@@ -1,0 +1,143 @@
+#!/bin/bash
+
+# Function to display general usage
+usage() {
+    echo "General Usage: $0 workflow_name [additional_args]"
+    echo "Available workflows:"
+    echo "  test      - Run the test suite."
+    echo "                - Accepts optional '--type=testtype' argument."
+    echo "                - Accepts optional '--k=keyword' argument."
+    echo "  clean     - Shuts down docker containers and rebuilds new ones."
+    echo "  shell     - Enters the user into a Flask shell inside the app container."
+    echo "  psql      - Enters the user into a Postgres shell inside the db container."
+    echo "  coverage  - Runs a coverage report for the full test suite."
+    echo "  quality   - Runs flake8, black, and isort, then runs a coverage report."
+    echo "Use '$0 workflow_name --help' for more information on a specific workflow"
+}
+
+# Function for testing help
+test_help() {
+    echo "Test Help:"
+    echo "Usage: $0 workflow1 [--type=test_type]"
+    echo "Description: Runs the pytest test suite."
+    echo "Options:"
+    echo "   --type=testtype: Runs functional or unit tests in isolation."
+    echo "   --k=keyword: Runs test matching a keyword in the name."
+}
+
+# Function for spinning up a new instnace help
+clean_help() {
+    echo "Clean Help:"
+    echo "Usage: $0 clean [options]"
+    echo "Description: Tears down the docker containers and builds new ones running"
+    echo "in detatched mode."
+}
+
+# Function for entering an app shell help
+shell_help() {
+    echo "Shell Help:"
+    echo "Usage: $0 shell [options]"
+    echo "Description: Enter into a Flask shell inside the app container."
+}
+
+# Function for entering a db shell help
+db_help() {
+    echo "DB ShellHelp:"
+    echo "Usage: $0 shell [options]"
+    echo "Description: Enter into a Postgres shell inside the db container."
+}
+
+coverage_help() {
+    echo "Coverage Help"
+    echo "Usage: $0 coverage [options]"
+    echo "Description: Runs a coverage report for the full test suite"
+}
+
+quality_help() {
+    echo "Quality Help"
+    echo "Usage: $0 quality [options]"
+    echo "Description: Runs flake8, black, and isort before running a coverage report for the full test suite"
+}
+
+# Check if at least one argument is provided
+if [ $# -lt 1 ]; then
+    usage
+    exit 1
+fi
+
+workflow=$1
+shift # This shifts the positional parameters to the left, so $2 becomes $1, $3 becomes $2, etc.
+
+case $workflow in
+    test)
+        command="docker compose exec backend pytest"
+        for arg in "$@"; do
+            if [[ "$arg" == "--help" ]]; then
+                test_help 
+                exit 0
+            elif [[ "$arg" =~ ^--type= ]]; then
+                type="${arg#*=}" 
+            elif [[ "$arg" =~ ^--k= ]]; then
+                k=" -k ${arg#*=}"
+            fi
+        done
+
+        if [[ -n $type ]]; then
+            command+="/$type"
+        fi
+        if [[ -n $k ]]; then
+            command+="$k"
+        fi
+
+        echo "Running tests..."
+        echo "$command"
+        eval "$command"
+        ;;
+    clean)
+        if [[ "$1" == "--help" ]]; then
+            clean_help
+            exit 0
+        fi
+        echo "Spinning up new instance..."
+        docker compose down
+        docker compose up -d --build
+        ;;
+    shell)
+        if [[ "$1" == "--help" ]]; then
+            shell_help
+            exit 0
+        fi
+        echo "Entering Flask shell..."
+        docker compose exec backend python manage.py shell
+        ;;
+    db)
+        if [[ "$1" == "--help" ]]; then
+            db_help
+            exit 0
+        fi
+        echo "Entering Postgres shell..."
+        docker compose exec db_dev psql -U postgres
+        ;;
+    coverage)
+        if [[ "$1" == "--help" ]]; then
+            coverage_help
+            exit 0
+        fi
+        docker-compose exec api python -m pytest "src/tests" -p no:warnings --cov=src
+        ;;
+    quality)
+        if [[ "$1" == "--help" ]]; then
+            quality_help
+            exit 0
+        fi
+        docker-compose exec api flake8 src
+        docker-compose exec api black src
+        docker-compose exec api isort src
+        docker-compose exec api python -m pytest "src/tests" -p no:warnings --cov=src
+        ;;
+    *)
+        echo "Unknown workflow: $workflow"
+        usage
+        exit 2
+        ;;
+esac
