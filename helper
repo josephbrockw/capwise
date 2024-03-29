@@ -123,17 +123,19 @@ case $workflow in
             coverage_help
             exit 0
         fi
-        docker-compose exec api python -m pytest "src/tests" -p no:warnings --cov=src
+        docker compose exec backend pytest -p no:warnings --cov=.
         ;;
     quality)
         if [[ "$1" == "--help" ]]; then
             quality_help
             exit 0
         fi
-        docker-compose exec api flake8 src
-        docker-compose exec api black src
-        docker-compose exec api isort src
-        docker-compose exec api python -m pytest "src/tests" -p no:warnings --cov=src
+        docker compose exec backend flake8 .
+        docker compose exec backend black /usr/src/backend --exclude=/env/
+#                                    black /usr/src/backend/ --exclude='/env/'
+
+        docker compose exec backend isort .
+        docker compose exec backend pytest -p no:warnings --cov=.
         ;;
     *)
         echo "Unknown workflow: $workflow"

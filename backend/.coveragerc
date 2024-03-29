@@ -1,0 +1,12 @@
+[run]
+omit =
+  *apps.py,
+  *settings.py,
+  config/api.py
+  *urls.py,
+  *wsgi.py,
+  *asgi.py,
+  manage.py,
+  */migrations/*,
+  */tests/*,
+branch = True
