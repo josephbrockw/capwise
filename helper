@@ -79,6 +79,8 @@ case $workflow in
                 type="${arg#*=}" 
             elif [[ "$arg" =~ ^--k= ]]; then
                 k=" -k ${arg#*=}"
+            elif [[ "$arg" == "-s" ]]; then
+                command+=" -s"
             fi
         done
 

@@ -1,0 +1,19 @@
+[
+{
+    "model": "account.user",
+    "fields": {
+        "password": "pbkdf2_sha256$390000$uefOQabAZq3e2g8XZDJ5WC$2oi7KW+Kw2rxy7QC+Czsw/nRuVfOaCMkQ+fVZ31JCQE=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "joe",
+        "first_name": "",
+        "last_name": "",
+        "email": "me@thejoewilkinson.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-03-30T20:20:03.265Z",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]
