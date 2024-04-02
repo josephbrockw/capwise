@@ -8,7 +8,7 @@ from rest_framework.test import APITestCase
 
 from account.models import User
 
-PASSWORD = 'password123'
+PASSWORD = 'testpass123'
 
 
 class AuthenticationTest(APITestCase):
@@ -36,12 +36,13 @@ class AuthenticationTest(APITestCase):
 
     def test_user_can_log_in(self): # new
         user = User.objects.get(username="gythaogg")
-        response = self.client.post(reverse('log_in'), data={
+        response = self.client.post("/api/login", data={
             'username': user.username,
             'password': PASSWORD,
         })
 
         # Parse payload data from access token.
+        print(response.data)
         access = response.data['access']
         header, payload, signature = access.split('.')
         decoded_payload = base64.b64decode(f'{payload}==')
@@ -49,7 +50,7 @@ class AuthenticationTest(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertIsNotNone(response.data['refresh'])
-        self.assertEqual(payload_data['id'], user.id)
+        self.assertEqual(payload_data['id'], str(user.id))
         self.assertEqual(payload_data['username'], user.username)
         self.assertEqual(payload_data['first_name'], user.first_name)
         self.assertEqual(payload_data['last_name'], user.last_name)

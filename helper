@@ -59,6 +59,12 @@ quality_help() {
     echo "Description: Runs flake8, black, and isort before running a coverage report for the full test suite"
 }
 
+dumpdata_help() {
+    echo "Dumpdata Help"
+    echo "Usage: $0 dumpdata"
+    echo "Description: Dumps the data from the database into a json file called all_data.json."
+}
+
 # Check if at least one argument is provided
 if [ $# -lt 1 ]; then
     usage
@@ -138,6 +144,22 @@ case $workflow in
 
         docker compose exec backend isort .
         docker compose exec backend pytest -p no:warnings --cov=.
+        ;;
+    dumpdata)
+        if [[ "$1" == "--help" ]]; then
+            dumpdata_help
+            exit 0
+        fi
+        docker compose exec backend python manage.py dumpdata \
+          --indent 4 \
+          --natural-foreign \
+          --natural-primary \
+          -e auth.Permission \
+          -e sessions \
+          -e admin \
+          -e contenttypes \
+          ${@: 2} \
+          > all_data.json
         ;;
     *)
         echo "Unknown workflow: $workflow"
