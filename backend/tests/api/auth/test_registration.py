@@ -1,6 +1,7 @@
-import os
-import json
 import base64
+import json
+import os
+
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -8,49 +9,69 @@ from rest_framework.test import APITestCase
 
 from account.models import User
 
-PASSWORD = 'testpass123'
+PASSWORD = "testpass123"
 
 
 class AuthenticationTest(APITestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
-        os.path.join(base_dir, 'fixtures/core.json'),
+        os.path.join(base_dir, "fixtures/core.json"),
     ]
+    username = "gythaogg"
 
     def test_user_can_sign_up(self):
-        response = self.client.post(reverse('sign_up'), data={
-            'username': 'test',
-            'email': 'user@example.com',
-            'first_name': 'Test',
-            'last_name': 'User',
-            'password1': PASSWORD,
-            'password2': PASSWORD,
-        })
+        response = self.client.post(
+            reverse("sign_up"),
+            data={
+                "username": "test",
+                "email": "user@example.com",
+                "first_name": "Test",
+                "last_name": "User",
+                "password1": PASSWORD,
+                "password2": PASSWORD,
+            },
+        )
         user = get_user_model().objects.get(username="test")
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        self.assertEqual(response.data['id'], str(user.id))
-        self.assertEqual(response.data['username'], user.username)
+        self.assertEqual(response.data["id"], str(user.id))
+        self.assertEqual(response.data["username"], user.username)
         self.assertEqual(response.data["email"], user.email)
-        self.assertEqual(response.data['first_name'], user.first_name)
-        self.assertEqual(response.data['last_name'], user.last_name)
+        self.assertEqual(response.data["first_name"], user.first_name)
+        self.assertEqual(response.data["last_name"], user.last_name)
 
-    def test_user_can_log_in(self): # new
+    def test_user_can_log_in(self):  # new
         user = User.objects.get(username="gythaogg")
-        response = self.client.post("/api/login", data={
-            'username': user.username,
-            'password': PASSWORD,
-        })
+        response = self.client.post(
+            "/api/login",
+            data={
+                "username": self.username,
+                "password": PASSWORD,
+            },
+        )
 
         # Parse payload data from access token.
-        print(response.data)
-        access = response.data['access']
-        header, payload, signature = access.split('.')
-        decoded_payload = base64.b64decode(f'{payload}==')
+        access = response.data["access"]
+        header, payload, signature = access.split(".")
+        decoded_payload = base64.b64decode(f"{payload}==")
         payload_data = json.loads(decoded_payload)
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIsNotNone(response.data['refresh'])
-        self.assertEqual(payload_data['id'], str(user.id))
-        self.assertEqual(payload_data['username'], user.username)
-        self.assertEqual(payload_data['first_name'], user.first_name)
-        self.assertEqual(payload_data['last_name'], user.last_name)
+        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(payload_data["id"], str(user.id))
+        self.assertEqual(payload_data["username"], user.username)
+        self.assertEqual(payload_data["first_name"], user.first_name)
+        self.assertEqual(payload_data["last_name"], user.last_name)
+
+    def test_user_login_fails_with_invalid_credentials(self):
+        response = self.client.post(
+            "/api/login",
+            data={
+                "username": self.username,
+                "password": "wrongpassword",
+            },
+        )
+        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+        self.assertEqual(
+            response.data["detail"],
+            "No active account found with the given credentials",
+        )

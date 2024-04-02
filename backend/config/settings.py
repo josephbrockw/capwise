@@ -10,9 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import datetime
 import os
 from pathlib import Path
-import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    'django.contrib.postgres',
+    "django.contrib.postgres",
     "django.contrib.staticfiles",
     # 3rd Party
     "drf_material",
@@ -132,24 +132,24 @@ AUTH_USER_MODEL = "account.User"
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ),
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ]
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
 }
 
 # Allow the use of the browsable API in development
 if DEBUG:
-    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += [
-        'rest_framework.renderers.BrowsableAPIRenderer',
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += [
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ]
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
-    'USER_ID_CLAIM': 'id',
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "USER_ID_CLAIM": "id",
 }
