@@ -9,6 +9,11 @@ function SignUp (props) {
   if (isSubmitted) {
     return <Navigate to='/dashboard' />;
   }
+
+  if (props.isAuthenticated) {
+    return <Navigate to='/dashboard' />;
+  }
+
   // Initial form values
   const initialValues = {
     username: '',
