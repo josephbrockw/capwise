@@ -1,10 +1,10 @@
 import React from 'react';
 import Navigation from './elements/Navigation';
 
-function Dashboard(props) {
+function Dashboard({ isAuthenticated, logOut }) {
   return (
     <>
-      <Navigation isAuthenticated={props.isAuthenticated} />
+      <Navigation isAuthenticated={isAuthenticated} logOut={logOut} />
       <div>
         <h1>Dashboard</h1>
       </div>

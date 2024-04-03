@@ -1,11 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Navigation({ isAuthenticated }) {
+function Navigation({ isAuthenticated, logOut }) {
   return (
     <nav>
       {isAuthenticated ? (
-        <button>Log Out</button>
+        <button
+          data-cy="logOut"
+          type="button"
+          onClick={logOut}
+        >Log Out</button>
       ) : (
         <>
           <Link to="/sign-up">Sign Up</Link>

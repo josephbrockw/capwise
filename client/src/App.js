@@ -27,9 +27,21 @@ function App() {
     }
   }
 
+  const logOut = () => {
+    window.localStorage.removeItem('auth');
+    setIsAuthenticated(false);
+  };
+
   return (
       <Routes>
-        <Route path='/' element={<Layout isAuthenticated={isAuthenticated}/>} />
+        <Route path='/' element=
+          {
+            <Layout
+              isAuthenticated={isAuthenticated}
+              logOut={logOut}
+            />
+          }
+        />
         <Route index element={<Landing />} />
         <Route
           path='sign-up'
@@ -41,19 +53,14 @@ function App() {
             <LogIn logIn={logIn} isAuthenticated={isAuthenticated} />
           }
         />
-        <Route path='dashboard' element={<Dashboard isAuthenticated={isAuthenticated} />} />
+        <Route path='dashboard' element={<Dashboard isAuthenticated={isAuthenticated} logOut={logOut} />} />
       </Routes>
   );
 }
 
-function Layout ({ isAuthenticated }) {
+function Layout ({ isAuthenticated, logOut }) {
   return (
-    <>
-      <nav>
-            <button>Log Out</button>
-      </nav>
       <Outlet />
-    </>
   );
 }
 

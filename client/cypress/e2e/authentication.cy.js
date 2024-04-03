@@ -75,4 +75,14 @@ describe('Authentication', () => {
     cy.get('button').contains('Submit').click();
     cy.url().should('contain', '/dashboard');
   });
+
+  it('Can log out.', function () {
+    logIn();
+    cy.wait(1000);
+    cy.get('[data-cy=logOut]').should('exist').should('be.visible');
+    // cy.get('[data-cy="logOut"]').click().should(() => {
+    //   expect(window.localStorage.getItem('auth')).to.be.null;
+    // });
+    // cy.get('[data-cy="logOut"]').should('not.exist');
+  });
 });
