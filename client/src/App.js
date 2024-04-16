@@ -13,11 +13,14 @@ function App() {
   });
 
   const logIn = async (username, password) => {
-    const url = "/api/login";
+    const url = `${process.env.REACT_APP_API_BASE_URL}/api/login`;
+    console.log(url);
     try {
       const response = await axios.post(url, { username, password });
+      console.log(response);
+      console.log(response.data);
       window.localStorage.setItem(
-        'auth', JSON.stringify(response.data.token)
+        'auth', JSON.stringify(response.data)
       );
       setIsAuthenticated(true);
       return { response, isError: false };

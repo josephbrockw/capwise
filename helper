@@ -101,6 +101,12 @@ case $workflow in
         echo "$command"
         eval "$command"
         ;;
+    full-test)
+        echo "Running full test suite..."
+        docker compose exec backend pytest
+        docker compose exec backend python manage.py flush --noinput
+        (cd client && npm run cypress:run --browser chrome)
+       ;;
     clean)
         if [[ "$1" == "--help" ]]; then
             clean_help

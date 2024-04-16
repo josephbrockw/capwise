@@ -44,7 +44,7 @@ function SignUp (props) {
   // Handle form submission
   const onSubmit = async (values, actions) => {
       console.log(JSON.stringify(values, null, 2));
-      const url = "/api/sign-up";
+      const url = `${process.env.REACT_APP_API_BASE_URL}/api/sign-up`;
       const formData = new FormData();
       formData.append('username', values.username);
       formData.append('email', values.email);

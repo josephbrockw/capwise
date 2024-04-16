@@ -1,13 +1,7 @@
 const logIn = () => {
   const { username, password } = Cypress.env('credentials');
 
-  cy.intercept('POST', 'login', {
-    statusCode: 200,
-    body: {
-      'access': 'ACCESS_TOKEN',
-      'refresh': 'REFRESH'
-    }
-  }).as('login');
+  cy.intercept('POST', 'login').as('login');
 
   cy.visit('/log-in');
   cy.get('input[name="username"]').type(username);
@@ -17,6 +11,21 @@ const logIn = () => {
 }
 
 describe('Authentication', () => {
+  it('Can sign up', () => {
+    cy.intercept('POST', 'sign-up').as('signUp');
+
+    cy.visit('/sign-up');
+    cy.get('input[name="username"]').type('nanny');
+    cy.get('input[name="email"]').type('gogg@lancre.gov');
+    cy.get('input[name="firstName"]').type('Gytha');
+    cy.get('input[name="lastName"]').type('Ogg');
+    cy.get('input[name="password"]').type('testpass123', { log: false });
+    cy.get('input[name="confirmPassword"]').type('testpass123', { log: false });
+    cy.get('button').contains('Submit').click();
+    cy.wait('@signUp');
+    cy.url().should('contain', '/dashboard');
+  });
+
   it('Can log in', () => {
     const {username, password} = Cypress.env('credentials');
 
@@ -61,31 +70,6 @@ describe('Authentication', () => {
     // Authenticated users should be redirected to dashboard if they
     // try to visit sign-up page
     cy.visit('/sign-up');
-    cy.url().should('contain', '/dashboard');
-  });
-
-  it('Can sign up', () => {
-    cy.intercept('POST', 'sign-up', {
-      statusCode: 201,
-      body: {
-        id: 1,
-        username: 'gogg@lancre.gov',
-        first_name: 'Gytha',
-        last_name: 'Ogg',
-        email: 'gogg@lancre.gov',
-
-      }
-    }).as('signUp');
-
-    cy.visit('/sign-up');
-    cy.get('input[name="username"]').type('nanny');
-    cy.get('input[name="email"]').type('gogg@lancre.gov');
-    cy.get('input[name="firstName"]').type('Gytha');
-    cy.get('input[name="lastName"]').type('Ogg');
-    cy.get('input[name="password"]').type('testpass123', { log: false });
-    cy.get('input[name="confirmPassword"]').type('testpass123', { log: false });
-    cy.get('button').contains('Submit').click();
-    cy.wait('@signUp');
     cy.url().should('contain', '/dashboard');
   });
 

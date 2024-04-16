@@ -1,7 +1,11 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import Navigation from './elements/Navigation';
 
 function Dashboard({ isAuthenticated, logOut }) {
+  if (!isAuthenticated) {
+    return <Navigate to='/log-in' />;
+  }
   return (
     <>
       <Navigation isAuthenticated={isAuthenticated} logOut={logOut} />
