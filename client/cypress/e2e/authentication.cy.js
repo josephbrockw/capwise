@@ -65,6 +65,18 @@ describe('Authentication', () => {
   });
 
   it('Can sign up', () => {
+    cy.intercept('POST', 'sign-up', {
+      statusCode: 201,
+      body: {
+        id: 1,
+        username: 'gogg@lancre.gov',
+        first_name: 'Gytha',
+        last_name: 'Ogg',
+        email: 'gogg@lancre.gov',
+
+      }
+    }).as('signUp');
+
     cy.visit('/sign-up');
     cy.get('input[name="username"]').type('nanny');
     cy.get('input[name="email"]').type('gogg@lancre.gov');
@@ -73,16 +85,37 @@ describe('Authentication', () => {
     cy.get('input[name="password"]').type('testpass123', { log: false });
     cy.get('input[name="confirmPassword"]').type('testpass123', { log: false });
     cy.get('button').contains('Submit').click();
+    cy.wait('@signUp');
     cy.url().should('contain', '/dashboard');
+  });
+
+  it('Show invalid fields on sign up error.', function () {
+    cy.intercept('POST', 'sign-up', {
+      statusCode: 400,
+      body: {
+        email: ['A user with that username already exists.'],
+      }
+    }).as('signUp');
+    cy.visit('/sign-up');
+    cy.get('input[name="username"]').type('nanny');
+    cy.get('input[name="email"]').type('gogg@lancre.gov');
+    cy.get('input[name="firstName"]').type('Gytha');
+    cy.get('input[name="lastName"]').type('Ogg');
+    cy.get('input[name="password"]').type('testpass123', {log: false});
+    cy.get('input[name="confirmPassword"]').type('testpass123', {log: false});
+    cy.get('button').contains('Submit').click();
+    cy.wait('@signUp');
+    cy.get('[data-cy="invalid-feedback"]').contains('A user with that username already exists.');
+    cy.url().should('contain', '/sign-up');
   });
 
   it('Can log out.', function () {
     logIn();
     cy.wait(1000);
     cy.get('[data-cy=logOut]').should('exist').should('be.visible');
-    // cy.get('[data-cy="logOut"]').click().should(() => {
-    //   expect(window.localStorage.getItem('auth')).to.be.null;
-    // });
-    // cy.get('[data-cy="logOut"]').should('not.exist');
+    cy.get('[data-cy="logOut"]').click().should(() => {
+      expect(window.localStorage.getItem('auth')).to.be.null;
+    });
+    cy.get('[data-cy="logOut"]').should('not.exist');
   });
 });

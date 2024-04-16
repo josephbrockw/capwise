@@ -21,7 +21,7 @@ class AuthenticationTest(APITestCase):
 
     def test_user_can_sign_up(self):
         response = self.client.post(
-            reverse("sign_up"),
+            "/api/sign-up",
             data={
                 "username": "test",
                 "email": "user@example.com",
