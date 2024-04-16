@@ -107,8 +107,9 @@ case $workflow in
             exit 0
         fi
         echo "Spinning up new instance..."
-        docker compose down
+        docker compose down -v
         docker compose up -d --build
+        docker compose exec backend python manage.py migrate
         ;;
     shell)
         if [[ "$1" == "--help" ]]; then

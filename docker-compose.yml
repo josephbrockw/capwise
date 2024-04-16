@@ -23,5 +23,19 @@ services:
     ports:
       - 5432:5432
 
+  frontend:
+    build:
+      context: ./client
+    command: yarn start
+    depends_on:
+      - backend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3001:3000
+    stdin_open: true
+    volumes:
+      - ./client:/usr/src/app
+
 volumes:
     postges_data:
