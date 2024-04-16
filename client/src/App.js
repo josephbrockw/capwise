@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom'
 import axios from 'axios';
 import './App.css';
+import { getUser, removeAppStorage } from './services/AuthService';
 import Landing from "./components/Landing";
 import SignUp from "./components/SignUp";
 import LogIn from "./components/LogIn";
@@ -17,11 +18,12 @@ function App() {
     console.log(url);
     try {
       const response = await axios.post(url, { username, password });
-      console.log(response);
-      console.log(response.data);
       window.localStorage.setItem(
-        'auth', JSON.stringify(response.data)
+        'app.auth', JSON.stringify(response.data)
       );
+      console.log(`getUser: ${JSON.stringify(getUser())}`);
+      window.localStorage.setItem('app.user', JSON.stringify(getUser()));
+
       setIsAuthenticated(true);
       return { response, isError: false };
     } catch (error) {
@@ -31,7 +33,7 @@ function App() {
   }
 
   const logOut = () => {
-    window.localStorage.removeItem('auth');
+    removeAppStorage();
     setIsAuthenticated(false);
   };
 
