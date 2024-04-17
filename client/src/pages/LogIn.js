@@ -7,9 +7,11 @@ import * as Yup from 'yup';
 function LogIn ({ isAuthenticated, logIn }) {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
 
+
   if (isAuthenticated || isSubmitted) {
     return <Navigate to='/dashboard' />;
   }
+
   // Initial form values
   const initialValues = {
     username: '',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import HeroSection from './landing/HeroSection';
+import HeroSection from '../components/landing/HeroSection';
 
 function Landing (props) {
   return (

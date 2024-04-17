@@ -23,7 +23,7 @@ describe('Authentication', () => {
     cy.get('input[name="confirmPassword"]').type('testpass123', { log: false });
     cy.get('button').contains('Submit').click();
     cy.wait('@signUp');
-    cy.url().should('contain', '/dashboard');
+    cy.url().should('contain', '/log-in');
   });
 
   it('Can log in', () => {

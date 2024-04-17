@@ -25,6 +25,14 @@ test_help() {
     echo "   --k=keyword: Runs test matching a keyword in the name."
 }
 
+# Function for full suite testing help
+full_test_help() {
+    echo "Full Test Help:"
+    echo "Usage: $0 workflow1 "
+    echo "Description: Runs the pytest test suite, flushes the db, and runs"
+    echo "the cypress tests."
+}
+
 # Function for spinning up a new instnace help
 clean_help() {
     echo "Clean Help:"
@@ -101,10 +109,24 @@ case $workflow in
         echo "$command"
         eval "$command"
         ;;
+    cypress)
+        if [[ "$1" == "--help" ]]; then
+            cypress_help
+            exit 0
+        fi
+        docker compose exec backend python manage.py flush --noinput
+        echo "Database flushed. Running cypress tests..."
+        (cd client && npm run cypress:open)
+        ;;
     full-test)
-        echo "Running full test suite..."
+        if [[ "$1" == "--help" ]]; then
+            full_test_help
+            exit 0
+        fi
+        echo "Running pytest..."
         docker compose exec backend pytest
         docker compose exec backend python manage.py flush --noinput
+        echo "Database flushed."
         (cd client && npm run cypress:run --browser chrome)
        ;;
     clean)
@@ -116,6 +138,14 @@ case $workflow in
         docker compose down -v
         docker compose up -d --build
         docker compose exec backend python manage.py migrate
+        ;;
+    flush-db)
+        if [[ "$1" == "--help" ]]; then
+            flush_db_help
+            exit 0
+        fi
+        echo "Flushing the database..."
+        docker compose exec backend python manage.py flush --noinput
         ;;
     shell)
         if [[ "$1" == "--help" ]]; then
