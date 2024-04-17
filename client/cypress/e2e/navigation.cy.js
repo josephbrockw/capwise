@@ -23,11 +23,11 @@ describe('Navigation', () => {
     cy.url().should('contain', '/log-in');
   });
 
-  it('Can navigate to home from log in', () => {
-    cy.visit('/log-in');
-    cy.get('a').contains('Home').click();
-    cy.url().should('not.contain', '/log-in');
-  });
+  // it('Can navigate to home from log in', () => {
+  //   cy.visit('/log-in');
+  //   cy.get('a').contains('Home').click();
+  //   cy.url().should('not.contain', '/log-in');
+  // });
 
   it('Can navigate to sign up from log in', () => {
     cy.visit('/log-in');

@@ -6,7 +6,7 @@ const logIn = () => {
   cy.visit('/log-in');
   cy.get('input[name="username"]').type(username);
   cy.get('input[name="password"]').type(password, { log: false });
-  cy.get('button').contains('Submit').click();
+  cy.get('button').contains('Sign In').click();
   cy.wait('@login');
 }
 
@@ -48,7 +48,7 @@ describe('Authentication', () => {
     cy.visit('/log-in');
     cy.get('input[name="username"]').type(username);
     cy.get('input[name="password"]').type('wrongpassword', { log: false });
-    cy.get('button').contains('Submit').click();
+    cy.get('button').contains('Sign In').click();
     cy.wait('@logIn');
     cy.get('div.alert').contains(
       'Please enter a correct username and password. ' +

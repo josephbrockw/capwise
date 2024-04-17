@@ -8,15 +8,12 @@ import Landing from "./pages/Landing";
 import SignUp from "./pages/SignUp";
 import LogIn from "./pages/LogIn";
 import Dashboard from "./pages/Dashboard";
+import SignIn from './pages/SignIn';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(() => {
     return window.localStorage.getItem('app.auth') !== null;
   });
-
-  useEffect(() => {
-    console.log(`isAuthenticated: ${isAuthenticated}`);
-  }, [isAuthenticated]);
 
   const logIn = async (username, password) => {
     const url = `${process.env.REACT_APP_API_BASE_URL}/api/login`;
@@ -55,12 +52,13 @@ function App() {
           path='sign-up'
           element={<SignUp isAuthenticated={isAuthenticated} />}
         />
-        <Route
-          path='log-in'
-          element={
-            <LogIn isAuthenticated={isAuthenticated} logIn={logIn} />
-          }
-        />
+        {/*<Route*/}
+        {/*  path='log-in'*/}
+        {/*  element={*/}
+        {/*    <LogIn isAuthenticated={isAuthenticated} logIn={logIn} />*/}
+        {/*  }*/}
+        {/*/>*/}
+        <Route path='log-in' element={<SignIn isAuthenticated={isAuthenticated} logIn={logIn} />} />
         <Route path='dashboard' element={<Dashboard isAuthenticated={isAuthenticated} logOut={logOut} />} />
       </Routes>
   );

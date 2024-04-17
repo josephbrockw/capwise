@@ -35,7 +35,6 @@ function LogIn ({ isAuthenticated, logIn }) {
         values.password
       );
       if (isError) {
-        console.log("ERROR IS HERE");
         const data = response.response.data;
         for (const value in data) {
           actions.setFieldError(value, data[value].join(' '));
