@@ -21,7 +21,7 @@ from api.views import version
 from api.views.auth import LogInView, SignUpView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin", admin.site.urls),
     path("version", version, name="version"),
     path("api/sign-up", SignUpView.as_view(), name="sign_up"),
     path("api/login", LogInView.as_view(), name="log_in"),

@@ -7,6 +7,8 @@ usage() {
     echo "  test      - Run the test suite."
     echo "                - Accepts optional '--type=testtype' argument."
     echo "                - Accepts optional '--k=keyword' argument."
+    echo "  cypress   - Run the cypress tests."
+    echo "  full-test - Run the test suite, flush the db, and run the cypress tests."
     echo "  clean     - Shuts down docker containers and rebuilds new ones."
     echo "  shell     - Enters the user into a Flask shell inside the app container."
     echo "  psql      - Enters the user into a Postgres shell inside the db container."
@@ -23,6 +25,13 @@ test_help() {
     echo "Options:"
     echo "   --type=testtype: Runs functional or unit tests in isolation."
     echo "   --k=keyword: Runs test matching a keyword in the name."
+}
+
+# Function for cypress help
+cypress_help() {
+    echo "Cypress Help:"
+    echo "Usage: $0 cypress"
+    echo "Description: Runs the cypress tests."
 }
 
 # Function for full suite testing help
@@ -71,6 +80,24 @@ dumpdata_help() {
     echo "Dumpdata Help"
     echo "Usage: $0 dumpdata"
     echo "Description: Dumps the data from the database into a json file called all_data.json."
+}
+
+makemigrations_help() {
+    echo "Make Migrations Help"
+    echo "Usage: $0 makemigrations"
+    echo "Description: Makes migrations for the database."
+}
+
+migrate_help() {
+    echo "Usage: bb migrate [--rollback app_name migration_name]"
+    echo ""
+    echo "Runs Django migrations inside the backend container."
+    echo ""
+    echo "Options:"
+    echo "  --rollback app_name migration_name   Roll back to a specific migration for the given app."
+    echo "        Example: bb migrate --rollback myapp 0005_migration_name"
+    echo ""
+    echo "Without arguments, this command runs all migrations."
 }
 
 # Check if at least one argument is provided
@@ -128,6 +155,8 @@ case $workflow in
         docker compose exec backend python manage.py flush --noinput
         echo "Database flushed."
         (cd client && npm run cypress:run --browser chrome)
+        docker compose exec backend python manage.py flush --noinput
+        docker compose exec backend python manage.py loaddata clean_data.json
        ;;
     clean)
         if [[ "$1" == "--help" ]]; then
@@ -138,6 +167,7 @@ case $workflow in
         docker compose down -v
         docker compose up -d --build
         docker compose exec backend python manage.py migrate
+        docker compose exec backend python manage.py loaddata clean_data.json
         ;;
     flush-db)
         if [[ "$1" == "--help" ]]; then
@@ -198,6 +228,38 @@ case $workflow in
           ${@: 2} \
           > all_data.json
         ;;
+    makemigrations)
+        if [[ "$1" == "--help" ]]; then
+            makemigrations_help
+            exit 0
+        fi
+        CMD="docker compose exec backend python manage.py makemigrations"
+        if [[ "$1" == "--name" ]]; then
+            CMD"$CMD --name $2"
+        fi
+        echo "Making migrations..."
+        $CMD
+        ;;
+    migrate)
+        if [[ "$1" == "--help" ]]; then
+            migrate_help
+            exit 0
+        fi
+
+        CMD="docker compose exec backend python manage.py migrate"
+
+        if [[ "$1" == "--rollback" && -n "$2" && -n "$3" ]]; then
+            # Roll back to a specific migration
+            APP_NAME=$2
+            MIGRATION_NAME=$3
+            CMD="$CMD $APP_NAME $MIGRATION_NAME"
+        elif [[ "$1" == "--rollback" && ( -z "$2" || -z "$3" ) ]]; then
+            red_echo "Error: You must specify both the app name and migration name for rollback."
+            exit 1
+        fi
+
+    echo "Running migrations..."
+    $CMD
     *)
         echo "Unknown workflow: $workflow"
         usage

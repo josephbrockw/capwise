@@ -10,6 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords must match.")
+        User = get_user_model()
+        if User.objects.filter(username=data["username"]).exists():
+            raise serializers.ValidationError("Username is already taken.")
+        if User.objects.filter(email=data["email"]).exists():
+            raise serializers.ValidationError("Email is already associated with an account.")
         return data
 
     def create(self, validated_data):
