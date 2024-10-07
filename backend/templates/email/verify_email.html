@@ -1,0 +1,15 @@
+{% extends 'email/base.html' %}
+
+{% block title %}Verify Your Email{% endblock %}
+
+{% block header %}Verify Your Email{% if user.first_name %}, {{ user.first_name }}.{% endif %}{% endblock %}
+
+{% block content %}
+	{% for item in content_list %}
+		{% if item.type == 'paragraph' %}
+			<p>{{ item.text }}</p>
+		{% elif item.type == 'button' and item.url %}
+			<p><a href="{{ item.url }}" class="cta-button">{{ item.text }}</a></p>
+		{% endif %}
+	{% endfor %}
+{% endblock %}

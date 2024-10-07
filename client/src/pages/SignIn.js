@@ -28,21 +28,18 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
-
 export default function SignIn ({ isAuthenticated, logIn }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [redirect, setRedirect] = useState(false);
+  const [redirectPath, setRedirectPath] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) {
-      setRedirect(true);
+      setRedirectPath('/dashboard');
     }
-  }, [isAuthenticated, isSubmitted, redirect]);
+  }, [isAuthenticated, redirectPath]);
 
-  if (redirect) {
-    return <Navigate to='/dashboard'/>;
+  if (redirectPath) {
+    return <Navigate to={redirectPath} />;
   }
 
   // Handle form submission
@@ -66,6 +63,11 @@ export default function SignIn ({ isAuthenticated, logIn }) {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSignUpClick = (event) => {
+    event.preventDefault();
+    setRedirectPath('/sign-up');
   };
 
   // Form validation schema using Yup
@@ -102,12 +104,6 @@ export default function SignIn ({ isAuthenticated, logIn }) {
             onSubmit={onSubmit}
           >
             {({ errors, touched, isSubmitting }) => (
-              <>
-              {
-                '__all__' in errors && (
-                <div className="alert">{errors['__all__']}</div>
-                )
-              }
               <Form noValidate sx={{ mt: 1 }}>
                   <Field
                     as={TextField}
@@ -122,7 +118,7 @@ export default function SignIn ({ isAuthenticated, logIn }) {
                     error={touched.username && Boolean(errors.username)}
                     helperText={(touched.username && errors.username) || ' '}
                   />
-                  <ErrorMessage name="username" component="div" />
+                  {/*<ErrorMessage name="username" component="div" />*/}
                   <Field
                     as={TextField}
                     margin="normal"
@@ -136,7 +132,7 @@ export default function SignIn ({ isAuthenticated, logIn }) {
                     error={touched.password && Boolean(errors.password)}
                     helperText={(touched.password && errors.password) || ' '}
                   />
-                  <ErrorMessage name="password" component="div" />
+                  {/*<ErrorMessage name="password" component="div" />*/}
                   <Button
                     type="submit"
                     fullWidth
@@ -146,19 +142,18 @@ export default function SignIn ({ isAuthenticated, logIn }) {
                   >
                     Sign In
                   </Button>
-                  <Grid container>
-                    <Grid item>
-                      <Link component={RouterLink} to='/sign-up' variant="body2">
-                        {"Don't have an account? Sign up"}
-                      </Link>
-                    </Grid>
-                  </Grid>
                 </Form>
-              </>
-            )}
+              )}
           </Formik>
+          <Grid container>
+            <Grid item>
+              <Link component={RouterLink} to="/sign-up" variant="body2">
+                {"Don't have an account? Sign up"}
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
-        {/* Assuming you have a Copyright component */}
+        <Copyright sx={{ mt: 5 }} />
       </Container>
     </SiteTheme>
   );

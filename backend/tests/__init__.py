@@ -1,8 +1,12 @@
+import json
+
+
 def read_api_response(response, show=False):
-    data = response.data.get('data', {})
-    msg = response.data.get('message', '')
-    err = response.data.get('error', '')
     code = response.status_code
+    response = json.loads(response.content)
+    data = response.get('data', {})
+    msg = response.get('message', '')
+    err = response.get('error', '')
     if show:
         print(f"Data:\n{data}")
         print(f"Message: {msg}")

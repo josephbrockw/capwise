@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_material",
     "rest_framework",
+    "anymail",
     # Local
     "account",
     "main",
@@ -65,7 +66,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -173,4 +176,12 @@ CHANNEL_LAYERS = {
     },
 }
 
-OTP_EXPIRATION_MINUTES = 15
+ANYMAIL = {
+    "POSTMARK_SERVER_TOKEN": os.environ.get("POSTMARK_API_SERVICE_KEY", "POSTMARK_API_KEY")
+}
+OTP_EXPIRATION_MINUTES = os.environ.get("OTP_EXPIRATION_MINUTES", 5)
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3001")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "support@test.com")
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "anymail.backends.postmark.EmailBackend")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "joe@wilkinsonventures.io")
+

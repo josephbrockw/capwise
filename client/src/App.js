@@ -1,14 +1,13 @@
 import React from 'react';
-import { useEffect } from 'react';
 import { Outlet, Route, Routes } from 'react-router-dom'
 import axios from 'axios';
 import './App.css';
 import { getUser, removeAppStorage } from './services/AuthService';
 import Landing from "./pages/Landing";
 import SignUp from "./pages/SignUp";
-import LogIn from "./pages/LogIn";
 import Dashboard from "./pages/Dashboard";
 import SignIn from './pages/SignIn';
+import SignUpUp from './pages/SignUpUp';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(() => {
@@ -53,10 +52,8 @@ function App() {
           element={<SignUp isAuthenticated={isAuthenticated} />}
         />
         {/*<Route*/}
-        {/*  path='log-in'*/}
-        {/*  element={*/}
-        {/*    <LogIn isAuthenticated={isAuthenticated} logIn={logIn} />*/}
-        {/*  }*/}
+        {/*  path='sign-up-up'*/}
+        {/*  element={<SignUpUp isAuthenticated={isAuthenticated} />}*/}
         {/*/>*/}
         <Route path='log-in' element={<SignIn isAuthenticated={isAuthenticated} logIn={logIn} />} />
         <Route path='dashboard' element={<Dashboard isAuthenticated={isAuthenticated} logOut={logOut} />} />

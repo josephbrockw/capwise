@@ -14,6 +14,9 @@ usage() {
     echo "  psql      - Enters the user into a Postgres shell inside the db container."
     echo "  coverage  - Runs a coverage report for the full test suite."
     echo "  quality   - Runs flake8, black, and isort, then runs a coverage report."
+    echo "  dumpdata  - Dumps the data from the database into a json file called all_data.json."
+    echo "  makemigrations - Makes migrations for the database."
+    echo "  migrate   - Runs Django migrations inside the backend container."
     echo "Use '$0 workflow_name --help' for more information on a specific workflow"
 }
 
@@ -257,9 +260,9 @@ case $workflow in
             red_echo "Error: You must specify both the app name and migration name for rollback."
             exit 1
         fi
-
-    echo "Running migrations..."
-    $CMD
+        echo "Running migrations..."
+        $CMD
+        ;;
     *)
         echo "Unknown workflow: $workflow"
         usage

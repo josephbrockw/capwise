@@ -14,16 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from api.views import version
-from api.views.auth import LogInView, SignUpView
+from api.views.auth import LogInView, SignUpView, VerifyEmailView
+from main.views import test_templates
 
 urlpatterns = [
     path("admin", admin.site.urls),
     path("version", version, name="version"),
     path("api/sign-up", SignUpView.as_view(), name="sign_up"),
+    path("api/verify-email", VerifyEmailView.as_view(), name="verify_email"),
     path("api/login", LogInView.as_view(), name="log_in"),
     path("api/token/refresh", TokenRefreshView.as_view(), name="token_refresh"),
 ]
+
+dev_patterns = [
+    path("test-templates/<str:directory>/<str:template>", test_templates, name="test_templates"),
+]
+
+
+if settings.DEBUG:
+    urlpatterns += dev_patterns

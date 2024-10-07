@@ -16,8 +16,13 @@ class OneTimePassword(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     token = models.CharField(max_length=64, unique=True, db_index=True)
+    created = models.DateTimeField(auto_now_add=True)
     expires = models.DateTimeField()
     is_active = models.BooleanField(default=True)
+
+    def __init__(self, *args, token_length=6, **kwargs):
+        self.token_length = token_length
+        super().__init__(*args, **kwargs)
 
     class Meta:
         db_table = "otp"
@@ -25,11 +30,19 @@ class OneTimePassword(models.Model):
         verbose_name_plural = "One-Time Passwords"
 
     def save(self, *args, **kwargs):
+        # Users should only have one token at a time
+        if OneTimePassword.objects.filter(user=self.user, is_active=True).exists():
+            if self.id:
+                OneTimePassword.objects.filter(user=self.user).exclude(id=self.id).update(is_active=False)
+            else:
+                OneTimePassword.objects.filter(user=self.user).update(is_active=False)
+
         if not self.token:
-            self.token = get_random_string(length=6, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+            self.token = get_random_string(length=self.token_length, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
         if not self.expires:
-            self.expires = now() + timedelta(minutes=settings.OTP_EXPIRATION_MINUTES)
+            self.expires = now() + timedelta(minutes=int(settings.OTP_EXPIRATION_MINUTES))
+
         super().save(*args, **kwargs)
 
     def is_valid(self):

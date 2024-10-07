@@ -2,6 +2,7 @@ __pycache__
 env
 *.sqlite3
 .idea
+backend/.env.secrets
 
 # =====================
 

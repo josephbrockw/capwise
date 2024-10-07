@@ -1,12 +1,15 @@
 import base64
 import json
 import os
+from datetime import timedelta
+
 
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from account.models import User
+from account.models import User, OneTimePassword
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -15,9 +18,11 @@ PASSWORD = "testpass123"
 class AuthenticationTest(APITestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
-        os.path.join(base_dir, "fixtures/core.json"),
+        os.path.join(base_dir, "fixtures/auth.json"),
     ]
     username = "nanny"
+    otp_token = "123456"
+    new_user = "magrat"
 
     def test_user_can_sign_up(self):
         data, msg, err, code = read_api_response(
@@ -40,6 +45,11 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(data["email"], user.email)
         self.assertEqual(data["first_name"], user.first_name)
         self.assertEqual(data["last_name"], user.last_name)
+        # User needs to verify email before becoming active
+        self.assertFalse(user.is_active)
+        otp = OneTimePassword.objects.get(user=user)
+        self.assertTrue(otp.is_active)
+        self.assertEqual(len(otp.token), 20)
 
     def test_user_cannot_sign_up_with_existing_username(self):
         data, message, error, code = read_api_response(
@@ -84,6 +94,47 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(
             err["non_field_errors"][0], "Email is already associated with an account."
         )
+
+    def test_user_can_verify_email(self):
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/verify-email",
+                data={"token": self.otp_token}
+            )
+        )
+        otp = OneTimePassword.objects.get(token=self.otp_token)
+        user = get_user_model().objects.get(username=self.new_user)
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertTrue(user.is_active)
+        self.assertFalse(otp.is_active)
+        self.assertEqual(msg, "Email verified successfully.")
+
+    def test_verify_email_with_invalid_token(self):
+        otp = OneTimePassword.objects.get(token=self.otp_token)
+        otp.is_valid()
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/verify-email",
+                data={"token": self.otp_token}
+            )
+        )
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "Invalid or expired token.")
+
+    def test_verify_email_with_expired_token(self):
+        otp = OneTimePassword.objects.get(token=self.otp_token)
+        otp.expires = now() - timedelta(minutes=1)
+        otp.save()
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/verify-email",
+                data={"token": self.otp_token}
+            )
+        )
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "Invalid or expired token.")
 
     def test_user_can_log_in(self):  # new
         user = User.objects.get(username="nanny")
