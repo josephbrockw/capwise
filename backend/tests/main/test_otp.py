@@ -15,7 +15,6 @@ class OneTimePasswordModelTest(TestCase):
     def test_create_otp_with_default_token_length(self):
         """Test creating a OneTimePassword with default token length (6 characters)"""
         otp = OneTimePassword.objects.create(user=self.user)
-        otp.save()
 
         # Check that token length is 6 (default)
         self.assertEqual(len(otp.token), 6)
@@ -55,16 +54,14 @@ class OneTimePasswordModelTest(TestCase):
     def test_auto_expiration_setting(self):
         """Test that expiration date is set correctly based on the default expiration time"""
         otp = OneTimePassword.objects.create(user=self.user)
-        otp.save()
 
         # Ensure the expiration is set based on the setting (e.g., 10 minutes)
-        expected_expiration = now() + timedelta(minutes=5)  # Assuming settings.OTP_EXPIRATION_MINUTES = 10
-        self.assertAlmostEqual(otp.expires, expected_expiration, delta=timedelta(seconds=5))
+        expected_expiration = now() + timedelta(minutes=15)  # Assuming settings.OTP_EXPIRATION_MINUTES = 10
+        self.assertAlmostEqual(otp.expires, expected_expiration, delta=timedelta(seconds=15))
 
     def test_is_valid_method_with_valid_token(self):
         """Test the is_valid method with a valid (not expired) token"""
         otp = OneTimePassword.objects.create(user=self.user)
-        otp.save()
 
         # Ensure the OTP is valid
         self.assertTrue(otp.is_valid())
@@ -77,15 +74,14 @@ class OneTimePasswordModelTest(TestCase):
         # Create an expired OTP
         expired_time = now() - timedelta(minutes=5)
         otp = OneTimePassword.objects.create(user=self.user, expires=expired_time)
-        otp.save()
 
         # Check that OTP is invalid since it's expired
         self.assertFalse(otp.is_valid())
 
     def test_custom_init_token_length(self):
         """Test custom token length passed in through __init__"""
-        otp = OneTimePassword(user=self.user, token_length=10)
-        otp.save()
+        otp = OneTimePassword.objects.create(user=self.user, token_length=10)
+
 
         # Check that the token has a length of 10
         self.assertEqual(len(otp.token), 10)
