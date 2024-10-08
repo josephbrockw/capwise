@@ -1,9 +1,9 @@
 {% extends 'email/base.html' %}
 {% load email_tags %}
 
-{% block title %}Verify Your Email{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
-{% block header %}Verify Your Email{% if user.first_name %}, {{ user.first_name }}.{% endif %}{% endblock %}
+{% block header %}{{ title }}{% endblock %}
 
 {% block content %}
 	{% for item in content_list %}

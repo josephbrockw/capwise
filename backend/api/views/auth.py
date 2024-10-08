@@ -11,7 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from api.serializers import LogInSerializer, UserSerializer
 from config.api import StandardAPIView, StandardResponse
 from account.models import OneTimePassword
-from account.emails import email_verification_content_list
+from account.emails import Email
 
 
 class SignUpView(generics.CreateAPIView, StandardAPIView):
@@ -23,25 +23,37 @@ class SignUpView(generics.CreateAPIView, StandardAPIView):
         self.send_verification_email(user)
 
     def send_verification_email(self, user):
-        content_list = email_verification_content_list(user)
-
-        html_content = render_to_string(
-            "email/verify_email.html", {
-                "user": user,
-                "content_list": content_list,
-                "current_year": now().year
-            }
-        )
-        text_content = strip_tags(html_content)
-
-        email = EmailMultiAlternatives(
-            subject="Verify your email",
-            body=text_content,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[user.email],
-        )
-        email.attach_alternative(html_content, "text/html")
+        otp = OneTimePassword.objects.create(user=user, token_length=20)
+        email = Email(subject="Verify your email", to=[user.email], template="default")
+        salutation = f"Hi"
+        if user.first_name:
+            salutation += f", {user.first_name}!"
+        else:
+            salutation += "!"
+        email.add_paragraph(salutation)
+        email.add_paragraph("Please click the button below to verify your email address.")
+        email.add_button("Verify Email", f"{settings.FRONTEND_URL}/verify/?token={otp.token}")
+        email.add_paragraph("If you did not create an account, no further action is required.")
+        email.add_paragraph("Thank you!")
         email.send()
+
+        # html_content = render_to_string(
+        #     "email/verify_email.html", {
+        #         "user": user,
+        #         "content_list": content_list,
+        #         "current_year": now().year
+        #     }
+        # )
+        # text_content = strip_tags(html_content)
+        #
+        # email = EmailMultiAlternatives(
+        #     subject="Verify your email",
+        #     body=text_content,
+        #     from_email=settings.DEFAULT_FROM_EMAIL,
+        #     to=[user.email],
+        # )
+        # email.attach_alternative(html_content, "text/html")
+        # email.send()
 
 
 class VerifyEmailView(StandardAPIView):

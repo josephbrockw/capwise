@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf import settings
-from django.urls import path
+from django.urls import path, include
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from api.views import version
@@ -33,6 +33,8 @@ urlpatterns = [
 
 dev_patterns = [
     path("test-templates/<str:directory>/<str:template>", test_templates, name="test_templates"),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+
 ]
 
 

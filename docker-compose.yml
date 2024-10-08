@@ -10,7 +10,7 @@ services:
       - 8009:8000
     env_file:
       - backend/.env.dev
-#      - backend/.env.secrets
+      - backend/.env.secrets
     depends_on:
       - db
   db:
