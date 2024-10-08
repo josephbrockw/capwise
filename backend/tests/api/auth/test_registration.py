@@ -5,6 +5,8 @@ from datetime import timedelta
 
 
 from django.contrib.auth import get_user_model
+from django.core import mail
+from django.conf import settings
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -38,6 +40,8 @@ class AuthenticationTest(APITestCase):
                 },
             )
         )
+
+        # Check that the user was created
         user = get_user_model().objects.get(username="granny")
         self.assertEqual(status.HTTP_201_CREATED, code)
         self.assertEqual(data["id"], str(user.id))
@@ -45,11 +49,30 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(data["email"], user.email)
         self.assertEqual(data["first_name"], user.first_name)
         self.assertEqual(data["last_name"], user.last_name)
+
         # User needs to verify email before becoming active
         self.assertFalse(user.is_active)
+
+        # Check that an OTP was created
         otp = OneTimePassword.objects.get(user=user)
         self.assertTrue(otp.is_active)
         self.assertEqual(len(otp.token), 20)
+
+        # Verify that one email was sent
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox[0]
+        self.assertEqual(email.subject, "Verify your email")
+        self.assertEqual(email.to, [user.email])
+
+        # Check the HTML version of the email (from email.alternatives)
+        html_content = email.alternatives[0][0]  # The first item in 'alternatives' is the HTML content
+
+        # Assert that the correct verification URL is present in the HTML content
+        self.assertIn(f"{settings.FRONTEND_URL}/verify?token={otp.token}", html_content)
+
+        # Optionally, you can check for other key pieces of content in the HTML
+        self.assertIn("Hi, Esmerelda!", html_content)  # Salutation check
+        self.assertIn("Please click the button below to verify your email address.", html_content)
 
     def test_user_cannot_sign_up_with_existing_username(self):
         data, message, error, code = read_api_response(

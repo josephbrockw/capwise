@@ -1,9 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.utils.timezone import now
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -32,28 +28,10 @@ class SignUpView(generics.CreateAPIView, StandardAPIView):
             salutation += "!"
         email.add_paragraph(salutation)
         email.add_paragraph("Please click the button below to verify your email address.")
-        email.add_button("Verify Email", f"{settings.FRONTEND_URL}/verify/?token={otp.token}")
+        email.add_button("Verify Email", f"{settings.FRONTEND_URL}/verify?token={otp.token}")
         email.add_paragraph("If you did not create an account, no further action is required.")
         email.add_paragraph("Thank you!")
         email.send()
-
-        # html_content = render_to_string(
-        #     "email/verify_email.html", {
-        #         "user": user,
-        #         "content_list": content_list,
-        #         "current_year": now().year
-        #     }
-        # )
-        # text_content = strip_tags(html_content)
-        #
-        # email = EmailMultiAlternatives(
-        #     subject="Verify your email",
-        #     body=text_content,
-        #     from_email=settings.DEFAULT_FROM_EMAIL,
-        #     to=[user.email],
-        # )
-        # email.attach_alternative(html_content, "text/html")
-        # email.send()
 
 
 class VerifyEmailView(StandardAPIView):
