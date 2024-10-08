@@ -46,6 +46,7 @@ class Email:
             to=self.to,
         )
         email.attach_alternative(html_content, "text/html")
+        print("Sending email...")
         email.send()
 
 

@@ -13,68 +13,69 @@ def test_templates(request, directory="email", template="welcome"):
         frontend_url = f"http://localhost:8000"
 
 
-    if template == "welcome":
-        frontend_url = frontend_url + "/login"
-        context = {
-            "subject": f"Welcome!",
-            "title": f"Welcome, friend!",
-            "content_list": [
-                {
-                    "type": "text",
-                    "text": f"Hello, Gytha Ogg!"
-                },
-                {
-                    "type": "text",
-                    "text": f"Thank you for verifying your email address with us! We’re excited to have you on board and look forward to helping you get the most out of {app_name}."
-                },
-                {
-                    "type": "text",
-                    "text": "Welcome to the community!"
-                },
-                {
-                    "type": "button",
-                    "text": "Get Started",
-                    "url": frontend_url
-                },
-            ],
-        }
-    elif template == "verify":
-        template_name = "verify_email"
+    if template == "verify":
+        template_name = "default"
         user = get_user_model().objects.first()
         context = {
             "user": user,
             "title": "Verify your email address",
             "content_list": email_verification_content_list(user),
         }
-    elif template == "reset-password":
-        context = {
-            "subject": "Reset your password",
-            "title": "Reset your password",
-            "content_list": [
-                {
-                    "type": "text",
-                    "text": "Hello!"
-                },
-                {
-                    "type": "text",
-                    "text": "You are receiving this email because we received a password reset request for your account. Click 'Reset Password' and enter the code at hte bottom of this email to reset your password."
-                },
-                {
-                    "type": "button",
-                    "text": "Reset Password",
-                    "url": frontend_url + "/reset-password"
-                },
-                {
-                    "type": "note",
-                    "text": "If you did not request a password reset, no further action is required."
-                },
-                {
-                    "type": "code",
-                    "text": "123456"
-                },
-            ],
-        }
+    # elif template == "welcome":
+    #     frontend_url = frontend_url + "/login"
+    #     context = {
+    #         "subject": f"Welcome!",
+    #         "title": f"Welcome, friend!",
+    #         "content_list": [
+    #             {
+    #                 "type": "text",
+    #                 "text": f"Hello, Gytha Ogg!"
+    #             },
+    #             {
+    #                 "type": "text",
+    #                 "text": f"Thank you for verifying your email address with us! We’re excited to have you on board and look forward to helping you get the most out of {app_name}."
+    #             },
+    #             {
+    #                 "type": "text",
+    #                 "text": "Welcome to the community!"
+    #             },
+    #             {
+    #                 "type": "button",
+    #                 "text": "Get Started",
+    #                 "url": frontend_url
+    #             },
+    #         ],
+    #     }
+    # elif template == "reset-password":
+    #     context = {
+    #         "subject": "Reset your password",
+    #         "title": "Reset your password",
+    #         "content_list": [
+    #             {
+    #                 "type": "text",
+    #                 "text": "Hello!"
+    #             },
+    #             {
+    #                 "type": "text",
+    #                 "text": "You are receiving this email because we received a password reset request for your account. Click 'Reset Password' and enter the code at hte bottom of this email to reset your password."
+    #             },
+    #             {
+    #                 "type": "button",
+    #                 "text": "Reset Password",
+    #                 "url": frontend_url + "/reset-password"
+    #             },
+    #             {
+    #                 "type": "note",
+    #                 "text": "If you did not request a password reset, no further action is required."
+    #             },
+    #             {
+    #                 "type": "code",
+    #                 "text": "123456"
+    #             },
+    #         ],
+    #     }
     else:
+        template_name = "default"
         context = {
             "subject": "Verify your email address",
             "title": "Verify your email address",

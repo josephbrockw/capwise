@@ -9,4 +9,5 @@ omit =
   manage.py,
   */migrations/*,
   */tests/*,
+
 branch = True
