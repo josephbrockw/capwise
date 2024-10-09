@@ -14,7 +14,7 @@ class StandardResponse(JsonResponse):
         super().__init__(formatted_data, status=status, **kwargs)
 
 
-class StandardViewSet(viewsets.ModelViewSet):
+class StandardViewSet(viewsets.ViewSet):
     def finalize_response(self, request, response, *args, **kwargs):
         # Ensure the original response is a DRF Response object
         if isinstance(response, JsonResponse):

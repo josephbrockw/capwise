@@ -29,7 +29,7 @@ class AuthenticationTest(APITestCase):
     def test_user_can_sign_up(self):
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/sign-up",
+                "/api/auth/sign-up",
                 data={
                     "username": "granny",
                     "email": "esme@lancre.gov",
@@ -77,7 +77,7 @@ class AuthenticationTest(APITestCase):
     def test_user_cannot_sign_up_with_existing_username(self):
         data, message, error, code = read_api_response(
             self.client.post(
-                "/api/sign-up",
+                "/api/auth/sign-up",
                 data={
                     "username": self.username,
                     "email": "jason@discworld.com",
@@ -99,7 +99,7 @@ class AuthenticationTest(APITestCase):
     def test_user_cannot_sign_up_with_existing_email(self):
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/sign-up",
+                "/api/auth/sign-up",
                 data={
                     "username": "jasonogg",
                     "email": "gytha@lancre.gov",
@@ -121,7 +121,7 @@ class AuthenticationTest(APITestCase):
     def test_user_can_verify_email(self):
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/verify-email",
+                "/api/auth/verify",
                 data={"token": self.otp_token}
             )
         )
@@ -137,7 +137,7 @@ class AuthenticationTest(APITestCase):
         otp.is_valid()
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/verify-email",
+                "/api/auth/verify",
                 data={"token": self.otp_token}
             )
         )
@@ -151,7 +151,7 @@ class AuthenticationTest(APITestCase):
         otp.save()
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/verify-email",
+                "/api/auth/verify",
                 data={"token": self.otp_token}
             )
         )

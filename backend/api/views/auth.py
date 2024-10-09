@@ -1,23 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from rest_framework import generics, status
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
 from api.serializers import LogInSerializer, UserSerializer
-from config.api import StandardAPIView, StandardResponse
+from config.api import StandardAPIView, StandardResponse, StandardViewSet
 from account.models import OneTimePassword
 from account.emails import Email
 
 
-class SignUpView(generics.CreateAPIView, StandardAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSerializer
-
-    def perform_create(self, serializer):
-        user = serializer.save()
-        self.send_verification_email(user)
+class RegistrationViewSet(StandardViewSet):
+    permission_classes = [AllowAny]
 
     def send_verification_email(self, user):
         otp = OneTimePassword.objects.create(user=user, token_length=20)
@@ -34,11 +30,23 @@ class SignUpView(generics.CreateAPIView, StandardAPIView):
         email.add_paragraph("Thank you!")
         email.send()
 
+    @action(detail=False, methods=["post"], url_path="sign-up", url_name="sign_up")
+    def sign_up(self, request):
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        self.send_verification_email(user)
+        return StandardResponse(
+            serializer.data,
+            message="User created successfully. An email has been sent to verify your email address.",
+            status=status.HTTP_201_CREATED,
+        )
 
-class VerifyEmailView(StandardAPIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
+    @action(detail=False, methods=["post"], url_path="verify", url_name="verify_email")
+    def verify_email(self, request):
+        """
+        Handle email verification using the OTP token.
+        """
         token = request.data.get("token")
         try:
             otp = OneTimePassword.objects.get(token=token, is_active=True)

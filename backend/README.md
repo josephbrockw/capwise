@@ -38,7 +38,7 @@ API key for Postmark email service. Needed for environments without DEBUG=True.
 
 # Example cURL commands
 ## Sign Up
-curl -X POST http://localhost:8009/api/sign-up \
+curl -X POST http://localhost:8009/api/auth/sign-up \
 -H "Content-Type: application/json" \
 -d '{
 "username": "jbwilkinson",

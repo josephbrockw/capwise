@@ -16,18 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from api.views import version
-from api.views.auth import LogInView, SignUpView, VerifyEmailView, TokenRefreshView
+from api.views.auth import LogInView, TokenRefreshView, RegistrationViewSet
 from main.views import test_templates
+
+router = DefaultRouter(trailing_slash=False)
+router.register(r"auth", RegistrationViewSet, basename="auth")
 
 urlpatterns = [
     path("admin", admin.site.urls),
     path("version", version, name="version"),
-    path("api/sign-up", SignUpView.as_view(), name="sign_up"),
-    path("api/verify-email", VerifyEmailView.as_view(), name="verify_email"),
     path("api/login", LogInView.as_view(), name="log_in"),
     path("api/token/refresh", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/", include(router.urls)),
 ]
 
 dev_patterns = [

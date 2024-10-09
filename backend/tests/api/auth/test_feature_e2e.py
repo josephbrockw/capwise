@@ -24,7 +24,7 @@ class AuthenticationTest(APITestCase):
     def test_register_new_user(self):
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/sign-up",
+                "/api/auth/sign-up",
                 data={
                     "username": "granny",
                     "email": "esme@lancre.gov",
@@ -49,7 +49,7 @@ class AuthenticationTest(APITestCase):
 
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/verify-email",
+                "/api/auth/verify",
                 data={"token": otp.token}
             )
         )

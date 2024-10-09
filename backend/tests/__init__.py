@@ -2,6 +2,8 @@ import json
 
 
 def read_api_response(response, show=False):
+    print(response)
+    print(response.content)
     code = response.status_code
     response = json.loads(response.content)
     data = response.get('data', {})
