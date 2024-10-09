@@ -3,6 +3,7 @@ from django.conf import settings
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
 from api.serializers import LogInSerializer, UserSerializer
 from config.api import StandardAPIView, StandardResponse
@@ -54,5 +55,9 @@ class VerifyEmailView(StandardAPIView):
         return StandardResponse(message="Email verified successfully.", status=status.HTTP_200_OK)
 
 
-class LogInView(TokenObtainPairView):
+class LogInView(TokenObtainPairView, StandardAPIView):
     serializer_class = LogInSerializer
+
+
+class TokenRefreshView(BaseTokenRefreshView, StandardAPIView):
+    pass

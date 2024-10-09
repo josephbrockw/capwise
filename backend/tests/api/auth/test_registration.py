@@ -161,37 +161,42 @@ class AuthenticationTest(APITestCase):
 
     def test_user_can_log_in(self):  # new
         user = User.objects.get(username="nanny")
-        response = self.client.post(
-            "/api/login",
-            data={
-                "username": "nanny",
-                "password": PASSWORD,
-            },
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/login",
+                data={
+                    "username": "nanny",
+                    "password": PASSWORD,
+                },
+            )
         )
 
         # Parse payload data from access token.
-        access = response.data["access"]
+        access = data["access"]
         header, payload, signature = access.split(".")
         decoded_payload = base64.b64decode(f"{payload}==")
         payload_data = json.loads(decoded_payload)
 
-        self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertIsNotNone(response.data["refresh"])
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIsNotNone(data["refresh"])
         self.assertEqual(payload_data["id"], str(user.id))
         self.assertEqual(payload_data["username"], user.username)
         self.assertEqual(payload_data["first_name"], user.first_name)
         self.assertEqual(payload_data["last_name"], user.last_name)
 
     def test_user_login_fails_with_invalid_credentials(self):
-        response = self.client.post(
-            "/api/login",
-            data={
-                "username": self.username,
-                "password": "wrongpassword",
-            },
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/login",
+                data={
+                    "username": self.username,
+                    "password": "wrongpassword",
+                },
+            ), show=True
         )
-        self.assertEqual(status.HTTP_401_UNAUTHORIZED, response.status_code)
+        self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(msg, "An error occurred")
         self.assertEqual(
-            response.data["detail"],
+            err["detail"],
             "No active account found with the given credentials",
         )

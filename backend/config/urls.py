@@ -16,10 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenRefreshView
 
 from api.views import version
-from api.views.auth import LogInView, SignUpView, VerifyEmailView
+from api.views.auth import LogInView, SignUpView, VerifyEmailView, TokenRefreshView
 from main.views import test_templates
 
 urlpatterns = [
