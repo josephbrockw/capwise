@@ -20,8 +20,7 @@ class LogInViewTestCase(APITestCase):
         payload = {'username': 'magrat', 'password': 'testpass123'}
         data, msg, err, code = read_api_response(self.client.post(url, payload, format='json'))
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(msg, "An error occurred")
-        self.assertEqual(err, {"detail": "No active account found with the given credentials"})
+        self.assertEqual(err,  "No active account found with the given credentials")
 
         # Verify the user
         user = get_user_model().objects.get(username='magrat')
@@ -80,5 +79,4 @@ class TokenRefreshViewTests(APITestCase):
             self.client.post(reverse('token_refresh'), {}), show=True
         )
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(msg, "An error occurred")
-        self.assertEqual(err, {"refresh": ["This field is required."]})
+        self.assertEqual(err, "No refresh token provided.")

@@ -90,10 +90,7 @@ class AuthenticationTest(APITestCase):
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
         self.assertEqual(
-            message, "An error occurred"
-        )
-        self.assertEqual(
-            error["username"][0], "A user with that username already exists."
+            error, "A user with that username already exists."
         )
 
     def test_user_cannot_sign_up_with_existing_email(self):
@@ -112,10 +109,7 @@ class AuthenticationTest(APITestCase):
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
         self.assertEqual(
-            msg, "An error occurred"
-        )
-        self.assertEqual(
-            err["non_field_errors"][0], "Email is already associated with an account."
+            err, "Email is already associated with an account."
         )
 
     def test_user_can_verify_email(self):
@@ -159,6 +153,41 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "Invalid or expired token.")
 
+    def test_user_initiate_verify_resend(self):
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/resend-verify",
+                data={
+                    "email": "magrat@lancre.gov",
+                },
+            )
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+
+        user = get_user_model().objects.get(username=self.new_user)
+        self.assertFalse(user.is_active)
+
+        # Check that an OTP was created
+        otp = OneTimePassword.objects.filter(user=user).order_by("-created").first()
+        self.assertTrue(otp.is_active)
+        self.assertEqual(len(otp.token), 20)
+
+        # Verify that one email was sent
+        self.assertEqual(len(mail.outbox), 1)
+        email = mail.outbox[0]
+        self.assertEqual(email.subject, "Verify your email")
+        self.assertEqual(email.to, [user.email])
+
+        # Check the HTML version of the email (from email.alternatives)
+        html_content = email.alternatives[0][0]  # The first item in 'alternatives' is the HTML content
+
+        # Assert that the correct verification URL is present in the HTML content
+        self.assertIn(f"{settings.FRONTEND_URL}/verify?token={otp.token}", html_content)
+
+        # Optionally, you can check for other key pieces of content in the HTML
+        self.assertIn("Hi, Magrat!", html_content)  # Salutation check
+        self.assertIn("Please click the button below to verify your email address.", html_content)
+
     def test_user_can_log_in(self):  # new
         user = User.objects.get(username="nanny")
         data, msg, err, code = read_api_response(
@@ -195,8 +224,7 @@ class AuthenticationTest(APITestCase):
             ), show=True
         )
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(msg, "An error occurred")
         self.assertEqual(
-            err["detail"],
+            err,
             "No active account found with the given credentials",
         )

@@ -4,7 +4,7 @@ from account.serializers import UserSerializer
 
 
 @pytest.mark.django_db
-def test_valid_movie_serializer():
+def test_valid_user_serializer():
     valid_serializer_data = {
         "username": "jsullivan",
         "email": "james@minc.com",
@@ -17,7 +17,8 @@ def test_valid_movie_serializer():
     assert serializer.errors == {}
 
 
-def test_invalid_movie_serializer():
+@pytest.mark.django_db
+def test_invalid_user_serializer():
     invalid_serializer_data = {
         "email": "james@minc.com",
         "password": "password",

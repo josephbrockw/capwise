@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
-from api.serializers import LogInSerializer, UserSerializer
+from api.serializers import LogInSerializer, UserSerializer, CustomTokenRefreshSerializer
 from config.api import StandardAPIView, StandardResponse, StandardViewSet
 from account.models import OneTimePassword
 from account.emails import Email
@@ -16,6 +16,7 @@ class RegistrationViewSet(StandardViewSet):
     permission_classes = [AllowAny]
 
     def send_verification_email(self, user):
+        # Create a new OTP
         otp = OneTimePassword.objects.create(user=user, token_length=20)
         email = Email(subject="Verify your email", to=[user.email], template="default")
         salutation = f"Hi"
@@ -62,10 +63,24 @@ class RegistrationViewSet(StandardViewSet):
 
         return StandardResponse(message="Email verified successfully.", status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=["post"], url_path="resend-verify", url_name="resend_verify")
+    def resend_verification(self, request):
+        email = request.data.get("email")
+        try:
+            user = get_user_model().objects.get(email=email)
+        except get_user_model().DoesNotExist:
+            return StandardResponse(error="User not found.", status=status.HTTP_400_BAD_REQUEST)
+
+        if user.is_active:
+            return StandardResponse(error="User is already verified.", status=status.HTTP_400_BAD_REQUEST)
+
+        self.send_verification_email(user)
+        return StandardResponse(message="Verification email sent.", status=status.HTTP_200_OK)
+
 
 class LogInView(TokenObtainPairView, StandardAPIView):
     serializer_class = LogInSerializer
 
 
 class TokenRefreshView(BaseTokenRefreshView, StandardAPIView):
-    pass
+    serializer_class = CustomTokenRefreshSerializer
