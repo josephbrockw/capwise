@@ -10,6 +10,7 @@ from django.utils.timezone import now
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    email = models.EmailField(unique=True)
 
 
 class OneTimePassword(models.Model):
