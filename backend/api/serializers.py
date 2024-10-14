@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from rest_framework_simplejwt.serializers import (TokenObtainPairSerializer,
+                                                  TokenRefreshSerializer)
 from rest_framework_simplejwt.tokens import TokenError
 
 
@@ -17,7 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
         if User.objects.filter(username=data["username"]).exists():
             raise serializers.ValidationError("Username is already taken.")
         if User.objects.filter(email=data["email"]).exists():
-            raise serializers.ValidationError("Email is already associated with an account.")
+            raise serializers.ValidationError(
+                "Email is already associated with an account."
+            )
         return data
 
     def create(self, validated_data):
@@ -71,6 +74,4 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
         try:
             return super().validate(attrs)
         except TokenError as e:
-            raise serializers.ValidationError({
-                "refresh": force_str(e)
-            })
+            raise serializers.ValidationError({"refresh": force_str(e)})

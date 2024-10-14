@@ -3,13 +3,12 @@ import json
 import os
 from datetime import timedelta
 
-
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from account.models import User, OneTimePassword
+from account.models import OneTimePassword, User
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -48,10 +47,7 @@ class AuthenticationTest(APITestCase):
         otp = OneTimePassword.objects.filter(user=user).order_by("-created").first()
 
         data, msg, err, code = read_api_response(
-            self.client.post(
-                "/api/auth/verify",
-                data={"token": otp.token}
-            )
+            self.client.post("/api/auth/verify", data={"token": otp.token})
         )
         assert code == status.HTTP_200_OK
 
@@ -63,4 +59,3 @@ class AuthenticationTest(APITestCase):
             },
         )
         assert response.status_code == status.HTTP_200_OK
-

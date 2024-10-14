@@ -67,7 +67,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -180,11 +180,14 @@ if DEBUG and not os.environ.get("USE_POSTMARK_IN_DEV", False):
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
     ANYMAIL = {
-        "POSTMARK_SERVER_TOKEN": os.environ.get("POSTMARK_API_SERVICE_KEY", "POSTMARK_API_KEY")
+        "POSTMARK_SERVER_TOKEN": os.environ.get(
+            "POSTMARK_API_SERVICE_KEY", "POSTMARK_API_KEY"
+        )
     }
-    EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "anymail.backends.postmark.EmailBackend")
+    EMAIL_BACKEND = os.environ.get(
+        "EMAIL_BACKEND", "anymail.backends.postmark.EmailBackend"
+    )
 
 OTP_EXPIRATION_MINUTES = os.environ.get("OTP_EXPIRATION_MINUTES", 5)
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3001")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@test.io")
-

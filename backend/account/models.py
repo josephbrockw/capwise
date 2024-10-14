@@ -1,9 +1,9 @@
 import uuid
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.conf import settings
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 
@@ -15,7 +15,9 @@ class User(AbstractUser):
 
 class OneTimePassword(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True
+    )
     token = models.CharField(max_length=64, unique=True, db_index=True)
     created = models.DateTimeField(auto_now_add=True)
     expires = models.DateTimeField()
@@ -34,15 +36,22 @@ class OneTimePassword(models.Model):
         # Users should only have one token at a time
         if OneTimePassword.objects.filter(user=self.user, is_active=True).exists():
             if self.id:
-                OneTimePassword.objects.filter(user=self.user).exclude(id=self.id).update(is_active=False)
+                OneTimePassword.objects.filter(user=self.user).exclude(
+                    id=self.id
+                ).update(is_active=False)
             else:
                 OneTimePassword.objects.filter(user=self.user).update(is_active=False)
 
         if not self.token:
-            self.token = get_random_string(length=self.token_length, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+            self.token = get_random_string(
+                length=self.token_length,
+                allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            )
 
         if not self.expires:
-            self.expires = now() + timedelta(minutes=int(settings.OTP_EXPIRATION_MINUTES))
+            self.expires = now() + timedelta(
+                minutes=int(settings.OTP_EXPIRATION_MINUTES)
+            )
 
         super().save(*args, **kwargs)
 
@@ -57,4 +66,3 @@ class OneTimePassword(models.Model):
         self.is_active = False
         self.save()
         return is_valid
-

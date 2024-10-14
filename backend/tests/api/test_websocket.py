@@ -1,8 +1,8 @@
 import pytest
-from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
-from channels.testing import WebsocketCommunicator
 from channels.layers import get_channel_layer
+from channels.testing import WebsocketCommunicator
+from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import AccessToken
 
 from config.asgi import application
@@ -26,9 +26,7 @@ def create_user(username, password):
 class TestWebSocket:
     async def test_can_connect_to_server(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
-        _, access = await create_user(
-            "granny", "testpass123"
-        )
+        _, access = await create_user("granny", "testpass123")
 
         communicator = WebsocketCommunicator(application, f"/ws?token={access}")
         connected, _ = await communicator.connect()
@@ -37,9 +35,7 @@ class TestWebSocket:
 
     async def test_can_send_and_receive_messages(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
-        _, access = await create_user(
-            "granny", "testpass123"
-        )
+        _, access = await create_user("granny", "testpass123")
 
         communicator = WebsocketCommunicator(application, f"/ws?token={access}")
         connected, _ = await communicator.connect()
@@ -57,9 +53,7 @@ class TestWebSocket:
 
     async def test_can_send_and_receive_broadcast_messages(self, settings):
         settings.CHANNEL_LAYERS = TEST_CHANNEL_LAYERS
-        _, access = await create_user(
-            "granny", "testpass123"
-        )
+        _, access = await create_user("granny", "testpass123")
 
         communicator = WebsocketCommunicator(application, f"/ws?token={access}")
         connected, _ = await communicator.connect()

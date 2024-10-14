@@ -1,8 +1,9 @@
 from django.conf import settings
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.template.exceptions import TemplateDoesNotExist
+
 from account.emails import email_verification_content_list
 
 
@@ -11,7 +12,6 @@ def test_templates(request, directory="email", template="welcome"):
         frontend_url = f"{settings.FRONTEND_URL}"
     else:
         frontend_url = f"http://localhost:8000"
-
 
     if template == "verify":
         template_name = "default"
@@ -80,26 +80,16 @@ def test_templates(request, directory="email", template="welcome"):
             "subject": "Verify your email address",
             "title": "Verify your email address",
             "content_list": [
+                {"type": "text", "text": "Hello!"},
                 {
                     "type": "text",
-                    "text": "Hello!"
+                    "text": "Thank you for signing up with our service! To complete your registration, please verify your emaill address by clicking on the link below:",
                 },
-                {
-                    "type": "text",
-                    "text": "Thank you for signing up with our service! To complete your registration, please verify your emaill address by clicking on the link below:"
-                },
-                {
-                    "type": "button",
-                    "text": "Click me",
-                    "url": frontend_url
-                },
-                {
-                    "type": "callout",
-                    "text": "123456"
-                },
+                {"type": "button", "text": "Click me", "url": frontend_url},
+                {"type": "callout", "text": "123456"},
                 {
                     "type": "note",
-                    "text": "If you did not sign up for our service, please ignore this email."
+                    "text": "If you did not sign up for our service, please ignore this email.",
                 },
             ],
         }

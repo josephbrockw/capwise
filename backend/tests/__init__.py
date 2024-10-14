@@ -4,10 +4,10 @@ import json
 def read_api_response(response, show=False):
     code = response.status_code
     response = json.loads(response.content)
-    data = response.get('data', {})
-    msg = response.get('message', '')
-    err = response.get('error', '')
-    err_code = response.get('error_code', None)
+    data = response.get("data", {})
+    msg = response.get("message", "")
+    err = response.get("error", "")
+    err_code = response.get("error_code", None)
     if show:
         print(f"Data:\n{data}")
         print(f"Message:  {msg}")

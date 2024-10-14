@@ -1,16 +1,10 @@
-from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework.exceptions import (
-    AuthenticationFailed,
-    NotAuthenticated,
-    PermissionDenied,
-    ValidationError,
-)
 from django.http import JsonResponse
 from django.utils.encoding import force_str
-
+from rest_framework import status, viewsets
+from rest_framework.exceptions import (AuthenticationFailed, NotAuthenticated,
+                                       PermissionDenied, ValidationError)
+from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import TokenError
 
 STANDARD_MESSAGES = {
     "request_successful": "Request successful",
@@ -19,12 +13,14 @@ STANDARD_MESSAGES = {
 
 
 class StandardResponse(JsonResponse):
-    def __init__(self, data={}, message="", error="", error_code=None, status=400, **kwargs):
+    def __init__(
+        self, data={}, message="", error="", error_code=None, status=400, **kwargs
+    ):
         formatted_data = {
             "data": data,
             "message": message,
             "error": error,
-            "error_code": error_code
+            "error_code": error_code,
         }
         super().__init__(formatted_data, status=status, **kwargs)
 
@@ -48,21 +44,15 @@ class StandardMixin:
             return response
         elif isinstance(exc, AuthenticationFailed):
             return StandardResponse(
-                error=force_str(exc),
-                error_code="AUTHENTICATION_FAILED",
-                status=401
+                error=force_str(exc), error_code="AUTHENTICATION_FAILED", status=401
             )
         elif isinstance(exc, NotAuthenticated):
             return StandardResponse(
-                error=force_str(exc),
-                error_code="NOT_AUTHENTICATED",
-                status=401
+                error=force_str(exc), error_code="NOT_AUTHENTICATED", status=401
             )
         elif isinstance(exc, PermissionDenied):
             return StandardResponse(
-                error=force_str(exc),
-                error_code="PERMISSION_DENIED",
-                status=403
+                error=force_str(exc), error_code="PERMISSION_DENIED", status=403
             )
         elif isinstance(exc, ValidationError):
             # Extracting the validation error messages
@@ -81,7 +71,7 @@ class StandardMixin:
             return StandardResponse(
                 error=combined_message,
                 error_code="VALIDATION_ERROR",
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
         elif isinstance(exc, TokenError):
             error_message = force_str(exc)
@@ -104,7 +94,9 @@ class StandardMixin:
             message = ""
             error = getattr(response, "error", STANDARD_MESSAGES["error_occurred"])
         else:
-            message = getattr(response, "message", STANDARD_MESSAGES["request_successful"])
+            message = getattr(
+                response, "message", STANDARD_MESSAGES["request_successful"]
+            )
             error = getattr(response, "error", "")
 
         error_code = getattr(response, "error_code", None)
@@ -117,7 +109,7 @@ class StandardMixin:
             message=message,
             error=error,
             error_code=error_code,
-            status=status_code
+            status=status_code,
         )
         return super().finalize_response(request, response, *args, **kwargs)
 

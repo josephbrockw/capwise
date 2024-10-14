@@ -3,6 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.timezone import now
+
 from account.models import OneTimePassword
 
 
@@ -11,7 +12,11 @@ class Email:
         self.subject = subject
         self.to = to
         self.from_email = settings.DEFAULT_FROM_EMAIL
-        self.context = {"title": self.subject, "current_year": now().year, "content_list": []}
+        self.context = {
+            "title": self.subject,
+            "current_year": now().year,
+            "content_list": [],
+        }
         self.template = template
 
         # self.html_content = render_to_string(self._find_template(email_name), self.context)
@@ -31,7 +36,9 @@ class Email:
         self.context["content_list"].append({"type": "paragraph", "text": text})
 
     def add_button(self, text, url):
-        self.context["content_list"].append({"type": "button", "text": text, "url": url})
+        self.context["content_list"].append(
+            {"type": "button", "text": text, "url": url}
+        )
 
     def send(self):
         if not self.context["content_list"]:
@@ -61,9 +68,15 @@ def email_verification_content_list(user):
 
     content_list = [
         {"type": "paragraph", "text": salutation},
-        {"type": "paragraph", "text": "Please click the button below to verify your email address."},
+        {
+            "type": "paragraph",
+            "text": "Please click the button below to verify your email address.",
+        },
         {"type": "button", "text": "Verify Email", "url": verification_url},
-        {"type": "paragraph", "text": "If you did not create an account, no further action is required."},
-        {"type": "paragraph", "text": "Thank you!"}
+        {
+            "type": "paragraph",
+            "text": "If you did not create an account, no further action is required.",
+        },
+        {"type": "paragraph", "text": "Thank you!"},
     ]
     return content_list

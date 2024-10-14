@@ -1,8 +1,10 @@
+from datetime import timedelta
+
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils.timezone import now
-from datetime import timedelta
+
 from account.models import OneTimePassword
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
@@ -10,7 +12,9 @@ User = get_user_model()
 class OneTimePasswordModelTest(TestCase):
     def setUp(self):
         # Create a user for testing
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
 
     def test_create_otp_with_default_token_length(self):
         """Test creating a OneTimePassword with default token length (6 characters)"""
@@ -56,8 +60,12 @@ class OneTimePasswordModelTest(TestCase):
         otp = OneTimePassword.objects.create(user=self.user)
 
         # Ensure the expiration is set based on the setting (e.g., 10 minutes)
-        expected_expiration = now() + timedelta(minutes=15)  # Assuming settings.OTP_EXPIRATION_MINUTES = 10
-        self.assertAlmostEqual(otp.expires, expected_expiration, delta=timedelta(seconds=15))
+        expected_expiration = now() + timedelta(
+            minutes=15
+        )  # Assuming settings.OTP_EXPIRATION_MINUTES = 10
+        self.assertAlmostEqual(
+            otp.expires, expected_expiration, delta=timedelta(seconds=15)
+        )
 
     def test_is_valid_method_with_valid_token(self):
         """Test the is_valid method with a valid (not expired) token"""
@@ -81,7 +89,6 @@ class OneTimePasswordModelTest(TestCase):
     def test_custom_init_token_length(self):
         """Test custom token length passed in through __init__"""
         otp = OneTimePassword.objects.create(user=self.user, token_length=10)
-
 
         # Check that the token has a length of 10
         self.assertEqual(len(otp.token), 10)

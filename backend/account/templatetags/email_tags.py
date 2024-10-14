@@ -11,7 +11,7 @@ def cta_button(url, text):
     Usage:
         {% cta_button 'http://example.com' 'Click Here' %}
     """
-    html = f'''
+    html = f"""
     <p>
         <a href="{url}" style="
             display: inline-block;
@@ -23,7 +23,7 @@ def cta_button(url, text):
             font-size: 16px;
         ">{text}</a>
     </p>
-    '''
+    """
     return mark_safe(html)
 
 
@@ -34,7 +34,7 @@ def paragraph(text):
     Usage:
         {% paragraph 'This is a paragraph.' %}
     """
-    html = f'''
+    html = f"""
     <p style="">{text}</p>
-    '''
+    """
     return mark_safe(html)

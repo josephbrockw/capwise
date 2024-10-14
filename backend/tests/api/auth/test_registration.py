@@ -3,15 +3,14 @@ import json
 import os
 from datetime import timedelta
 
-
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.conf import settings
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from account.models import User, OneTimePassword
+from account.models import OneTimePassword, User
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -65,14 +64,18 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(email.to, [user.email])
 
         # Check the HTML version of the email (from email.alternatives)
-        html_content = email.alternatives[0][0]  # The first item in 'alternatives' is the HTML content
+        html_content = email.alternatives[0][
+            0
+        ]  # The first item in 'alternatives' is the HTML content
 
         # Assert that the correct verification URL is present in the HTML content
         self.assertIn(f"{settings.FRONTEND_URL}/verify?token={otp.token}", html_content)
 
         # Optionally, you can check for other key pieces of content in the HTML
         self.assertIn("Hi, Esmerelda!", html_content)  # Salutation check
-        self.assertIn("Please click the button below to verify your email address.", html_content)
+        self.assertIn(
+            "Please click the button below to verify your email address.", html_content
+        )
 
     def test_user_cannot_sign_up_with_existing_username(self):
         data, message, error, code = read_api_response(
@@ -89,9 +92,7 @@ class AuthenticationTest(APITestCase):
             )
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
-        self.assertEqual(
-            error, "A user with that username already exists."
-        )
+        self.assertEqual(error, "A user with that username already exists.")
 
     def test_user_cannot_sign_up_with_existing_email(self):
         data, msg, err, code = read_api_response(
@@ -108,16 +109,29 @@ class AuthenticationTest(APITestCase):
             )
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
-        self.assertEqual(
-            err, "Email is already associated with an account."
+        self.assertEqual(err, "Email is already associated with an account.")
+
+    def test_user_cannot_sign_up_with_passwords_not_matching(self):
+        """Test that sign up fails when the provided passwords do not match."""
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "granny2",
+                    "email": "granny2@lancre.gov",
+                    "first_name": "Granny",
+                    "last_name": "Weatherwax",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD + "123",
+                },
+            )
         )
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "Passwords must match.")
 
     def test_user_can_verify_email(self):
         data, msg, err, code = read_api_response(
-            self.client.post(
-                "/api/auth/verify",
-                data={"token": self.otp_token}
-            )
+            self.client.post("/api/auth/verify", data={"token": self.otp_token})
         )
         otp = OneTimePassword.objects.get(token=self.otp_token)
         user = get_user_model().objects.get(username=self.new_user)
@@ -126,14 +140,22 @@ class AuthenticationTest(APITestCase):
         self.assertFalse(otp.is_active)
         self.assertEqual(msg, "Email verified successfully.")
 
+    def test_verify_email_without_token(self):
+        """Test verification without providing a token."""
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/verify",
+                data={},
+            )
+        )
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "The 'token' field is required to verify the email.")
+
     def test_verify_email_with_invalid_token(self):
         otp = OneTimePassword.objects.get(token=self.otp_token)
         otp.is_valid()
         data, msg, err, code = read_api_response(
-            self.client.post(
-                "/api/auth/verify",
-                data={"token": self.otp_token}
-            )
+            self.client.post("/api/auth/verify", data={"token": self.otp_token})
         )
 
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
@@ -144,10 +166,7 @@ class AuthenticationTest(APITestCase):
         otp.expires = now() - timedelta(minutes=1)
         otp.save()
         data, msg, err, code = read_api_response(
-            self.client.post(
-                "/api/auth/verify",
-                data={"token": self.otp_token}
-            )
+            self.client.post("/api/auth/verify", data={"token": self.otp_token})
         )
 
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
@@ -179,14 +198,48 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(email.to, [user.email])
 
         # Check the HTML version of the email (from email.alternatives)
-        html_content = email.alternatives[0][0]  # The first item in 'alternatives' is the HTML content
+        html_content = email.alternatives[0][
+            0
+        ]  # The first item in 'alternatives' is the HTML content
 
         # Assert that the correct verification URL is present in the HTML content
         self.assertIn(f"{settings.FRONTEND_URL}/verify?token={otp.token}", html_content)
 
         # Optionally, you can check for other key pieces of content in the HTML
         self.assertIn("Hi, Magrat!", html_content)  # Salutation check
-        self.assertIn("Please click the button below to verify your email address.", html_content)
+        self.assertIn(
+            "Please click the button below to verify your email address.", html_content
+        )
+
+    def test_user_cannot_resend_verification_for_nonexistent_email(self):
+        """Test that a user cannot request verification resend for a non-existent email."""
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/resend-verify",
+                data={
+                    "email": "notexist@lancre.gov",
+                },
+            )
+        )
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "User not found.")
+
+    def test_user_cannot_resend_verification_for_verified_user(self):
+        """Test that a user who is already verified cannot request email verification resend."""
+        user = get_user_model().objects.get(username=self.new_user)
+        user.is_active = True
+        user.save()
+
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/resend-verify",
+                data={
+                    "email": user.email,
+                },
+            )
+        )
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "User is already verified.")
 
     def test_user_can_log_in(self):  # new
         user = User.objects.get(username="nanny")
@@ -221,10 +274,25 @@ class AuthenticationTest(APITestCase):
                     "username": self.username,
                     "password": "wrongpassword",
                 },
-            ), show=True
+            ),
+            show=True,
         )
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(
             err,
             "No active account found with the given credentials",
         )
+
+    def test_user_can_not_log_in_if_unverified(self):
+        """Test that login fails if the user's email is not verified."""
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/login",
+                data={
+                    "username": self.new_user,
+                    "password": PASSWORD,
+                },
+            )
+        )
+        self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(err, "No active account found with the given credentials")
