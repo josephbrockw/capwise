@@ -1,10 +1,9 @@
 from datetime import timedelta
 
+from account.models import OneTimePassword
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils.timezone import now
-
-from account.models import OneTimePassword
 
 User = get_user_model()
 
@@ -56,7 +55,10 @@ class OneTimePasswordModelTest(TestCase):
         self.assertTrue(otp2.is_active)
 
     def test_auto_expiration_setting(self):
-        """Test that expiration date is set correctly based on the default expiration time"""
+        """
+        Test that expiration date is set correctly based on the
+        default expiration time
+        """
         otp = OneTimePassword.objects.create(user=self.user)
 
         # Ensure the expiration is set based on the setting (e.g., 10 minutes)

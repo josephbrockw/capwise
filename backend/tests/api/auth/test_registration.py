@@ -3,14 +3,13 @@ import json
 import os
 from datetime import timedelta
 
+from account.models import OneTimePassword, User
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
-
-from account.models import OneTimePassword, User
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -212,7 +211,10 @@ class AuthenticationTest(APITestCase):
         )
 
     def test_user_cannot_resend_verification_for_nonexistent_email(self):
-        """Test that a user cannot request verification resend for a non-existent email."""
+        """
+        Test that a user cannot request verification resend for a
+        non-existent email.
+        """
         data, msg, err, code = read_api_response(
             self.client.post(
                 "/api/auth/resend-verify",
@@ -225,7 +227,10 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(err, "User not found.")
 
     def test_user_cannot_resend_verification_for_verified_user(self):
-        """Test that a user who is already verified cannot request email verification resend."""
+        """
+        Test that a user who is already verified cannot request email
+        verification resend.
+        """
         user = get_user_model().objects.get(username=self.new_user)
         user.is_active = True
         user.save()
@@ -245,7 +250,7 @@ class AuthenticationTest(APITestCase):
         user = User.objects.get(username="nanny")
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/login",
+                "/api/auth/login",
                 data={
                     "username": "nanny",
                     "password": PASSWORD,
@@ -269,7 +274,7 @@ class AuthenticationTest(APITestCase):
     def test_user_login_fails_with_invalid_credentials(self):
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/login",
+                "/api/auth/login",
                 data={
                     "username": self.username,
                     "password": "wrongpassword",
@@ -287,7 +292,7 @@ class AuthenticationTest(APITestCase):
         """Test that login fails if the user's email is not verified."""
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/login",
+                "/api/auth/login",
                 data={
                     "username": self.new_user,
                     "password": PASSWORD,

@@ -1,10 +1,9 @@
+from account.models import OneTimePassword
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.timezone import now
-
-from account.models import OneTimePassword
 
 
 class Email:
@@ -18,9 +17,6 @@ class Email:
             "content_list": [],
         }
         self.template = template
-
-        # self.html_content = render_to_string(self._find_template(email_name), self.context)
-        # self.text_content = strip_tags(self.html_content)
 
     def _get_template(self):
         return f"email/{self.template}.html"
@@ -60,7 +56,7 @@ class Email:
 def email_verification_content_list(user):
     otp = OneTimePassword.objects.create(user=user, token_length=20)
     verification_url = f"{settings.FRONTEND_URL}/verify/?token={otp.token}"
-    salutation = f"Hi"
+    salutation = "Hi"
     if user.first_name:
         salutation += f", {user.first_name}!"
     else:

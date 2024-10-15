@@ -4,6 +4,9 @@ env
 .idea
 backend/.env.secrets
 
+# pre-commit cache
+.pre-commit/
+
 # =====================
 
 # Created by https://www.toptal.com/developers/gitignore/api/django

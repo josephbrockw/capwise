@@ -117,10 +117,10 @@ case $workflow in
         command="docker compose exec backend pytest"
         for arg in "$@"; do
             if [[ "$arg" == "--help" ]]; then
-                test_help 
+                test_help
                 exit 0
             elif [[ "$arg" =~ ^--type= ]]; then
-                type="${arg#*=}" 
+                type="${arg#*=}"
             elif [[ "$arg" =~ ^--k= ]]; then
                 k=" -k ${arg#*=}"
             elif [[ "$arg" == "-s" ]]; then

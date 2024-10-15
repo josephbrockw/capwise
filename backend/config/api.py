@@ -1,8 +1,12 @@
 from django.http import JsonResponse
 from django.utils.encoding import force_str
 from rest_framework import status, viewsets
-from rest_framework.exceptions import (AuthenticationFailed, NotAuthenticated,
-                                       PermissionDenied, ValidationError)
+from rest_framework.exceptions import (
+    AuthenticationFailed,
+    NotAuthenticated,
+    PermissionDenied,
+    ValidationError,
+)
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 

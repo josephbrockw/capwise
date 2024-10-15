@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-
 from tests import read_api_response
 
 
@@ -18,7 +17,7 @@ class LogInViewTestCase(APITestCase):
 
     def test_login_success(self):
         # Users should not be able to login if they are not verified
-        url = "/api/login"
+        url = "/api/auth/login"
         payload = {"username": "magrat", "password": "testpass123"}
         data, msg, err, code = read_api_response(
             self.client.post(url, payload, format="json")
@@ -50,7 +49,7 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(payload["last_name"], user.last_name)
 
     def test_login_failure(self):
-        url = "/api/login"
+        url = "/api/auth/login"
         data = {"username": "test_user", "password": "wrongpassword"}
         data, msg, err, code = read_api_response(
             self.client.post(url, data, format="json")
@@ -70,7 +69,7 @@ class TokenRefreshViewTests(APITestCase):
         # Obtain an access token
         data, msg, err, code = read_api_response(
             self.client.post(
-                "/api/login",
+                "/api/auth/login",
                 {"username": "nanny", "password": "testpass123"},
                 format="json",
             )
@@ -90,7 +89,7 @@ class TokenRefreshViewTests(APITestCase):
     def test_refresh_token_missing_refresh_token(self):
         # Try to refresh without providing the refresh token
         data, msg, err, code = read_api_response(
-            self.client.post(reverse("token_refresh"), {}), show=True
+            self.client.post(reverse("token_refresh"), {})
         )
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "No refresh token provided.")

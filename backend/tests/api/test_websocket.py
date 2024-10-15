@@ -2,10 +2,9 @@ import pytest
 from channels.db import database_sync_to_async
 from channels.layers import get_channel_layer
 from channels.testing import WebsocketCommunicator
+from config.asgi import application
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import AccessToken
-
-from config.asgi import application
 
 TEST_CHANNEL_LAYERS = {
     "default": {

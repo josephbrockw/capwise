@@ -1,17 +1,18 @@
+from account.emails import Email
+from account.models import OneTimePassword
+from api.serializers import (
+    CustomTokenRefreshSerializer,
+    LogInSerializer,
+    UserSerializer,
+)
+from config.api import StandardAPIView, StandardResponse, StandardViewSet
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.views import \
-    TokenRefreshView as BaseTokenRefreshView
-
-from account.emails import Email
-from account.models import OneTimePassword
-from api.serializers import (CustomTokenRefreshSerializer, LogInSerializer,
-                             UserSerializer)
-from config.api import StandardAPIView, StandardResponse, StandardViewSet
+from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
 
 class AuthViewSet(StandardViewSet):
@@ -47,7 +48,8 @@ class AuthViewSet(StandardViewSet):
         self.send_verification_email(user)
         return StandardResponse(
             serializer.data,
-            message="User created successfully. An email has been sent to verify your email address.",
+            message="User created successfully. An email has been "
+            "sent to verify your email address.",
             status=status.HTTP_201_CREATED,
         )
 
@@ -59,7 +61,8 @@ class AuthViewSet(StandardViewSet):
         token = request.data.get("token", None)
         if not token:
             return StandardResponse(
-                error="The 'token' field is required to verify the email.", status=status.HTTP_400_BAD_REQUEST
+                error="The 'token' field is required to verify the email.",
+                status=status.HTTP_400_BAD_REQUEST,
             )
         try:
             otp = OneTimePassword.objects.get(token=token, is_active=True)

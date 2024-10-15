@@ -1,14 +1,9 @@
-import base64
-import json
 import os
-from datetime import timedelta
 
+from account.models import OneTimePassword
 from django.contrib.auth import get_user_model
-from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
-
-from account.models import OneTimePassword, User
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -36,7 +31,7 @@ class AuthenticationTest(APITestCase):
         )
         assert code == status.HTTP_201_CREATED
         response = self.client.post(
-            "/api/login",
+            "/api/auth/login",
             data={
                 "username": "granny",
                 "password": PASSWORD,
@@ -52,10 +47,27 @@ class AuthenticationTest(APITestCase):
         assert code == status.HTTP_200_OK
 
         response = self.client.post(
-            "/api/login",
+            "/api/auth/login",
             data={
                 "username": "granny",
                 "password": PASSWORD,
             },
         )
         assert response.status_code == status.HTTP_200_OK
+
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/refresh",
+                data={"refresh": response.data["refresh"]},
+            )
+        )
+        assert code == status.HTTP_200_OK
+
+        # TODO: Add a test for getting response with a new access token
+        # data, msg, err, code = read_api_response(
+        #     self.client.get(
+        #         "/api/user/info",
+        #         HTTP_AUTHORIZATION=f"Bearer {data['access']}",
+        #     )
+        # )
+        # TODO: Add a test for the /api/auth/logout endpoint

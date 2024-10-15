@@ -27,5 +27,6 @@ fi
 green_echo "Installing dev helper tool"
 chmod +x bb.sh
 cp bb.sh /usr/local/bin/bb
+pre-commit install
 green_echo "Complete! Run 'bb --help' for available commands."
 exit 0

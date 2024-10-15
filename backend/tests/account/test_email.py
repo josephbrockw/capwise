@@ -1,10 +1,9 @@
 from datetime import datetime
 from unittest.mock import patch
 
+from account.emails import Email
 from django.conf import settings
 from django.test import TestCase
-
-from account.emails import Email
 
 
 class TestEmailClass(TestCase):

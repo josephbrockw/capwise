@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_str
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import (TokenObtainPairSerializer,
-                                                  TokenRefreshSerializer)
+from rest_framework_simplejwt.serializers import (
+    TokenObtainPairSerializer,
+    TokenRefreshSerializer,
+)
 from rest_framework_simplejwt.tokens import TokenError
 
 
