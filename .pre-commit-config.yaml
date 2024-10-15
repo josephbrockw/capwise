@@ -32,5 +32,3 @@ repos:
       - id: isort
         args:
           - "--profile=black"
-          - "--known-first-party=backend"
-          - "--sections=FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"

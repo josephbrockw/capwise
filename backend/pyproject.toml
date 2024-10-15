@@ -1,0 +1,5 @@
+[tool.isort]
+profile = "black"  # Ensure compatibility with Black
+known_first_party = ["backend"]  # Replace 'backend' with your local package/module name
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+default_section = "THIRDPARTY"
