@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
@@ -42,4 +42,4 @@ services:
       - ./client:/usr/src/app
 
 volumes:
-    postges_data:
+  postges_data:

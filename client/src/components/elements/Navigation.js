@@ -5,11 +5,9 @@ function Navigation({ isAuthenticated, logOut }) {
   return (
     <nav>
       {isAuthenticated ? (
-        <button
-          data-cy="logOut"
-          type="button"
-          onClick={logOut}
-        >Log Out</button>
+        <button data-cy="logOut" type="button" onClick={logOut}>
+          Log Out
+        </button>
       ) : (
         <>
           <Link to="/sign-up">Sign Up</Link>

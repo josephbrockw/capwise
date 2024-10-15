@@ -7,7 +7,7 @@ module.exports = defineConfig({
       credentials: {
         username: "nanny",
         password: "testpass123",
-      }
-    }
+      },
+    },
   },
 });

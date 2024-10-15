@@ -1,10 +1,10 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import Navigation from '../components/elements/Navigation';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import Navigation from "../components/elements/Navigation";
 
 function Dashboard({ isAuthenticated, logOut }) {
   if (!isAuthenticated) {
-    return <Navigate to='/log-in' />;
+    return <Navigate to="/log-in" />;
   }
   return (
     <>

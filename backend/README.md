@@ -1,5 +1,7 @@
 # Environment Variables
+
 ## Required
+
 SECRET_KEY
 Django secret key for the application.
 
@@ -37,12 +39,16 @@ POSTMARK_API_SERVICE_KEY
 API key for Postmark email service. Needed for environments without DEBUG=True.
 
 # Implementation
+
 ## Standard Response
+
 ### Custom Exception Handling (StandardException):
+
 - The StandardException class encapsulates the error details (message, error_code, and status). This makes raising errors throughout your project much more consistent.
 - By handling this exception in the handle_exception method, you ensure a standardized error response format without repeating logic across views.
 
 ### Consistent StandardResponse Formatting:
+
 - The StandardResponse class ensures every response is formatted consistently, providing a clear structure that’s easy for the frontend to interpret.
 - You’ve removed the unnecessary debug handling, which keeps the code clean. You can always add this back for development-specific use if needed.
 
@@ -53,11 +59,14 @@ API key for Postmark email service. Needed for environments without DEBUG=True.
 - Differentiating between successful and error responses with message and error fields keeps the response intuitive.
 
 ### Extending with StandardViewSet and StandardAPIView:
+
 - By creating StandardViewSet and StandardAPIView, you’re making it easy to apply these standardized patterns throughout your project simply by inheriting from these base classes.
 - This approach not only makes your code DRY (Don’t Repeat Yourself) but also consistent across all your APIs.
 
 # Example cURL commands
+
 ## Sign Up
+
 curl -X POST http://localhost:8009/api/auth/sign-up \
 -H "Content-Type: application/json" \
 -d '{

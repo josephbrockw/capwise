@@ -1,16 +1,6 @@
-{% extends 'email/base.html' %}
-{% load email_tags %}
-
-{% block title %}Verify Your Email{% endblock %}
-
-{% block header %}Verify Your Email{% if user.first_name %}, {{ user.first_name }}.{% endif %}{% endblock %}
-
-{% block content %}
-	{% for item in content_list %}
-		{% if item.type == 'paragraph' %}
-			{% paragraph item.text %}
-		{% elif item.type == 'button' and item.url %}
-			{% cta_button item.url item.text %}
-		{% endif %}
-	{% endfor %}
-{% endblock %}
+{% extends 'email/base.html' %} {% load email_tags %} {% block title %}Verify
+Your Email{% endblock %} {% block header %}Verify Your Email{% if
+user.first_name %}, {{ user.first_name }}.{% endif %}{% endblock %} {% block
+content %} {% for item in content_list %} {% if item.type == 'paragraph' %} {%
+paragraph item.text %} {% elif item.type == 'button' and item.url %} {%
+cta_button item.url item.text %} {% endif %} {% endfor %} {% endblock %}

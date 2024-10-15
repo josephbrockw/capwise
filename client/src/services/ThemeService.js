@@ -1,12 +1,7 @@
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const defaultTheme = createTheme();
 
-
-export const SiteTheme = ({children}) => {
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            {children}
-        </ThemeProvider>
-    );
-}
+export const SiteTheme = ({ children }) => {
+  return <ThemeProvider theme={defaultTheme}>{children}</ThemeProvider>;
+};

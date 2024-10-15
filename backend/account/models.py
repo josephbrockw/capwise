@@ -13,6 +13,10 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
 
 
+def hello():
+    print("hello")
+
+
 class OneTimePassword(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
