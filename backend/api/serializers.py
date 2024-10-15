@@ -8,7 +8,7 @@ from rest_framework_simplejwt.serializers import (
 from rest_framework_simplejwt.tokens import TokenError
 
 
-class UserSerializer(serializers.ModelSerializer):
+class RegisterUserSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     email = serializers.EmailField()
@@ -54,11 +54,25 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "username", "first_name", "last_name", "email")
+        read_only_fields = ("id", "username", "email")
+
+    def update(self, instance, validated_data):
+        # Update the instance without modifying the password fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
 class LogInSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        user_data = UserSerializer(user).data
+        user_data = RegisterUserSerializer(user).data
         for key, value in user_data.items():
             if key != "id":
                 token[key] = value

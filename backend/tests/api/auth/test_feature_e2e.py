@@ -46,19 +46,21 @@ class AuthenticationTest(APITestCase):
         )
         assert code == status.HTTP_200_OK
 
-        response = self.client.post(
-            "/api/auth/login",
-            data={
-                "username": "granny",
-                "password": PASSWORD,
-            },
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/login",
+                data={
+                    "username": "granny",
+                    "password": PASSWORD,
+                },
+            )
         )
-        assert response.status_code == status.HTTP_200_OK
+        assert code == status.HTTP_200_OK
 
         data, msg, err, code = read_api_response(
             self.client.post(
                 "/api/auth/refresh",
-                data={"refresh": response.data["refresh"]},
+                data={"refresh": data["refresh"]},
             )
         )
         assert code == status.HTTP_200_OK

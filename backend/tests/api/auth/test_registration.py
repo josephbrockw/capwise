@@ -7,6 +7,7 @@ from account.models import OneTimePassword, User
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
+from django.test import override_settings
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -24,6 +25,7 @@ class AuthenticationTest(APITestCase):
     otp_token = "123456"
     new_user = "magrat"
 
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_user_can_sign_up(self):
         data, msg, err, code = read_api_response(
             self.client.post(
@@ -63,9 +65,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(email.to, [user.email])
 
         # Check the HTML version of the email (from email.alternatives)
-        html_content = email.alternatives[0][
-            0
-        ]  # The first item in 'alternatives' is the HTML content
+        html_content = email.alternatives[0][0] if email.alternatives else email.body
 
         # Assert that the correct verification URL is present in the HTML content
         self.assertIn(f"{settings.FRONTEND_URL}/verify?token={otp.token}", html_content)

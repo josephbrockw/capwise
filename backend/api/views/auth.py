@@ -3,7 +3,7 @@ from account.models import OneTimePassword
 from api.serializers import (
     CustomTokenRefreshSerializer,
     LogInSerializer,
-    UserSerializer,
+    RegisterUserSerializer,
 )
 from config.api import StandardAPIView, StandardResponse, StandardViewSet
 from django.conf import settings
@@ -42,7 +42,7 @@ class AuthViewSet(StandardViewSet):
 
     @action(detail=False, methods=["post"], url_path="sign-up", url_name="sign_up")
     def sign_up(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = RegisterUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         self.send_verification_email(user)
