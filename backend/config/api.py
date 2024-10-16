@@ -119,7 +119,31 @@ class StandardMixin:
 
 
 class StandardViewSet(StandardMixin, viewsets.ViewSet):
-    pass
+    def get_serializer(self, *args, **kwargs):
+        """
+        Returns the serializer instance that should be used for validating and
+        deserializing input, and for serializing output.
+        """
+        serializer_class = self.get_serializer_class()
+        kwargs.setdefault("context", self.get_serializer_context())
+        return serializer_class(*args, **kwargs)
+
+    def get_serializer_class(self):
+        """
+        Returns the class to use for the serializer.
+        """
+        if hasattr(self, "serializer_class"):
+            return self.serializer_class
+        raise NotImplementedError(
+            "Please set 'serializer_class' attribute or override "
+            "'get_serializer_class()'."
+        )
+
+    def get_serializer_context(self):
+        """
+        Extra context provided to the serializer class.
+        """
+        return {"request": self.request, "format": self.format_kwarg, "view": self}
 
 
 class StandardAPIView(StandardMixin, APIView):

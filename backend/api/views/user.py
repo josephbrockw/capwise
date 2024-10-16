@@ -7,42 +7,29 @@ from api.serializers import UserSerializer
 from config.api import StandardResponse, StandardViewSet
 
 
-def hello():
-    print("hello")
-
-
 class UserViewSet(StandardViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
 
-    def get_object(self):
-        """
-        Override get_object to retrieve the currently authenticated user.
-        """
-        return self.request.user
-
     @action(detail=False, methods=["get"], url_path="me", url_name="me")
-    def retrieve_user(self, request):
+    def me(self, request):
         """
         Retrieve details of the currently authenticated user.
         """
-        user = self.get_object()
-        serializer = self.get_serializer(user)
+        serializer = self.get_serializer(request.user)
         return StandardResponse(
             data=serializer.data,
             message="User details retrieved successfully.",
             status=status.HTTP_200_OK,
         )
 
-    @action(detail=False, methods=["put", "patch"], url_path="me", url_name="update_me")
+    @me.mapping.patch
     def update_user(self, request):
         """
         Update information of the currently authenticated user.
         """
-        user = self.get_object()
-        partial = request.method == "PATCH"
-        serializer = self.get_serializer(user, data=request.data, partial=partial)
+        serializer = self.get_serializer(request.user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return StandardResponse(

@@ -1,9 +1,10 @@
 import os
 
-from account.models import OneTimePassword
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+from account.models import OneTimePassword
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -66,10 +67,11 @@ class AuthenticationTest(APITestCase):
         assert code == status.HTTP_200_OK
 
         # TODO: Add a test for getting response with a new access token
-        # data, msg, err, code = read_api_response(
-        #     self.client.get(
-        #         "/api/user/info",
-        #         HTTP_AUTHORIZATION=f"Bearer {data['access']}",
-        #     )
-        # )
+        data, msg, err, code = read_api_response(
+            self.client.get(
+                "/api/users/me",
+                HTTP_AUTHORIZATION=f"Bearer {data['access']}",
+            )
+        )
+        assert code == status.HTTP_200_OK
         # TODO: Add a test for the /api/auth/logout endpoint
