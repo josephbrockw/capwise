@@ -1,0 +1,48 @@
+[
+  {
+    "fields": {
+      "date_joined": "2024-03-30T20:20:03.265Z",
+      "email": "gytha@lancre.gov",
+      "first_name": "Gytha",
+      "groups": [],
+      "is_active": true,
+      "is_staff": false,
+      "is_superuser": false,
+      "last_login": null,
+      "last_name": "Ogg",
+      "password": "pbkdf2_sha256$390000$6KcQBQ6WIUQpgw6x0UNOJE$oM+AngV6GXMowE0iCGiva2KqYfIrxTlP7RDrVpZxPG0=",
+      "user_permissions": [],
+      "username": "nanny"
+    },
+    "model": "account.user",
+    "pk": "ee00d202-fbb8-4a94-93ea-fc45b0bff10b"
+  },
+  {
+    "fields": {
+      "expires_at": "2099-12-31T23:59:59Z",
+      "jti": "e1f0b5e6-bc0d-11ec-b909-0242ac120002",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImp0aSI6ImUxZjBiNWU2LWJjMGQtMTFlYy1iOTA5LTAyNDJhYzEyMDAwMiIsInVzZXJfaWQiOjF9.WsS8FsUE4cHhN1aNuVVb7xgHtIO4mZsRJ0B_U0egMBs",
+      "user": "ee00d202-fbb8-4a94-93ea-fc45b0bff10b"
+    },
+    "model": "token_blacklist.outstandingtoken",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "expires_at": "2000-01-01T00:00:00Z",
+      "jti": "e1f0b6e6-bc0d-11ec-b909-0242ac120002",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImp0aSI6ImUxZjBiNmU2LWJjMGQtMTFlYy1iOTA5LTAyNDJhYzEyMDAwMiIsInVzZXJfaWQiOjF9.J4FvKtY7IvUmSi3P_S5LHgQddq94L0jsFgZJGZaQ4Qw",
+      "user": "ee00d202-fbb8-4a94-93ea-fc45b0bff10b"
+    },
+    "model": "token_blacklist.outstandingtoken",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "blacklisted_at": "2000-02-01T00:00:00Z",
+      "token": 2
+    },
+    "model": "token_blacklist.blacklistedtoken",
+    "pk": 1
+  }
+]
