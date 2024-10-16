@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from tests import read_api_response
 
 
@@ -93,3 +95,51 @@ class TokenRefreshViewTests(APITestCase):
         )
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "No refresh token provided.")
+
+
+class UserViewSetTest(APITestCase):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    fixtures = [
+        os.path.join(base_dir, "fixtures/auth.json"),
+    ]
+
+    def setUp(self):
+        # Create a user to authenticate
+        self.user = get_user_model().objects.get(username="nanny")
+        # Get JWT tokens for the user
+        refresh = RefreshToken.for_user(self.user)
+        self.access_token = str(refresh.access_token)
+        self.refresh_token = str(refresh)
+        # Set authorization header for requests
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
+
+    def test_logout_user(self):
+        # Logout using the refresh token
+        response = self.client.post(
+            "/api/auth/logout", data={"refresh": self.refresh_token}
+        )
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertEqual(msg, "Logout successful.")
+
+    def test_logout_user_invalid_token(self):
+        # Attempt to logout using an invalid refresh token
+        response = self.client.post(
+            "/api/auth/logout", data={"refresh": "invalidtoken123"}
+        )
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "Could not complete logout.")
+
+    def test_logout_user_unauthenticated(self):
+        # Remove credentials to simulate unauthenticated request
+        self.client.credentials()
+        response = self.client.post(
+            "/api/auth/logout", data={"refresh": self.refresh_token}
+        )
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(err, "Authentication credentials were not provided.")

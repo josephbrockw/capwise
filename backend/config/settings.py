@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(" ")
 
 # Application definition
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_material",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "anymail",
     # Local
     "account",
@@ -105,7 +106,8 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME": "django.contrib.auth.password_validation."
+        "UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
@@ -150,7 +152,9 @@ REST_FRAMEWORK = {
 
 # Allow the use of the browsable API in development
 if DEBUG:
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] += [
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = list(
+        REST_FRAMEWORK.get("DEFAULT_RENDERER_CLASSES", [])
+    ) + [
         "rest_framework.renderers.BrowsableAPIRenderer",
     ]
 

@@ -20,7 +20,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from api.views import version
-from api.views.auth import AuthViewSet, LogInView, TokenRefreshView
+from api.views.auth import AuthViewSet, LogInView, LogoutView, TokenRefreshView
 from api.views.user import UserViewSet
 from main.views import test_templates
 
@@ -33,6 +33,7 @@ urlpatterns = [
     path("version", version, name="version"),
     path("api/auth/login", LogInView.as_view(), name="log_in"),
     path("api/auth/refresh", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/auth/logout", LogoutView.as_view(), name="log_out"),
     path("api/", include(router.urls)),
 ]
 

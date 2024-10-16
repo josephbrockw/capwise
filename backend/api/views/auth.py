@@ -1,3 +1,12 @@
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
+
 from account.emails import Email
 from account.models import OneTimePassword
 from api.serializers import (
@@ -6,13 +15,6 @@ from api.serializers import (
     RegisterUserSerializer,
 )
 from config.api import StandardAPIView, StandardResponse, StandardViewSet
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
 
 class AuthViewSet(StandardViewSet):
@@ -116,3 +118,22 @@ class LogInView(TokenObtainPairView, StandardAPIView):
 
 class TokenRefreshView(BaseTokenRefreshView, StandardAPIView):
     serializer_class = CustomTokenRefreshSerializer
+
+
+class LogoutView(StandardAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return StandardResponse(
+                message="Logout successful.", status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return StandardResponse(
+                error="Could not complete logout.",
+                error_code=str(e),
+                status=status.HTTP_400_BAD_REQUEST,
+            )
