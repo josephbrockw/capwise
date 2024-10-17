@@ -1,9 +1,10 @@
-from account.models import OneTimePassword
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.timezone import now
+
+from account.models import OneTimePassword
 
 
 class Email:
@@ -52,26 +53,62 @@ class Email:
         email.send()
 
 
-def email_verification_content_list(user):
+def verification_email(user):
     otp = OneTimePassword.objects.create(user=user, token_length=20)
-    verification_url = f"{settings.FRONTEND_URL}/verify/?token={otp.token}"
+    email = Email(subject="Verify your email", to=[user.email], template="default")
     salutation = "Hi"
     if user.first_name:
         salutation += f", {user.first_name}!"
     else:
         salutation += "!"
+    email.add_paragraph(salutation)
+    email.add_paragraph("Please click the button below to verify your email address.")
+    email.add_button(
+        "Verify Email", f"{settings.FRONTEND_URL}/verify?token={otp.token}"
+    )
+    email.add_paragraph(
+        "If you did not create an account, no further action is required."
+    )
+    email.add_paragraph("Thank you!")
+    return email
 
-    content_list = [
-        {"type": "paragraph", "text": salutation},
-        {
-            "type": "paragraph",
-            "text": "Please click the button below to verify your email address.",
-        },
-        {"type": "button", "text": "Verify Email", "url": verification_url},
-        {
-            "type": "paragraph",
-            "text": "If you did not create an account, no further action is required.",
-        },
-        {"type": "paragraph", "text": "Thank you!"},
-    ]
-    return content_list
+
+def initiate_password_reset_email(user):
+    otp = OneTimePassword.objects.create(user=user, token_length=20)
+    email = Email(subject="Reset your password", to=[user.email], template="default")
+    salutation = "Hi"
+    if user.first_name:
+        salutation += f", {user.first_name}!"
+    else:
+        salutation += "!"
+    email.add_paragraph(salutation)
+    email.add_paragraph("Please click the button below to reset your password.")
+    email.add_button(
+        "Reset Password",
+        f"{settings.FRONTEND_URL}/reset-password?token={otp.token}",
+    )
+    email.add_paragraph(
+        "If you did not request a password reset, no further action is required."
+    )
+    email.add_paragraph("Thank you!")
+    return email
+
+
+def password_changed_email(user):
+    email = Email(subject="Password Changed", to=[user.email], template="default")
+    salutation = "Hi"
+    if user.first_name:
+        salutation += f", {user.first_name}!"
+    else:
+        salutation += "!"
+    email.add_paragraph(salutation)
+    email.add_paragraph(
+        "This is a confirmation that the password for your account has "
+        "just been changed."
+    )
+    email.add_paragraph(
+        "If you did not make this change, please contact us immediately. "
+        "Otherwise, no further action is required."
+    )
+    email.add_paragraph("Thank you!")
+    return email

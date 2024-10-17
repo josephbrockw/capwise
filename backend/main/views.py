@@ -1,9 +1,14 @@
-from account.emails import email_verification_content_list
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
+
+from account.emails import (
+    initiate_password_reset_email,
+    password_changed_email,
+    verification_email,
+)
 
 
 def test_templates(request, directory="email", template="welcome"):
@@ -12,19 +17,35 @@ def test_templates(request, directory="email", template="welcome"):
     else:
         frontend_url = "http://localhost:8000"
 
+    user = get_user_model().objects.first()
+
     if template == "verify":
         template_name = "default"
-        user = get_user_model().objects.first()
         context = {
             "user": user,
             "title": "Verify your email address",
-            "content_list": email_verification_content_list(user),
+            "content_list": verification_email(user).context["content_list"],
+        }
+    elif template == "initiate-password-reset":
+        template_name = "default"
+        email = initiate_password_reset_email(user)
+        context = {
+            "user": user,
+            "title": email.subject,
+            "content_list": email.context["content_list"],
+        }
+    elif template == "confirm-password-reset":
+        template_name = "default"
+        email = password_changed_email(user)
+        context = {
+            "title": email.subject,
+            "content_list": email.context["content_list"],
         }
     else:
         template_name = "default"
         context = {
-            "subject": "Verify your email address",
-            "title": "Verify your email address",
+            "subject": "Hello",
+            "title": "Hello",
             "content_list": [
                 {"type": "text", "text": "Hello!"},
                 {

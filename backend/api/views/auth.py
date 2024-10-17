@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.decorators import action
@@ -7,7 +6,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView as BaseTokenRefreshView
 
-from account.emails import Email
+from account.emails import (
+    initiate_password_reset_email,
+    password_changed_email,
+    verification_email,
+)
 from account.models import OneTimePassword
 from api.serializers import (
     CustomTokenRefreshSerializer,
@@ -20,75 +23,15 @@ from config.api import StandardAPIView, StandardResponse, StandardViewSet
 class AuthViewSet(StandardViewSet):
     permission_classes = [AllowAny]
 
-    def send_verification_email(self, user):
-        # Create a new OTP
-        otp = OneTimePassword.objects.create(user=user, token_length=20)
-        email = Email(subject="Verify your email", to=[user.email], template="default")
-        salutation = "Hi"
-        if user.first_name:
-            salutation += f", {user.first_name}!"
-        else:
-            salutation += "!"
-        email.add_paragraph(salutation)
-        email.add_paragraph(
-            "Please click the button below to verify your email address."
-        )
-        email.add_button(
-            "Verify Email", f"{settings.FRONTEND_URL}/verify?token={otp.token}"
-        )
-        email.add_paragraph(
-            "If you did not create an account, no further action is required."
-        )
-        email.add_paragraph("Thank you!")
-        email.send()
-
-    def send_password_reset_email(self, user):
-        otp = OneTimePassword.objects.create(user=user, token_length=20)
-        email = Email(
-            subject="Reset your password", to=[user.email], template="default"
-        )
-        salutation = "Hi"
-        if user.first_name:
-            salutation += f", {user.first_name}!"
-        else:
-            salutation += "!"
-        email.add_paragraph(salutation)
-        email.add_paragraph("Please click the button below to reset your password.")
-        email.add_button(
-            "Reset Password",
-            f"{settings.FRONTEND_URL}/reset-password?token={otp.token}",
-        )
-        email.add_paragraph(
-            "If you did not request a password reset, no further action is required."
-        )
-        email.add_paragraph("Thank you!")
-        email.send()
-
-    def send_password_changed_email(self, user):
-        email = Email(subject="Password Changed", to=[user.email], template="default")
-        salutation = "Hi"
-        if user.first_name:
-            salutation += f", {user.first_name}!"
-        else:
-            salutation += "!"
-        email.add_paragraph(salutation)
-        email.add_paragraph(
-            "This is a confirmation that the password for your account has "
-            "just been changed."
-        )
-        email.add_paragraph(
-            "If you did not make this change, please contact us immediately. "
-            "Otherwise, no further action is required."
-        )
-        email.add_paragraph("Thank you!")
-        email.send()
-
     @action(detail=False, methods=["post"], url_path="sign-up", url_name="sign_up")
     def sign_up(self, request):
         serializer = RegisterUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        self.send_verification_email(user)
+
+        email = verification_email(user)
+        email.send()
+
         return StandardResponse(
             serializer.data,
             message="User created successfully. An email has been "
@@ -147,7 +90,9 @@ class AuthViewSet(StandardViewSet):
                 error="User is already verified.", status=status.HTTP_400_BAD_REQUEST
             )
 
-        self.send_verification_email(user)
+        email = verification_email(user)
+        email.send()
+
         return StandardResponse(
             message="Verification email sent.", status=status.HTTP_200_OK
         )
@@ -167,7 +112,9 @@ class AuthViewSet(StandardViewSet):
         except User.DoesNotExist:
             return StandardResponse(message=message, status=status.HTTP_200_OK)
 
-        self.send_password_reset_email(user)
+        email = initiate_password_reset_email(user)
+        email.send()
+
         return StandardResponse(message=message, status=status.HTTP_200_OK)
 
     @action(
@@ -215,7 +162,8 @@ class AuthViewSet(StandardViewSet):
         user.set_password(password)
         user.save()
 
-        self.send_password_changed_email(user)
+        email = password_changed_email(user)
+        email.send()
 
         return StandardResponse(
             message="Password reset successfully.", status=status.HTTP_200_OK
