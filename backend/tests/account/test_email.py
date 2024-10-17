@@ -1,9 +1,10 @@
 from datetime import datetime
 from unittest.mock import patch
 
-from account.emails import Email
 from django.conf import settings
 from django.test import TestCase
+
+from account.emails import Email
 
 
 class TestEmailClass(TestCase):
@@ -68,8 +69,6 @@ class TestEmailClass(TestCase):
         self.assertEqual(str(context.exception), "No content to send.")
 
     @patch("account.emails.EmailMultiAlternatives.send")
-    # @patch("django.template.loader.render_to_string")
-    # @patch("django.utils.html.strip_tags")
     @patch("account.emails.render_to_string")
     @patch("account.emails.strip_tags")
     def test_send_email(self, mock_strip_tags, mock_render_to_string, mock_send):

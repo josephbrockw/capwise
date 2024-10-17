@@ -42,6 +42,47 @@ class AuthViewSet(StandardViewSet):
         email.add_paragraph("Thank you!")
         email.send()
 
+    def send_password_reset_email(self, user):
+        otp = OneTimePassword.objects.create(user=user, token_length=20)
+        email = Email(
+            subject="Reset your password", to=[user.email], template="default"
+        )
+        salutation = "Hi"
+        if user.first_name:
+            salutation += f", {user.first_name}!"
+        else:
+            salutation += "!"
+        email.add_paragraph(salutation)
+        email.add_paragraph("Please click the button below to reset your password.")
+        email.add_button(
+            "Reset Password",
+            f"{settings.FRONTEND_URL}/reset-password?token={otp.token}",
+        )
+        email.add_paragraph(
+            "If you did not request a password reset, no further action is required."
+        )
+        email.add_paragraph("Thank you!")
+        email.send()
+
+    def send_password_changed_email(self, user):
+        email = Email(subject="Password Changed", to=[user.email], template="default")
+        salutation = "Hi"
+        if user.first_name:
+            salutation += f", {user.first_name}!"
+        else:
+            salutation += "!"
+        email.add_paragraph(salutation)
+        email.add_paragraph(
+            "This is a confirmation that the password for your account has "
+            "just been changed."
+        )
+        email.add_paragraph(
+            "If you did not make this change, please contact us immediately. "
+            "Otherwise, no further action is required."
+        )
+        email.add_paragraph("Thank you!")
+        email.send()
+
     @action(detail=False, methods=["post"], url_path="sign-up", url_name="sign_up")
     def sign_up(self, request):
         serializer = RegisterUserSerializer(data=request.data)
@@ -109,6 +150,75 @@ class AuthViewSet(StandardViewSet):
         self.send_verification_email(user)
         return StandardResponse(
             message="Verification email sent.", status=status.HTTP_200_OK
+        )
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="password/reset",
+        url_name="reset_password_initiate",
+    )
+    def password_reset_initiate(self, request):
+        User = get_user_model()
+        email = request.data.get("email")
+        message = "If an account with that email exists, an email will be sent."
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return StandardResponse(message=message, status=status.HTTP_200_OK)
+
+        self.send_password_reset_email(user)
+        return StandardResponse(message=message, status=status.HTTP_200_OK)
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="password/reset/confirm",
+        url_name="reset_password",
+    )
+    def password_reset(self, request):
+        token = request.data.get("token", None)
+        password = request.data.get("password", None)
+        password_confirm = request.data.get("password_confirm", None)
+
+        if not token:
+            return StandardResponse(
+                error="The 'token' field is required to reset the password.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not password:
+            return StandardResponse(
+                error="The 'password' field is required to reset the password.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not password_confirm or password != password_confirm:
+            return StandardResponse(
+                error="Passwords must match.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            otp = OneTimePassword.objects.get(token=token, is_active=True)
+        except OneTimePassword.DoesNotExist:
+            return StandardResponse(
+                error="Invalid or expired token.", status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not otp.is_valid():
+            return StandardResponse(
+                error="Invalid or expired token.", status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = otp.user
+        user.set_password(password)
+        user.save()
+
+        self.send_password_changed_email(user)
+
+        return StandardResponse(
+            message="Password reset successfully.", status=status.HTTP_200_OK
         )
 
 
