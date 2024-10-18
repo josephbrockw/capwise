@@ -35,7 +35,7 @@ services:
   celery:
     build: backend
     container_name: django_worker
-    command: celery -A worker worker --loglevel=info
+    command: celery -A worker worker --loglevel=info -Q queue1
     volumes:
       - ./backend/:/usr/src/backend/
     env_file:
@@ -66,7 +66,7 @@ services:
   celery2:
     build: celeryworker
     container_name: independent_worker
-    command: celery -A worker_app worker --loglevel=info
+    command: celery -A worker_app worker --loglevel=info -Q queue2
     working_dir: /usr/src/celeryworker
     volumes:
       - ./celeryworker/:/usr/src/celeryworker/
