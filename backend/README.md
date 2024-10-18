@@ -38,6 +38,12 @@ The email address to send emails from. Default is "no-reply@test.io".
 POSTMARK_API_SERVICE_KEY
 API key for Postmark email service. Needed for environments without DEBUG=True.
 
+CELERY_BROKER_URL
+URL for the Celery broker. Default is "redis://redis:6379/0".
+
+CELERY_RESULT_BACKEND
+URL for the Celery result backend. Default is "redis://redis:6379/0".
+
 # Implementation
 
 ## Standard Response

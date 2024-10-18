@@ -3,9 +3,23 @@ version: "3.8"
 services:
   broker:
     image: redis:alpine
+    container_name: broker
+
+  db:
+    image: postgres:15
+    container_name: db
+    volumes:
+      - postges_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=db_dev
+    ports:
+      - 5432:5432
 
   backend:
     build: backend
+    container_name: backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend/:/usr/src/backend/
@@ -18,20 +32,23 @@ services:
       - db
       - broker
 
-  db:
-    image: postgres:15
+  celery:
+    build: backend
+    container_name: celery
+    command: celery -A worker worker --loglevel=info
     volumes:
-      - postges_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=db_dev
-    ports:
-      - 5432:5432
+      - ./backend/:/usr/src/backend/
+    env_file:
+      - backend/.env.dev
+      - backend/.env.secrets
+    depends_on:
+      - db
+      - broker
 
   frontend:
     build:
       context: ./client
+    container_name: frontend
     command: yarn start
     depends_on:
       - backend
