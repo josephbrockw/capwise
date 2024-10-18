@@ -196,5 +196,5 @@ else:
 OTP_EXPIRATION_MINUTES = os.environ.get("OTP_EXPIRATION_MINUTES", 5)
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3001")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@test.io")
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379/0")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://broker:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://broker:6379/0")

@@ -185,7 +185,7 @@ case $workflow in
             shell_help
             exit 0
         fi
-        echo "Entering Flask shell..."
+        echo "Entering Django shell..."
         docker compose exec backend python manage.py shell
         ;;
     db)
