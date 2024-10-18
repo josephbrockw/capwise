@@ -63,5 +63,15 @@ services:
     volumes:
       - ./client:/usr/src/app
 
+  celery2:
+    build: celeryworker
+    container_name: worker2
+    command: celery -A worker_app worker --loglevel=info
+    working_dir: /usr/src/celeryworker
+    volumes:
+      - ./celeryworker/:/usr/src/celeryworker/
+    depends_on:
+      - broker
+
 volumes:
   postges_data:
