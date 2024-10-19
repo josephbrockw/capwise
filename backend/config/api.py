@@ -72,11 +72,23 @@ class StandardMixin:
             else:
                 combined_message = str(exc.detail)
 
+            # Check if the validation error is related to a blacklisted token
+            if (
+                "token" in combined_message.lower()
+                and "blacklisted" in combined_message.lower()
+            ):
+                return StandardResponse(
+                    error=combined_message,
+                    error_code="BLACKLISTED_TOKEN",
+                    status=401,
+                )
+
             return StandardResponse(
                 error=combined_message,
                 error_code="VALIDATION_ERROR",
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
         elif isinstance(exc, TokenError):
             error_message = force_str(exc)
             response = StandardResponse(
