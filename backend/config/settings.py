@@ -199,3 +199,28 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "no-reply@test.io")
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://broker:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://broker:6379/0")
+
+# Retry and task execution settings
+CELERY_TASK_DEFAULT_RETRY_DELAY = int(
+    os.environ.get("CELERY_TASK_DEFAULT_RETRY_DELAY", 60)
+)
+CELERY_TASK_MAX_RETRIES = int(os.environ.get("CELERY_TASK_MAX_RETRIES", 3))
+CELERY_TASK_ACKS_LATE = bool(int(os.environ.get("CELERY_TASK_ACKS_LATE", 1)))
+CELERY_TASK_TIME_LIMIT = int(os.environ.get("CELERY_TASK_TIME_LIMIT", 300))
+CELERY_TASK_SOFT_TIME_LIMIT = int(os.environ.get("CELERY_TASK_SOFT_TIME_LIMIT", 240))
+
+# performance
+CELERY_WORKER_CONCURRENCY = int(os.environ.get("CELERY_WORKER_CONCURRENCY", 1))
+CELERY_WORKER_PREFETCH_MULTIPLIER = int(os.environ.get("CELERY_PREFETCH_MULTIPLIER", 1))
+
+# Rate limiting
+CELERY_TASK_DEFAULT_RATE_LIMIT = (
+    f"{os.environ.get('CELERY_TASK_DEFAULT_RATE_LIMIT', 1)}/s"
+)
+
+# Queue settings
+CELERY_TASK_DEFAULT_QUEUE = os.environ.get("CELERY_TASK_DEFAULT_QUEUE", "default")
+
+# Monitoring and debugging
+CELERY_WORKER_LOG_LEVEL = os.environ.get("CELERY_WORKER_LOG_LEVEL", "INFO")
+CELERY_TRACK_STARTED = bool(int(os.environ.get("CELERY_TRACK_STARTED", 1)))

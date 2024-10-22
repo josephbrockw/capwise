@@ -7,10 +7,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 app = Celery("worker")
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
-app.conf.task_routes = {
-    "worker.tasks.say_hello": {"queue": "queue1"},
-    "worker.tasks.say_goodbye": {"queue": "queue2"},
-}
+
 app.autodiscover_tasks()
 
 

@@ -35,7 +35,7 @@ services:
   celery:
     build: backend
     container_name: django_worker
-    command: celery -A worker worker --loglevel=info -Q queue1
+    command: celery -A worker worker --hostname=djangoworker --loglevel=info -Q default
     volumes:
       - ./backend/:/usr/src/backend/
     env_file:
@@ -66,10 +66,20 @@ services:
   celery2:
     build: celeryworker
     container_name: independent_worker
-    command: celery -A worker_app worker --loglevel=info -Q queue2
+    command: celery -A worker_app worker --hostname=independentworker --loglevel=info -Q queue2
     working_dir: /usr/src/celeryworker
     volumes:
       - ./celeryworker/:/usr/src/celeryworker/
+    depends_on:
+      - broker
+
+  flower:
+    image: mher/flower
+    container_name: flower
+    ports:
+      - 5555:5555
+    environment:
+      - CELERY_BROKER_URL=redis://broker:6379/0
     depends_on:
       - broker
 

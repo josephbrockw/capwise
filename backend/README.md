@@ -44,6 +44,15 @@ URL for the Celery broker. Default is "redis://broker:6379/0".
 CELERY_RESULT_BACKEND
 URL for the Celery result backend. Default is "redis://broker:6379/0".
 
+CELERY_TASK_RATE_LIMIT
+Rate limit for Celery tasks per minute. Default is 10.
+
+CELERY_WORKER_CONCURRENCY
+Number of concurrent workers for Celery. Default is 1 in dev and 0 (autoscaling) in production.
+
+CELERY_PREFETCH_MULTIPLIER
+Number of tasks to prefetch by each worker. Default is 1.
+
 # Implementation
 
 ## Standard Response
