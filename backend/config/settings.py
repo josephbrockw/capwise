@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "anymail",
+    "django_celery_beat",
     # Local
     "account",
     "main",
@@ -224,3 +225,6 @@ CELERY_TASK_DEFAULT_QUEUE = os.environ.get("CELERY_TASK_DEFAULT_QUEUE", "default
 # Monitoring and debugging
 CELERY_WORKER_LOG_LEVEL = os.environ.get("CELERY_WORKER_LOG_LEVEL", "INFO")
 CELERY_TRACK_STARTED = bool(int(os.environ.get("CELERY_TRACK_STARTED", 1)))
+
+# Celery Beat settings
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

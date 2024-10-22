@@ -1,11 +1,30 @@
 import time
+from datetime import timedelta
+
+from celery.schedules import crontab
 
 from worker.celery_config import app
+
+app.conf.beat_schedule = {
+    "test_task": {
+        "task": "worker.tasks.test_task",
+        "schedule": timedelta(minutes=10),
+    },
+    "make_a_wish": {
+        "task": "worker.tasks.make_a_wish",
+        "schedule": crontab(minute="11", hour="11"),
+    },
+}
 
 
 @app.task
 def test_task():
     print("This is a test task.")
+
+
+@app.task
+def make_a_wish():
+    print("11:11 - Make a wish!")
 
 
 @app.task

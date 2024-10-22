@@ -35,7 +35,7 @@ services:
   celery:
     build: backend
     container_name: django_worker
-    command: celery -A worker worker --hostname=djangoworker --loglevel=info -Q default
+    command: celery -A worker worker --hostname=djangoworker --loglevel=info -Q default -E -B
     volumes:
       - ./backend/:/usr/src/backend/
     env_file:
@@ -44,6 +44,7 @@ services:
     depends_on:
       - db
       - broker
+      - backend
 
   frontend:
     build:
