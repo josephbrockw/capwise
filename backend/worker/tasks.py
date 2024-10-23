@@ -1,20 +1,31 @@
-import time
 from datetime import timedelta
 
 from celery.schedules import crontab
+from django.conf import settings
+from django.db.models import Q
+from django.utils import timezone
 
+from account.models import OneTimePassword
 from worker.celery_config import app
 
-app.conf.beat_schedule = {
-    "test_task": {
-        "task": "worker.tasks.test_task",
-        "schedule": timedelta(minutes=10),
-    },
+schedule = {
     "make_a_wish": {
         "task": "worker.tasks.make_a_wish",
         "schedule": crontab(minute="11", hour="11"),
     },
+    "delete_expired_otps": {
+        "task": "worker.tasks.delete_expired_otps",
+        "schedule": crontab(hour=0, minute=0),
+    },
 }
+
+if settings.DEBUG:
+    schedule["test_task"] = {
+        "task": "worker.tasks.test_task",
+        "schedule": timedelta(minutes=10),
+    }
+
+app.conf.beat_schedule = schedule
 
 
 @app.task
@@ -28,15 +39,7 @@ def make_a_wish():
 
 
 @app.task
-def say_hello(a, b, name=None):
-    time.sleep(3)
-    if name:
-        print(f"Hi, {name}! I'm a Django task.")
-    print(f"Sum of {a} and {b} is {a + b}.")
-    return a + b
-
-
-@app.task
-def say_goodbye():
-    time.sleep(3)
-    print("Goodbye!")
+def delete_invalid_otps():
+    invalid_cond = Q(expires__lt=timezone.now()) | Q(is_active=False)
+    invalid_otps = OneTimePassword.objects.filter(invalid_cond)
+    invalid_otps.delete()

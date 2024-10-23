@@ -1,7 +1,4 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse
-from django.template.exceptions import TemplateDoesNotExist
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
@@ -29,7 +26,10 @@ class TestEmailTemplatesView(TestCase):
         self.assertEqual(response.status_code, 200)
 
     # def test_reset_password_template_renders_correctly(self):
-    #     """Test that the 'reset-password' template is rendered with the correct context."""
+    #     """
+    #     Test that the 'reset-password' template is rendered with the
+    #     correct context.
+    #     """
     #     response = self.client.get(f'{self.url}?template=reset-password')
     #     self.assertEqual(response.status_code, 200)
     #     self.assertContains(response, "Reset your password")
