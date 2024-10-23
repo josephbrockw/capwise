@@ -7,6 +7,8 @@ from rest_framework_simplejwt.serializers import (
 )
 from rest_framework_simplejwt.tokens import TokenError
 
+from experiment.models import Experiment, Variation
+
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
@@ -91,3 +93,17 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
             return super().validate(attrs)
         except TokenError as e:
             raise serializers.ValidationError({"refresh": force_str(e)})
+
+
+class VariationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Variation
+        fields = ["id", "name", "weight", "seen_count", "conversion_count"]
+
+
+class ExperimentSerializer(serializers.ModelSerializer):
+    variations = VariationSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Experiment
+        fields = ["id", "name", "description", "created_at", "active", "variations"]

@@ -21,12 +21,14 @@ from rest_framework.routers import DefaultRouter
 
 from api.views import version
 from api.views.auth import AuthViewSet, LogInView, LogoutView, TokenRefreshView
+from api.views.experiment import ExperimentViewSet
 from api.views.user import UserViewSet
 from main.views import test_templates
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"auth", AuthViewSet, basename="auth")
 router.register(r"users", UserViewSet, basename="users")
+router.register(r"experiments", ExperimentViewSet, basename="experiments")
 
 urlpatterns = [
     path("admin", admin.site.urls),
