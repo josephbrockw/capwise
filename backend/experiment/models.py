@@ -18,8 +18,8 @@ class Variation(models.Model):
     name = models.CharField(max_length=255)
     weight = models.PositiveIntegerField(default=1)  # Weight for allocation
     created_at = models.DateTimeField(auto_now_add=True)
-    seen_count = models.PositiveIntegerField(default=0)
-    conversion_count = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
+    conversions = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"{self.experiment.name} - {self.name}"

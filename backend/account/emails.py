@@ -50,6 +50,17 @@ class Email:
             {"type": "button", "text": text, "url": url}
         )
 
+    def add_unordered_list(self, items):
+        self.context["content_list"].append({"type": "unordered_list", "items": items})
+
+    def add_ordered_list(self, items):
+        self.context["content_list"].append({"type": "ordered_list", "items": items})
+
+    def add_table(self, headers, rows):
+        self.context["content_list"].append(
+            {"type": "table", "headers": headers, "rows": rows}
+        )
+
     def send(self):
         if not self.context["content_list"]:
             raise ValueError("No content to send.")
@@ -127,6 +138,29 @@ def password_changed_email(user):
     return email
 
 
+# def experiment_report_email():
+#     report = generate_active_experiments_report()
+#     email = Email(
+#         subject="Active Experiments Report",
+#         to=[settings.OWNER_EMAIL],
+#         template="default",
+#     )
+#     for line in report.splitlines()[1:]:  # Skip the header
+#         if line.startswith("Experiment:"):
+#             email.add_section_header(line)
+#         elif line.startswith("Variations:"):
+#             email.add_divider()
+#             email.add_section_subheader(line)
+#         elif line.strip().startswith("- "):
+#             email.add_bold_text(line.strip().strip("- "))
+#         else:
+#             if line.startswith("Description:"):
+#                 email.add_paragraph(line.strip().strip("Description: "))
+#             else:
+#                 email.add_paragraph(line)
+#     return email
+
+
 def experiment_report_email():
     report = generate_active_experiments_report()
     email = Email(
@@ -134,17 +168,37 @@ def experiment_report_email():
         to=[settings.OWNER_EMAIL],
         template="default",
     )
-    for line in report.splitlines()[1:]:  # Skip the header
+    lines = report.splitlines()[1:]  # Skip the header
+    table_headers = None
+    table_data = []
+
+    for i, line in enumerate(lines):
         if line.startswith("Experiment:"):
+            # Add the previous table if it exists before starting a new experiment
+            if table_headers and table_data:
+                email.add_table(table_headers, table_data)
+                table_headers = None
+                table_data = []
+
+            # Add the experiment section header
             email.add_section_header(line)
+        elif line.startswith("Description:"):
+            email.add_paragraph(line.replace("Description: ", ""))
+        elif line.startswith("Created at:"):
+            email.add_paragraph(line)
         elif line.startswith("Variations:"):
             email.add_divider()
             email.add_section_subheader(line)
-        elif line.strip().startswith("- "):
-            email.add_bold_text(line.strip().strip("- "))
-        else:
-            if line.startswith("Description:"):
-                email.add_paragraph(line.strip().strip("Description: "))
-            else:
-                email.add_paragraph(line)
+        elif "Name,Weight,Views,Conversion Rate" in line:
+            # Capture the header row for stats
+            table_headers = line.split(",")
+        elif table_headers:
+            # The next line should be the stats data
+            stats = line.split(",")
+            table_data.append(stats)
+
+    # If there was a table pending, add it to the email
+    if table_headers and table_data:
+        email.add_table(table_headers, table_data)
+
     return email

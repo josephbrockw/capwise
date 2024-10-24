@@ -15,14 +15,17 @@ def generate_active_experiments_report():
         report_lines.append("Variations:")
 
         for variation in experiment.variations.all():
-            report_lines.append(f"  - {variation.name}")
-            report_lines.append(f"    Weight:          {variation.weight}")
-            report_lines.append(f"    Seen Count:      {variation.seen_count}")
-            report_lines.append(
-                "    Conversion Rate: "
-                f"{variation.conversion_count / variation.seen_count:.2%}"
-                if variation.seen_count > 0
-                else "    Conversion Rate: 0.00%"
+            report_lines.append("Name,Weight,Views,Conversion Rate")
+            stats = (
+                variation.name,
+                variation.weight,
+                variation.views,
+                (
+                    f"{variation.conversions/variation.views:.2%}"
+                    if variation.views > 0
+                    else "0.00%"
+                ),
             )
+            report_lines.append(f"{stats[0]},{stats[1]},{stats[2]},{stats[3]}")
 
     return "\n".join(report_lines)

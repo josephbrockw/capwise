@@ -24,7 +24,7 @@ class ExperimentViewSet(StandardViewSet):
                 error="Variation not found.", status=status.HTTP_400_BAD_REQUEST
             )
 
-        variation.seen_count += 1
+        variation.views += 1
         variation.save()
         return StandardResponse(
             message="View tracked successfully.", status=status.HTTP_200_OK
@@ -44,7 +44,7 @@ class ExperimentViewSet(StandardViewSet):
                 error="Variation not found.", status=status.HTTP_400_BAD_REQUEST
             )
 
-        variation.conversion_count += 1
+        variation.conversions += 1
         variation.save()
         return StandardResponse(
             message="Conversion tracked successfully.", status=status.HTTP_200_OK

@@ -19,6 +19,12 @@
 			{% bold_text item.text %}
 		{% elif item.type == 'button' and item.url %}
 			{% cta_button item.url item.text %}
+		{% elif item.type == 'unordered_list'%}
+			{% unordered_list item.items %}
+		{% elif item.type == 'ordered_list' %}
+				{% ordered_list item.items %}
+		{% elif item.type == 'table' %}
+				{% table item.headers item.rows %}
 		{% endif %}
 	{% endfor %}
 {% endblock %}

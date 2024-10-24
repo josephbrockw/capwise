@@ -34,13 +34,9 @@ class GenerateActiveExperimentsReportTest(TestCase):
         self.assertIn("Variations:", report)
 
         # Check variation data
-        self.assertIn("  - Wizards Only Ad", report)
-        self.assertIn("    Weight:", report)
-        self.assertIn("    Seen Count:", report)
-        self.assertIn("    Conversion Rate:", report)
-
-        # Make sure both variations are present
-        self.assertIn("  - General Magic Ad", report)
+        self.assertIn("Name,Weight,Views,Conversion Rate", report)
+        self.assertIn("Wizards Only Ad,1,50,10.00%", report)
+        self.assertIn("General Magic Ad,2,100,15.00%", report)
 
         # Check that inactive experiments are not included
         self.assertNotIn("Lancre Witch Potion Sales", report)
@@ -49,15 +45,15 @@ class GenerateActiveExperimentsReportTest(TestCase):
         # Update seen and conversion counts for variation testing
         experiment = Experiment.objects.get(name="Ankh-Morpork Recruitment Campaign")
         variation = experiment.variations.first()
-        variation.seen_count = 10
-        variation.conversion_count = 3
+        variation.views = 10
+        variation.conversions = 3
         variation.save()
 
         report = generate_active_experiments_report()
 
         # Check that the conversion rate calculation is correct
         expected_conversion_rate = (
-            "    Conversion Rate: "
-            f"{variation.conversion_count / variation.seen_count:.2%}"
+            f"{variation.name},{variation.weight},"
+            f"{variation.views},{variation.conversions / variation.views:.2%}"
         )
         self.assertIn(expected_conversion_rate, report)

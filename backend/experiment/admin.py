@@ -18,8 +18,8 @@ class VariationAdmin(admin.ModelAdmin):
         "name",
         "experiment",
         "weight",
-        "seen_count",
-        "conversion_count",
+        "views",
+        "conversions",
         "created_at",
     )
     search_fields = ("name",)

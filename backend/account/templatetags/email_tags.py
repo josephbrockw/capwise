@@ -88,3 +88,36 @@ def bold_text(text):
         {% bold_text 'This is bold text.' %}
     """
     return mark_safe(f"<strong>{text}</strong>")
+
+
+@register.simple_tag
+def unordered_list(items):
+    list_items = "".join(f"<li>{item}</li>" for item in items)
+    html = f"<ul style='padding-left: 20px;'>{list_items}</ul>"
+    return mark_safe(html)
+
+
+@register.simple_tag
+def ordered_list(items):
+    list_items = "".join(f"<li>{item}</li>" for item in items)
+    html = f"<ol style='padding-left: 20px;'>{list_items}</ol>"
+    return mark_safe(html)
+
+
+@register.simple_tag
+def table(headers, rows):
+    headers_html = "".join(f"<th>{header}</th>" for header in headers)
+    rows_html = ""
+    for row in rows:
+        row_html = "".join(
+            f"<td style='text-align: center;'>{cell}</td>" for cell in row
+        )
+        rows_html += f"<tr>{row_html}</tr>"
+
+    html = f"""
+    <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+        <thead><tr>{headers_html}</tr></thead>
+        <tbody>{rows_html}</tbody>
+    </table>
+    """
+    return mark_safe(html)
