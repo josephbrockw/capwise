@@ -229,3 +229,5 @@ CELERY_TRACK_STARTED = bool(int(os.environ.get("CELERY_TRACK_STARTED", 1)))
 
 # Celery Beat settings
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "test@test.com")

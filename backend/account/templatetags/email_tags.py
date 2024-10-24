@@ -38,3 +38,53 @@ def paragraph(text):
     <p style="">{text}</p>
     """
     return mark_safe(html)
+
+
+@register.simple_tag
+def section_header(text):
+    """
+    Renders a section header with inline styles.
+    Usage:
+        {% section_header 'This is a section header.' %}
+    """
+    html = f"""
+    <div style="background-color: #333; color: #fff; width: 100%;
+    padding: 1rem 0; margin: 1.5rem 0 1rem; border-radius: 3px;">
+        <h2 style="margin: 0; padding: 0 20px;">{text}</h2>
+    </div>
+    """
+    return mark_safe(html)
+
+
+@register.simple_tag
+def section_subheader(text):
+    """
+    Renders a section subheader with inline styles.
+    Usage:
+        {% section_subheader 'This is a section subheader.' %}
+    """
+    html = f"""
+    <h3 style="margin: 0; padding: .5rem 0; color: #4caf50;
+    font-size: 1.5rem; margin-bottom: .5rem;">{text}</h3>
+    """
+    return mark_safe(html)
+
+
+@register.simple_tag
+def divider():
+    """
+    Renders a divider.
+    Usage:
+        {% divider %}
+    """
+    return mark_safe("<hr style='border: 1px solid #ccc; margin: 20px 0;'>")
+
+
+@register.simple_tag
+def bold_text(text):
+    """
+    Renders bold text.
+    Usage:
+        {% bold_text 'This is bold text.' %}
+    """
+    return mark_safe(f"<strong>{text}</strong>")

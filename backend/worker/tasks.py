@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 
+from account.emails import experiment_report_email
 from account.models import OneTimePassword
 from worker.celery_config import app
 
@@ -43,3 +44,9 @@ def delete_invalid_otps():
     invalid_cond = Q(expires__lt=timezone.now()) | Q(is_active=False)
     invalid_otps = OneTimePassword.objects.filter(invalid_cond)
     invalid_otps.delete()
+
+
+@app.task
+def send_experiment_report_email():
+    email = experiment_report_email()
+    email.send()

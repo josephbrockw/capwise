@@ -5,6 +5,7 @@ from django.utils.html import strip_tags
 from django.utils.timezone import now
 
 from account.models import OneTimePassword
+from experiment.process import generate_active_experiments_report
 
 
 class Email:
@@ -31,6 +32,18 @@ class Email:
 
     def add_paragraph(self, text):
         self.context["content_list"].append({"type": "paragraph", "text": text})
+
+    def add_section_header(self, text):
+        self.context["content_list"].append({"type": "section_header", "text": text})
+
+    def add_section_subheader(self, text):
+        self.context["content_list"].append({"type": "section_subheader", "text": text})
+
+    def add_divider(self):
+        self.context["content_list"].append({"type": "divider"})
+
+    def add_bold_text(self, text):
+        self.context["content_list"].append({"type": "bold_text", "text": text})
 
     def add_button(self, text, url):
         self.context["content_list"].append(
@@ -111,4 +124,27 @@ def password_changed_email(user):
         "Otherwise, no further action is required."
     )
     email.add_paragraph("Thank you!")
+    return email
+
+
+def experiment_report_email():
+    report = generate_active_experiments_report()
+    email = Email(
+        subject="Active Experiments Report",
+        to=[settings.OWNER_EMAIL],
+        template="default",
+    )
+    for line in report.splitlines()[1:]:  # Skip the header
+        if line.startswith("Experiment:"):
+            email.add_section_header(line)
+        elif line.startswith("Variations:"):
+            email.add_divider()
+            email.add_section_subheader(line)
+        elif line.strip().startswith("- "):
+            email.add_bold_text(line.strip().strip("- "))
+        else:
+            if line.startswith("Description:"):
+                email.add_paragraph(line.strip().strip("Description: "))
+            else:
+                email.add_paragraph(line)
     return email

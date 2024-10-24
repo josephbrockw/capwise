@@ -1,5 +1,3 @@
-# fixtures/experiments.yaml
-
 - model: experiment.experiment
   pk: 1
   fields:

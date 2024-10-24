@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
 
 from account.emails import (
+    experiment_report_email,
     initiate_password_reset_email,
     password_changed_email,
     verification_email,
@@ -37,6 +38,13 @@ def test_templates(request, directory="email", template="welcome"):
     elif template == "confirm-password-reset":
         template_name = "default"
         email = password_changed_email(user)
+        context = {
+            "title": email.subject,
+            "content_list": email.context["content_list"],
+        }
+    elif template == "experiment-report":
+        template_name = "default"
+        email = experiment_report_email()
         context = {
             "title": email.subject,
             "content_list": email.context["content_list"],

@@ -15,6 +15,7 @@ usage() {
     echo "  coverage  - Runs a coverage report for the full test suite."
     echo "  quality   - Runs flake8, black, and isort, then runs a coverage report."
     echo "  dumpdata  - Dumps the data from the database into a json file called all_data.json."
+    echo "  loaddata    - Loads data from a given file path into the database."
     echo "  makemigrations - Makes migrations for the database."
     echo "  migrate   - Runs Django migrations inside the backend container."
     echo "Use '$0 workflow_name --help' for more information on a specific workflow"
@@ -101,6 +102,13 @@ migrate_help() {
     echo "        Example: bb migrate --rollback myapp 0005_migration_name"
     echo ""
     echo "Without arguments, this command runs all migrations."
+}
+
+# Function for loaddata help
+loaddata_help() {
+    echo "Loaddata Help"
+    echo "Usage: $0 loaddata filepath"
+    echo "Description: Loads data from a specified fixture file path into the database."
 }
 
 # Check if at least one argument is provided
@@ -230,6 +238,20 @@ case $workflow in
           -e contenttypes \
           ${@: 2} \
           > all_data.json
+        ;;
+    loaddata)
+        if [[ "$1" == "--help" ]]; then
+            loaddata_help
+            exit 0
+        fi
+        if [[ -z "$1" ]]; then
+            echo "Error: You must provide a fixture file path."
+            loaddata_help
+            exit 1
+        fi
+        filepath=$1
+        echo "Loading data from $filepath..."
+        docker compose exec backend python manage.py loaddata "$filepath"
         ;;
     makemigrations)
         if [[ "$1" == "--help" ]]; then
