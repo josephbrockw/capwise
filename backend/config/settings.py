@@ -231,3 +231,69 @@ CELERY_TRACK_STARTED = bool(int(os.environ.get("CELERY_TRACK_STARTED", 1)))
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "test@test.com")
+
+
+# LOGGING
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": os.environ.get("LOG_LEVEL", "INFO") if not DEBUG else "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.getenv(
+                "LOG_FILE_PATH", os.path.join(BASE_DIR, "application.log")
+            ),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": int(os.environ.get("LOG_BACKUP_COUNT", 5)),
+            "formatter": "verbose",
+        },
+        "error_file": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.getenv(
+                "ERROR_LOG_FILE_PATH", os.path.join(BASE_DIR, "error.log")
+            ),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": int(os.environ.get("LOG_BACKUP_COUNT", 5)),
+            "formatter": "verbose",
+        },
+        "console": {
+            "level": os.getenv("CONSOLE_LOG_LEVEL", "ERROR") if not DEBUG else "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file", "error_file"],
+            "level": "ERROR" if not DEBUG else "INFO",
+            "propagate": True,
+        },
+        "django.db.backends": {
+            "handlers": ["file"],  # Use file handler for SQL query logging
+            "level": "ERROR",  # Set level to ERROR to suppress most SQL query logging
+            "propagate": False,
+        },
+        "custom_logger": {
+            "handlers": ["console", "file"],
+            "level": "INFO" if not DEBUG else "DEBUG",
+            "propagate": False,
+        },
+        "error_logger": {
+            "handlers": ["error_file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
