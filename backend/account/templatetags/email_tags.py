@@ -121,3 +121,13 @@ def table(headers, rows):
     </table>
     """
     return mark_safe(html)
+
+
+@register.simple_tag
+def space():
+    """
+    Renders a space.
+    Usage:
+        {% space %}
+    """
+    return mark_safe("<div style='display: block; height: 2rem;'></div>")

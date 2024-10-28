@@ -25,6 +25,8 @@
 				{% ordered_list item.items %}
 		{% elif item.type == 'table' %}
 				{% table item.headers item.rows %}
+		{% elif item.type == 'space' %}
+				{% space %}
 		{% endif %}
 	{% endfor %}
 {% endblock %}

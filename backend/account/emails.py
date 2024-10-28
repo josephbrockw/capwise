@@ -61,6 +61,9 @@ class Email:
             {"type": "table", "headers": headers, "rows": rows}
         )
 
+    def add_space(self):
+        self.context["content_list"].append({"type": "space"})
+
     def send(self):
         if not self.context["content_list"]:
             raise ValueError("No content to send.")
@@ -138,29 +141,6 @@ def password_changed_email(user):
     return email
 
 
-# def experiment_report_email():
-#     report = generate_active_experiments_report()
-#     email = Email(
-#         subject="Active Experiments Report",
-#         to=[settings.OWNER_EMAIL],
-#         template="default",
-#     )
-#     for line in report.splitlines()[1:]:  # Skip the header
-#         if line.startswith("Experiment:"):
-#             email.add_section_header(line)
-#         elif line.startswith("Variations:"):
-#             email.add_divider()
-#             email.add_section_subheader(line)
-#         elif line.strip().startswith("- "):
-#             email.add_bold_text(line.strip().strip("- "))
-#         else:
-#             if line.startswith("Description:"):
-#                 email.add_paragraph(line.strip().strip("Description: "))
-#             else:
-#                 email.add_paragraph(line)
-#     return email
-
-
 def experiment_report_email():
     report = generate_active_experiments_report()
     email = Email(
@@ -177,6 +157,7 @@ def experiment_report_email():
             # Add the previous table if it exists before starting a new experiment
             if table_headers and table_data:
                 email.add_table(table_headers, table_data)
+                email.add_space()
                 table_headers = None
                 table_data = []
 
