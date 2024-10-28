@@ -13,7 +13,7 @@ from rest_framework_simplejwt.token_blacklist.models import (
 class BlacklistCleanupCommandTest(TestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
-        os.path.join(base_dir, "fixtures/blacklist_cleanup.json"),
+        os.path.join(base_dir, "fixtures/blacklist_cleanup.yaml"),
     ]
 
     def test_blacklist_cleanup_command(self):

@@ -3,7 +3,6 @@ import json
 import os
 from datetime import timedelta
 
-from account.models import OneTimePassword, User
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -11,6 +10,8 @@ from django.test import override_settings
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+from account.models import OneTimePassword, User
 from tests import read_api_response
 
 PASSWORD = "testpass123"
@@ -19,7 +20,7 @@ PASSWORD = "testpass123"
 class AuthenticationTest(APITestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
-        os.path.join(base_dir, "fixtures/auth.json"),
+        os.path.join(base_dir, "fixtures/auth.yaml"),
     ]
     username = "nanny"
     otp_token = "123456"

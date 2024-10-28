@@ -14,7 +14,8 @@ usage() {
     echo "  psql      - Enters the user into a Postgres shell inside the db container."
     echo "  coverage  - Runs a coverage report for the full test suite."
     echo "  quality   - Runs flake8, black, and isort, then runs a coverage report."
-    echo "  dumpdata  - Dumps the data from the database into a json file called all_data.json."
+    echo "  dumpdata  - Dumps the data from the database into a yaml file called default.yaml by default."
+    echo "                - Accepts optional output file name as argument."
     echo "  loaddata    - Loads data from a given file path into the database."
     echo "  makemigrations - Makes migrations for the database."
     echo "  migrate   - Runs Django migrations inside the backend container."
@@ -82,8 +83,9 @@ quality_help() {
 
 dumpdata_help() {
     echo "Dumpdata Help"
-    echo "Usage: $0 dumpdata"
-    echo "Description: Dumps the data from the database into a json file called all_data.json."
+    echo "Usage: $0 dumpdata [output_file_name]"
+    echo "Description: Dumps the data from the database into a yaml file called default.yaml by default."
+    echo "             You can optionally specify an output file name."
 }
 
 makemigrations_help() {
@@ -167,7 +169,7 @@ case $workflow in
         echo "Database flushed."
         (cd client && npm run cypress:run --browser chrome)
         docker compose exec backend python manage.py flush --noinput
-        docker compose exec backend python manage.py loaddata clean_data.json
+        docker compose exec backend python manage.py loaddata clean_data.yaml
        ;;
     clean)
         if [[ "$1" == "--help" ]]; then
@@ -178,7 +180,7 @@ case $workflow in
         docker compose down -v
         docker compose up -d --build
         docker compose exec backend python manage.py migrate
-        docker compose exec backend python manage.py loaddata clean_data.json
+        docker compose exec backend python manage.py loaddata clean_data.yaml
         ;;
     flush-db)
         if [[ "$1" == "--help" ]]; then
@@ -228,6 +230,10 @@ case $workflow in
             dumpdata_help
             exit 0
         fi
+        output_file="default.yaml"
+        if [[ -n "$1" ]]; then
+            output_file="$1"
+        fi
         docker compose exec backend python manage.py dumpdata \
           --indent 4 \
           --natural-foreign \
@@ -237,7 +243,7 @@ case $workflow in
           -e admin \
           -e contenttypes \
           ${@: 2} \
-          > all_data.json
+          > "$output_file"
         ;;
     loaddata)
         if [[ "$1" == "--help" ]]; then

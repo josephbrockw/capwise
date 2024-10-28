@@ -13,7 +13,7 @@ from tests import read_api_response
 class PasswordResetTests(APITestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
-        os.path.join(base_dir, "fixtures/auth.json"),
+        os.path.join(base_dir, "fixtures/auth.yaml"),
     ]
 
     def setUp(self):
