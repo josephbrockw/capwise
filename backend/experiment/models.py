@@ -8,7 +8,7 @@ class Experiment(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return self.name  # pragma: no cover
 
 
 class Variation(models.Model):
@@ -22,4 +22,4 @@ class Variation(models.Model):
     conversions = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f"{self.experiment.name} - {self.name}"
+        return f"{self.experiment.name} - {self.name}"  # pragma: no cover

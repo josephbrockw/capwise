@@ -1,7 +1,9 @@
 import os
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.core import mail
+from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -55,6 +57,16 @@ class PasswordResetTests(APITestCase):
         )
         self.assertIn("Reset Password", html_content)
 
+    def test_password_reset_initiate_email_not_found(self):
+        response = self.client.post(
+            "/api/auth/password/reset", data={"email": "not-real@test.com"}
+        )
+        data, msg, err, code = read_api_response(response)
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertEqual(
+            msg, "If an account with that email exists, an email will be sent."
+        )
+
     def test_password_reset_confirm(self):
         # Create an OTP for password reset
         otp = OneTimePassword.objects.create(user=self.user, token_length=20)
@@ -96,10 +108,30 @@ class PasswordResetTests(APITestCase):
         )
 
     def test_password_reset_invalid_token(self):
+        otp = OneTimePassword.objects.create(user=self.user, token_length=20)
+        otp.is_active = False
+        otp.save()
         response = self.client.post(
             "/api/auth/password/reset/confirm",
             data={
-                "token": "invalidtoken",
+                "token": otp.token,
+                "password": "newpassword",
+                "password_confirm": "newpassword",
+            },
+        )
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "Invalid or expired token.")
+
+    def test_password_reset_token_expired(self):
+        otp = OneTimePassword.objects.create(user=self.user, token_length=20)
+        otp.expires = now() - timedelta(minutes=1)
+        otp.save()
+        response = self.client.post(
+            "/api/auth/password/reset/confirm",
+            data={
+                "token": otp.token,
                 "password": "newpassword",
                 "password_confirm": "newpassword",
             },

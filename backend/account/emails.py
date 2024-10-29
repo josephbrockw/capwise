@@ -83,12 +83,7 @@ class Email:
 def verification_email(user):
     otp = OneTimePassword.objects.create(user=user, token_length=20)
     email = Email(subject="Verify your email", to=[user.email], template="default")
-    salutation = "Hi"
-    if user.first_name:
-        salutation += f", {user.first_name}!"
-    else:
-        salutation += "!"
-    email.add_paragraph(salutation)
+    email.add_paragraph(user.salutation())
     email.add_paragraph("Please click the button below to verify your email address.")
     email.add_button(
         "Verify Email", f"{settings.FRONTEND_URL}/verify?token={otp.token}"
@@ -103,12 +98,7 @@ def verification_email(user):
 def initiate_password_reset_email(user):
     otp = OneTimePassword.objects.create(user=user, token_length=20)
     email = Email(subject="Reset your password", to=[user.email], template="default")
-    salutation = "Hi"
-    if user.first_name:
-        salutation += f", {user.first_name}!"
-    else:
-        salutation += "!"
-    email.add_paragraph(salutation)
+    email.add_paragraph(user.salutation())
     email.add_paragraph("Please click the button below to reset your password.")
     email.add_button(
         "Reset Password",
@@ -123,12 +113,8 @@ def initiate_password_reset_email(user):
 
 def password_changed_email(user):
     email = Email(subject="Password Changed", to=[user.email], template="default")
-    salutation = "Hi"
-    if user.first_name:
-        salutation += f", {user.first_name}!"
-    else:
-        salutation += "!"
-    email.add_paragraph(salutation)
+    print(f"salutation: {user.salutation()}")
+    email.add_paragraph(user.salutation())
     email.add_paragraph(
         "This is a confirmation that the password for your account has "
         "just been changed."

@@ -19,11 +19,11 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from account.views import test_templates
 from api.views import version
 from api.views.auth import AuthViewSet, LogInView, LogoutView, TokenRefreshView
 from api.views.experiment import ExperimentViewSet
 from api.views.user import UserViewSet
-from main.views import test_templates
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"auth", AuthViewSet, basename="auth")

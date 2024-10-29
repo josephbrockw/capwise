@@ -3,6 +3,7 @@ from io import StringIO
 
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import TestCase
 
 User = get_user_model()
@@ -10,7 +11,6 @@ User = get_user_model()
 
 class UserActivationCommandTest(TestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    print(base_dir)
     fixtures = [os.path.join(base_dir, "fixtures", "user_management.yaml")]
 
     def test_activate_user(self):
@@ -43,3 +43,14 @@ class UserActivationCommandTest(TestCase):
         out = StringIO()
         call_command("user_activation", "nonexistentuser", "activate", stdout=out)
         self.assertIn('User "nonexistentuser" does not exist.', out.getvalue())
+
+    def test_user_activation_invalid_argument(self):
+        out = StringIO()
+        with self.assertRaises(CommandError):
+            call_command(
+                "user_activation", "magrat@lancre.gov", "invalid_action", stdout=out
+            )
+            self.assertIn(
+                'Invalid action "invalid_action". Use "activate" or "deactivate".',
+                out.getvalue(),
+            )

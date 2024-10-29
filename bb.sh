@@ -71,8 +71,11 @@ db_help() {
 
 coverage_help() {
     echo "Coverage Help"
-    echo "Usage: $0 coverage [options]"
+    echo "Usage: $0 coverage [--html]"
     echo "Description: Runs a coverage report for the full test suite"
+    echo ""
+    echo "Options:"
+    echo "  --html   Generate an HTML report."
 }
 
 quality_help() {
@@ -211,7 +214,20 @@ case $workflow in
             coverage_help
             exit 0
         fi
-        docker compose exec backend pytest -p no:warnings --cov=.
+
+        command="docker compose exec backend pytest -p no:warnings --cov=."
+
+        # Check if the user wants an HTML report
+        if [[ "$1" == "--html" ]]; then
+            command+=" --cov-report=html"
+        fi
+
+        echo "Running coverage..."
+        eval "$command"
+
+        if [[ "$1" == "--html" ]]; then
+            echo "Coverage HTML report generated. You can view it at 'htmlcov/index.html'."
+        fi
         ;;
     quality)
         if [[ "$1" == "--help" ]]; then

@@ -20,7 +20,7 @@ schedule = {
     },
 }
 
-if settings.DEBUG:
+if settings.DEBUG:  # pragma: no cover
     schedule["test_task"] = {
         "task": "worker.tasks.test_task",
         "schedule": timedelta(minutes=10),
@@ -31,12 +31,12 @@ app.conf.beat_schedule = schedule
 
 @app.task
 def test_task():
-    print("This is a test task.")
+    print("This is a test task.")  # pragma: no cover
 
 
 @app.task
 def make_a_wish():
-    print("11:11 - Make a wish!")
+    print("11:11 - Make a wish!")  # pragma: no cover
 
 
 @app.task

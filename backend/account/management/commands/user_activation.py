@@ -22,9 +22,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         email = options["email"]
         action = options["action"]
+        print(f"action: {action}")
 
         try:
             user = User.objects.get(email=email)
+        except ObjectDoesNotExist:
+            self.stdout.write(self.style.ERROR(f'User "{email}" does not exist.'))
+        try:
             if action == "activate":
                 if user.is_active:
                     self.stdout.write(
@@ -36,7 +40,7 @@ class Command(BaseCommand):
                     self.stdout.write(
                         self.style.SUCCESS(f'User "{email}" has been activated.')
                     )
-            elif action == "deactivate":
+            else:
                 if not user.is_active:
                     self.stdout.write(
                         self.style.WARNING(f'User "{email}" is already deactivated.')
@@ -47,5 +51,5 @@ class Command(BaseCommand):
                     self.stdout.write(
                         self.style.SUCCESS(f'User "{email}" has been deactivated.')
                     )
-        except ObjectDoesNotExist:
-            self.stdout.write(self.style.ERROR(f'User "{email}" does not exist.'))
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"An error occurred: {str(e)}"))
