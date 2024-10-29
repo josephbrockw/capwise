@@ -179,11 +179,17 @@ case $workflow in
             clean_help
             exit 0
         fi
-        echo "Spinning up new instance..."
-        docker compose down -v
-        docker compose up -d --build
-        docker compose exec backend python manage.py migrate
-        docker compose exec backend python manage.py loaddata clean_data.yaml
+        if [[ "$1" == "--data" ]]; then
+            echo "Cleaning up data..."
+            docker compose exec backend python manage.py flush --noinput
+            docker compose exec backend python manage.py loaddata clean_data.yam
+        else
+            echo "Spinning up new instance..."
+            docker compose down -v
+            docker compose up -d --build
+            docker compose exec backend python manage.py migrate
+            docker compose exec backend python manage.py loaddata clean_data.yaml
+        fi
         ;;
     flush-db)
         if [[ "$1" == "--help" ]]; then

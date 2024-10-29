@@ -49,6 +49,7 @@ services:
   frontend:
     build:
       context: ./client
+      dockerfile: Dockerfile.dev
     container_name: frontend
     command: npm start
     depends_on:
@@ -63,6 +64,8 @@ services:
     stdin_open: true
     volumes:
       - ./client:/app
+      - /app/node_modules
+    working_dir: /app
 
   celery2:
     build: celeryworker
