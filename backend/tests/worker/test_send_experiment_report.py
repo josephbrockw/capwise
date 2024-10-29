@@ -9,7 +9,6 @@ from worker.tasks import send_experiment_report_email
 
 class SendExperimentReportEmailTest(TestCase):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    print(base_dir)
     fixtures = [os.path.join(base_dir, "fixtures", "experiments.yaml")]
 
     @patch("worker.tasks.experiment_report_email")

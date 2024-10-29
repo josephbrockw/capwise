@@ -1,11 +1,12 @@
 FROM node:19.0-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
-COPY package.json .
-COPY yarn.lock .
-RUN yarn install --production
+COPY package*.json ./
+RUN npm install
 
 COPY . .
+
+CMD ["npm", "start"]
