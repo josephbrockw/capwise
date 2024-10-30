@@ -1,0 +1,31 @@
+- model: account.user
+  pk: ee00d202-fbb8-4a94-93ea-fc45b0bff10b
+  fields:
+    date_joined: "2024-03-30T20:20:03.265Z"
+    email: "gytha@lancre.gov"
+    first_name: "Gytha"
+    last_name: "Ogg"
+    username: "nanny"
+    password: "pbkdf2_sha256$390000$6KcQBQ6WIUQpgw6x0UNOJE$oM+AngV6GXMowE0iCGiva2KqYfIrxTlP7RDrVpZxPG0="
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: null
+    groups: []
+    user_permissions: []
+
+- model: account.user
+  pk: 84f02d0b-afae-4a0e-b950-cac2e13cb350
+  fields:
+    date_joined: "2024-03-30T20:20:03.265Z"
+    email: "magrat@lancre.gov"
+    first_name: "Magrat"
+    last_name: "Garlick"
+    username: "magrat"
+    password: "pbkdf2_sha256$390000$6KcQBQ6WIUQpgw6x0UNOJE$oM+AngV6GXMowE0iCGiva2KqYfIrxTlP7RDrVpZxPG0="
+    is_active: false
+    is_staff: false
+    is_superuser: false
+    last_login: null
+    groups: []
+    user_permissions: []

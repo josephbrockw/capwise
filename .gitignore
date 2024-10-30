@@ -7,6 +7,9 @@ backend/.env.secrets
 # pre-commit cache
 .pre-commit/
 
+# Coverage
+htmlcov/
+
 # =====================
 
 # Created by https://www.toptal.com/developers/gitignore/api/django

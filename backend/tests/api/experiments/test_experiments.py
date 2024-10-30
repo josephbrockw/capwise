@@ -13,7 +13,7 @@ class ExperimentViewSetTest(APITestCase):
 
     def test_track_view_valid_variation(self):
         variation_a = Variation.objects.get(name="Variation A")
-        self.assertEqual(variation_a.seen_count, 0)
+        self.assertEqual(variation_a.views, 0)
         url = "/api/experiments/1/track-view"
         response = self.client.post(url, data={"variation": "Variation A"})
         data, msg, err, code = read_api_response(response)
@@ -21,7 +21,7 @@ class ExperimentViewSetTest(APITestCase):
         self.assertEqual(code, status.HTTP_200_OK)
         self.assertEqual(msg, "View tracked successfully.")
         variation_a.refresh_from_db()
-        self.assertEqual(variation_a.seen_count, 1)
+        self.assertEqual(variation_a.views, 1)
 
     def test_track_view_invalid_variation(self):
         url = "/api/experiments/1/track-view"
@@ -33,7 +33,7 @@ class ExperimentViewSetTest(APITestCase):
 
     def test_track_conversion_valid_variation(self):
         variation_b = Variation.objects.get(name="Variation B")
-        self.assertEqual(variation_b.conversion_count, 0)
+        self.assertEqual(variation_b.conversions, 0)
         url = "/api/experiments/1/track-conversion"
         response = self.client.post(url, data={"variation": "Variation B"})
         data, msg, err, code = read_api_response(response)
@@ -41,7 +41,7 @@ class ExperimentViewSetTest(APITestCase):
         self.assertEqual(code, status.HTTP_200_OK)
         self.assertEqual(msg, "Conversion tracked successfully.")
         variation_b.refresh_from_db()
-        self.assertEqual(variation_b.conversion_count, 1)
+        self.assertEqual(variation_b.conversions, 1)
 
     def test_track_conversion_invalid_variation(self):
         url = "/api/experiments/1/track-conversion"

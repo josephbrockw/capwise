@@ -17,6 +17,7 @@ if [ "$response" = "y" ]; then
     source backend/env/bin/activate
     green_echo "  - Installing Node dependencies"
     npm install ./client
+    pre-commit install
 elif [ "$response" = "n" ]; then
     green_echo "Skipping installs."
 else
@@ -27,6 +28,5 @@ fi
 green_echo "Installing dev helper tool"
 chmod +x bb.sh
 cp bb.sh /usr/local/bin/bb
-pre-commit install
 green_echo "Complete! Run 'bb --help' for available commands."
 exit 0

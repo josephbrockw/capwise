@@ -4,19 +4,21 @@
 usage() {
     echo "General Usage: $0 workflow_name [additional_args]"
     echo "Available workflows:"
-    echo "  test      - Run the test suite."
-    echo "                - Accepts optional '--type=testtype' argument."
-    echo "                - Accepts optional '--k=keyword' argument."
-    echo "  cypress   - Run the cypress tests."
-    echo "  full-test - Run the test suite, flush the db, and run the cypress tests."
-    echo "  clean     - Shuts down docker containers and rebuilds new ones."
-    echo "  shell     - Enters the user into a Flask shell inside the app container."
-    echo "  psql      - Enters the user into a Postgres shell inside the db container."
-    echo "  coverage  - Runs a coverage report for the full test suite."
-    echo "  quality   - Runs flake8, black, and isort, then runs a coverage report."
-    echo "  dumpdata  - Dumps the data from the database into a json file called all_data.json."
+    echo "  test           - Run the test suite."
+    echo "                   - Accepts optional '--type=testtype' argument."
+    echo "                   - Accepts optional '--k=keyword' argument."
+    echo "  cypress        - Run the cypress tests."
+    echo "  full-test      - Run the test suite, flush the db, and run the cypress tests."
+    echo "  clean          - Shuts down docker containers and rebuilds new ones."
+    echo "  shell          - Enters the user into a Flask shell inside the app container."
+    echo "  psql           - Enters the user into a Postgres shell inside the db container."
+    echo "  coverage       - Runs a coverage report for the full test suite."
+    echo "  quality        - Runs flake8, black, and isort, then runs a coverage report."
+    echo "  dumpdata       - Dumps the data from the database into a yaml file called default.yaml by default."
+    echo "                 - Accepts optional output file name as argument."
+    echo "  loaddata       - Loads data from a given file path into the database."
     echo "  makemigrations - Makes migrations for the database."
-    echo "  migrate   - Runs Django migrations inside the backend container."
+    echo "  migrate        - Runs Django migrations inside the backend container."
     echo "Use '$0 workflow_name --help' for more information on a specific workflow"
 }
 
@@ -69,8 +71,11 @@ db_help() {
 
 coverage_help() {
     echo "Coverage Help"
-    echo "Usage: $0 coverage [options]"
+    echo "Usage: $0 coverage [--html]"
     echo "Description: Runs a coverage report for the full test suite"
+    echo ""
+    echo "Options:"
+    echo "  --html   Generate an HTML report."
 }
 
 quality_help() {
@@ -81,8 +86,9 @@ quality_help() {
 
 dumpdata_help() {
     echo "Dumpdata Help"
-    echo "Usage: $0 dumpdata"
-    echo "Description: Dumps the data from the database into a json file called all_data.json."
+    echo "Usage: $0 dumpdata [output_file_name]"
+    echo "Description: Dumps the data from the database into a yaml file called default.yaml by default."
+    echo "             You can optionally specify an output file name."
 }
 
 makemigrations_help() {
@@ -101,6 +107,13 @@ migrate_help() {
     echo "        Example: bb migrate --rollback myapp 0005_migration_name"
     echo ""
     echo "Without arguments, this command runs all migrations."
+}
+
+# Function for loaddata help
+loaddata_help() {
+    echo "Loaddata Help"
+    echo "Usage: $0 loaddata filepath"
+    echo "Description: Loads data from a specified fixture file path into the database."
 }
 
 # Check if at least one argument is provided
@@ -159,18 +172,27 @@ case $workflow in
         echo "Database flushed."
         (cd client && npm run cypress:run --browser chrome)
         docker compose exec backend python manage.py flush --noinput
-        docker compose exec backend python manage.py loaddata clean_data.json
+        docker compose exec backend python manage.py loaddata clean_data.yaml
        ;;
     clean)
         if [[ "$1" == "--help" ]]; then
             clean_help
             exit 0
         fi
-        echo "Spinning up new instance..."
-        docker compose down -v
-        docker compose up -d --build
-        docker compose exec backend python manage.py migrate
-        docker compose exec backend python manage.py loaddata clean_data.json
+        if [[ "$1" == "--data" ]]; then
+            echo "Cleaning up data..."
+            docker compose exec backend python manage.py flush --noinput
+            docker compose exec backend python manage.py loaddata clean_data.yaml
+        elif [[ "$1" == "--flush" ]]; then
+            echo "Flushing the database..."
+            docker compose exec backend python manage.py flush --noinput
+        else
+            echo "Spinning up new instance..."
+            docker compose down -v
+            docker compose up -d --build
+            docker compose exec backend python manage.py migrate
+            docker compose exec backend python manage.py loaddata clean_data.yaml
+        fi
         ;;
     flush-db)
         if [[ "$1" == "--help" ]]; then
@@ -201,7 +223,20 @@ case $workflow in
             coverage_help
             exit 0
         fi
-        docker compose exec backend pytest -p no:warnings --cov=.
+
+        command="docker compose exec backend pytest -p no:warnings --cov=."
+
+        # Check if the user wants an HTML report
+        if [[ "$1" == "--html" ]]; then
+            command+=" --cov-report=html"
+        fi
+
+        echo "Running coverage..."
+        eval "$command"
+
+        if [[ "$1" == "--html" ]]; then
+            echo "Coverage HTML report generated. You can view it at 'htmlcov/index.html'."
+        fi
         ;;
     quality)
         if [[ "$1" == "--help" ]]; then
@@ -220,6 +255,10 @@ case $workflow in
             dumpdata_help
             exit 0
         fi
+        output_file="default.yaml"
+        if [[ -n "$1" ]]; then
+            output_file="$1"
+        fi
         docker compose exec backend python manage.py dumpdata \
           --indent 4 \
           --natural-foreign \
@@ -229,7 +268,21 @@ case $workflow in
           -e admin \
           -e contenttypes \
           ${@: 2} \
-          > all_data.json
+          > "$output_file"
+        ;;
+    loaddata)
+        if [[ "$1" == "--help" ]]; then
+            loaddata_help
+            exit 0
+        fi
+        if [[ -z "$1" ]]; then
+            echo "Error: You must provide a fixture file path."
+            loaddata_help
+            exit 1
+        fi
+        filepath=$1
+        echo "Loading data from $filepath..."
+        docker compose exec backend python manage.py loaddata "$filepath"
         ;;
     makemigrations)
         if [[ "$1" == "--help" ]]; then

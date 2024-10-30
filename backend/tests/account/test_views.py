@@ -25,17 +25,39 @@ class TestEmailTemplatesView(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    # def test_reset_password_template_renders_correctly(self):
-    #     """
-    #     Test that the 'reset-password' template is rendered with the
-    #     correct context.
-    #     """
-    #     response = self.client.get(f'{self.url}?template=reset-password')
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertContains(response, "Reset your password")
-    #     self.assertContains(response, "Reset Password")
-    #     self.assertContains(response, "123456")  # Check for the code
-    #
+    def test_initiate_password_reset_template_renders_correctly(self):
+        """Test that the 'verify' template is rendered with the correct context."""
+        url = reverse("test_templates", args=["email", "initiate-password-reset"])
+        get_user_model().objects.create_user(
+            email="svimes@ankhmorpork.gov",
+            username="sam",
+            first_name="Sam",
+            password="password",
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_confirm_password_reset_template_renders_correctly(self):
+        """Test that the 'verify' template is rendered with the correct context."""
+        url = reverse("test_templates", args=["email", "confirm-password-reset"])
+        get_user_model().objects.create_user(
+            email="svimes@ankhmorpork.gov",
+            username="sam",
+            first_name="Sam",
+            password="password",
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_experiment_report_template_renders_correctly(self):
+        """
+        Test that the 'experiment-report' template is rendered
+        with the correct context.
+        """
+        url = reverse("test_templates", args=["email", "experiment-report"])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
     def test_default_template_renders_correctly(self):
         """Test that the default case is rendered when no template is passed."""
         url = reverse("test_templates", args=["email", "default"])

@@ -98,7 +98,7 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
 class VariationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Variation
-        fields = ["id", "name", "weight", "seen_count", "conversion_count"]
+        fields = ["id", "name", "weight", "views", "conversions"]
 
 
 class ExperimentSerializer(serializers.ModelSerializer):

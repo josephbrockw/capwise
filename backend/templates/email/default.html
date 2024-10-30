@@ -9,8 +9,24 @@
 	{% for item in content_list %}
 		{% if item.type == 'paragraph' %}
 			{% paragraph item.text %}
+		{% elif item.type == 'section_header' %}
+			{% section_header item.text %}
+		{% elif item.type == 'section_subheader' %}
+			{% section_subheader item.text %}
+		{% elif item.type == 'divider' %}
+			{% divider %}
+		{% elif item.type == 'bold_text' %}
+			{% bold_text item.text %}
 		{% elif item.type == 'button' and item.url %}
 			{% cta_button item.url item.text %}
+		{% elif item.type == 'unordered_list'%}
+			{% unordered_list item.items %}
+		{% elif item.type == 'ordered_list' %}
+				{% ordered_list item.items %}
+		{% elif item.type == 'table' %}
+				{% table item.headers item.rows %}
+		{% elif item.type == 'space' %}
+				{% space %}
 		{% endif %}
 	{% endfor %}
 {% endblock %}

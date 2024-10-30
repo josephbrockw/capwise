@@ -1,0 +1,85 @@
+# fixtures/experiments.yaml
+
+- model: experiment.experiment
+  pk: 1
+  fields:
+    name: "Unseen University Ad Campaign"
+    description: "Testing different variations of advertisements for the Unseen University."
+    created_at: 2024-01-10T09:00:00Z
+    is_active: true
+
+- model: experiment.variation
+  pk: 1
+  fields:
+    experiment: 1
+    name: "Wizards Only Ad"
+    weight: 1
+    views: 50
+    conversions: 5
+    created_at: 2024-01-10T09:00:00Z
+
+- model: experiment.variation
+  pk: 2
+  fields:
+    experiment: 1
+    name: "General Magic Ad"
+    weight: 2
+    views: 100
+    conversions: 15
+    created_at: 2024-01-10T09:00:00Z
+
+- model: experiment.experiment
+  pk: 2
+  fields:
+    name: "Ankh-Morpork Recruitment Campaign"
+    description: "Testing recruitment ads for the Ankh-Morpork City Watch."
+    created_at: 2024-02-15T11:30:00Z
+    is_active: true
+
+- model: experiment.variation
+  pk: 3
+  fields:
+    experiment: 2
+    name: "Commander Vimes Endorsement"
+    weight: 3
+    views: 200
+    conversions: 25
+    created_at: 2024-02-15T11:30:00Z
+
+- model: experiment.variation
+  pk: 4
+  fields:
+    experiment: 2
+    name: "Nobby Nobbs Testimonial"
+    weight: 1
+    views: 150
+    conversions: 5
+    created_at: 2024-02-15T11:30:00Z
+
+- model: experiment.experiment
+  pk: 3
+  fields:
+    name: "Lancre Witch Potion Sales"
+    description: "Testing different promotional strategies for Lancre witch potions."
+    created_at: 2024-03-05T14:45:00Z
+    is_active: false
+
+- model: experiment.variation
+  pk: 5
+  fields:
+    experiment: 3
+    name: "Granny Weatherwax Recommendation"
+    weight: 2
+    views: 300
+    conversions: 50
+    created_at: 2024-03-05T14:45:00Z
+
+- model: experiment.variation
+  pk: 6
+  fields:
+    experiment: 3
+    name: "Nanny Ogg Special Offer"
+    weight: 1
+    views: 100
+    conversions: 20
+    created_at: 2024-03-05T14:45:00Z

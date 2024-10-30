@@ -11,10 +11,19 @@ from django.utils.timezone import now
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
+    preferred_name = models.CharField(max_length=30, blank=True)
 
+    @property
+    def name(self):
+        if self.preferred_name:
+            return self.preferred_name
+        elif self.first_name:
+            return self.first_name
+        else:
+            return self.username
 
-def hello():
-    print("hello")
+    def salutation(self):
+        return f"Hi, {self.name}!"
 
 
 class OneTimePassword(models.Model):
@@ -39,7 +48,7 @@ class OneTimePassword(models.Model):
     def save(self, *args, **kwargs):
         # Users should only have one token at a time
         if OneTimePassword.objects.filter(user=self.user, is_active=True).exists():
-            if self.id:
+            if self.pk:
                 OneTimePassword.objects.filter(user=self.user).exclude(
                     id=self.id
                 ).update(is_active=False)
