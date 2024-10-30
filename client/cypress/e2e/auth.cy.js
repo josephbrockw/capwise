@@ -52,12 +52,14 @@ describe('User Login Flow', () => {
     cy.intercept('POST', '/api/auth/login', {
       statusCode: 200,
       body: {
-        access: 'mockedAccess',
-        refresh: 'mockedRefresh',
-        id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
-        username: 'nanny',
-        first_name: 'Gytha',
-        last_name: 'Ogg',
+        data: {
+          access: 'mockedAccess',
+          refresh: 'mockedRefresh',
+          id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
+          username: 'nanny',
+          first_name: 'Gytha',
+          last_name: 'Ogg',
+        }
       },
     }).as('loginUser');
     cy.visit('/login');
@@ -68,7 +70,7 @@ describe('User Login Flow', () => {
     cy.get('button[type="submit"]').click();
     cy.wait('@loginUser');
     // TODO: Check for dashboard redirect
-    // cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/dashboard');
     // cy.contains('Welcome to your dashboard').should('be.visible');
   });
 });

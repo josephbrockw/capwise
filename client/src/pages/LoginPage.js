@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function LoginPage() {
+const Login = () => {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, formData);
+      console.log("Login Response:");
+      console.log(response.data);
+      localStorage.setItem('token', response.data.data.access);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('There was an error logging in!', error);
+    }
+  };
+
   return (
-    <div>
-      <h1>Login</h1>
-      <p>Please enter your credentials to log in.</p>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="username" placeholder="Username" onChange={handleChange} required />
+      <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+      <button type="submit">Login</button>
+    </form>
   );
-}
+};
 
-export default LoginPage;
+export default Login;
