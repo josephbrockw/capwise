@@ -4,7 +4,7 @@ import LandingPage from './pages/LandingPage';
 import DashboardPage from './pages/DashboardPage';
 import Register from './components/Register';
 import Login from './components/Login';
-import VerifyEmail from './components/VerifyEmail';
+import VerifyEmail from './pages/VerifyEmail';
 
 const AppRoutes = () => (
   <Router>

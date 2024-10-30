@@ -4,21 +4,21 @@
 usage() {
     echo "General Usage: $0 workflow_name [additional_args]"
     echo "Available workflows:"
-    echo "  test      - Run the test suite."
-    echo "                - Accepts optional '--type=testtype' argument."
-    echo "                - Accepts optional '--k=keyword' argument."
-    echo "  cypress   - Run the cypress tests."
-    echo "  full-test - Run the test suite, flush the db, and run the cypress tests."
-    echo "  clean     - Shuts down docker containers and rebuilds new ones."
-    echo "  shell     - Enters the user into a Flask shell inside the app container."
-    echo "  psql      - Enters the user into a Postgres shell inside the db container."
-    echo "  coverage  - Runs a coverage report for the full test suite."
-    echo "  quality   - Runs flake8, black, and isort, then runs a coverage report."
-    echo "  dumpdata  - Dumps the data from the database into a yaml file called default.yaml by default."
-    echo "                - Accepts optional output file name as argument."
-    echo "  loaddata    - Loads data from a given file path into the database."
+    echo "  test           - Run the test suite."
+    echo "                   - Accepts optional '--type=testtype' argument."
+    echo "                   - Accepts optional '--k=keyword' argument."
+    echo "  cypress        - Run the cypress tests."
+    echo "  full-test      - Run the test suite, flush the db, and run the cypress tests."
+    echo "  clean          - Shuts down docker containers and rebuilds new ones."
+    echo "  shell          - Enters the user into a Flask shell inside the app container."
+    echo "  psql           - Enters the user into a Postgres shell inside the db container."
+    echo "  coverage       - Runs a coverage report for the full test suite."
+    echo "  quality        - Runs flake8, black, and isort, then runs a coverage report."
+    echo "  dumpdata       - Dumps the data from the database into a yaml file called default.yaml by default."
+    echo "                 - Accepts optional output file name as argument."
+    echo "  loaddata       - Loads data from a given file path into the database."
     echo "  makemigrations - Makes migrations for the database."
-    echo "  migrate   - Runs Django migrations inside the backend container."
+    echo "  migrate        - Runs Django migrations inside the backend container."
     echo "Use '$0 workflow_name --help' for more information on a specific workflow"
 }
 
@@ -182,7 +182,10 @@ case $workflow in
         if [[ "$1" == "--data" ]]; then
             echo "Cleaning up data..."
             docker compose exec backend python manage.py flush --noinput
-            docker compose exec backend python manage.py loaddata clean_data.yam
+            docker compose exec backend python manage.py loaddata clean_data.yaml
+        elif [[ "$1" == "--flush" ]]; then
+            echo "Flushing the database..."
+            docker compose exec backend python manage.py flush --noinput
         else
             echo "Spinning up new instance..."
             docker compose down -v
