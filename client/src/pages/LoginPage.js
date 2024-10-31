@@ -20,8 +20,6 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, formData);
-      console.log("Login Response:");
-      console.log(response.data);
       localStorage.setItem('token', response.data.data.access);
       navigate('/dashboard');
     } catch (error) {
