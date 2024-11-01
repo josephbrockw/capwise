@@ -67,7 +67,7 @@ describe('User Login Flow', () => {
     // Fill in login form
     cy.get('input[name="username"]').type('testuser@example.com');
     cy.get('input[name="password"]').type('Password123!');
-    cy.get('button[type="submit"]').click();
+    cy.get('[data-cy="login-submit-button"]').click();
     cy.wait('@loginUser');
     // TODO: Check for dashboard redirect
     cy.url().should('include', '/dashboard');
