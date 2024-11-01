@@ -34,7 +34,7 @@ class LogInViewTestCase(APITestCase):
 
         # Users should be able to login if they are verified
         data, msg, err, code = read_api_response(
-            self.client.post(url, payload, format="json")
+            self.client.post(url, payload, format="json"), show=True
         )
         self.assertEqual(code, status.HTTP_200_OK)
         self.assertIn("access", data)
