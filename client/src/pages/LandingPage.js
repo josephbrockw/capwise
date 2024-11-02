@@ -1,17 +1,6 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-//
-// const LandingPage = () => (
-//   <div>
-//     <h1>Welcome to BaseBuild</h1>
-//     <Link to="/register">Register</Link> | <Link to="/login">Login</Link>
-//   </div>
-// );
-
 // client/src/pages/Landing.js
 import React from 'react';
 import { Button } from 'primereact/button';  // PrimeReact Button component
-import { Card } from 'primereact/card';      // PrimeReact Card component
 import { Link } from 'react-router-dom';
 import hero from '../assets/images/hero.jpg';
 
@@ -158,24 +147,6 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-      </div>
-
-
-      <div className="p-d-flex p-jc-center p-ai-center" style={{minHeight: '100vh'}}>
-        <Card title="Welcome to BaseBuild" subTitle="Make data-driven decisions with ease" className="p-shadow-5">
-          <p>
-            BaseBuild is a platform that helps you manage experiments, make data-driven decisions, and achieve your
-            business goals effectively.
-          </p>
-          <div className="p-d-flex p-ai-center p-flex-column">
-            <Link to="/register">
-              <Button label="Get Started" className="p-button-success p-mt-2"/>
-            </Link>
-            <Link to="/login">
-              <Button label="Login" className="p-button-secondary p-mt-2"/>
-            </Link>
-          </div>
-        </Card>
       </div>
     </div>
   );

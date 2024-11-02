@@ -19,7 +19,7 @@ describe('User Registration Flow', () => {
     cy.get('input[name="email"]').type('gytha@lancre.gov');
     cy.get('input[name="password1"]').type('Password123!');
     cy.get('input[name="password2"]').type('Password123!');
-    cy.get('button[type="submit"]').click();
+    cy.get('[data-cy="registration-submit-button"]').click();
     cy.wait('@registerUser');
     // Verify successful registration prompt
     cy.contains('Registration successful! Please check your email to verify your account.').should('be.visible');
