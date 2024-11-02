@@ -1,6 +1,7 @@
 // client/src/components/LogoutButton.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'primereact/button';
 import storageHelper from '../utils/storageHelper';
 
 const LogoutButton = () => {
@@ -12,7 +13,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <button onClick={handleLogout}>Logout</button>
+    <Button label="Logout" onClick={handleLogout} data-cy="logout-button" />
   );
 };
 

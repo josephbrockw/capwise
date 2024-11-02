@@ -62,6 +62,18 @@ describe('User Login Flow', () => {
         }
       },
     }).as('loginUser');
+    cy.intercept("GET", "/api/users/me", {
+      statusCode: 200,
+      body: {
+        data: {
+          id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
+          username: 'nanny',
+          email: 'gytha@lancre.gov',
+          first_name: 'Gytha',
+          last_name: 'Ogg',
+        }
+      },
+    }).as('getUser');
     cy.visit('/login');
 
     // Fill in login form
@@ -69,8 +81,19 @@ describe('User Login Flow', () => {
     cy.get('input[name="password"]').type('Password123!');
     cy.get('[data-cy="login-submit-button"]').click();
     cy.wait('@loginUser');
+    cy.window().then((win) => {
+      let token = win.localStorage.getItem('token');
+      expect(token).to.equal('mockedAccess');
+    });
     // TODO: Check for dashboard redirect
     cy.url().should('include', '/dashboard');
-    // cy.contains('Welcome to your dashboard').should('be.visible');
+    cy.wait('@getUser');
+    cy.contains('Welcome to Your Dashboard').should('be.visible');
+    cy.get('[data-cy="logout-button"]').click();
+    cy.url().should('include', '/login');
+    cy.window().then((win) => {
+      let token = win.localStorage.getItem('token');
+      expect(token).to.be.null;
+    });
   });
 });
