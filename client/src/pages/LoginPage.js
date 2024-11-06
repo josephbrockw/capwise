@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import inlineLogo from '../assets/images/inlineLogo.png';
+import FloatLabel from '../components/FloatLabel/FloatLabel';
 
 import axios from 'axios';
 
@@ -45,12 +46,8 @@ const Login = () => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-900 font-medium mb-2">Username</label>
-            <InputText id="username" type="text" name="username" placeholder="Username" className="w-full mb-3" onChange={handleChange} required/>
-
-            <label htmlFor="password" className="block text-900 font-medium mb-2">Password</label>
-            <InputText id="password" name="password" type="password" placeholder="Password" className="w-full mb-3" onChange={handleChange} required/>
-
+            <FloatLabel id="username" name="username" label="Username" value={formData.username} onChange={handleChange} type="text" required />
+            <FloatLabel id="password" label="Password" value={formData.password} onChange={handleChange} name="password" type="password" required />
             <div className="flex align-items-center justify-content-between mb-6">
               <Link to="/password/initiate" style={{ textDecoration: 'none' }} data-cy="reset-password-link">
                 <span className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot your password?</span>

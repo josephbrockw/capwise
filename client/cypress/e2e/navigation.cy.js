@@ -47,3 +47,17 @@ describe('Reset Password Page', () => {
     cy.url().should('include', '/register');
   });
 });
+
+describe('Reset Confirm Page', () => {
+  it('Should be able to navigate to login page', () => {
+    cy.visit('/password/confirm');
+    cy.get('[data-cy=login-link]').click();
+    cy.url().should('include', '/login');
+  });
+
+  it('Should be able to navigate to registration page', () => {
+    cy.visit('/password/confirm');
+    cy.get('[data-cy=registration-link]').click();
+    cy.url().should('include', '/register');
+  });
+});

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { FloatLabel } from 'primereact/floatlabel';
 import inlineLogo from "../assets/images/inlineLogo.png";
+import FloatLabel from '../components/FloatLabel/FloatLabel';
 
 import axios from 'axios';
 
@@ -12,18 +11,41 @@ const ResetPassword = () => {
   const [formData, setFormData] = useState({
     email: '',
   });
+  // State to track resize updates (optional, if resize handling is needed)
+  const [isResizing, setIsResizing] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
+
+  // Debounce resize event handling (if needed for custom logic)
+  useEffect(() => {
+    let resizeTimeout;
+    const handleResize = () => {
+      setIsResizing(true);
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setIsResizing(false);
+      }, 100); // Adjust debounce duration as necessary
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/password/reset`, formData);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/auth/password/reset`,
+        formData
+      );
       setMessage('If an account with that email exists, a password reset email will be sent.');
     } catch (error) {
       console.error('There was an error attempting to reset your password.', error);
@@ -54,12 +76,7 @@ const ResetPassword = () => {
                 </Link>
               </div>
               <div>
-                <FloatLabel className="mb-2">
-
-                  <InputText id="email" type="email" name="email" className="w-full"
-                             onChange={handleChange} required/>
-                  <label htmlFor="email">Email</label>
-                </FloatLabel>
+                <FloatLabel id="email" label="Email" value={formData.email} onChange={handleChange} name="email" type="email" required />
 
                 <div className="flex align-items-center justify-content-between mb-6">
                   <Link to="/login" style={{textDecoration: 'none'}} data-cy="login-link">

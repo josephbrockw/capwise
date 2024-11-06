@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import {InputText} from "primereact/inputtext";
+import { FloatLabel } from 'primereact/floatlabel';
 import {Button} from "primereact/button";
 
 const Register = () => {
@@ -52,21 +53,31 @@ const Register = () => {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-900 font-medium mb-2">Email</label>
-            <InputText id="email" type="email" name="email" placeholder="Email" className="w-full mb-3"
-                       onChange={handleChange} required/>
 
-            <label htmlFor="username" className="block text-900 font-medium mb-2">Username</label>
-            <InputText id="username" type="text" name="username" placeholder="Username" className="w-full mb-3"
-                       onChange={handleChange} required/>
+            <FloatLabel className="mb-5">
+              <InputText id="email" type="email" name="email" placeholder="Email" className="w-full"
+                         onChange={handleChange} required/>
+              <label htmlFor="email">Email</label>
+            </FloatLabel>
 
-            <label htmlFor="password1" className="block text-900 font-medium mb-2">Password</label>
-            <InputText id="password1" name="password1" type="password" placeholder="Password" className="w-full mb-3"
-                       onChange={handleChange} required/>
+            <FloatLabel className="mb-5">
+              <InputText id="username" type="text" name="username" placeholder="Username" className="w-full"
+                         onChange={handleChange} required/>
+              <label htmlFor="username">Username</label>
+            </FloatLabel>
 
-            <label htmlFor="password2" className="block text-900 font-medium mb-2">Password</label>
-            <InputText id="password2" name="password2" type="password" placeholder="Confirm Password" className="w-full mb-3"
-                       onChange={handleChange} required/>
+            <FloatLabel className="mb-5">
+              <InputText id="password1" name="password1" type="password" placeholder="Password" className="w-full"
+                         onChange={handleChange} required/>
+              <label htmlFor="password1">Password</label>
+            </FloatLabel>
+
+            <FloatLabel className="mb-5">
+              <InputText id="password2" name="password2" type="password" placeholder="Confirm Password"
+                         className="w-full"
+                         onChange={handleChange} required/>
+              <label htmlFor="password2">Password</label>
+            </FloatLabel>
 
             <Button label="Register" icon="pi pi-user" className="w-full" onClick={handleSubmit}
                     data-cy="registration-submit-button"/>
