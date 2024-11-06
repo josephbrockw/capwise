@@ -295,5 +295,6 @@ LOGGING = {
             "level": "ERROR",
             "propagate": False,
         },
+        "django.email": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
     },
 }

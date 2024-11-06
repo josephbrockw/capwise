@@ -18,6 +18,12 @@ describe('Login Page', () => {
     cy.get('[data-cy=registration-link]').click();
     cy.url().should('include', '/register');
   });
+
+  it('Should be able to navigate to reset password page', () => {
+    cy.visit('/login');
+    cy.get('[data-cy=reset-password-link]').click();
+    cy.url().should('include', '/password/initiate');
+  });
 });
 
 describe('Registration Page', () => {
@@ -25,5 +31,19 @@ describe('Registration Page', () => {
     cy.visit('/register');
     cy.get('[data-cy=login-link]').click();
     cy.url().should('include', '/login');
+  });
+});
+
+describe('Reset Password Page', () => {
+  it('Should be able to navigate to login page', () => {
+    cy.visit('/password/initiate');
+    cy.get('[data-cy=login-link]').click();
+    cy.url().should('include', '/login');
+  });
+
+  it('Should be able to navigate to registration page', () => {
+    cy.visit('/password/initiate');
+    cy.get('[data-cy=registration-link]').click();
+    cy.url().should('include', '/register');
   });
 });

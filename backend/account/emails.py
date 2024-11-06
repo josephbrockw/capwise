@@ -96,13 +96,13 @@ def verification_email(user):
 
 
 def initiate_password_reset_email(user):
-    otp = OneTimePassword.objects.create(user=user, token_length=20)
+    otp = OneTimePassword.objects.create(user=user, token_length=6)
     email = Email(subject="Reset your password", to=[user.email], template="default")
     email.add_paragraph(user.salutation())
     email.add_paragraph("Please click the button below to reset your password.")
     email.add_button(
         "Reset Password",
-        f"{settings.FRONTEND_URL}/reset-password?token={otp.token}",
+        f"{settings.FRONTEND_URL}/password/confirm?token={otp.token}",
     )
     email.add_paragraph(
         "If you did not request a password reset, no further action is required."

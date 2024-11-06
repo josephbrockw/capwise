@@ -97,3 +97,92 @@ describe('User Login Flow', () => {
     });
   });
 });
+
+describe('Password Reset Flow', () => {
+  it('Initiates password reset process', () => {
+    cy.intercept('POST', '/api/auth/password/reset', (req) => {
+      expect(req.body).to.deep.equal({
+        email: 'gytha@lancre.gov',
+      });
+      req.reply({
+        statusCode: 200,
+        body: {
+          message: 'Password reset email sent successfully.'
+        },
+      });
+    }).as('initiateReset');
+    cy.visit('/password/initiate');
+    cy.get('input[name="email"]').type('gytha@lancre.gov');
+    cy.get('[data-cy="submit-button"]').click();
+    cy.wait('@initiateReset');
+    cy.contains('If an account with that email exists, a password reset email will be sent.').should('be.visible');
+  });
+
+  it('Resets user password successfully with token query param', () => {
+    const resetToken = "123456";
+    cy.intercept('POST', '/api/auth/password/reset/confirm', (req) =>{
+      expect(req.body).to.deep.equal({
+        token: resetToken,
+        password: 'NewPassword123!',
+        password_confirm: 'NewPassword123!',
+      });
+      req.reply({
+        statusCode: 200,
+        body: {
+          message: 'Password reset successful. Please sign in.'
+        },
+      });
+    }).as('resetPassword');
+    cy.visit(`/password/confirm?token=${resetToken}`);
+    cy.get('input[name="password"]').type('NewPassword123!');
+    cy.get('input[name="password_confirm"]').type('NewPassword123!');
+    cy.get('[data-cy="submit-button"]').click();
+    cy.wait('@resetPassword');
+    cy.contains('Password reset successful. Please sign in.').should('be.visible');
+  });
+
+  it('Resets user password successfully with manual token entry', () => {
+    const reset = "123456";
+    cy.intercept('POST', '/api/auth/password/reset/confirm', (req) => {
+      expect(req.body).to.deep.equal({
+        token: reset,
+        password: 'NewPassword123!',
+        password_confirm: 'NewPassword123!',
+      });
+      req.reply({
+        statusCode: 200,
+        body: {
+          message: 'Password reset successful. Please sign in.'
+        },
+      });
+    }).as('resetPassword');
+    cy.visit('/password/confirm');
+    cy.get('[data-cy="otp-container"]').as('otpContainer');
+    cy.get('@otpContainer').find('input').should('have.length', 6);
+    reset.split('').forEach((digit, index) => {
+      cy.get('@otpContainer').find('input').eq(index).type(digit);
+    });
+
+    cy.get('input[name="password"]').type('NewPassword123!');
+    cy.get('input[name="password_confirm"]').type('NewPassword123!');
+    cy.get('[data-cy="submit-button"]').click();
+    cy.wait('@resetPassword');
+    cy.contains('Password reset successful. Please sign in.').should('be.visible');
+  });
+
+  it('Shows an error message when not successfully resetting password', () => {
+    const resetToken = "123456";
+    cy.intercept('POST', '/api/auth/password/reset/confirm', {
+      statusCode: 400,
+      body: {
+        error: 'An error occurred. Please try again.'
+      },
+    }).as('resetPassword');
+    cy.visit(`/password/confirm?token=${resetToken}`);
+    cy.get('input[name="password"]').type('NewPassword123!');
+    cy.get('input[name="password_confirm"]').type('NewPassword123!');
+    cy.get('[data-cy="submit-button"]').click();
+    cy.wait('@resetPassword');
+    cy.contains('An error occurred. Please try again.').should('be.visible');
+  });
+});
