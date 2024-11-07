@@ -15,7 +15,7 @@ describe('Home Page', () => {
 describe('Login Page', () => {
   it('Should be able to navigate to registration page', () => {
     cy.visit('/login');
-    cy.get('[data-cy=registration-link]').click();
+    cy.get('[data-cy=register-link]').click();
     cy.url().should('include', '/register');
   });
 
@@ -43,7 +43,7 @@ describe('Reset Password Page', () => {
 
   it('Should be able to navigate to registration page', () => {
     cy.visit('/password/initiate');
-    cy.get('[data-cy=registration-link]').click();
+    cy.get('[data-cy=register-link]').click();
     cy.url().should('include', '/register');
   });
 });

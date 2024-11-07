@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import inlineLogo from '../assets/images/inlineLogo.png';
 import FloatLabel from '../components/FloatLabel/FloatLabel';
+import Button from '../components/Button/Button';
+import AuthLayout from '../components/layout/AuthLayout/AuthLayout';
 
 import axios from 'axios';
 
@@ -33,34 +33,40 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div className="flex align-items-center justify-content-center">
-        <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
-          <div className="text-center mb-5">
-            <img src={inlineLogo} alt="hyper" height={50} className="mb-3 mt-3"/>
-            <div className="text-900 text-3xl font-medium mb-3">Welcome Back</div>
-            <span className="text-600 font-medium line-height-3">Don't have an account?</span>
-            <Link to="/register" style={{ textDecoration: 'none' }} data-cy="registration-link">
-              <span className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</span>
-            </Link>
-          </div>
-
-          <div>
-            <FloatLabel id="username" name="username" label="Username" value={formData.username} onChange={handleChange} type="text" required />
-            <FloatLabel id="password" label="Password" value={formData.password} onChange={handleChange} name="password" type="password" required />
-            <div className="flex align-items-center justify-content-between mb-6">
-              <Link to="/password/initiate" style={{ textDecoration: 'none' }} data-cy="reset-password-link">
-                <span className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot your password?</span>
-              </Link>
-            </div>
-
-            <Button label="Sign In" icon="pi pi-user" className="w-full" onClick={handleSubmit}
-                    data-cy="login-submit-button" />
-          </div>
+    <AuthLayout
+      title="Welcome Back"
+      subtext="Don't have an account?"
+      sublinkText="Create today!"
+      sublinkUrl="/register"
+    >
+      <form onSubmit={handleSubmit}>
+        <FloatLabel
+          id="username"
+          name="username"
+          label="Username"
+          value={formData.username}
+          onChange={handleChange}
+          type="text"
+          required
+        />
+        <FloatLabel
+          id="password"
+          name="password"
+          label="Password"
+          value={formData.password}
+          onChange={handleChange}
+          type="password"
+          required
+        />
+        <div className="flex align-items-center justify-content-between mb-6">
+          <Link to="/password/initiate" className="text-blue-500" data-cy='reset-password-link' >
+            Forgot your password?
+          </Link>
         </div>
-      </div>
-    </div>
-  );
+        <Button label="Sign In" icon="pi pi-user" fullWidth onClick={handleSubmit} data-cy="login-submit-button" />
+      </form>
+    </AuthLayout>
+  )
 };
 
 export default Login;

@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './FloatLabel.css'; // Custom styles
+import './FloatLabel.css';
 
-const FloatLabel = ({ id, label, value, onChange, type = "text", name, required = false }) => {
+const FloatLabel = ({ id, label, value, onChange, type = 'text', name, required = false }) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  // Check if the label should float
+  const isFloating = isFocused || (value && value.trim() !== '');
 
   return (
-    <div className={`custom-float-label ${isFocused || value ? 'focused' : ''}`}>
+    <div className={`float-label-container ${isFloating ? 'floating' : ''}`}>
       <input
         id={id}
         type={type}
         name={name}
         value={value}
         onChange={onChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className="custom-input"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        className="float-label-input"
         required={required}
       />
-      <label htmlFor={id} className="custom-label">
+      <label htmlFor={id} className="float-label">
         {label}
       </label>
     </div>

@@ -1,23 +1,24 @@
-.custom-float-label {
+/* FloatLabel.css */
+.float-label-container {
   position: relative;
   margin-bottom: 1rem;
 }
 
-.custom-input {
+.float-label-input {
   width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   padding: 12px 8px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   outline: none;
-  background: none;
+  background-color: #fff;
 }
 
-.custom-input:focus {
+.float-label-input:focus {
   border-color: #007bff;
 }
 
-.custom-label {
+.float-label {
   position: absolute;
   top: 50%;
   left: 8px;
@@ -28,14 +29,13 @@
   pointer-events: none;
 }
 
-.custom-float-label.focused .custom-label,
-.custom-input:not(:placeholder-shown) + .custom-label {
+.floating .float-label {
   top: -8px;
   left: 8px;
   font-size: 12px;
   color: #007bff;
 }
 
-.custom-float-label.focused .custom-input {
+.floating .float-label-input {
   border-color: #007bff;
 }

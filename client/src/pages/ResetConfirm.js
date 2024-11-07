@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'primereact/button';
 import { InputOtp } from 'primereact/inputotp';
 import { Password } from 'primereact/password';
 import { FloatLabel } from 'primereact/floatlabel';
 import { useSearchParams } from 'react-router-dom';
 import inlineLogo from '../assets/images/inlineLogo.png';
+import Button from '../components/Button/Button';
 
 import axios from 'axios';
 
@@ -96,8 +96,7 @@ const ResetConfirm = () => {
                   </Link>
                 </div>
 
-                <Button label="Submit" icon="pi pi-user" className="w-full" onClick={handleSubmit}
-                        data-cy="submit-button"/>
+                <Button label="Submit" icon="pi pi-user" fullWidth onClick={handleSubmit} data-cy="submit-button" />
               </div>
             </div>
           )}
