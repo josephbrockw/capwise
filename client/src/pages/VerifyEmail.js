@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import AuthLayout from '../components/layout/AuthLayout/AuthLayout';
 
 const VerifyEmail = () => {
   const [message, setMessage] = useState('');
@@ -32,7 +33,10 @@ const VerifyEmail = () => {
     verifyEmail();
   }, [token, navigate]);
 
-  return <p>{message}</p>;
+  return (
+    // <p>{message}</p>
+    <AuthLayout title={'Verify Email'} message={message} />
+  );
 };
 
 export default VerifyEmail;

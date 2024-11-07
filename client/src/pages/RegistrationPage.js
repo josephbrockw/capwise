@@ -37,16 +37,13 @@ const Register = () => {
     }
   };
 
-  if (successMessage) {
-    return <div>{successMessage}</div>;
-  }
-
   return (
     <AuthLayout
       title="Welcome Back"
       subtext="Already have an account?"
       sublinkText="Login!"
       sublinkUrl="/login"
+      message={successMessage}
     >
       <form onSubmit={handleSubmit}>
         <FloatLabel
