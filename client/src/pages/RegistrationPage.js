@@ -82,7 +82,7 @@ const Register = () => {
           type="password"
           required
         />
-        <Button label="Register" icon="pi pi-user" fullWidth data-cy="registration-submit-button" />
+        <Button label="Register" icon="pi pi-user" type="submit" fullWidth data-cy="registration-submit-button" />
       </form>
     </AuthLayout>
   )

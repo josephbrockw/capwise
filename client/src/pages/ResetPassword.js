@@ -48,7 +48,7 @@ const ResetPassword = () => {
             Sign in
           </Link>
         </div>
-        <Button label="Submit" icon="pi pi-user" fullWidth data-cy="submit-button"/>
+        <Button label="Submit" icon="pi pi-user" type="submit" fullWidth data-cy="submit-button"/>
       </form>
     </AuthLayout>
   );

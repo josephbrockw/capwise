@@ -59,11 +59,11 @@ const Login = () => {
           required
         />
         <div className="flex align-items-center justify-content-between mb-6">
-          <Link to="/password/initiate" className="text-blue-500" data-cy='reset-password-link' >
+          <Link to="/password/initiate" className="text-blue-500" style={{textDecoration: 'none'}} data-cy='reset-password-link' >
             Forgot your password?
           </Link>
         </div>
-        <Button label="Sign In" icon="pi pi-user" fullWidth onClick={handleSubmit} data-cy="login-submit-button" />
+        <Button label="Sign In" icon="pi pi-user" fullWidth onClick={handleSubmit} type="submit" data-cy="login-submit-button" />
       </form>
     </AuthLayout>
   )
