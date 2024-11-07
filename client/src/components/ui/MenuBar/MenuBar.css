@@ -1,0 +1,35 @@
+/* components/MenuBar/MenuBar.css */
+.menu-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--dark); /* Replace with your theme color */
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menu-bar-logo img {
+  height: 40px;
+  cursor: pointer;
+}
+
+.menu-bar-items {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.menu-bar-link {
+  text-decoration: none;
+  color: var(--text-color); /* Replace with your theme text color */
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.menu-bar-link:hover {
+  color: var(--primary-color); /* Replace with your theme primary color */
+}
+
+.menu-bar-button {
+  font-size: 1rem;
+}

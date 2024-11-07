@@ -59,7 +59,7 @@ const Login = () => {
           required
         />
         <div className="flex align-items-center justify-content-between mb-6">
-          <Link to="/password/initiate" className="text-blue-500" style={{textDecoration: 'none'}} data-cy='reset-password-link' >
+          <Link to="/password/initiate" className="text-primary-color" style={{textDecoration: 'none'}} data-cy='reset-password-link' >
             Forgot your password?
           </Link>
         </div>

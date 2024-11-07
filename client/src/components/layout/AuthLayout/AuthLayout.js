@@ -22,7 +22,7 @@ const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, children
                     <Link
                       to={sublinkUrl}
                       style={{ textDecoration: 'none' }}
-                      className="ml-2 text-blue-500"
+                      className="ml-2 text-primary-color"
                       data-cy={`${sublinkUrl.replace('/', '')}-link`}
                     >
                       {sublinkText}
@@ -42,7 +42,7 @@ const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, children
             <Link
               to="/login"
               style={{ textDecoration: 'none' }}
-              className="text-blue-500 font-medium"
+              className="text-primary-color font-medium"
               data-cy="login-link"
             >
               Sign in

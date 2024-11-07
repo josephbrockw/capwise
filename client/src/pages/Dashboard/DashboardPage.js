@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 import { Chart } from 'primereact/chart';
 import { Skeleton } from 'primereact/skeleton';
 import 'chart.js/auto';
+import MenuBar from '../../components/ui/MenuBar/MenuBar';
 
 import LogoutButton from '../../components/LogoutButton';
 import storageHelper from '../../utils/storageHelper';
@@ -41,11 +42,6 @@ const Dashboard = () => {
 
   // Define the items for the Menubar
   const menuItems = [
-      {
-          label: 'Home',
-          icon: 'pi pi-fw pi-home',
-          command: () => { window.location = '/dashboard'; },
-      },
   ];
 
 
@@ -72,7 +68,8 @@ const Dashboard = () => {
       ) : (
         <div className="dashboard-container">
           {/* Menubar */}
-          <Menubar model={menuItems} end={<EndMenuContent/>}/>
+          {/*<Menubar model={menuItems} end={<EndMenuContent/>}/>*/}
+          <MenuBar menuItems={menuItems} />
 
           <div className="dashboard-content">
             {/* Sidebar */}

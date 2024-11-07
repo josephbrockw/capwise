@@ -1,10 +1,13 @@
 /* global.css */
 :root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
+  --primary-color:  #3498DB;
+  --secondary-color:  #5CC3FF;
+  --contrast-color:  #EB984E;
   --background-color: #f8f9fa;
   --white: #fff;
-  --text-color: #212529;
+  --dark:  #2C3E50;
+  --gray: #ccc;
+  --text-color:  #3D3D3D;
   --font-family: 'Roboto', sans-serif;
 }
 
@@ -13,6 +16,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
+}
+
+.text-primary-color {
+  color: var(--primary-color, blue);
 }
 
 #webpack-dev-server-client-overlay{display:none!important}

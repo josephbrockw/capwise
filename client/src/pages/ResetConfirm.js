@@ -67,7 +67,7 @@ const ResetConfirm = () => {
         <FloatLabel id="password_confirm" label="Password Confirm" value={formData.password_confirm}
                     onChange={handleChange} name="password_confirm" type="password" required/>
         <div className="flex align-items-center justify-content-between mb-6">
-          <Link to="/login" className="text-blue-500" style={{textDecoration: 'none'}} data-cy='login-link'>
+          <Link to="/login" className="text-primary-color" style={{textDecoration: 'none'}} data-cy='login-link'>
             Sign in
           </Link>
         </div>
