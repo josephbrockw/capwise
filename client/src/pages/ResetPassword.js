@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import inlineLogo from "../assets/images/inlineLogo.png";
+// pages/ResetPassword.js
+import React, { useState } from 'react';
 import FloatLabel from '../components/FloatLabel/FloatLabel';
 import Button from '../components/Button/Button';
 import AuthLayout from '../components/layout/AuthLayout/AuthLayout';
-import AuthFormWrapper from '../components/layout/AuthLayout/AuthFormWrapper';
-
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 const ResetPassword = () => {
   const [message, setMessage] = useState('');
-  const [formData, setFormData] = useState({
-    email: '',
-  });
+  const [formData, setFormData] = useState({ email: '' });
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/auth/password/reset`,
-        formData
-      );
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/password/reset`, formData);
       setMessage('If an account with that email exists, a password reset email will be sent.');
     } catch (error) {
-      console.error('There was an error attempting to reset your password.', error);
+      console.error('Error resetting password:', error);
+      setMessage('An error occurred. Please try again.');
     }
   };
 
@@ -40,69 +31,27 @@ const ResetPassword = () => {
       subtext="Don't have an account?"
       sublinkText="Create today!"
       sublinkUrl="/register"
+      message={message}
     >
-      <AuthFormWrapper>
-        <form onSubmit={handleSubmit}>
-          <FloatLabel
-            id="email"
-            label="Email"
-            value={formData.email}
-            onChange={handleChange}
-            name="email"
-            type="email"
-            required
-          />
-          <Button label="Submit" icon="pi pi-user" fullWidth onClick={handleSubmit}/>
-        </form>
-      </AuthFormWrapper>
-      <div className="flex align-items-center justify-content-between mb-6">
-        <Link to="/login" className="text-blue-500" data-cy='login-link'>
-          Sign in.
-        </Link>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <FloatLabel
+          id="email"
+          label="Email"
+          value={formData.email}
+          onChange={handleChange}
+          name="email"
+          type="email"
+          required
+        />
+        <div className="flex align-items-center justify-content-between mb-6">
+          <Link to="/login" className="text-blue-500" style={{textDecoration: 'none'}} data-cy='login-link'>
+            Sign in
+          </Link>
+        </div>
+        <Button label="Submit" icon="pi pi-user" fullWidth data-cy="submit-button"/>
+      </form>
     </AuthLayout>
-  )
-
-  // return (
-  // <div>
-  //   <div className="flex align-items-center justify-content-center">
-  //       {message  ? (
-  //         <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
-  //           <div className="text-center mb-5">
-    //             <img src={inlineLogo} alt="hyper" height={50} className="mb-3 mt-3"/>
-    //             <div className="text-600 font-medium line-height-3">{message}</div>
-    //             <Link to="/login" style={{textDecoration: 'none'}} data-cy="login-link">
-    //               <span className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Sign in</span>
-    //             </Link>
-    //           </div>
-    //         </div>
-    //       ) : (
-    //         <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
-    //           <div className="text-center mb-5">
-    //             <img src={inlineLogo} alt="hyper" height={50} className="mb-3 mt-3"/>
-    //             <div className="text-900 text-3xl font-medium mb-3">Reset Password</div>
-    //             <span className="text-600 font-medium line-height-3">Don't have an account?</span>
-    //             <Link to="/register" style={{textDecoration: 'none'}} data-cy="registration-link">
-    //               <span className="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</span>
-    //             </Link>
-    //           </div>
-    //           <div>
-    //             <FloatLabel id="email" label="Email" value={formData.email} onChange={handleChange} name="email" type="email" required />
-    //
-    //             <div className="flex align-items-center justify-content-between mb-6">
-    //               <Link to="/login" style={{textDecoration: 'none'}} data-cy="login-link">
-    //                 <span
-    //                   className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Sign in</span>
-    //               </Link>
-    //             </div>
-    //
-    //             <Button label="Submit" icon="pi pi-user" fullWidth onClick={handleSubmit} data-cy="submit-button" />
-    //           </div>
-    //         </div>
-    //       )}
-    //   </div>
-    // </div>
-  // );
+  );
 };
 
 export default ResetPassword;

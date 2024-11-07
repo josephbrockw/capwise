@@ -57,7 +57,7 @@ describe('Reset Confirm Page', () => {
 
   it('Should be able to navigate to registration page', () => {
     cy.visit('/password/confirm');
-    cy.get('[data-cy=registration-link]').click();
+    cy.get('[data-cy=register-link]').click();
     cy.url().should('include', '/register');
   });
 });
