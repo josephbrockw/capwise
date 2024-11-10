@@ -7,7 +7,7 @@ import inlineLogo from '../../../assets/images/inlineLogo.png';
 const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, children }) => {
   return (
     <div className="flex align-items-center justify-content-center">
-      <div className="w-full lg:w-6" style={{maxWidth: '450px'}}>
+      <div className="w-full lg:w-6" style={{maxWidth: '450px', margin: '1rem 2rem'}} >
         <div className="text-center mb-5">
           <img src={inlineLogo} alt="hyper" height={50} className="mb-3 mt-3" />
           {message ? (

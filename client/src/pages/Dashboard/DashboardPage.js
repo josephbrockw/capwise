@@ -54,21 +54,6 @@ const Dashboard = () => {
               <Chart type="bar" data={chartData} />
             </Panel>
           )}
-
-
-          <Card title="Quick Actions" style={{marginBottom: '2em'}}>
-            <div className="p-grid">
-              <div className="p-col-12 p-md-4">
-                <Button label="View Reports" icon="pi pi-chart-line" className="p-button-info"/>
-              </div>
-              <div className="p-col-12 p-md-4">
-                <Button label="Manage Account" icon="pi pi-user-edit" className="p-button-warning"/>
-              </div>
-              <div className="p-col-12 p-md-4">
-                <Button label="Settings" icon="pi pi-cog" className="p-button-secondary"/>
-              </div>
-            </div>
-          </Card>
         </div>
       )}
     </DashboardLayout>
