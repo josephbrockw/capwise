@@ -1,0 +1,27 @@
+/* components/layout/DashboardLayout/DashboardLayout.css */
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.dashboard-header {
+  flex-shrink: 0;
+}
+
+.dashboard-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 2rem;
+  margin-left: 0;
+  overflow-y: auto;
+}
+
+.dashboard-content.with-sidebar {
+  margin-left: 0; /* Match sidebar width */
+}

@@ -5,8 +5,8 @@ import { Button } from 'primereact/button';
 import { Chart } from 'primereact/chart';
 import { Skeleton } from 'primereact/skeleton';
 import 'chart.js/auto';
-import MenuBar from '../../components/ui/MenuBar/MenuBar';
 import storageHelper from '../../utils/storageHelper';
+import DashboardLayout from '../../components/layout/DashboardLayout/DashboardLayout';
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,12 +23,6 @@ const Dashboard = () => {
     fetchUserData();
   }, []);
 
-  // Define the items for the Menubar
-  const menuItems = [
-  ];
-
-
-        // Example chart data for a usage chart
   const chartData = {
     labels: ['January', 'February', 'March', 'April', 'May'],
     datasets: [
@@ -42,60 +36,42 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <DashboardLayout showSidebar={true}>
       {isLoading ? (
         <div className="dashboard-loading">
           <Skeleton width="100%" height="2em" />
           <Skeleton width="100%" height="20em" />
         </div>
       ) : (
-        <div className="dashboard-container">
-          <MenuBar menuItems={menuItems} />
+        <div>
+          <Card title="Welcome to Your Dashboard" style={{marginBottom: '2em'}}>
+            <p>This is your project dashboard, where you can see your usage and manage your account.</p>
+            <Button label="Get Started" icon="pi pi-arrow-right"/>
+          </Card>
 
-          <div className="dashboard-content">
-            {/* Sidebar */}
-            <div className="sidebar">
-              <Panel header="Navigation">
-                <ul>
-                  <li>Overview</li>
-                  <li>Reports</li>
-                  <li>Account</li>
-                </ul>
-              </Panel>
+          {chartData && (
+            <Panel header="Usage Statistics" style={{ marginBottom: '2em' }}>
+              <Chart type="bar" data={chartData} />
+            </Panel>
+          )}
+
+
+          <Card title="Quick Actions" style={{marginBottom: '2em'}}>
+            <div className="p-grid">
+              <div className="p-col-12 p-md-4">
+                <Button label="View Reports" icon="pi pi-chart-line" className="p-button-info"/>
+              </div>
+              <div className="p-col-12 p-md-4">
+                <Button label="Manage Account" icon="pi pi-user-edit" className="p-button-warning"/>
+              </div>
+              <div className="p-col-12 p-md-4">
+                <Button label="Settings" icon="pi pi-cog" className="p-button-secondary"/>
+              </div>
             </div>
-
-            {/* Main Content */}
-            <div className="main-content">
-              <Card title="Welcome to Your Dashboard" style={{marginBottom: '2em'}}>
-                <p>This is your project dashboard, where you can see your usage and manage your account.</p>
-                <Button label="Get Started" icon="pi pi-arrow-right"/>
-              </Card>
-
-              {chartData && (
-                <Panel header="Usage Statistics" style={{ marginBottom: '2em' }}>
-                  <Chart type="bar" data={chartData} />
-                </Panel>
-              )}
-
-
-              <Card title="Quick Actions" style={{marginBottom: '2em'}}>
-                <div className="p-grid">
-                  <div className="p-col-12 p-md-4">
-                    <Button label="View Reports" icon="pi pi-chart-line" className="p-button-info"/>
-                  </div>
-                  <div className="p-col-12 p-md-4">
-                    <Button label="Manage Account" icon="pi pi-user-edit" className="p-button-warning"/>
-                  </div>
-                  <div className="p-col-12 p-md-4">
-                    <Button label="Settings" icon="pi pi-cog" className="p-button-secondary"/>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          </div>
+          </Card>
         </div>
       )}
-    </div>
+    </DashboardLayout>
   );
 };
 
