@@ -67,8 +67,6 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className="dashboard-container">
-          {/* Menubar */}
-          {/*<Menubar model={menuItems} end={<EndMenuContent/>}/>*/}
           <MenuBar menuItems={menuItems} />
 
           <div className="dashboard-content">

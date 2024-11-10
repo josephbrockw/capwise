@@ -41,14 +41,12 @@ const MenuBar = ({ menuItems, onLogout }) => {
 };
 
 MenuBar.propTypes = {
-  logoSrc: PropTypes.string.isRequired,
   menuItems: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       href: PropTypes.string.isRequired,
     })
   ).isRequired,
-  onLogout: PropTypes.func.isRequired,
 };
 
 export default MenuBar;
