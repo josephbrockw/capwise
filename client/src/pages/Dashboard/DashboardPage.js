@@ -1,6 +1,4 @@
-// client/src/pages/Dashboard.js
 import React, { useEffect, useState, memo } from 'react';
-import { Menubar } from 'primereact/menubar';
 import { Card } from 'primereact/card';
 import { Panel } from 'primereact/panel';
 import { Button } from 'primereact/button';
@@ -8,22 +6,7 @@ import { Chart } from 'primereact/chart';
 import { Skeleton } from 'primereact/skeleton';
 import 'chart.js/auto';
 import MenuBar from '../../components/ui/MenuBar/MenuBar';
-
-import LogoutButton from '../../components/LogoutButton';
 import storageHelper from '../../utils/storageHelper';
-// import './Dashboard.css';
-
-const EndMenuContent = memo(() => (
-  <div style={{display: 'flex', alignItems: 'center'}}>
-    <i
-      className="pi pi-fw pi-cog"
-      style={{marginRight: '10px', fontSize: '1.5rem', cursor: 'pointer'}}
-      title="Settings"
-      // onClick={() => window.location = '/settings'}
-    />
-    <LogoutButton/>
-  </div>
-));
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
