@@ -6,14 +6,14 @@ import LogoutButton from '../../LogoutButton';
 import Button from '../../Button/Button';
 import { Link } from 'react-router-dom';
 import './MenuBar.css';
-import inlineLogo from '../../../assets/images/inlineLogo.png';
+import inlineLogoWhite from '../../../assets/images/inlineLogoWhite.png';
 
 const MenuBar = ({ menuItems, onLogout }) => {
   return (
     <div className="menu-bar">
       <div className="menu-bar-logo">
         <Link to="/dashboard">
-          <img src={inlineLogo} alt="Logo" />
+          <img src={inlineLogoWhite} alt="Logo" />
         </Link>
       </div>
       <div className="menu-bar-items">
