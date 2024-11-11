@@ -10,7 +10,9 @@ const DashboardLayout = ({ children, showSidebar }) => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const isMobile = useIsMobile();
 
-  const menuItems = [];  // Add MenuBar items
+  const menuItems = [
+    { label: 'Account', href: '/account' },
+  ];  // Add MenuBar items
   const sidebarItems = [
     'Overview',
     'Reports',
@@ -30,7 +32,7 @@ const DashboardLayout = ({ children, showSidebar }) => {
             <i className="pi pi-bars" style={{ color: 'var(--menu-bar-text-color, white)' }} />
           </button>
         )}
-        <MenuBar menuItems={menuItems} />
+        <MenuBar menuItems={menuItems} isMobile={isMobile} />
       </div>
 
       {/* Body Section */}

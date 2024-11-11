@@ -1,0 +1,37 @@
+.mobile-menu-dropdown {
+  position: relative;
+}
+
+.mobile-menu-icon {
+  background: none;
+  border: none;
+  color: var(--menu-bar-text-color, white);
+  cursor: pointer;
+}
+
+.mobile-menu-dropdown-menu {
+  position: absolute;
+  top: 2.5rem; /* Adjust based on the size of the icon */
+  right: 0;
+  background-color: var(--menu-bar-background, #2c3e50);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.mobile-menu-dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--menu-bar-text-color, white);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mobile-menu-dropdown-item:hover {
+  background-color: var(--menu-bar-hover-background, #1a252f);
+}
+
+.logout {
+  color: var(--logout-text-color, red);
+}
