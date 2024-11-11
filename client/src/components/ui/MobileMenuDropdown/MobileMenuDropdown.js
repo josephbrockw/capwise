@@ -67,7 +67,7 @@ const MobileMenuDropdown = ({ menuItems }) => {
                 )}
               </div>
               {item.items && activeItem === item && (
-                <div className={`submenu ${activeItem == item ? 'visible' : ''}`}>
+                <div className={`submenu ${activeItem === item ? 'visible' : ''}`}>
                   {item.items.map((subItem, subIndex) => (
                     <a
                       key={subIndex}

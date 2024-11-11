@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { InputOtp } from 'primereact/inputotp';
 import { useSearchParams } from 'react-router-dom';
-import inlineLogo from '../assets/images/inlineLogo.png';
 import Button from '../components/Button/Button';
 import FloatLabel from '../components/FloatLabel/FloatLabel';
 import AuthLayout from '../components/layout/AuthLayout/AuthLayout';

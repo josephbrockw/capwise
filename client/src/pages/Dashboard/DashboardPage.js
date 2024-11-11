@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from 'primereact/card';
 import { Panel } from 'primereact/panel';
 import { Button } from 'primereact/button';
@@ -10,7 +10,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout/DashboardLa
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
+  const [, setUserData] = useState(null);
 
   useEffect(() => {
     // Fetch user data from API after component mounts

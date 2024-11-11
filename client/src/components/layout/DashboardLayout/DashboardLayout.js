@@ -1,5 +1,5 @@
 // components/layout/DashboardLayout/DashboardLayout.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MenuBar from '../../ui/MenuBar/MenuBar';
 import Sidebar from '../../ui/Sidebar/Sidebar';

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import inlineLogo from '../assets/images/inlineLogo.png';
 import FloatLabel from '../components/FloatLabel/FloatLabel';
 import Button from '../components/Button/Button';
 import AuthLayout from '../components/layout/AuthLayout/AuthLayout';
