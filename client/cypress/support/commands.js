@@ -23,3 +23,17 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+Cypress.Commands.add('setLocalStorageForDashboard', () => {
+  cy.window().then((win) => {
+    win.localStorage.setItem('token', 'mock-token');
+    win.localStorage.setItem('userData',
+      JSON.stringify({
+        id: '4c7a58fe-006b-49c6-a6d1-97bad7bcb8df',
+        email: 'gytha@lancre.gov',
+        username: 'gytha',
+        first_name: 'Gytha',
+        last_name: 'Ogg'
+      })
+    );
+  });
+});

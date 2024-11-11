@@ -1,5 +1,6 @@
 describe('Dashboard Sidebar', () => {
   beforeEach(() => {
+    cy.setLocalStorageForDashboard();
     cy.visit('/dashboard'); // Replace with the correct route
   });
 
