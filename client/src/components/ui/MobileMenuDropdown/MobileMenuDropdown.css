@@ -11,27 +11,71 @@
 
 .mobile-menu-dropdown-menu {
   position: absolute;
-  top: 2.5rem; /* Adjust based on the size of the icon */
+  top: 2.5rem;
   right: 0;
-  background-color: var(--menu-bar-background, #2c3e50);
+  background-color: var(--dropdown-background-color, #ffffff); /* Light background */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
   overflow: hidden;
   z-index: 1000;
+  width: 250px; /* Increased width */
 }
 
 .mobile-menu-dropdown-item {
+  margin: .5rem 1rem;
+  padding: 0.75rem 1rem; /* Adjust padding for a larger clickable area */
+  color: var(--menu-bar-text-color, #333); /* Darker text for light background */
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--dropdown-border-color, #e5e5e5); /* Divider between items */
+  position: relative;
+  flex-direction: column
+}
+
+.mobile-menu-dropdown-item:last-child {
+  border-bottom: none; /* Remove border from the last item */
+}
+
+.dropdown-menu-item {
+  color: var(--dropdown-menu-text-color, #333); /* Darker text for light background */
+}
+
+.mobile-menu-dropdown-item:hover {
+  background-color: var(--dropdown-hover-background, #f0f0f0); /* Subtle hover effect */
+}
+
+.submenu-icon {
+  margin-left: auto;
+  font-size: 1rem;
+}
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  padding-left: 0; /* Align submenu with parent */
+  background-color: var(--dropdown-background-color, #ffffff); /* Same background as the main menu */
+}
+
+.submenu.visible {
+  max-height: 500px; /* Adjust the height based on the number of items */
+}
+
+.submenu-item {
   display: block;
-  padding: 0.5rem 1rem;
-  color: var(--menu-bar-text-color, white);
+  padding: 0.75rem 1rem; /* Match main menu padding */
+  color: var(--dropdown-menu-text-color, #333); /* Darker text for light background */
   text-decoration: none;
   white-space: nowrap;
 }
 
-.mobile-menu-dropdown-item:hover {
-  background-color: var(--menu-bar-hover-background, #1a252f);
+.submenu-item:hover {
+  background-color: var(--dropdown-hover-background, #f0f0f0);
 }
 
 .logout {
   color: var(--logout-text-color, red);
+  font-weight: bold; /* Emphasize logout */
 }

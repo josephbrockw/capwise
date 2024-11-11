@@ -12,6 +12,8 @@
   --border-radius: 4px;
   --menu-bar-background: #2C3E50;
   --menu-bar-text-color: #fff;
+  --dropdown-background-color: #ffffff;
+  --dropdown-menu-text-color: #333;
 }
 
 body {

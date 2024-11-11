@@ -5,15 +5,17 @@ import './MobileMenuDropdown.css';
 
 const MobileMenuDropdown = ({ menuItems }) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const dorpdownRef = useRef(null);
+  const [activeItem, setActiveItem] = useState(null); // For tiered menu interaction
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setDropdownVisible((prev) => !prev);
   };
 
   const handleClickOutside = (event) => {
-    if (dorpdownRef.current && !dorpdownRef.current.contains(event.target)) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setDropdownVisible(false);
+      setActiveItem(null); // Reset active item
     }
   };
 
@@ -24,14 +26,22 @@ const MobileMenuDropdown = ({ menuItems }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     }
 
-    // Cleanup the event listener on unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isDropdownVisible]);
 
+  const handleItemClick = (item) => {
+    if (item.items) {
+      setActiveItem((prev) => (prev === item ? null : item)); // Toggle submenu
+    } else {
+      setDropdownVisible(false);
+      setActiveItem(null);
+    }
+  };
+
   return (
-    <div className="mobile-menu-dropdown" ref={dorpdownRef}>
+    <div className="mobile-menu-dropdown" ref={dropdownRef}>
       <button
         className="mobile-menu-icon"
         onClick={toggleDropdown}
@@ -42,16 +52,39 @@ const MobileMenuDropdown = ({ menuItems }) => {
       {isDropdownVisible && (
         <div className="mobile-menu-dropdown-menu">
           {menuItems.map((item, index) => (
-            <a
-              key={index}
-              href={item.href}
-              className="mobile-menu-dropdown-item"
-              data-cy={`${item.label.toLowerCase()}-link`}
-            >
-              {item.label}
-            </a>
+            <div key={index} className="mobile-menu-dropdown-item">
+              <div
+                className={`dropdown-menu-item ${activeItem === item ? 'active' : ''}`}
+                onClick={() => handleItemClick(item)}
+              >
+                {item.label}
+                {item.items && (
+                  <i
+                    className={`pi ${
+                      activeItem === item ? 'pi-angle-up' : 'pi-angle-down'
+                    } submenu-icon`}
+                  ></i>
+                )}
+              </div>
+              {item.items && activeItem === item && (
+                <div className={`submenu ${activeItem == item ? 'visible' : ''}`}>
+                  {item.items.map((subItem, subIndex) => (
+                    <a
+                      key={subIndex}
+                      href={subItem.href}
+                      className="submenu-item"
+                      data-cy={`${subItem.label.toLowerCase()}-link`}
+                    >
+                      {subItem.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
-          <LogoutButton className="mobile-menu-dropdown-item logout" />
+          <div className={"mobile-menu-dropdown-item"}>
+            <LogoutButton className="mobile-menu-dropdown-item logout" />
+          </div>
         </div>
       )}
     </div>
@@ -62,7 +95,13 @@ MobileMenuDropdown.propTypes = {
   menuItems: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
-      href: PropTypes.string.isRequired,
+      href: PropTypes.string,
+      items: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string.isRequired,
+          href: PropTypes.string.isRequired,
+        })
+      ),
     })
   ).isRequired,
 };

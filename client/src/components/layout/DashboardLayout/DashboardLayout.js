@@ -11,7 +11,14 @@ const DashboardLayout = ({ children, showSidebar }) => {
   const isMobile = useIsMobile();
 
   const menuItems = [
-    { label: 'Account', href: '/account' },
+    {
+      label: 'Settings',
+      href: '/settings',
+      items: [
+        { label: 'Profile', href: '/settings/profile' },
+        { label: 'Billing', href: '/settings/billing' },
+      ],
+    },
   ];  // Add MenuBar items
   const sidebarItems = [
     'Overview',
