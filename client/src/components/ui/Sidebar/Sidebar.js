@@ -3,11 +3,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Sidebar.css';
 
-const Sidebar = ({ isVisible, items }) => {
-  if (!isVisible) return null;
-
+const Sidebar = ({ isVisible, items, onClose, isMobile }) => {
   return (
-    <div className="sidebar-container">
+    <div className={`sidebar-container ${
+      isVisible ? 'visible' : ''
+      } ${isMobile ? 'mobile' : ''}`}
+    >
+      {isMobile && (
+        <button className="sidebar-close" onClick={onClose}>
+          &times; {/* Close icon */}
+        </button>
+      )}
       <ul className="sidebar-list">
         {items.map((item, index) => (
           <li key={index} className="sidebar-item">

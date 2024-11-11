@@ -6,7 +6,29 @@
 }
 
 .dashboard-header {
-  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--surface-ground);
+  z-index: 1000;
+  position: sticky;
+  top: 0;
+  background-color: var(--menu-bar-background);
+}
+
+.sidebar-toggle {
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none; /* Hidden by default */
+  margin-left: 1rem;
+  background-color: var(--menu-bar-background, #2C3E50);
+}
+
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    display: block; /* Show on smaller screens */
+  }
 }
 
 .dashboard-body {
@@ -20,8 +42,4 @@
   padding: 2rem;
   margin-left: 0;
   overflow-y: auto;
-}
-
-.dashboard-content.with-sidebar {
-  margin-left: 0; /* Match sidebar width */
 }

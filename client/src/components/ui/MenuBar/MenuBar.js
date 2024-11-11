@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import './MenuBar.css';
 import inlineLogoWhite from '../../../assets/images/inlineLogoWhite.png';
 
-const MenuBar = ({ menuItems, onLogout }) => {
+const MenuBar = ({ menuItems, isMobile }) => {
   return (
     <div className="menu-bar">
       <div className="menu-bar-logo">
