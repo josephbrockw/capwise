@@ -55,3 +55,12 @@
 .tabs-content {
   padding: 1rem 0;
 }
+
+/* Ensure hidden panels are not visible */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.visible {
+  display: block;
+}
