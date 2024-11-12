@@ -15,8 +15,8 @@ const DashboardLayout = ({ children, showSidebar }) => {
       label: 'Settings',
       href: '/dashboard/settings',
       items: [
-        { label: 'Profile', href: '/settings/profile' },
-        { label: 'Billing', href: '/settings/billing' },
+        { label: 'Profile', href: '/settings#account' },
+        { label: 'Billing', href: '/settings#billing' },
       ],
     },
   ];  // Add MenuBar items

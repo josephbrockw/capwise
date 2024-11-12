@@ -36,6 +36,7 @@ const Settings = () => {
         </div>
       ) : (
         <div>
+          <h1>Settings</h1>
           <Tabs tabs={tabs} />
         </div>
       )}
