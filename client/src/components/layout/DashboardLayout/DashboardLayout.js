@@ -5,8 +5,10 @@ import MenuBar from '../../ui/MenuBar/MenuBar';
 import Sidebar from '../../ui/Sidebar/Sidebar';
 import './DashboardLayout.css';
 import useIsMobile from '../../../hooks/useIsMobile';
+import config from '../../../config';
 
-const DashboardLayout = ({ children, showSidebar }) => {
+const DashboardLayout = ({ children }) => {
+  const showSidebar = config.sidebar.enabled;
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const isMobile = useIsMobile();
 
@@ -60,7 +62,6 @@ const DashboardLayout = ({ children, showSidebar }) => {
 
 DashboardLayout.propTypes = {
   children: PropTypes.node.isRequired,
-  showSidebar: PropTypes.bool,
 };
 
 DashboardLayout.defaultProps = {
