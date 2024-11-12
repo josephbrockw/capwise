@@ -1,5 +1,6 @@
+// routes.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import DashboardHome from './pages/Dashboard/DashboardHome';
 import RegistrationPage from './pages/RegistrationPage';
@@ -7,31 +8,44 @@ import LoginPage from './pages/LoginPage';
 import VerifyEmail from './pages/VerifyEmail';
 import ResetPassword from './pages/ResetPassword';
 import ResetConfirm from './pages/ResetConfirm';
+import Settings from './pages/Dashboard/Settings/Settings';
+
+const isAuthenticated = () => {
+  return Boolean(localStorage.getItem('token'));
+};
+
+const PrivateRoute = ({ children }) => {
+  return isAuthenticated() ? children : <Navigate to="/login" />;
+};
 
 const AppRoutes = () => {
-  const isAuthenticated = () => {
-    return Boolean(localStorage.getItem('token'));
-  };
-
-  const PrivateRoute = ({ children }) => {
-    return isAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
-  }
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/password/initiate" element={<ResetPassword />} />
         <Route path="/password/confirm" element={<ResetConfirm />} />
         <Route path="/verify" element={<VerifyEmail />} />
-        <Route path="/dashboard" element={<PrivateRoute />}>
-          <Route index element={<DashboardHome />} />
-        </Route>
-        <Route path="/landing" element={<LandingPage />} />
-        <Route path="/" element={<LoginPage />} />
+
+        {/* Private Routes */}
+        <Route
+          path="/*"
+          element={
+            <PrivateRoute>
+              <Routes>
+                <Route path="/" element={<DashboardHome />} />
+                <Route path="settings" element={<Settings />} />
+                {/* Add more nested dashboard routes here */}
+              </Routes>
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );
-}
+};
 
 export default AppRoutes;

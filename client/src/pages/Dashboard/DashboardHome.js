@@ -14,13 +14,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch user data from API after component mounts
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       const user = await storageHelper.getUserData();
       setUserData(user);
       setIsLoading(false);
     };
 
-    fetchUserData();
+    fetchData();
   }, []);
 
   const chartData = {

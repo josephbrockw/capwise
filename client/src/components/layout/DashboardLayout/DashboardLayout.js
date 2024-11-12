@@ -13,7 +13,7 @@ const DashboardLayout = ({ children, showSidebar }) => {
   const menuItems = [
     {
       label: 'Settings',
-      href: '/settings',
+      href: '/dashboard/settings',
       items: [
         { label: 'Profile', href: '/settings/profile' },
         { label: 'Billing', href: '/settings/billing' },

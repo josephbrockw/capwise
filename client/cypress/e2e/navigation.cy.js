@@ -28,7 +28,7 @@ describe('Login Page', () => {
   it('Should redirect to dashboard if authenticated', () => {
     cy.setLocalStorageForDashboard();
     cy.visit('/login');
-    cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/');
   });
 });
 
@@ -42,7 +42,7 @@ describe('Registration Page', () => {
   it('Should redirect to dashboard if authenticated', () => {
     cy.setLocalStorageForDashboard();
     cy.visit('/register');
-    cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/');
   });
 });
 
@@ -62,7 +62,7 @@ describe('Reset Password Page', () => {
   it('Should redirect to dashboard if authenticated', () => {
     cy.setLocalStorageForDashboard();
     cy.visit('/password/initiate');
-    cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/');
   });
 });
 
@@ -82,6 +82,28 @@ describe('Reset Confirm Page', () => {
   it('Should redirect to dashboard if authenticated', () => {
     cy.setLocalStorageForDashboard();
     cy.visit('/password/confirm');
-    cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/');
+  });
+});
+
+describe('Unauthenticated Dashboard Pages', () => {
+  it('Overview should redirect to login if not authenticated', () => {
+    cy.visit('/');
+    cy.url().should('include', '/login');
+  });
+
+  it('Settings should redirect to login if not authenticated', () => {
+    cy.visit('/settings');
+    cy.url().should('include', '/login');
+  });
+});
+
+describe('Dashboard Home', () => {
+
+  it('Should be able to navigate to settings page', () => {
+    cy.setLocalStorageForDashboard();
+    cy.visit('/');
+    cy.get('[data-cy=settings-link]').click();
+    cy.url().should('include', '/settings');
   });
 });

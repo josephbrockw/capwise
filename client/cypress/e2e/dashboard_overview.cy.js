@@ -1,7 +1,7 @@
 describe('Dashboard Sidebar', () => {
   beforeEach(() => {
     cy.setLocalStorageForDashboard();
-    cy.visit('/dashboard'); // Replace with the correct route
+    cy.visit('/'); // Replace with the correct route
   });
 
   it('shows the sidebar on desktop by default', () => {
@@ -26,7 +26,7 @@ describe('Dashboard Sidebar', () => {
 describe('Dashboard MenuBar', () => {
   beforeEach(() => {
     cy.setLocalStorageForDashboard();
-    cy.visit('/dashboard');
+    cy.visit('/');
   });
 
   it('shows menu items directly on desktop', () => {

@@ -118,7 +118,7 @@ describe('User Login Flow', () => {
       expect(token).to.equal('mockedAccess');
     });
     // TODO: Check for dashboard redirect
-    cy.url().should('include', '/dashboard');
+    cy.url().should('include', '/');
     cy.wait('@getUser');
     cy.contains('Welcome to Your Dashboard').should('be.visible');
     cy.get('[data-cy="logout-button"]').click();

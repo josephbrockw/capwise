@@ -26,7 +26,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/login`, formData);
       localStorage.setItem('token', response.data.data.access);
-      navigate('/dashboard');
+      navigate('/');
     } catch (error) {
       console.error('There was an error logging in!', error);
       setErrorMessage(
