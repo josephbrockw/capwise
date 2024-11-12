@@ -29,7 +29,7 @@
 }
 
 .menu-bar-link:hover {
-  color: var(--primary-color); /* Replace with your theme primary color */
+  color: var(--primaryColor); /* Replace with your theme primary color */
 }
 
 .menu-bar-button {

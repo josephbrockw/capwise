@@ -13,7 +13,7 @@ import config from './config';
 // Dynamically inject theme variables into the :root selector
 const applyTheme = (theme) => {
   const root = document.documentElement;
-  Object.entries(theme).forEach((key, value) => {
+  Object.entries(theme).forEach(([key, value]) => {
     root.style.setProperty(`--${key}`, value);
   });
 };

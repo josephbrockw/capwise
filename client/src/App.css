@@ -26,7 +26,7 @@ body {
 }
 
 .text-primary-color {
-  color: var(--primary-color, blue);
+  color: var(--primaryColor, blue);
 }
 
 #webpack-dev-server-client-overlay{display:none!important}
