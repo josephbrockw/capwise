@@ -1,11 +1,20 @@
 // components/AuthLayout/AuthLayout.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import inlineLogo from '../../../assets/images/inlineLogo.png';
 import './AuthLayout.css';
 
 const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, errorMessage, children }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
   return (
     <div className="flex align-items-center justify-content-center">
       <div className="w-full lg:w-6" style={{ maxWidth: '450px', margin: '1rem 2rem' }}>
