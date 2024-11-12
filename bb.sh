@@ -157,7 +157,7 @@ case $workflow in
             cypress_help
             exit 0
         fi
-        docker compose exec backend python manage.py flush --noinput
+#        docker compose exec backend python manage.py flush --noinput
         echo "Database flushed. Running cypress tests..."
         (cd client && npm run cypress:open)
         ;;

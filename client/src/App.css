@@ -8,12 +8,14 @@
   --dark:  #2C3E50;
   --gray: #ccc;
   --text-color:  #3D3D3D;
-  --font-family: 'Roboto', sans-serif;
-  --border-radius: 4px;
   --menu-bar-background: #2C3E50;
   --menu-bar-text-color: #fff;
   --dropdown-background-color: #ffffff;
   --dropdown-menu-text-color: #333;
+  --error-color: #FF5c5C;
+  --success-color: #5BC85B;
+  --font-family: 'Roboto', sans-serif;
+  --border-radius: 4px;
 }
 
 body {

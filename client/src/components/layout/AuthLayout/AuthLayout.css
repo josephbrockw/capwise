@@ -1,0 +1,9 @@
+.text-success {
+  color: var(--success-color, green);
+  font-weight: bold;
+}
+
+.text-error {
+  color: var(--error-color, red);
+  font-weight: bold;
+}

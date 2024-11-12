@@ -11,9 +11,9 @@ const Register = () => {
     password1: '',
     password2: '',
   });
-  console.log('Initial username value:', formData.username);
 
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -25,14 +25,17 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/sign-up`, formData);
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/sign-up`, formData);
       if (res.status === 201) {
         setSuccessMessage('Registration successful! Please check your email to verify your account.');
+        setErrorMessage(''); // Clear any previous errors
       } else {
-        setSuccessMessage('Registration failed. Please try again.');
+        setErrorMessage('Registration failed. Please try again.');
       }
     } catch (error) {
       console.error('There was an error registering!', error);
+      setErrorMessage(error.response?.data?.error || 'Registration failed. Please try again.');
+      setSuccessMessage(''); // Clear any previous success message
     }
   };
 
@@ -43,6 +46,7 @@ const Register = () => {
       sublinkText="Login!"
       sublinkUrl="/login"
       message={successMessage}
+      errorMessage={errorMessage}
     >
       <form onSubmit={handleSubmit}>
         <FloatLabel
@@ -84,7 +88,7 @@ const Register = () => {
         <Button label="Register" icon="pi pi-user" type="submit" fullWidth data-cy="registration-submit-button" />
       </form>
     </AuthLayout>
-  )
+  );
 };
 
 export default Register;

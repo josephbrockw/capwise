@@ -42,8 +42,9 @@
   color: var(--dropdown-menu-text-color, #333); /* Darker text for light background */
 }
 
-.mobile-menu-dropdown-item:hover {
+.mobile-menu-dropdown-item i:hover {
   background-color: var(--dropdown-hover-background, #f0f0f0); /* Subtle hover effect */
+  border-radius: var(--border-radius, 4px); /* Rounded corners */
 }
 
 .submenu-icon {

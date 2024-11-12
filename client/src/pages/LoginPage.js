@@ -11,6 +11,7 @@ const Login = () => {
     username: '',
     password: '',
   });
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,6 +29,9 @@ const Login = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('There was an error logging in!', error);
+      setErrorMessage(
+        error.response?.data?.error || 'Login failed. Please check your credentials and try again.'
+      );
     }
   };
 
@@ -37,6 +41,7 @@ const Login = () => {
       subtext="Don't have an account?"
       sublinkText="Create today!"
       sublinkUrl="/register"
+      errorMessage={errorMessage} // Display error messages if any
     >
       <form onSubmit={handleSubmit}>
         <FloatLabel
@@ -58,14 +63,14 @@ const Login = () => {
           required
         />
         <div className="flex align-items-center justify-content-between mb-6">
-          <Link to="/password/initiate" className="text-primary-color" style={{textDecoration: 'none'}} data-cy='reset-password-link' >
+          <Link to="/password/initiate" className="text-primary-color" style={{ textDecoration: 'none' }} data-cy='reset-password-link'>
             Forgot your password?
           </Link>
         </div>
-        <Button label="Sign In" icon="pi pi-user" fullWidth onClick={handleSubmit} type="submit" data-cy="login-submit-button" />
+        <Button label="Sign In" icon="pi pi-user" fullWidth type="submit" data-cy="login-submit-button" />
       </form>
     </AuthLayout>
-  )
+  );
 };
 
 export default Login;

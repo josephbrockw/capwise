@@ -24,7 +24,7 @@
   text-decoration: none;
   color: var(--text-color); /* Replace with your theme text color */
   font-weight: 500;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: var(--menu-bar-text-color, white); /* Replace with your theme text color */
 }
 

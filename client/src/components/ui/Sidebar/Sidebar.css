@@ -32,6 +32,11 @@
   color: var(--text-color);
   cursor: pointer;
   margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.sidebar-close i {
+  color: var(--dark, #333);
 }
 
 .sidebar-list {

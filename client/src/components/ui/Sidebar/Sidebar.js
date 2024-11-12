@@ -11,7 +11,7 @@ const Sidebar = ({ isVisible, items, onClose, isMobile }) => {
     >
       {isMobile && (
         <button className="sidebar-close" onClick={onClose}>
-          &times; {/* Close icon */}
+          <i className="pi pi-times" /> {/* Close icon */}
         </button>
       )}
       <ul className="sidebar-list">

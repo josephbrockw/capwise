@@ -1,16 +1,24 @@
 describe('User Registration Flow', () => {
   it('Registers a new user and shows a success message', () => {
-    cy.intercept('POST', '/api/auth/sign-up', {
-      statusCode: 201,
-      body: {
-        data: {
-          id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
-          username: 'nanny',
-          email: 'gytha@lancre.gov',
-          first_name: 'Gytha',
-          last_name: 'Ogg',
-        }
-      },
+    cy.intercept('POST', '/api/auth/sign-up', (req) => {
+      expect(req.body).to.deep.equal({
+        username: 'nanny',
+        email: 'gytha@lancre.gov',
+        password1: 'Password123!',
+        password2: 'Password123!',
+      });
+      req.reply({
+        statusCode: 201,
+        body: {
+          data: {
+            id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
+            username: 'nanny',
+            email: 'gytha@lancre.gov',
+            first_name: 'Gytha',
+            last_name: 'Ogg',
+          },
+        },
+      });
     }).as('registerUser');
     cy.visit('/register');
 
@@ -24,6 +32,21 @@ describe('User Registration Flow', () => {
     // Verify successful registration prompt
     cy.contains('Registration successful! Please check your email to verify your account.').should('be.visible');
   });
+
+  it('Shows error when registering with duplicate email', () => {
+  cy.intercept('POST', '/api/auth/sign-up', {
+    statusCode: 400,
+    body: { error: 'A user with this email already exists.' },
+  }).as('registerUser');
+  cy.visit('/register');
+  cy.get('input[name="username"]').type('nanny');
+  cy.get('input[name="email"]').type('gytha@lancre.gov');
+  cy.get('input[name="password1"]').type('Password123!');
+  cy.get('input[name="password2"]').type('Password123!');
+  cy.get('[data-cy="registration-submit-button"]').click();
+  cy.wait('@registerUser');
+  cy.contains('A user with this email already exists.').should('be.visible');
+});
 });
 
 describe('Email Verification', () => {
@@ -36,9 +59,12 @@ describe('Email Verification', () => {
   it('Verifies user email using the verification token', () => {
     // Mock visiting verification link with token
     const verificationToken = 'testtoken123';
-    cy.intercept('POST', `/api/auth/verify`, {
-      statusCode: 200,
-      body: { message: 'Email verified successfully.' },
+    cy.intercept('POST', '/api/auth/verify', (req) => {
+      expect(req.body).to.deep.equal({ token: verificationToken });
+      req.reply({
+        statusCode: 200,
+        body: { message: 'Email verified successfully.' },
+      });
     }).as('verifyEmail');
     cy.visit(`/verify?token=${verificationToken}`);
     cy.wait('@verifyEmail');
@@ -49,18 +75,24 @@ describe('Email Verification', () => {
 
 describe('User Login Flow', () => {
   it('Logs in an existing user successfully', () => {
-    cy.intercept('POST', '/api/auth/login', {
-      statusCode: 200,
-      body: {
-        data: {
-          access: 'mockedAccess',
-          refresh: 'mockedRefresh',
-          id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
-          username: 'nanny',
-          first_name: 'Gytha',
-          last_name: 'Ogg',
-        }
-      },
+    cy.intercept('POST', '/api/auth/login', (req) => {
+      expect(req.body).to.deep.equal({
+        username: 'testuser@example.com',
+        password: 'Password123!',
+      });
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: {
+            access: 'mockedAccess',
+            refresh: 'mockedRefresh',
+            id: '3e086fe8-35bb-4a1a-9bbb-1d2f9a0e4642',
+            username: 'nanny',
+            first_name: 'Gytha',
+            last_name: 'Ogg',
+          },
+        },
+      });
     }).as('loginUser');
     cy.intercept("GET", "/api/users/me", {
       statusCode: 200,
@@ -96,6 +128,19 @@ describe('User Login Flow', () => {
       expect(token).to.be.null;
     });
   });
+
+  it('Shows error on invalid login credentials', () => {
+  cy.intercept('POST', '/api/auth/login', {
+    statusCode: 401,
+    body: { error: 'Invalid username or password.' },
+  }).as('loginUser');
+  cy.visit('/login');
+  cy.get('input[name="username"]').type('testuser@example.com');
+  cy.get('input[name="password"]').type('WrongPassword!');
+  cy.get('[data-cy="login-submit-button"]').click();
+  cy.wait('@loginUser');
+  cy.contains('Invalid username or password.').should('be.visible');
+});
 });
 
 describe('Password Reset Flow', () => {

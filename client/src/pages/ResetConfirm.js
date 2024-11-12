@@ -10,6 +10,7 @@ import axios from 'axios';
 
 const ResetConfirm = () => {
   const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Get the token from the URL if it exists
   const [searchParams] = useSearchParams();
@@ -41,11 +42,11 @@ const ResetConfirm = () => {
     if (response.status === 200) {
       setMessage(response.data.message || 'Password reset successful. Please sign in.');
     } else {
-      setMessage(response.data.error || 'An error occurred. Please try again.');
+      setErrorMessage(response.data.error || 'An error occurred. Please try again.');
     }
   } catch (error) {
     console.error('There was an error attempting to reset your password.', error);
-    setMessage(error.response?.data?.error || 'An error occurred. Please try again.');
+    setErrorMessage(error.response?.data?.error || 'An error occurred. Please try again.');
   }
 };
 
@@ -56,6 +57,7 @@ const ResetConfirm = () => {
       sublinkText="Create today!"
       sublinkUrl="/register"
       message={message}
+      errorMessage={errorMessage}
     >
       <form onSubmit={handleSubmit}>
         <div className="flex justify-content-center flex-wrap mb-3" data-cy="otp-container">

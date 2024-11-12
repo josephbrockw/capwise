@@ -3,16 +3,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import inlineLogo from '../../../assets/images/inlineLogo.png';
+import './AuthLayout.css';
 
-const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, children }) => {
+const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, errorMessage, children }) => {
   return (
     <div className="flex align-items-center justify-content-center">
-      <div className="w-full lg:w-6" style={{maxWidth: '450px', margin: '1rem 2rem'}} >
+      <div className="w-full lg:w-6" style={{ maxWidth: '450px', margin: '1rem 2rem' }}>
         <div className="text-center mb-5">
           <img src={inlineLogo} alt="hyper" height={50} className="mb-3 mt-3" />
-          {message ? (
-            <div className="text-600 font-medium line-height-3">{message}</div>
-          ) : (
+
+          {/* Success Message */}
+          {message && (
+            <div className="text-success font-medium line-height-3">{message}</div>
+          )}
+
+          {/* Default Title and Subtext */}
+          {!message && (
             <>
               <div className="text-900 text-3xl font-medium mb-3">{title}</div>
               {subtext && (
@@ -32,23 +38,15 @@ const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, children
               )}
             </>
           )}
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="text-error font-medium line-height-3 mt-4">{errorMessage}</div>
+          )}
         </div>
 
-        {/* Render form or message */}
-        {!message && <div>{children}</div>}
-
-        {message && (
-          <div className="text-center mt-4">
-            <Link
-              to="/login"
-              style={{ textDecoration: 'none' }}
-              className="text-primary-color font-medium"
-              data-cy="login-link"
-            >
-              Sign in
-            </Link>
-          </div>
-        )}
+        {/* Render form */}
+        <div>{children}</div>
       </div>
     </div>
   );
@@ -60,7 +58,16 @@ AuthLayout.propTypes = {
   sublinkText: PropTypes.string,
   sublinkUrl: PropTypes.string,
   message: PropTypes.string,
+  errorMessage: PropTypes.string,
   children: PropTypes.node.isRequired,
+};
+
+AuthLayout.defaultProps = {
+  subtext: '',
+  sublinkText: '',
+  sublinkUrl: '',
+  message: '',
+  errorMessage: '',
 };
 
 export default AuthLayout;
