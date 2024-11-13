@@ -8,7 +8,7 @@ import useIsMobile from '../../../hooks/useIsMobile';
 import config from '../../../config';
 
 const DashboardLayout = ({ children }) => {
-  const showSidebar = config.sidebar.enabled;
+  const showSidebar = config.showSidebar;
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const isMobile = useIsMobile();
 

@@ -6,7 +6,6 @@ import 'primereact/resources/primereact.min.css';          // Core CSS
 import 'primeicons/primeicons.css';                        // Icons
 import "primeflex/primeflex.css";                          // Grid system
 import './App.css';
-import './pages/Dashboard/Dashboard.css';
 import config from './config';
 
 
