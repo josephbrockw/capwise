@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { SettingsProvider } from './context';
 import 'primereact/resources/themes/saga-blue/theme.css';  // Theme
 import 'primereact/resources/primereact.min.css';          // Core CSS
 import 'primeicons/primeicons.css';                        // Icons
@@ -21,5 +22,12 @@ const applyTheme = (theme) => {
 // Apply theme variables to the :root selector
 applyTheme(config.theme);
 
+// Set the document title dynamically
+document.title = config.title;
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(
+  <SettingsProvider>
+    <App />
+  </SettingsProvider>
+);

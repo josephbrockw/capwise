@@ -1,7 +1,7 @@
 /* Button.css */
 .custom-button {
   background-color: var(--primaryColor);
-  /*color: var(--text-color);*/
+  /*color: var(--textColor);*/
   color: var(--white, white);
   padding: 10px 20px;
   border: none;

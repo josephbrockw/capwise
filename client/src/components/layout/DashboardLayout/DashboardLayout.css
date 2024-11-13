@@ -9,11 +9,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--surface-ground);
   z-index: 1000;
   position: sticky;
   top: 0;
-  background-color: var(--menu-bar-background);
+  background-color: var(--menuBarBackgroundColor);
 }
 
 .sidebar-toggle {
@@ -22,7 +21,7 @@
   cursor: pointer;
   display: none; /* Hidden by default */
   margin-left: 1rem;
-  background-color: var(--menu-bar-background, #2C3E50);
+  background-color: var(--menuBarBackground, #2C3E50);
 }
 
 @media (max-width: 768px) {

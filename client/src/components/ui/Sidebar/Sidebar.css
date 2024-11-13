@@ -29,7 +29,7 @@
   border: none;
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--text-color);
+  color: var(--textColor);
   cursor: pointer;
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;

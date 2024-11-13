@@ -38,7 +38,7 @@ const DashboardLayout = ({ children }) => {
         {/* Header content */}
         {showSidebar && isMobile && (
           <button className="sidebar-toggle" onClick={toggleSidebar} data-cy="sidebar-toggle">
-            <i className="pi pi-bars" style={{ color: 'var(--menu-bar-text-color, white)' }} />
+            <i className="pi pi-bars" style={{ color: 'var(--menuBarTextColor, white)' }} />
           </button>
         )}
         <MenuBar menuItems={menuItems} isMobile={isMobile} />

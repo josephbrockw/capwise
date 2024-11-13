@@ -1,9 +1,9 @@
 .text-success {
-  color: var(--success-color, green);
+  color: var(--successColor, green);
   font-weight: bold;
 }
 
 .text-error {
-  color: var(--error-color, red);
+  color: var(--errorColor, red);
   font-weight: bold;
 }
