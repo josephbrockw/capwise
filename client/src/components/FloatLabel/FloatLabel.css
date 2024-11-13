@@ -8,14 +8,14 @@
   width: 100%;
   padding: 12px 8px;
   font-size: 16px;
-  border: 1px solid var(--gray, #ccc);
+  border: 1px solid var(--floatLabelBorderColor, #ccc);
   border-radius: 4px;
   outline: none;
-  background-color: var(--white, #fff);
+  background-color: var(--light, #fff);
 }
 
 .float-label-input:focus {
-  border-color: var(--secondaryColor, #b4f0f2);
+  border-color: var(--floatLabelFocusBorderColor, #b4f0f2);
 }
 
 .float-label {
@@ -24,7 +24,7 @@
   left: 8px;
   transform: translateY(-50%);
   font-size: 16px;
-  color: #aaa;
+  color: var(--floatLabelColor, #aaa);
   transition: all 0.2s ease-in-out;
   pointer-events: none;
 }
@@ -33,9 +33,9 @@
   top: -8px;
   left: 8px;
   font-size: 12px;
-  color: var(--primaryColor, #007bff);
+  color: var(--floatLabelActiveColor, #007bff);
 }
 
 .floating .float-label-input {
-  border-color: var(--primaryColor, #007bff);
+  border-color: var(--floatLabelActiveBorderColor, #007bff);
 }

@@ -3,11 +3,12 @@ const colors = {
   secondaryColor: '#5CC3FF',
   contrastColor: '#EB984E',
   backgroundColor: '#f8f9fa',
-  white: '#ffffff',
+  light: '#ffffff',
   surface: '#ffffff',
   dark: '#2C3E50',
   gray: '#ccc',
   lightGray: '#e9ecef',
+  darkGray: '#6c757d',
   textColor: '#3D3D3D',
   inactiveTextColor: '#6c757d',
   menuBarBackgroundColor: '#2c3e50',
@@ -42,15 +43,18 @@ const shadows = {
 };
 
 const buttons = {
+  buttonPadding: '10px 20px', // Standard padding
+  buttonFontSize: typography.fontSizeBase, // Matches base font size
   buttonPrimaryBackground: colors.primaryColor, // Matches primary color
-  buttonPrimaryText: colors.white, // White text on primary button
+  buttonPrimaryHover: colors.secondaryColor,
+  buttonPrimaryText: colors.light, // White text on primary button
   buttonSecondaryBackground: colors.backgroundColor, // Matches background color
   buttonDisabledBackground: colors.lightGray, // Light gray for disabled buttons
 };
 
 const tabs = {
   tabActiveBackground: colors.primaryColor, // Matches primary color
-  tabActiveTextColor: colors.white, // White text on active tab
+  tabActiveTextColor: colors.light, // White text on active tab
   tabInactiveBackground: colors.lightGray, // Light gray for inactive tabs
   tabInactiveTextColor: colors.inactiveTextColor, // Secondary text color
 };
@@ -63,15 +67,21 @@ const dropdowns = {
 };
 
 const inputs = {
-  inputBackground: colors.white, // White for input fields
+  inputBackground: colors.light, // White for input fields
   inputTextColor: colors.dark, // Matches text color
   inputBorderColor: colors.secondaryColor, // Matches border color
   inputFocusBorderColor: colors.primaryColor, // Matches primary color
+  floatLabelColor: colors.darkGray,
+  floatLabelBorderColor: colors.gray, // Light gray for float label
+  floatLabelBackgroundColor: colors.light, // White background for float label
+  floatLabelFocusBorderColor: colors.secondaryColor,
+  floatLabelActiveColor: colors.primaryColor,
+  floatLabelActiveBorderColor: colors.primaryColor,
 };
 
 const tooltips = {
   tooltipBackground: colors.dark, // Dark background
-  tooltipTextColor: colors.white, // White text
+  tooltipTextColor: colors.light, // White text
 };
 
 const breakpoints = {
