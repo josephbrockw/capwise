@@ -84,12 +84,6 @@ const tooltips = {
   tooltipTextColor: colors.light, // White text
 };
 
-const breakpoints = {
-  breakpointMobile: 768, // Matches existing theme
-  breakpointTablet: 1024, // Optional for larger screens
-  breakpointDesktop: 1200, // Standard desktop breakpoint
-};
-
 const animations = {
   transitionDuration: '0.3s', // Smooth transitions
   transitionTimingFunction: 'ease-in-out', // Natural easing
@@ -112,6 +106,7 @@ const utilities = {
 
 const config = {
   appName: 'BaseBuild',
+  version: process.env.APP_VERSION || '0.1.0',
   apiBaseUrl: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8009',
   showSidebar: true,
   theme: {
@@ -124,7 +119,6 @@ const config = {
     ...dropdowns,
     ...inputs,
     ...tooltips,
-    ...breakpoints,
     ...animations,
     ...accessibility,
     ...utilities,
@@ -132,18 +126,30 @@ const config = {
   tabs: {
     settings: ['account', 'billing'],  // Default tabs for the Settings page
   },
-  apiRoutes: {
-    auth: {
-      login: '/api/auth/login',
-      register: '/api/auth/register',
-      logout: '/api/auth/logout',
-      passwordReset: '/api/auth/password/reset',
-      passwordResetConfirm: '/api/auth/password/reset/confirm',
-    },
-    user: {
-      info: '/api/user/me',
+  navigation: {
+    login: '/login',
+    register: '/register',
+    dashboard: '/dashboard',
+    settings: {
+      root: '/settings',
+      account: '/settings#account',
+      billing: '/settings#billing',
     },
   },
+  api: {
+    routes: {
+      auth: {
+        login: '/api/auth/login',
+        register: '/api/auth/register',
+        logout: '/api/auth/logout',
+        passwordReset: '/api/auth/password/reset',
+        passwordResetConfirm: '/api/auth/password/reset/confirm',
+      },
+      user: {
+        info: '/api/user/me',
+      },
+    },
+  }
 }
 
 export default config;
