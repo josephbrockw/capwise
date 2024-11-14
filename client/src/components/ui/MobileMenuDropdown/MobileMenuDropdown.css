@@ -19,14 +19,14 @@
   overflow: hidden;
   z-index: 1000;
   width: var(--dropdownWidth, 250px);
-  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
+  max-height: 0; /* Initially collapsed */
+  opacity: 0; /* Initially invisible */
+  pointer-events: none; /* Prevent interaction */
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 .mobile-menu-dropdown-menu.visible {
-  max-height: 500px; /* Adjust the height based on the number of items */
+  max-height: 500px; /* Adjust as needed */
   opacity: 1;
   pointer-events: auto;
 }
@@ -64,14 +64,14 @@
 .submenu {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   opacity: 0;
-  padding-left: 0; /* Align submenu with parent */
-  background-color: var(--dropdownBackgroundColor, #ffffff); /* Same background as the main menu */
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  background-color: var(--dropdownBackgroundColor, #ffffff);
+  padding-left: 0;
 }
 
 .submenu.visible {
-  max-height: 500px; /* Adjust the height based on the number of items */
+  max-height: 500px; /* Adjust based on number of items */
   opacity: 1;
 }
 
@@ -84,10 +84,5 @@
 }
 
 .submenu-item:hover {
-  background-color: var(--dropdownHoverTextColor, #f0f0f0);
+  background-color: var(--dropdownHoverBackground, #f0f0f0);
 }
-
-/*.logout {*/
-/*  color: var(--logout-text-color, red);*/
-/*  font-weight: bold; !* Emphasize logout *!*/
-/*}*/

@@ -1,9 +1,9 @@
 /* components/ui/Sidebar/Sidebar.css */
 .sidebar-container {
   width: 200px;
-  background-color: var(--background-color);
+  background-color: var(--sidebarBackground, white);
   padding: 1rem;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadowSidebar, 2px 0 5px rgba(0, 0, 0, 0.1));
   overflow-y: auto;
   position: relative;
   top: 0;
@@ -29,14 +29,14 @@
   border: none;
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--textColor);
+  color: var(--sidebarTextColor, #333);
   cursor: pointer;
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
 }
 
 .sidebar-close i {
-  color: var(--dark, #333);
+  color: var(--sidebarTextColor, #333);
 }
 
 .sidebar-list {
@@ -51,7 +51,7 @@
 }
 
 .sidebar-item:hover {
-  background-color: var(--dark);
-  color: var(--light, gray);
-  border-radius: var(--border-radius, 4px);
+  background-color: var(--sidebarLinkHoverBackground);
+  color: var(--sidebarLinkHoverTextColor, gray);
+  border-radius: var(--borderRadius, 4px);
 }

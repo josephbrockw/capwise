@@ -33,7 +33,7 @@ const MobileMenuDropdown = ({ menuItems }) => {
 
   const handleItemClick = (item) => {
     if (item.items) {
-      setActiveItem((prev) => (prev === item ? null : item)); // Toggle submenu
+      setActiveItem((prev) => (prev === item ? null : item)); // Toggle submenu visibility
     } else {
       setDropdownVisible(false);
       setActiveItem(null);
@@ -46,28 +46,37 @@ const MobileMenuDropdown = ({ menuItems }) => {
         className="mobile-menu-icon"
         onClick={toggleDropdown}
         aria-label="User menu"
+        aria-expanded={isDropdownVisible}
       >
         <i className="pi pi-user" style={{ fontSize: '1.5rem' }}></i>
       </button>
-      {isDropdownVisible && (
-        <div className={`mobile-menu-dropdown-menu ${isDropdownVisible ? 'visible' : 'hidden'}`}>
-          {menuItems.map((item, index) => (
-            <div key={index} className="mobile-menu-dropdown-item">
-              <div
-                className={`dropdown-menu-item ${activeItem === item ? 'active' : ''}`}
-                onClick={() => handleItemClick(item)}
-              >
-                {item.label}
-                {item.items && (
-                  <i
-                    className={`pi ${
-                      activeItem === item ? 'pi-angle-up' : 'pi-angle-down'
-                    } submenu-icon`}
-                  ></i>
-                )}
-              </div>
-              <div className={`submenu ${activeItem === item ? 'visible' : 'hidden'}`}>
-                {item.items && item.items.map((subItem, subIndex) => (
+      <div
+        className={`mobile-menu-dropdown-menu ${
+          isDropdownVisible ? 'visible' : 'hidden'
+        }`}
+      >
+        {menuItems.map((item, index) => (
+          <div key={index} className="mobile-menu-dropdown-item">
+            <div
+              className={`dropdown-menu-item ${activeItem === item ? 'active' : ''}`}
+              onClick={() => handleItemClick(item)}
+              role="menuitem"
+              aria-expanded={activeItem === item}
+            >
+              {item.label}
+              {item.items && (
+                <i
+                  className={`pi ${
+                    activeItem === item ? 'pi-angle-up' : 'pi-angle-down'
+                  } submenu-icon`}
+                ></i>
+              )}
+            </div>
+            <div
+              className={`submenu ${activeItem === item ? 'visible' : 'hidden'}`}
+            >
+              {item.items &&
+                item.items.map((subItem, subIndex) => (
                   <a
                     key={subIndex}
                     href={subItem.href}
@@ -77,14 +86,13 @@ const MobileMenuDropdown = ({ menuItems }) => {
                     {subItem.label}
                   </a>
                 ))}
-              </div>
             </div>
-          ))}
-          <div className={"mobile-menu-dropdown-item"}>
-            <LogoutButton className="mobile-menu-dropdown-item logout" />
           </div>
+        ))}
+        <div className="mobile-menu-dropdown-item">
+          <LogoutButton className="mobile-menu-dropdown-item logout" />
         </div>
-      )}
+      </div>
     </div>
   );
 };

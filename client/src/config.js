@@ -38,6 +38,7 @@ const shadows = {
   shadowSmall: '0px 1px 3px rgba(0, 0, 0, 0.1)', // Subtle shadow
   shadowMedium: '0px 3px 6px rgba(0, 0, 0, 0.15)', // Moderate shadow
   shadowLarge: '0px 5px 15px rgba(0, 0, 0, 0.2)', // Prominent shadow
+  shadowSidebar: '2px 0 5px rgba(0, 0, 0, 0.1)', // Sidebar shadow
 };
 
 const buttons = {
@@ -50,6 +51,14 @@ const buttons = {
   buttonDisabledBackground: colors.lightGray, // Light gray for disabled buttons
 };
 
+const sideBarMenu = {
+  sidebarBackground: colors.light,
+  sidebarTextColor: colors.dark,
+  sidebarLinkHoverBackground: colors.dark,
+  sidebarLinkHoverTextColor: colors.light,
+  sidebarLinkFontSize: '1rem',
+};
+
 const menuBar = {
   menuBarBackground: colors.dark,
   menuBarTextColor: colors.light,
@@ -57,11 +66,30 @@ const menuBar = {
   menuBarLinkFontSize: '1rem',
 };
 
+
+const tabsBorder = {
+  activeThickness: '2px',
+  inactiveThickness: '0px',
+  style: 'solid',
+  activeColor: colors.primaryColor,
+  inactiveColor: colors.lightGray,
+}
+
 const tabs = {
-  tabActiveBackground: colors.primaryColor, // Matches primary color
-  tabActiveTextColor: colors.light, // White text on active tab
-  tabInactiveBackground: colors.lightGray, // Light gray for inactive tabs
-  tabInactiveTextColor: colors.inactiveTextColor, // Secondary text color
+  tabActiveBackground: 'transparent',
+  tabActiveTextColor: colors.primaryColor,
+  tabActiveBorderBottom: `${tabsBorder.activeThickness} ${tabsBorder.style} ${tabsBorder.activeColor}`,
+  tabInactiveBackground: 'transparent',
+  tabInactiveTextColor: colors.inactiveTextColor,
+  tabInactiveBorderBottom: `${tabsBorder.inactiveThickness} ${tabsBorder.style} ${tabsBorder.inactiveColor}`,
+  tabHoverColor: colors.contrastColor,
+  scrollbarColor: colors.primaryColor,
+  scrollbarWidth: 'thin', // Thin scrollbar for FireFox
+  scrollbarSnapType: ' x mandatory',  // Enable horizontal snap scrolling
+  scrollbarSnapAlign: 'center',  // centers each tab when scrolled
+  // For webkit browsers (Chrome, Safari, Edge)
+  scrollbarHeight: '.5rem',
+  scrollbarTrackBackground: 'transparent',
 };
 
 const dropdowns = {
@@ -122,6 +150,7 @@ const config = {
     ...shadows,
     ...buttons,
     ...menuBar,
+    ...sideBarMenu,
     ...tabs,
     ...dropdowns,
     ...inputs,

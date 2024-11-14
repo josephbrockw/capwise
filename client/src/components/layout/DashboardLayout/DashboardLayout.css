@@ -43,3 +43,11 @@
   margin-left: 0;
   overflow-y: auto;
 }
+
+.dashboard-content h1 {
+  color: var(--primaryColor);
+}
+
+.dashboard-content h2 {
+  color: var(--contrastColor);
+}
