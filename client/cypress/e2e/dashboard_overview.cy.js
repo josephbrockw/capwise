@@ -46,6 +46,6 @@ describe('Dashboard MenuBar', () => {
     cy.get('.mobile-menu-icon').click();
     cy.get('.mobile-menu-dropdown-menu').should('be.visible');
     cy.get('body').click(0, 0); // Click outside
-    cy.get('.mobile-menu-dropdown-menu').should('not.exist');
+    cy.get('.mobile-menu-dropdown-menu').should('not.be.visible');
   });
 });

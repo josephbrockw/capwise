@@ -16,10 +16,10 @@ const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, errorMes
   }, [navigate]);
 
   return (
-    <div className="flex align-items-center justify-content-center">
+    <div className="auth-layout flex align-items-center justify-content-center">
       <div className="w-full lg:w-6" style={{ maxWidth: '450px', margin: '1rem 2rem' }}>
-        <div className="text-center mb-5">
-          <img src={inlineLogo} alt="hyper" height={50} className="mb-3 mt-3" />
+        <div className="text-center header">
+          <img src={inlineLogo} alt="hyper" height={50} className="logo" />
 
           {/* Success Message */}
           {message && (
@@ -29,7 +29,7 @@ const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, errorMes
           {/* Default Title and Subtext */}
           {!message && (
             <>
-              <div className="text-900 text-3xl font-medium mb-3">{title}</div>
+              <div className="page-title">{title}</div>
               {subtext && (
                 <span className="text-600 font-medium line-height-3">
                   {subtext}

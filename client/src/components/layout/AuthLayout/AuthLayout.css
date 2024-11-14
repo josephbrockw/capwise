@@ -7,3 +7,17 @@
   color: var(--errorColor, red);
   font-weight: bold;
 }
+
+.page-title {
+  color: var(--primaryColor, blue);
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem;
+}
+
+.auth-layout .logo {
+  margin: 3rem 0;
+}
+
+.auth-layout .header {
+  margin-bottom: 2rem;
+}
