@@ -6,4 +6,10 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3001',
   },
+  component: {
+    devServer: {
+      framework: 'react',
+      bundler: 'webpack',
+    },
+  }
 });
