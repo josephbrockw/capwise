@@ -12,8 +12,9 @@ body {
   margin: 0;
 }
 
+/*Title font*/
 h1, h2, .page-title {
-  font-family: 'Couture-bld', Arial, sans-serif;
+  font-family: var(--fontFamilyTitle, 'Couture-bld', Arial, sans-serif);
 }
 
 .text-primary-color {

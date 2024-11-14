@@ -19,6 +19,7 @@ const colors = {
 
 const typography = {
   fontFamily: 'Roboto, sans-serif',
+  fontFamilyTitle: 'Couture, Arial, sans-serif',
   fontSizeBase: '1rem',
   fontSizeSmall: '0.875rem',
   fontSizeLarge: '1.25rem',
