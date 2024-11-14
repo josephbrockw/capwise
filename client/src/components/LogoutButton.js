@@ -13,7 +13,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button label="Logout" onClick={handleLogout} data-cy="logout-button" />
+    <Button label="Logout" className="logout-button" onClick={handleLogout} data-cy="logout-button" />
   );
 };
 

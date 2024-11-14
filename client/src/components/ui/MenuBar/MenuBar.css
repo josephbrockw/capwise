@@ -3,9 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--dark); /* Replace with your theme color */
+  background-color: var(--menuBarBackground); /* Replace with your theme color */
   padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
 }
 
@@ -22,16 +21,15 @@
 
 .menu-bar-link {
   text-decoration: none;
-  color: var(--textColor); /* Replace with your theme text color */
   font-weight: 500;
-  font-size: 1rem;
-  color: var(--menuBarTextColor, white); /* Replace with your theme text color */
+  font-size: var(--menuBarLinkFontSize, 1rem);
+  color: var(--menuBarTextColor, white);
 }
 
 .menu-bar-link:hover {
-  color: var(--primaryColor); /* Replace with your theme primary color */
+  color: var(--menuBarLinkHoverColor, #3498db); /* Replace with your theme primary color */
 }
 
 .menu-bar-button {
-  font-size: 1rem;
+  font-size: var(--menuBarButtonFontSize, 1rem);
 }

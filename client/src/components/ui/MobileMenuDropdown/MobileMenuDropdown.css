@@ -13,23 +13,32 @@
   position: absolute;
   top: 2.5rem;
   right: 0;
-  background-color: var(--dropdownBackgroundColor, #ffffff); /* Light background */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 0.5rem;
+  background-color: var(--dropdownBackgroundColor, #ffffff);
+  box-shadow: var(--shadowSmall, 0 2px 5px rgba(0, 0, 0, 0.2));
+  border-radius: var(--border-radius, 4px);
   overflow: hidden;
   z-index: 1000;
-  width: 250px; /* Increased width */
+  width: var(--dropdownWidth, 250px);
+  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mobile-menu-dropdown-menu.visible {
+  max-height: 500px; /* Adjust the height based on the number of items */
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile-menu-dropdown-item {
   margin: .5rem 1rem;
   padding: 0.75rem 1rem; /* Adjust padding for a larger clickable area */
-  color: var(--menuBarTextColor, #333); /* Darker text for light background */
+  color: var(--dropdownTextColor, #333); /* Darker text for light background */
   cursor: pointer;
   user-select: none;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid var(--dropdown-border-color, #e5e5e5); /* Divider between items */
   position: relative;
   flex-direction: column
 }
@@ -55,13 +64,15 @@
 .submenu {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 0;
   padding-left: 0; /* Align submenu with parent */
   background-color: var(--dropdownBackgroundColor, #ffffff); /* Same background as the main menu */
 }
 
 .submenu.visible {
   max-height: 500px; /* Adjust the height based on the number of items */
+  opacity: 1;
 }
 
 .submenu-item {
@@ -73,10 +84,10 @@
 }
 
 .submenu-item:hover {
-  background-color: var(--dropdown-hover-background, #f0f0f0);
+  background-color: var(--dropdownHoverTextColor, #f0f0f0);
 }
 
-.logout {
-  color: var(--logout-text-color, red);
-  font-weight: bold; /* Emphasize logout */
-}
+/*.logout {*/
+/*  color: var(--logout-text-color, red);*/
+/*  font-weight: bold; !* Emphasize logout *!*/
+/*}*/

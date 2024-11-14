@@ -11,8 +11,6 @@ const colors = {
   darkGray: '#6c757d',
   textColor: '#3D3D3D',
   inactiveTextColor: '#6c757d',
-  menuBarBackgroundColor: '#2c3e50',
-  menuBarTextColor: '#ffffff',
   dropdownMenubackgroundColor: '#ffffff',
   dropdownMenutextColor: '#3D3D3D',
   errorColor: '#ff5c5c',
@@ -52,6 +50,13 @@ const buttons = {
   buttonDisabledBackground: colors.lightGray, // Light gray for disabled buttons
 };
 
+const menuBar = {
+  menuBarBackground: colors.dark,
+  menuBarTextColor: colors.light,
+  menuBarLinkHoverColor: colors.primaryColor,
+  menuBarLinkFontSize: '1rem',
+};
+
 const tabs = {
   tabActiveBackground: colors.primaryColor, // Matches primary color
   tabActiveTextColor: colors.light, // White text on active tab
@@ -64,6 +69,7 @@ const dropdowns = {
   dropdownTextColor: colors.textColor, // Matches text color
   dropdownHoverBackground: colors.lightGray, // Light gray hover
   dropdownHoverTextColor: colors.dark, // Darker gray text on hover
+  dropdownWidth: '250px',
 };
 
 const inputs = {
@@ -115,6 +121,7 @@ const config = {
     ...borders,
     ...shadows,
     ...buttons,
+    ...menuBar,
     ...tabs,
     ...dropdowns,
     ...inputs,

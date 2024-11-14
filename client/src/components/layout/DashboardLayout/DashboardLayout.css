@@ -12,7 +12,8 @@
   z-index: 1000;
   position: sticky;
   top: 0;
-  background-color: var(--menuBarBackgroundColor);
+  background-color: var(--menuBarBackground);
+  box-shadow: var(--shadowSmall, 0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .sidebar-toggle {

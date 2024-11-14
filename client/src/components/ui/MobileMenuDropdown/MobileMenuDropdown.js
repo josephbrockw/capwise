@@ -50,7 +50,7 @@ const MobileMenuDropdown = ({ menuItems }) => {
         <i className="pi pi-user" style={{ fontSize: '1.5rem' }}></i>
       </button>
       {isDropdownVisible && (
-        <div className="mobile-menu-dropdown-menu">
+        <div className={`mobile-menu-dropdown-menu ${isDropdownVisible ? 'visible' : 'hidden'}`}>
           {menuItems.map((item, index) => (
             <div key={index} className="mobile-menu-dropdown-item">
               <div
@@ -66,20 +66,18 @@ const MobileMenuDropdown = ({ menuItems }) => {
                   ></i>
                 )}
               </div>
-              {item.items && activeItem === item && (
-                <div className={`submenu ${activeItem === item ? 'visible' : ''}`}>
-                  {item.items.map((subItem, subIndex) => (
-                    <a
-                      key={subIndex}
-                      href={subItem.href}
-                      className="submenu-item"
-                      data-cy={`${subItem.label.toLowerCase()}-link`}
-                    >
-                      {subItem.label}
-                    </a>
-                  ))}
-                </div>
-              )}
+              <div className={`submenu ${activeItem === item ? 'visible' : 'hidden'}`}>
+                {item.items && item.items.map((subItem, subIndex) => (
+                  <a
+                    key={subIndex}
+                    href={subItem.href}
+                    className="submenu-item"
+                    data-cy={`${subItem.label.toLowerCase()}-link`}
+                  >
+                    {subItem.label}
+                  </a>
+                ))}
+              </div>
             </div>
           ))}
           <div className={"mobile-menu-dropdown-item"}>
