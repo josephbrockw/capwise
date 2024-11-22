@@ -17,7 +17,7 @@ const VerifyEmail = () => {
       }
 
       try {
-        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/verify`, {
+        await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/verify`, {
           token: token,
         });
         setMessage('Email verified successfully. Redirecting to login...');

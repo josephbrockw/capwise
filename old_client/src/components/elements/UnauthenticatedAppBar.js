@@ -10,7 +10,7 @@ export default function UnauthenticatedAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {process.env.REACT_APP_NAME}
+            {import.meta.env.VITE_NAME}
           </Typography>
         </Toolbar>
       </AppBar>
