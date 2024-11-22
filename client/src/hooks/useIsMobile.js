@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const useIsMobile = () => {
-  const breakpoint = parseInt(process.env.REACT_APP_MOBILE_BREAKPOINT || 768, 10);
+  const breakpoint = parseInt(import.meta.env.VITE_MOBILE_BREAKPOINT || 768, 10);
   const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
 
   useEffect(() => {

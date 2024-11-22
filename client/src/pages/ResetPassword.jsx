@@ -17,7 +17,7 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/password/reset`, formData);
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/password/reset`, formData);
       setMessage('If an account with that email exists, a password reset email will be sent.');
     } catch (error) {
       console.error('Error resetting password:', error);

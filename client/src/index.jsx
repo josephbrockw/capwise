@@ -23,7 +23,7 @@ const applyTheme = (theme) => {
 applyTheme(config.theme);
 
 // Set the document title dynamically
-document.title = config.title;
+document.title = config.appName;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

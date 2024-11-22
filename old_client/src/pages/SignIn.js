@@ -24,8 +24,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href={process.env.REACT_APP_URL}>
-        {process.env.REACT_APP_NAME}
+      <Link color="inherit" href={import.meta.env.VITE_URL}>
+        {import.meta.env.VITE_NAME}
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}

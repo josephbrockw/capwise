@@ -5,9 +5,13 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
 COPY package.json .
-COPY yarn.lock .
-RUN yarn install
+COPY package-lock.json .
+RUN npm install
 
 COPY . .
 
-CMD ["yarn", "start"]
+# Expose Vite's default port
+EXPOSE 3001
+
+# Use Vite's development server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

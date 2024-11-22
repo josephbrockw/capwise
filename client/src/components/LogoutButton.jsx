@@ -1,4 +1,4 @@
-// client/src/components/LogoutButton.js
+// client/src/components/LogoutButton.jsx.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import storageHelper from '../utils/storageHelper';

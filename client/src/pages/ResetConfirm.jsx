@@ -38,7 +38,7 @@ const ResetConfirm = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/password/reset/confirm`, formData);
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/password/reset/confirm`, formData);
     if (response.status === 200) {
       setMessage(response.data.message || 'Password reset successful. Please sign in.');
     } else {
