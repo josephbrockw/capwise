@@ -12,6 +12,7 @@ install_pip() {
   curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
   python3 get-pip.py
   rm get-pip.py
+  python3 -m pip install --upgrade pip
 }
 
 install_npm() {
@@ -22,6 +23,17 @@ install_npm() {
 install_pre_commit() {
     green_echo "Installing pre-commit..."
     pip install pre-commit
+}
+
+create_env_secrets() {
+    green_echo "Creating backend/.env.secrets file..."
+    cat <<EOL > backend/.env.secrets
+POSTMARK_API_SERVICE_KEY=0
+DEFAULT_FROM_EMAIL=system@wilkinsonventures.io
+OWNER_EMAIL=joe@wilkinsonventures.io
+STRIPE_SECRET_KEY=0
+EOL
+    green_echo "backend/.env.secrets created."
 }
 
 green_echo "Dev Setup"
@@ -45,12 +57,12 @@ if [ "$response" = "y" ]; then
     fi
 
     # Check for virtual environment
-    if [ ! -f "./backend/env/bin/activate" ]; then
+    if [ ! -f "./bb-dev/bin/activate" ]; then
         red_echo "Virtual environment not found!"
         read -p "Do you want to create a virtual environment? (y/n): " create_env_response
         if [ "$create_env_response" = "y" ]; then
             green_echo "Creating virtual environment..."
-            python3 -m venv ./backend/env
+            python3 -m venv ./bb-dev
         else
             red_echo "Virtual environment is required. Exiting."
             exit 1
@@ -61,7 +73,7 @@ if [ "$response" = "y" ]; then
 
     # Activate the virtual environment
     green_echo "Activating virtual environment..."
-    source backend/env/bin/activate
+    source bb-dev/bin/activate
 
     # Install Python dependencies
     green_echo "Installing Python dependencies..."
@@ -102,13 +114,20 @@ if [ "$response" = "y" ]; then
     green_echo "Installing pre-commit hooks..."
     pre-commit install
 
-#    green_echo "Installing Python dependencies"
-#    pip install -r ./backend/requirements.txt
-#    green_echo "  - Activating virtual environment"
-#    source backend/env/bin/activate
-#    green_echo "  - Installing Node dependencies"
-#    npm install ./client
-#    pre-commit install
+    # Check and create .env.secrets file if not present
+    if [ ! -f "backend/.env.secrets" ]; then
+        red_echo "backend/.env.secrets not found!"
+        read -p "Do you want to create a default .env.secrets file? (y/n): " create_env_secrets_response
+        if [ "$create_env_secrets_response" = "y" ]; then
+            create_env_secrets
+        else
+            red_echo "backend/.env.secrets is required. Exiting."
+            exit 1
+        fi
+    else
+        green_echo "backend/.env.secrets already exists."
+    fi
+
 elif [ "$response" = "n" ]; then
     green_echo "Skipping installs."
 else
@@ -132,8 +151,5 @@ else
     fi
 fi
 
-#green_echo "Installing dev helper tool"
-#chmod +x bb.sh
-#cp bb.sh /usr/local/bin/bb
 green_echo "Complete! Run 'bb --help' for available commands."
 exit 0

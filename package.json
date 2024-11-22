@@ -1,0 +1,15 @@
+{
+  "author": "",
+  "dependencies": {
+    "client": "file:client"
+  },
+  "description": "## Environment Variables",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "basebuild",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}

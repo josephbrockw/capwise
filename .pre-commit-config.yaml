@@ -27,6 +27,8 @@ repos:
     rev: v1.4.0  # Replace with the version you want to use
     hooks:
       - id: mypy
+        args:
+          - "--exclude=bb-dev/"
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
