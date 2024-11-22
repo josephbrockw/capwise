@@ -14,16 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.conf import settings
-from django.contrib import admin
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
+from django.conf import settings  # type: ignore
+from django.contrib import admin  # type: ignore
+from django.urls import include, path  # type: ignore
+from drf_spectacular.views import (  # type: ignore
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+from rest_framework.routers import DefaultRouter  # type: ignore
 
-from account.views import test_templates
-from api.views import version
-from api.views.auth import AuthViewSet, LogInView, LogoutView, TokenRefreshView
-from api.views.experiment import ExperimentViewSet
-from api.views.user import UserViewSet
+from account.views import test_templates  # type: ignore
+from api.views import version  # type: ignore
+from api.views.auth import (  # type: ignore
+    AuthViewSet,
+    LogInView,
+    LogoutView,
+    TokenRefreshView,
+)
+from api.views.experiment import ExperimentViewSet  # type: ignore
+from api.views.user import UserViewSet  # type: ignore
 
 router = DefaultRouter(trailing_slash=False)
 router.register(r"auth", AuthViewSet, basename="auth")
@@ -37,6 +47,18 @@ urlpatterns = [
     path("api/auth/refresh", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/auth/logout", LogoutView.as_view(), name="log_out"),
     path("api/", include(router.urls)),
+    # OpenAPI 3 documentation with Swagger UI
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path(
+        "api/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    ),
 ]
 
 dev_patterns = [

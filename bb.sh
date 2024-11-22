@@ -1,35 +1,44 @@
 #!/bin/bash
 
+exec_backend() {
+    docker compose exec backend "$@"
+}
+
+exec_db() {
+    docker compose exec db "$@"
+}
+
 # Function to display general usage
 usage() {
     echo "General Usage: $0 workflow_name [additional_args]"
     echo "Available workflows:"
-    echo "  test           - Run the test suite."
-    echo "                   - Accepts optional '--type=testtype' argument."
-    echo "                   - Accepts optional '--k=keyword' argument."
-    echo "  cypress        - Run the cypress tests."
-    echo "  full-test      - Run the test suite, flush the db, and run the cypress tests."
-    echo "  clean          - Shuts down docker containers and rebuilds new ones."
-    echo "  shell          - Enters the user into a Flask shell inside the app container."
+    echo "  test           - Run the full test suite or selective tests."
+    echo "                   - Accepts '-b' to run only Django tests."
+    echo "                   - Accepts '-c' to run only Cypress tests."
+    echo "                   - Accepts '--type=testtype' and '--k=keyword' for filtering Django tests."
+    echo "  clean          - Shuts down Docker containers and rebuilds new ones."
+    echo "  shell          - Enters the user into a Django shell inside the backend container."
     echo "  psql           - Enters the user into a Postgres shell inside the db container."
-    echo "  coverage       - Runs a coverage report for the full test suite."
-    echo "  quality        - Runs flake8, black, and isort, then runs a coverage report."
-    echo "  dumpdata       - Dumps the data from the database into a yaml file called default.yaml by default."
-    echo "                 - Accepts optional output file name as argument."
+    echo "  coverage       - Runs a coverage report for the Django test suite."
+    echo "  quality        - Runs flake8, black, and isort."
+    echo "  dumpdata       - Dumps the data from the database into a YAML file (default: default.yaml)."
+    echo "                   - Accepts an optional output file name as an argument."
     echo "  loaddata       - Loads data from a given file path into the database."
     echo "  makemigrations - Makes migrations for the database."
     echo "  migrate        - Runs Django migrations inside the backend container."
-    echo "Use '$0 workflow_name --help' for more information on a specific workflow"
+    echo "Use '$0 workflow_name --help' for more information on a specific workflow."
 }
 
 # Function for testing help
 test_help() {
     echo "Test Help:"
-    echo "Usage: $0 workflow1 [--type=test_type]"
-    echo "Description: Runs the pytest test suite."
+    echo "Usage: $0 test [options]"
+    echo "Description: Runs the full test suite or specific test subsets."
     echo "Options:"
-    echo "   --type=testtype: Runs functional or unit tests in isolation."
-    echo "   --k=keyword: Runs test matching a keyword in the name."
+    echo "  -b                Run only the Django tests."
+    echo "  -c                Run only the Cypress tests."
+    echo "  --type=testtype   Run functional or unit tests in isolation."
+    echo "  --k=keyword       Run Django tests matching a specific keyword in the name."
 }
 
 # Function for cypress help
@@ -127,53 +136,57 @@ shift # This shifts the positional parameters to the left, so $2 becomes $1, $3 
 
 case $workflow in
     test)
-        command="docker compose exec backend pytest"
+        if [[ "$1" == "--help" ]]; then
+            test_help
+            exit 0
+        fi
+
+        # Default behavior: run both Django and Cypress tests
+        run_django_tests=true
+        run_cypress_tests=true
+        django_command="docker compose exec backend pytest"
+        cypress_command="(cd client && npm run cypress:run --browser chrome)"
+
+        # Parse options
         for arg in "$@"; do
-            if [[ "$arg" == "--help" ]]; then
-                test_help
-                exit 0
-            elif [[ "$arg" =~ ^--type= ]]; then
-                type="${arg#*=}"
-            elif [[ "$arg" =~ ^--k= ]]; then
-                k=" -k ${arg#*=}"
-            elif [[ "$arg" == "-s" ]]; then
-                command+=" -s"
-            fi
+            case $arg in
+                -b)
+                    run_cypress_tests=false
+                    ;;
+                -c)
+                    run_django_tests=false
+                    ;;
+                --type=*)
+                    type="${arg#*=}"
+                    django_command+=" /$type"
+                    ;;
+                --k=*)
+                    k=" -k ${arg#*=}"
+                    django_command+="$k"
+                    ;;
+                -s)
+                    django_command+=" -s"
+                    ;;
+                *)
+                    echo "Unknown argument: $arg"
+                    test_help
+                    exit 2
+                    ;;
+            esac
         done
 
-        if [[ -n $type ]]; then
-            command+="/$type"
+        # Run tests
+        if [[ $run_django_tests == true ]]; then
+            echo "Running Django tests..."
+            echo "$django_command"
+            eval "$django_command"
         fi
-        if [[ -n $k ]]; then
-            command+="$k"
+        if [[ $run_cypress_tests == true ]]; then
+            echo "Running Cypress tests..."
+            echo "$cypress_command"
+            eval "$cypress_command"
         fi
-
-        echo "Running tests..."
-        echo "$command"
-        eval "$command"
         ;;
-    cypress)
-        if [[ "$1" == "--help" ]]; then
-            cypress_help
-            exit 0
-        fi
-#        docker compose exec backend python manage.py flush --noinput
-        echo "Database flushed. Running cypress tests..."
-        (cd client && npm run cypress:open)
-        ;;
-    full-test)
-        if [[ "$1" == "--help" ]]; then
-            full_test_help
-            exit 0
-        fi
-        echo "Running pytest..."
-        docker compose exec backend pytest
-        docker compose exec backend python manage.py flush --noinput
-        echo "Database flushed."
-        (cd client && npm run cypress:run --browser chrome)
-        docker compose exec backend python manage.py flush --noinput
-        docker compose exec backend python manage.py loaddata clean_data.yaml
-       ;;
     clean)
         if [[ "$1" == "--help" ]]; then
             clean_help
@@ -181,17 +194,17 @@ case $workflow in
         fi
         if [[ "$1" == "--data" ]]; then
             echo "Cleaning up data..."
-            docker compose exec backend python manage.py flush --noinput
-            docker compose exec backend python manage.py loaddata clean_data.yaml
+            exec_backend python manage.py flush --noinput
+            exec_backend python manage.py loaddata clean_data.yaml
         elif [[ "$1" == "--flush" ]]; then
             echo "Flushing the database..."
-            docker compose exec backend python manage.py flush --noinput
+            exec_backend python manage.py flush --noinput
         else
             echo "Spinning up new instance..."
             docker compose down -v
             docker compose up -d --build
-            docker compose exec backend python manage.py migrate
-            docker compose exec backend python manage.py loaddata clean_data.yaml
+            exec_backend python manage.py migrate
+            exec_backend python manage.py loaddata clean_data.yaml
         fi
         ;;
     flush-db)
@@ -200,7 +213,7 @@ case $workflow in
             exit 0
         fi
         echo "Flushing the database..."
-        docker compose exec backend python manage.py flush --noinput
+        exec_backend python manage.py flush --noinput
         ;;
     shell)
         if [[ "$1" == "--help" ]]; then
@@ -208,7 +221,7 @@ case $workflow in
             exit 0
         fi
         echo "Entering Django shell..."
-        docker compose exec backend python manage.py shell
+        exec_backend python manage.py shell
         ;;
     db)
         if [[ "$1" == "--help" ]]; then
@@ -216,7 +229,7 @@ case $workflow in
             exit 0
         fi
         echo "Entering Postgres shell..."
-        docker compose exec db_dev psql -U postgres
+        exec_db psql -U postgres
         ;;
     coverage)
         if [[ "$1" == "--help" ]]; then
@@ -243,12 +256,12 @@ case $workflow in
             quality_help
             exit 0
         fi
-        docker compose exec backend flake8 .
-        docker compose exec backend black /usr/src/backend --exclude=/env/
+        exec_backend flake8 .
+        exec_backend black /usr/src/backend --exclude=/env/
 #                                    black /usr/src/backend/ --exclude='/env/'
 
-        docker compose exec backend isort .
-        docker compose exec backend pytest -p no:warnings --cov=.
+        exec_backend isort .
+        exec_backend pytest -p no:warnings --cov=.
         ;;
     dumpdata)
         if [[ "$1" == "--help" ]]; then
@@ -259,7 +272,7 @@ case $workflow in
         if [[ -n "$1" ]]; then
             output_file="$1"
         fi
-        docker compose exec backend python manage.py dumpdata \
+        exec_backend python manage.py dumpdata \
           --indent 4 \
           --natural-foreign \
           --natural-primary \
@@ -282,7 +295,7 @@ case $workflow in
         fi
         filepath=$1
         echo "Loading data from $filepath..."
-        docker compose exec backend python manage.py loaddata "$filepath"
+        exec_backend python manage.py loaddata "$filepath"
         ;;
     makemigrations)
         if [[ "$1" == "--help" ]]; then

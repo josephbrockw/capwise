@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "anymail",
     "django_celery_beat",
+    "drf_spectacular",
     # Local
     "account",
     "main",
@@ -148,9 +149,27 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "BaseBuild API",
+    "DESCRIPTION": "API documentation for the BaseBuild application foundation",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": False,
+        "defaultModelsExpandDepth": -1,
+        "defaultModelExpandDepth": 2,
+        "docExpansion": "none",
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SCHEMA_PATH_PREFIX": "/api/",
 }
 
 # Allow the use of the browsable API in development
@@ -160,7 +179,6 @@ if DEBUG:
     ) + [
         "rest_framework.renderers.BrowsableAPIRenderer",
     ]
-
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=60),
