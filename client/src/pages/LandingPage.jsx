@@ -1,154 +1,177 @@
-// client/src/pages/Landing.js
 import { Link } from 'react-router-dom';
+import styles from './LandingPage.module.css';
 import Button from '../components/Button/Button';
-import hero from '../assets/images/hero.jpg';
 
-const LandingPage = () => {
+const features = [
+  {
+    title: 'Instant Build Setup',
+    description: 'Get your build environment up and running in seconds with our one-click setup process.',
+    icon: '🚀'
+  },
+  {
+    title: 'Cross-Platform Support',
+    description: 'Build your projects seamlessly across macOS, Linux, and Windows with consistent results.',
+    icon: '💻'
+  },
+  {
+    title: 'Smart Caching',
+    description: 'Optimize build times with intelligent caching that learns from your build patterns.',
+    icon: '⚡'
+  },
+  {
+    title: 'Real-Time Monitoring',
+    description: 'Track build progress and performance metrics in real-time with our intuitive dashboard.',
+    icon: '📊'
+  },
+  {
+    title: 'Team Collaboration',
+    description: 'Share build configurations and collaborate with your team in real-time.',
+    icon: '👥'
+  },
+];
+
+const testimonials = [
+  {
+    quote: "BaseBuild has transformed how we handle our build process. What used to take hours now takes minutes.",
+    name: "Sarah Chen",
+    title: "CTO at TechFlow",
+    avatar: "https://i.pravatar.cc/150?img=1"
+  },
+  {
+    quote: "The smart caching feature alone has saved us countless development hours. It is a game-changer.",
+    name: "Michael Rodriguez",
+    title: "Lead Developer at BuildX",
+    avatar: "https://i.pravatar.cc/150?img=2"
+  },
+  {
+    quote: "Finally, a build tool that just works. The cross-platform support is flawless.",
+    name: "Emma Thompson",
+    title: "DevOps Engineer at CloudScale",
+    avatar: "https://i.pravatar.cc/150?img=3"
+  }
+];
+
+const pricingPlans = [
+  {
+    name: 'Starter',
+    price: '$0',
+    period: '/month',
+    features: [
+      'Up to 100 builds/month',
+      'Basic caching',
+      'Community support',
+      '1 concurrent build',
+      'Basic analytics'
+    ]
+  },
+  {
+    name: 'Pro',
+    price: '$49',
+    period: '/month',
+    popular: true,
+    features: [
+      'Unlimited builds',
+      'Smart caching',
+      'Priority support',
+      '5 concurrent builds',
+      'Advanced analytics',
+      'Custom workflows',
+      'Team collaboration'
+    ]
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    period: '',
+    features: [
+      'Everything in Pro',
+      'Dedicated support',
+      'Unlimited concurrent builds',
+      'Custom integrations',
+      'SLA guarantee',
+      'On-premise deployment',
+      'SSO & advanced security'
+    ]
+  }
+];
+
+export default function LandingPage() {
   return (
     <div>
-
-      <div className="grid grid-nogutter surface-0 text-800">
-        <div className="col-12 md:col-6 p-6 text-center md:text-left flex align-items-center ">
-          <section>
-            <span className="block text-6xl font-bold mb-1">Create the screens</span>
-            <div className="text-6xl text-primary font-bold mb-3">your visitors deserve to see</div>
-            <p className="mt-0 mb-4 text-700 line-height-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                                                            do eiusmod tempor incididunt ut labore et dolore magna
-                                                            aliqua.</p>
-            <Link to="/register" style={{textDecoration: 'none'}} data-cy="registration-button">
-              <Button label="Sign Up" className="mr-3" />
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <div className={styles.heroText}>
+            <h1 className={styles.title}>Build Better. Build Faster.</h1>
+            <p className={styles.subtitle}>
+              The modern build tool that streamlines your development workflow and supercharges your team&apos;s productivity.
+            </p>
+            <Link to="/signup">
+              <button className={styles.ctaButton}>Start Building for Free</button>
             </Link>
-            <Link to="/login" style={{textDecoration: 'none'}} data-cy="login-button">
-              <Button label="Login" className="outlined" />
-            </Link>
-          </section>
-        </div>
-        <div className="col-12 md:col-6 overflow-hidden">
-          <img src={hero} alt="hero-1" className="md:ml-auto block md:h-full"
-               style={{clipPath: 'polygon(8% 0, 100% 0%, 100% 100%, 0 100%)'}}/>
-        </div>
-      </div>
-
-
-      <div className="surface-0 mt-8">
-        <div className="text-900 font-bold text-6xl mb-4 text-center">Pricing Plans</div>
-        <div className="text-700 text-xl mb-6 text-center line-height-3">Lorem ipsum dolor sit, amet consectetur
-                                                                         adipisicing elit. Velit numquam eligendi quos.
-        </div>
-
-        <div className="grid">
-          <div className="col-12 lg:col-4">
-            <div className="p-3 h-full">
-              <div className="shadow-2 p-3 h-full flex flex-column" style={{borderRadius: '6px'}}>
-                <div className="text-900 font-medium text-xl mb-2">Basic</div>
-                <div className="text-600">Plan description</div>
-                <hr className="my-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <div className="flex align-items-center">
-                  <span className="font-bold text-2xl text-900">$9</span>
-                  <span className="ml-2 font-medium text-600">per month</span>
-                </div>
-                <hr className="my-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <ul className="list-none p-0 m-0 flex-grow-1">
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Arcu vitae elementum</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Dui faucibus in ornare</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Morbi tincidunt augue</span>
-                  </li>
-                </ul>
-                <hr className="mb-3 mx-0 border-top-1 border-bottom-none border-300 mt-auto"/>
-                <Button label="Buy Now" className="p-3 w-full mt-auto"/>
-              </div>
-            </div>
           </div>
-
-          <div className="col-12 lg:col-4">
-            <div className="p-3 h-full">
-              <div className="shadow-2 p-3 h-full flex flex-column" style={{borderRadius: '6px'}}>
-                <div className="text-900 font-medium text-xl mb-2">Premium</div>
-                <div className="text-600">Plan description</div>
-                <hr className="my-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <div className="flex align-items-center">
-                  <span className="font-bold text-2xl text-900">$29</span>
-                  <span className="ml-2 font-medium text-600">per month</span>
-                </div>
-                <hr className="my-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <ul className="list-none p-0 m-0 flex-grow-1">
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Arcu vitae elementum</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Dui faucibus in ornare</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Morbi tincidunt augue</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Duis ultricies lacus sed</span>
-                  </li>
-                </ul>
-                <hr className="mb-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <Button label="Buy Now" className="p-3 w-full"/>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-12 lg:col-4">
-            <div className="p-3 h-full">
-              <div className="shadow-2 p-3 flex flex-column" style={{borderRadius: '6px'}}>
-                <div className="text-900 font-medium text-xl mb-2">Enterprise</div>
-                <div className="text-600">Plan description</div>
-                <hr className="my-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <div className="flex align-items-center">
-                  <span className="font-bold text-2xl text-900">$49</span>
-                  <span className="ml-2 font-medium text-600">per month</span>
-                </div>
-                <hr className="my-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <ul className="list-none p-0 m-0 flex-grow-1">
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Arcu vitae elementum</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Dui faucibus in ornare</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Morbi tincidunt augue</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Duis ultricies lacus sed</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Imperdiet proin</span>
-                  </li>
-                  <li className="flex align-items-center mb-3">
-                    <i className="pi pi-check-circle text-green-500 mr-2"></i>
-                    <span>Nisi scelerisque</span>
-                  </li>
-                </ul>
-                <hr className="mb-3 mx-0 border-top-1 border-bottom-none border-300"/>
-                <Button label="Buy Now" className="p-3 w-full p-button-outlined"/>
-              </div>
-            </div>
+          <div className={styles.heroImage}>
+            {/* Add hero image here */}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Features Section */}
+      <section className={styles.features}>
+        <h2 className={styles.sectionTitle}>Why Choose BaseBuild?</h2>
+        <div className={`${styles.featuresGrid} features-container`}>
+          {features.map((feature, index) => (
+            <div key={index} className={styles.featureCard}>
+              <div className={styles.featureIcon}>{feature.icon}</div>
+              <h3 className={styles.featureTitle}>{feature.title}</h3>
+              <p className={styles.featureDescription}>{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className={styles.pricing}>
+        <h2 className={styles.sectionTitle}>Simple, Transparent Pricing</h2>
+        <div className={styles.pricingGrid}>
+          {pricingPlans.map((plan, index) => (
+            <div key={index} className={`${styles.pricingCard} ${plan.popular ? styles.popular : ''}`}>
+              {plan.popular && <span className={styles.popularBadge}>Most Popular</span>}
+              <div className={styles.pricingHeader}>
+                <h3 className={styles.planName}>{plan.name}</h3>
+                <div className={styles.price}>{plan.price}<span className={styles.period}>{plan.period}</span></div>
+              </div>
+              <ul className={styles.featureList}>
+                {plan.features.map((feature, featureIndex) => (
+                  <li key={featureIndex} className={styles.featureItem}>{feature}</li>
+                ))}
+              </ul>
+              <Link to="/signup">
+                <Button label={plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'} />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className={styles.testimonials}>
+        <h2 className={styles.sectionTitle}>What Our Users Say</h2>
+        <div className={styles.testimonialsGrid}>
+          {testimonials.map((testimonial, index) => (
+            <div key={index} className={styles.testimonialCard}>
+              <p className={styles.quote}>{testimonial.quote}</p>
+              <div className={styles.author}>
+                <img src={testimonial.avatar} alt={testimonial.name} className={styles.authorAvatar} />
+                <div className={styles.authorInfo}>
+                  <div className={styles.authorName}>{testimonial.name}</div>
+                  <div className={styles.authorTitle}>{testimonial.title}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
-};
-
-export default LandingPage;
+}
