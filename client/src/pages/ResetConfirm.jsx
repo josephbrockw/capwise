@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { InputOtp } from 'primereact/inputotp';
 import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button/Button';
 import FloatLabel from '../components/FloatLabel/FloatLabel';
+import OtpInput from '../components/ui/OtpInput/OtpInput';
 import AuthLayout from '../components/layout/AuthLayout/AuthLayout';
 
 import axios from 'axios';
@@ -16,7 +16,7 @@ const ResetConfirm = () => {
   const [searchParams] = useSearchParams();
   const paramToken = searchParams.get('token');
   const [formData, setFormData] = useState({
-    token: paramToken || null,
+    token: paramToken || '',
     password: '',
     password_confirm: '',
   });
@@ -33,22 +33,22 @@ const ResetConfirm = () => {
       ...formData,
       token: e.value,
     });
-  }
+  };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/password/reset/confirm`, formData);
-    if (response.status === 200) {
-      setMessage(response.data.message || 'Password reset successful. Please sign in.');
-    } else {
-      setErrorMessage(response.data.error || 'An error occurred. Please try again.');
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/password/reset/confirm`, formData);
+      if (response.status === 200) {
+        setMessage(response.data.message || 'Password reset successful. Please sign in.');
+      } else {
+        setErrorMessage(response.data.error || 'An error occurred. Please try again.');
+      }
+    } catch (error) {
+      console.error('There was an error attempting to reset your password.', error);
+      setErrorMessage(error.response?.data?.error || 'An error occurred. Please try again.');
     }
-  } catch (error) {
-    console.error('There was an error attempting to reset your password.', error);
-    setErrorMessage(error.response?.data?.error || 'An error occurred. Please try again.');
-  }
-};
+  };
 
   return (
     <AuthLayout
@@ -60,13 +60,32 @@ const ResetConfirm = () => {
       errorMessage={errorMessage}
     >
       <form onSubmit={handleSubmit}>
-        <div className="flex justify-content-center flex-wrap mb-3" data-cy="otp-container">
-          <InputOtp value={formData.token} onChange={handleOtpChange} length={6} mask/>
+        <div className="mb-3" data-cy="otp-container">
+          <OtpInput
+            value={formData.token || ''}
+            onChange={handleOtpChange}
+            length={6}
+            mask
+          />
         </div>
-        <FloatLabel id="password" label="Password" value={formData.password} onChange={handleChange} name="password"
-                    type="password" required/>
-        <FloatLabel id="password_confirm" label="Password Confirm" value={formData.password_confirm}
-                    onChange={handleChange} name="password_confirm" type="password" required/>
+        <FloatLabel
+          id="password"
+          label="Password"
+          value={formData.password}
+          onChange={handleChange}
+          name="password"
+          type="password"
+          required
+        />
+        <FloatLabel
+          id="password_confirm"
+          label="Password Confirm"
+          value={formData.password_confirm}
+          onChange={handleChange}
+          name="password_confirm"
+          type="password"
+          required
+        />
         <div className="flex align-items-center justify-content-between mb-6">
           <Link to="/login" className="text-primary-color" style={{textDecoration: 'none'}} data-cy='login-link'>
             Sign in

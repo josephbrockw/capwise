@@ -1,0 +1,6 @@
+.bb-chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px; /* Default height, can be overridden */
+  padding: 1rem;
+}

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Skeleton } from 'primereact/skeleton';
+import { useEffect, useState } from 'react';
+import { CardSkeleton } from '../../../components/ui/Skeleton/Skeleton';
 import 'chart.js/auto';
 import storageHelper from '../../../utils/storageHelper';
 import DashboardLayout from '../../../components/layout/DashboardLayout/DashboardLayout';
@@ -25,14 +25,14 @@ const Settings = () => {
   const tabs = [
     { id: 'account', label: 'Account', content: <AccountTab /> },
     { id: 'billing', label: 'Billing', content: <BillingTab /> },
-  ]
+  ];
 
   return (
     <DashboardLayout showSidebar={true}>
       {isLoading ? (
         <div className="dashboard-loading">
-          <Skeleton width="100%" height="2em" />
-          <Skeleton width="100%" height="20em" />
+          <CardSkeleton style={{ marginBottom: '2em' }} />
+          <CardSkeleton />
         </div>
       ) : (
         <div>

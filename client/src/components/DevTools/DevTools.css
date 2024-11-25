@@ -1,0 +1,54 @@
+.dev-tools {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.dev-tools * {
+  pointer-events: auto;
+}
+
+.dev-tools-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--borderRadius);
+  background: var(--surface);
+  border: none;
+  box-shadow: var(--shadowMedium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--inactiveTextColor);
+  transition: all var(--transitionDuration) var(--transitionTimingFunction);
+}
+
+.dev-tools-toggle:hover {
+  color: var(--textColor);
+  box-shadow: var(--shadowLarge);
+}
+
+.dev-tools-content {
+  margin-right: 10px;
+  width: 250px;
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all var(--transitionDuration) var(--transitionTimingFunction);
+  pointer-events: none;
+}
+
+.dev-tools.expanded .dev-tools-content {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dev-tools-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

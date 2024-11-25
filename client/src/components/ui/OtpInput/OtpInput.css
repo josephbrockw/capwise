@@ -1,0 +1,28 @@
+.otp-input-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.otp-input {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--lightGray);
+  border-radius: var(--borderRadius);
+  text-align: center;
+  font-size: var(--fontSizeLarge);
+  color: var(--textColor);
+  background: var(--surface);
+  transition: all var(--transitionDuration) var(--transitionTimingFunction);
+}
+
+.otp-input:focus {
+  outline: none;
+  border-color: var(--primaryColor);
+  box-shadow: 0 0 0 2px var(--primaryColor);
+}
+
+.otp-input:hover {
+  border-color: var(--primaryColor);
+}

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import Card from '../../components/ui/Card/Card';
 import Panel from '../../components/ui/Panel/Panel';
 import Button from '../../components/Button/Button';
-import { Chart } from 'primereact/chart';
-import { Skeleton } from 'primereact/skeleton';
-import 'chart.js/auto';
+import Chart from '../../components/ui/Chart/Chart';
+import { CardSkeleton, ChartPanelSkeleton } from '../../components/ui/Skeleton/Skeleton';
+import DevTools from '../../components/DevTools/DevTools';
 import storageHelper from '../../utils/storageHelper';
 import DashboardLayout from '../../components/layout/DashboardLayout/DashboardLayout';
 
@@ -35,12 +35,25 @@ const Dashboard = () => {
     ],
   };
 
+  const devTriggers = [
+    {
+      label: `Loading State: ${isLoading ? 'On' : 'Off'}`,
+      onClick: () => setIsLoading(!isLoading),
+      active: isLoading
+    }
+  ];
+
   return (
     <DashboardLayout showSidebar={true}>
+      {/* Development only - loading toggle button */}
+      {import.meta.env.DEV && (
+        <DevTools triggers={devTriggers} />
+      )}
+
       {isLoading ? (
         <div className="dashboard-loading">
-          <Skeleton width="100%" height="2em" />
-          <Skeleton width="100%" height="20em" />
+          <CardSkeleton style={{ marginBottom: '2em' }} />
+          <ChartPanelSkeleton />
         </div>
       ) : (
         <div>

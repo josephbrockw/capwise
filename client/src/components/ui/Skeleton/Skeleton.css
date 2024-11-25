@@ -1,0 +1,50 @@
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.bb-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--lightGray) 0%,
+    var(--backgroundColor) 50%,
+    var(--lightGray) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: var(--borderRadius);
+}
+
+.bb-skeleton-card,
+.bb-skeleton-panel {
+  background: var(--surface);
+  border-radius: var(--borderRadius);
+  padding: 1.25rem;
+  box-shadow: var(--shadowMedium);
+}
+
+.bb-skeleton-title {
+  height: 2rem;
+}
+
+.bb-skeleton-text {
+  height: 1rem;
+}
+
+.bb-skeleton-button {
+  height: 2.5rem;
+  width: 120px;
+}
+
+.bb-skeleton-chart {
+  height: 300px;
+}
+
+/* Adjust heights based on variant */
+.bb-skeleton-rect {
+  height: 100px;
+}
