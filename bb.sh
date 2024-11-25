@@ -15,6 +15,7 @@ usage() {
     echo "  test           - Run the full test suite or selective tests."
     echo "                   - Accepts '-b' to run only Django tests."
     echo "                   - Accepts '-c' to run only Cypress tests."
+    echo "                   - Accepts '--open' to open Cypress test client."
     echo "                   - Accepts '--type=testtype' and '--k=keyword' for filtering Django tests."
     echo "  clean          - Shuts down Docker containers and rebuilds new ones."
     echo "  shell          - Enters the user into a Django shell inside the backend container."
@@ -146,6 +147,7 @@ case $workflow in
         run_cypress_tests=true
         django_command="docker compose exec backend pytest"
         cypress_command="(cd client && npm run cypress:run --browser chrome)"
+        cypress_open_command="(cd client && npm run cypress:open)"
 
         # Parse options
         for arg in "$@"; do
@@ -163,6 +165,9 @@ case $workflow in
                 --k=*)
                     k=" -k ${arg#*=}"
                     django_command+="$k"
+                    ;;
+                --open)
+                    cypress_command="$cypress_open_command"
                     ;;
                 -s)
                     django_command+=" -s"

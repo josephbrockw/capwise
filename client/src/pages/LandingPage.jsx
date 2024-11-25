@@ -1,7 +1,6 @@
 // client/src/pages/Landing.js
-import React from 'react';
-import { Button } from 'primereact/button';  // PrimeReact Button component
 import { Link } from 'react-router-dom';
+import Button from '../components/Button/Button';
 import hero from '../assets/images/hero.jpg';
 
 const LandingPage = () => {
@@ -17,10 +16,10 @@ const LandingPage = () => {
                                                             do eiusmod tempor incididunt ut labore et dolore magna
                                                             aliqua.</p>
             <Link to="/register" style={{textDecoration: 'none'}} data-cy="registration-button">
-              <Button label="Sign Up" type="button" className="mr-3 p-button-raised"/>
+              <Button label="Sign Up" className="mr-3" />
             </Link>
             <Link to="/login" style={{textDecoration: 'none'}} data-cy="login-button">
-              <Button label="Login" type="button" className="p-button-outlined"/>
+              <Button label="Login" className="outlined" />
             </Link>
           </section>
         </div>

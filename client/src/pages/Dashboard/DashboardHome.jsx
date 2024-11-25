@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from 'primereact/card';
 import { Panel } from 'primereact/panel';
-import { Button } from 'primereact/button';
+import Button from '../../components/Button/Button';
 import { Chart } from 'primereact/chart';
 import { Skeleton } from 'primereact/skeleton';
 import 'chart.js/auto';
