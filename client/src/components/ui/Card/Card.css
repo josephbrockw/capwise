@@ -1,0 +1,20 @@
+.bb-card {
+  background: var(--surface);
+  border-radius: var(--borderRadius);
+  padding: 1.25rem;
+  box-shadow: var(--shadowMedium);
+  margin-bottom: 1rem;
+}
+
+.bb-card-title {
+  font-family: var(--fontFamilyTitle);
+  font-size: var(--fontSizeLarge);
+  font-weight: var(--fontWeightBold);
+  margin-bottom: 1rem;
+  color: var(--textColor);
+}
+
+.bb-card-content {
+  color: var(--inactiveTextColor);
+  line-height: var(--lineHeightBase);
+}

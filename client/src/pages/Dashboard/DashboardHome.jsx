@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Card } from 'primereact/card';
-import { Panel } from 'primereact/panel';
+import Card from '../../components/ui/Card/Card';
+import Panel from '../../components/ui/Panel/Panel';
 import Button from '../../components/Button/Button';
 import { Chart } from 'primereact/chart';
 import { Skeleton } from 'primereact/skeleton';
