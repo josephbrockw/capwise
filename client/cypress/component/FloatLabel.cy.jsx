@@ -55,9 +55,26 @@ describe('FloatLabel', () => {
     const defaultProps = getDefaultProps();
     cy.mount(<FloatLabel {...defaultProps} />);
 
-    const testValue = 'test input';
-    cy.get('input').type(testValue);
+    cy.get('input').type('test value');
     cy.get('@onChange').should('have.been.called');
+  });
+
+  it('should pass through additional props to input element', () => {
+    const defaultProps = getDefaultProps();
+    const additionalProps = {
+      'data-cy': 'test-input',
+      'aria-label': 'Test Input',
+      placeholder: 'Enter test value',
+      maxLength: '50'
+    };
+
+    cy.mount(<FloatLabel {...defaultProps} {...additionalProps} />);
+
+    cy.get('input')
+      .should('have.attr', 'data-cy', 'test-input')
+      .and('have.attr', 'aria-label', 'Test Input')
+      .and('have.attr', 'placeholder', 'Enter test value')
+      .and('have.attr', 'maxLength', '50');
   });
 
   it('should render with different input types', () => {

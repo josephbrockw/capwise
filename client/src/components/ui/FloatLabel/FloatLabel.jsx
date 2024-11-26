@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './FloatLabel.css';
 
-const FloatLabel = ({ id, label, value, onChange, type = 'text', name, required = false }) => {
+const FloatLabel = ({ id, label, value, onChange, type = 'text', name, required = false, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   // Check if the label should float
@@ -20,6 +20,7 @@ const FloatLabel = ({ id, label, value, onChange, type = 'text', name, required 
         onBlur={() => setIsFocused(false)}
         className="float-label-input"
         required={required}
+        {...props}
       />
       <label htmlFor={id} className="float-label">
         {label}

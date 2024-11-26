@@ -18,11 +18,46 @@ const AccountTab = () => {
 
   useEffect(() => {
     const loadUserData = async () => {
-      const userData = await storageHelper.getUserData();
-      if (userData) {
-        const { first_name, last_name, preferred_name } = userData;
-        setFormData({ first_name: first_name || '', last_name: last_name || '', preferred_name: preferred_name || '' });
-        setOriginalData({ first_name, last_name, preferred_name });
+      try {
+        // First try to load from localStorage
+        const userData = await storageHelper.getUserData();
+        if (userData?.first_name) {
+          const { first_name, last_name, preferred_name } = userData;
+          setFormData({
+            first_name: first_name || '',
+            last_name: last_name || '',
+            preferred_name: preferred_name || ''
+          });
+          setOriginalData({ first_name, last_name, preferred_name });
+          return;
+        }
+
+        // If no data in localStorage, fetch from API
+        const token = storageHelper.getItem('token');
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data?.data) {
+          const { first_name, last_name, preferred_name } = response.data.data;
+          setFormData({
+            first_name: first_name || '',
+            last_name: last_name || '',
+            preferred_name: preferred_name || ''
+          });
+          setOriginalData({ first_name, last_name, preferred_name });
+          storageHelper.setItem('userData', response.data.data);
+        }
+      } catch (err) {
+        setToast({
+          type: 'error',
+          message: err.response?.data?.error || 'Failed to load user data'
+        });
       }
     };
     loadUserData();
@@ -50,46 +85,39 @@ const AccountTab = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setToast(null);
-
-    const changes = getChangedFields();
-
-    // Only make the request if there are actual changes
-    if (Object.keys(changes).length === 0) {
-      setIsLoading(false);
-      return;
-    }
-
     try {
       const token = storageHelper.getItem('token');
+      const changedFields = getChangedFields();
+
       const response = await axios.patch(
         `${import.meta.env.VITE_API_BASE_URL}/api/users/me`,
-        changes,
+        changedFields,
         {
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (response.data) {
-        setOriginalData(prev => ({ ...prev, ...changes }));
+      if (response.data?.data) {
         storageHelper.setItem('userData', response.data.data);
+        setOriginalData({ ...formData });
         setToast({
           type: 'success',
-          message: 'Profile updated successfully!'
+          message: response.data.message || 'User information updated successfully.'
         });
       }
     } catch (err) {
       setToast({
         type: 'error',
-        message: err.response?.data?.message || 'An error occurred while updating your profile'
+        message: err.response?.data?.error || 'An error occurred while updating your information.'
       });
     } finally {
       setIsLoading(false);
     }
   };
+
+  const hasChanges = Object.keys(getChangedFields()).length > 0;
 
   return (
     <div className="account-tab">
@@ -98,8 +126,8 @@ const AccountTab = () => {
 
       {toast && (
         <Toast
-          type={toast.type}
           message={toast.message}
+          type={toast.type}
           onClose={() => setToast(null)}
           data-cy={`${toast.type}-message`}
         />
@@ -108,29 +136,31 @@ const AccountTab = () => {
       <form onSubmit={handleSubmit} className="account-form">
         <div className="form-group">
           <FloatLabel
-            type="text"
+            id="first-name"
             name="first_name"
             label="First Name"
             value={formData.first_name}
             onChange={handleInputChange}
             data-cy="first-name-input"
+            required
           />
         </div>
 
         <div className="form-group">
           <FloatLabel
-            type="text"
+            id="last-name"
             name="last_name"
             label="Last Name"
             value={formData.last_name}
             onChange={handleInputChange}
             data-cy="last-name-input"
+            required
           />
         </div>
 
         <div className="form-group">
           <FloatLabel
-            type="text"
+            id="preferred-name"
             name="preferred_name"
             label="Preferred Name"
             value={formData.preferred_name}
@@ -142,9 +172,11 @@ const AccountTab = () => {
         <Button
           type="submit"
           label={isLoading ? 'Saving...' : 'Save Changes'}
-          disabled={isLoading || Object.keys(getChangedFields()).length === 0}
+          disabled={isLoading || !hasChanges}
           data-cy="save-profile-button"
-        />
+        >
+          Save Changes
+        </Button>
       </form>
     </div>
   );
