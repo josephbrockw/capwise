@@ -15,8 +15,10 @@ usage() {
     echo "  test           - Run the full test suite or selective tests."
     echo "                   - Accepts '-b' to run only Django tests."
     echo "                   - Accepts '-c' to run only Cypress tests."
-    echo "                   - Accepts '--open' to open Cypress test client."
     echo "                   - Accepts '--type=testtype' and '--k=keyword' for filtering Django tests."
+    echo "                   - Accepts '--open' to open Cypress test client."
+    echo "                   - Accepts '--component' to run only Cypress component tests."
+    echo "                   - Accepts '--e2e' to run only Cypress end-to-end tests."
     echo "  clean          - Shuts down Docker containers and rebuilds new ones."
     echo "  shell          - Enters the user into a Django shell inside the backend container."
     echo "  psql           - Enters the user into a Postgres shell inside the db container."
@@ -43,10 +45,18 @@ test_help() {
 }
 
 # Function for cypress help
-cypress_help() {
-    echo "Cypress Help:"
-    echo "Usage: $0 cypress"
-    echo "Description: Runs the cypress tests."
+test_help() {
+    echo "Test Help:"
+    echo "Usage: $0 test [options]"
+    echo "Description: Runs the full test suite or specific test subsets."
+    echo "Options:"
+    echo "  -b                Run only the Django tests."
+    echo "  -c                Run only the Cypress tests (E2E and component)."
+    echo "  --e2e             Run only Cypress end-to-end (E2E) tests."
+    echo "  --component       Run only Cypress component tests."
+    echo "  --open            Open the Cypress test runner."
+    echo "  --type=testtype   Run functional or unit tests in isolation (Django tests)."
+    echo "  --k=keyword       Run Django tests matching a specific keyword in the name."
 }
 
 # Function for full suite testing help
@@ -142,20 +152,39 @@ case $workflow in
             exit 0
         fi
 
-        # Default behavior: run both Django and Cypress tests
         run_django_tests=true
-        run_cypress_tests=true
-        django_command="docker compose exec backend pytest"
-        cypress_command="(cd client && npm run cypress:run --browser chrome)"
-        cypress_open_command="(cd client && npm run cypress:open)"
+        run_cypress_e2e_tests=true
+        run_cypress_component_tests=true
 
-        # Parse options
+#        if [ $# -eq 0 ]; then
+#            echo "Running full test suite..."
+#            run_django_tests=true
+#            run_cypress_tests=true
+#            run_cypress_component_tests=true
+#            run_cypress_e2e_tests=true
+#        fi
+
         for arg in "$@"; do
             case $arg in
                 -b)
-                    run_cypress_tests=false
+                    run_cypress_e2e_tests=false
+                    run_cypress_component_tests=false
                     ;;
                 -c)
+                    run_django_tests=false
+                    ;;
+                --e2e)
+                    run_cypress_component_tests=false
+                    run_django_tests=false
+                    ;;
+                --component)
+                    run_cypress_e2e_tests=false
+                    run_django_tests=false
+                    ;;
+                --open)
+                    cypress_open_command="(cd client && npm run cypress:open)"
+                    run_cypress_e2e_tests=false
+                    run_cypress_component_tests=false
                     run_django_tests=false
                     ;;
                 --type=*)
@@ -165,9 +194,6 @@ case $workflow in
                 --k=*)
                     k=" -k ${arg#*=}"
                     django_command+="$k"
-                    ;;
-                --open)
-                    cypress_command="$cypress_open_command"
                     ;;
                 -s)
                     django_command+=" -s"
@@ -183,13 +209,22 @@ case $workflow in
         # Run tests
         if [[ $run_django_tests == true ]]; then
             echo "Running Django tests..."
-            echo "$django_command"
-            eval "$django_command"
+            exec_backend pytest
         fi
-        if [[ $run_cypress_tests == true ]]; then
-            echo "Running Cypress tests..."
-            echo "$cypress_command"
-            eval "$cypress_command"
+        if [[ $run_cypress_e2e_tests == true ]]; then
+            echo "Running Cypress end-to-end (E2E) tests..."
+            (cd client && npx cypress run --browser chrome --e2e)
+        fi
+        if [[ $run_cypress_component_tests == true ]]; then
+            echo "Running Cypress component tests..."
+            (cd client && npx cypress run --browser chrome --component)        fi
+        if [[ $cypress_open_command ]]; then
+            echo "Opening Cypress test runner..."
+            eval "$cypress_open_command"
+        fi
+        if [[ $cypress_open_command ]]; then
+            echo "Opening Cypress test runner..."
+            eval "$cypress_open_command"
         fi
         ;;
     clean)

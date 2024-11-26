@@ -137,7 +137,6 @@ if [ "$response" = "y" ]; then
     install_dev_helper
     green_echo "Dev setup complete! Activate the virtual environment with 'source bb-dev/bin/activate'."
 elif [ "$response" = "n" ]; then
-    setup_precommit
     install_dev_helper
     green_echo "Skipping installs."
 else
