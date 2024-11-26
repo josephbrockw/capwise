@@ -30,6 +30,7 @@ class UserViewSetTest(APITestCase):
         self.assertEqual(msg, "User details retrieved successfully.")
         self.assertEqual(data["username"], self.user.username)
         self.assertEqual(data["email"], self.user.email)
+        self.assertEqual(data["preferred_name"], "")
         self.assertEqual(data["first_name"], self.user.first_name)
         self.assertEqual(data["last_name"], self.user.last_name)
 
@@ -37,6 +38,7 @@ class UserViewSetTest(APITestCase):
         update_data = {
             "first_name": "Updated",
             "last_name": "Name",
+            "preferred_name": "Preferred",
         }
         response = self.client.patch("/api/users/me", data=update_data)
         data, msg, err, code = read_api_response(response)
@@ -45,6 +47,7 @@ class UserViewSetTest(APITestCase):
         self.assertEqual(msg, "User information updated successfully.")
         self.assertEqual(data["first_name"], update_data["first_name"])
         self.assertEqual(data["last_name"], update_data["last_name"])
+        self.assertEqual(data["preferred_name"], update_data["preferred_name"])
 
     def test_partial_update_user(self):
         update_data = {

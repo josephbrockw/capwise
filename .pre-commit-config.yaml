@@ -27,8 +27,12 @@ repos:
     rev: v1.13.0
     hooks:
       - id: mypy
+        additional_dependencies:
+          - django-stubs
+          - djangorestframework-stubs
         args:
           - "--exclude=bb-dev/"
+          - "--ignore-missing-imports"
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
@@ -41,7 +45,6 @@ repos:
     rev: v8.56.0
     hooks:
       - id: eslint
-#        files: \.(js|jsx)$
         files: \.(js|jsx|ts|tsx|cy\.js|cy\.jsx)$
         additional_dependencies:
           - eslint@8.56.0

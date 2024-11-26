@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }) => {
   const menuItems = [
     {
       label: 'Settings',
-      href: '/dashboard/settings',
+      href: '/settings',
       items: [
         { label: 'Profile', href: '/settings#account' },
         { label: 'Billing', href: '/settings#billing' },

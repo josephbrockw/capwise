@@ -58,6 +58,11 @@
   padding: 1rem 0;
 }
 
+/* Space already provided by other elements */
+.tabs-content h2 {
+  margin-top: 0;
+}
+
 /* Ensure hidden panels are not visible */
 .tab-panel {
   display: none;
