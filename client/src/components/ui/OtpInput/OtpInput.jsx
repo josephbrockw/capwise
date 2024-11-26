@@ -11,8 +11,26 @@ const OtpInput = ({ length = 6, value = '', onChange, mask = false }) => {
     setOtp(value.split('').concat(Array(length - value.length).fill('')));
   }, [value, length]);
 
+  const clearInput = (index) => {
+    const newOtp = [...otp];
+    newOtp[index] = '';
+    setOtp(newOtp);
+    onChange({ value: newOtp.join('') });
+  };
+
   const handleChange = (e, index) => {
     const newValue = e.target.value;
+
+    // Handle backspace/delete
+    if (newValue === '') {
+      clearInput(index);
+      if (index > 0) {
+        inputRefs.current[index - 1].focus();
+      }
+      return;
+    }
+
+    // Handle regular input
     if (newValue.length > 1) return; // Prevent pasting multiple characters
 
     const newOtp = [...otp];
@@ -29,9 +47,20 @@ const OtpInput = ({ length = 6, value = '', onChange, mask = false }) => {
   };
 
   const handleKeyDown = (e, index) => {
-    // Move to previous input on backspace
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      inputRefs.current[index - 1].focus();
+    if (e.key === 'Backspace') {
+      e.preventDefault(); // Prevent the default backspace behavior
+
+      // If current input is empty and not first input, move to previous and clear it
+      if (!otp[index] && index > 0) {
+        clearInput(index - 1);  // Clear the previous input
+        inputRefs.current[index - 1].focus();
+      } else {
+        // Clear current input and move to previous if not first
+        clearInput(index);
+        if (index > 0) {
+          inputRefs.current[index - 1].focus();
+        }
+      }
     }
   };
 
