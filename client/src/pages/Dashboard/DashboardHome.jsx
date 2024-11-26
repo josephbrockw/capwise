@@ -64,7 +64,7 @@ const Dashboard = () => {
 
           {chartData && (
             <Panel header="Usage Statistics" style={{ marginBottom: '2em' }}>
-              <Chart type="bar" data={chartData} />
+              <Chart type="line" data={chartData} />
             </Panel>
           )}
         </div>

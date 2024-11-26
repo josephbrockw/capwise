@@ -22,9 +22,13 @@ const Chart = ({ type, data, options = {}, className = '', ...props }) => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          animation: false, // Disable animations for testing
           ...options,
         },
       });
+
+      // Store the chart instance on the canvas element for testing
+      chartRef.current.__chartInstance = chartInstance.current;
     }
 
     // Cleanup on unmount
