@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
-import Button from '../components/Button/Button';
-import FloatLabel from '../components/FloatLabel/FloatLabel';
+import Button from '../components/ui/Button/Button';
+import FloatLabel from '../components/ui/FloatLabel/FloatLabel';
 import OtpInput from '../components/ui/OtpInput/OtpInput';
 import AuthLayout from '../components/layout/AuthLayout/AuthLayout';
 

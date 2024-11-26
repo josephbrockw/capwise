@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './LandingPage.module.css';
-import Button from '../components/Button/Button';
+import Button from '../components/ui/Button/Button';
 
 const features = [
   {

@@ -1,16 +1,17 @@
-describe('Landing Page', () => {
-  it('Should be able to navigate to registration page', () => {
-    cy.visit('/landing');
-    cy.get('[data-cy=registration-button]').click();
-    cy.url().should('include', '/register');
-  });
-
-  it('Should be able to navigate to login page', () => {
-    cy.visit('/landing');
-    cy.get('[data-cy=login-button]').click();
-    cy.url().should('include', '/login');
-  });
-});
+// TODO: reimplement landing page tests with new landing page
+// describe('Landing Page', () => {
+//   it('Should be able to navigate to registration page', () => {
+//     cy.visit('/landing');
+//     cy.get('[data-cy=registration-button]').click();
+//     cy.url().should('include', '/register');
+//   });
+//
+//   it('Should be able to navigate to login page', () => {
+//     cy.visit('/landing');
+//     cy.get('[data-cy=login-button]').click();
+//     cy.url().should('include', '/login');
+//   });
+// });
 
 describe('Login Page', () => {
   it('Should be able to navigate to registration page', () => {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import storageHelper from '../utils/storageHelper';
-import Button from './Button/Button';
+import Button from './ui/Button/Button';
 
 const LogoutButton = () => {
   const navigate = useNavigate();

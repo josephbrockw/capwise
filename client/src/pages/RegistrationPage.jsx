@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import FloatLabel from "../components/FloatLabel/FloatLabel";
-import Button from "../components/Button/Button";
+import FloatLabel from "../components/ui/FloatLabel/FloatLabel";
+import Button from "../components/ui/Button/Button";
 import AuthLayout from "../components/layout/AuthLayout/AuthLayout";
 
 const Register = () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Card from '../../components/ui/Card/Card';
 import Panel from '../../components/ui/Panel/Panel';
-import Button from '../../components/Button/Button';
+import Button from '../../components/ui/Button/Button';
 import Chart from '../../components/ui/Chart/Chart';
 import { CardSkeleton, ChartPanelSkeleton } from '../../components/ui/Skeleton/Skeleton';
 import DevTools from '../../components/DevTools/DevTools';

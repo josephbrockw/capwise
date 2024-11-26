@@ -1,16 +1,24 @@
-import { defineConfig } from 'cypress';
-import { defineConfig as defineViteConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import cypressVite from 'cypress-vite';
+import { defineConfig } from "cypress";
+import react from "@vitejs/plugin-react";
 
-console.log('Cypress config is being loaded with baseUrl:', 'http://localhost:3001');
+console.log(
+  "Cypress config is being loaded with baseUrl:",
+  "http://localhost:3001"
+);
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3001',
+    baseUrl: "http://localhost:3001",
     video: false,
-    setupNodeEvents(on, config) {
-      on('file:preprocessor', cypressVite());
+  },
+
+  component: {
+    devServer: {
+      framework: "react",
+      bundler: "vite",
+      viteConfig: {
+        plugins: [react()],
+      },
     },
   },
 });
