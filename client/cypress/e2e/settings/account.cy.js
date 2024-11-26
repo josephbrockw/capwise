@@ -1,11 +1,11 @@
 describe('Account Settings Page', () => {
   const mockUserData = {
     id: '6722e8bd-48db-4bfd-b637-e4516490a6fc',
-    username: 'joe',
-    preferred_name: 'Joseph',
-    first_name: 'Joe',
-    last_name: 'Wilkinson',
-    email: 'me@thejoewilkinson.com'
+    username: 'gytha',
+    preferred_name: 'Nanny',
+    first_name: 'Gytha',
+    last_name: 'Ogg',
+    email: 'gytha@lancre.gov'
   };
 
   beforeEach(() => {
@@ -51,7 +51,7 @@ describe('Account Settings Page', () => {
   it('successfully updates user information', () => {
     const updatedData = {
       ...mockUserData,
-      preferred_name: 'Joey'
+      preferred_name: 'Mother'
     };
 
     // Intercept the PATCH request
@@ -200,7 +200,7 @@ describe('Account Settings Page', () => {
   });
 
   it('reverts unsaved changes on page reload', () => {
-    const newName = 'Joey';
+    const newName = 'Gy';
 
     // Make a change
     cy.get('[data-cy="preferred-name-input"]').as('prefNameInput');

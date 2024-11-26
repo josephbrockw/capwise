@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Colors for output
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+BOLD='\033[1m'
+
+# Arrays to store test results
+declare -a failed_tests
+django_exit_code=0
+cypress_e2e_exit_code=0
+cypress_component_exit_code=0
+
 exec_backend() {
     docker compose exec backend "$@"
 }
@@ -136,6 +148,21 @@ loaddata_help() {
     echo "Description: Loads data from a specified fixture file path into the database."
 }
 
+# Function to display test summary
+display_test_summary() {
+    echo -e "\n${BOLD}Test Summary:${NC}"
+
+    if [ ${#failed_tests[@]} -eq 0 ]; then
+        echo -e "${GREEN}✓ All tests passed successfully!${NC}"
+    else
+        echo -e "${RED}⨯ The following tests failed:${NC}"
+        for failure in "${failed_tests[@]}"; do
+            echo -e "${RED}  - $failure${NC}"
+        done
+        exit 1
+    fi
+}
+
 # Check if at least one argument is provided
 if [ $# -lt 1 ]; then
     usage
@@ -206,26 +233,38 @@ case $workflow in
             esac
         done
 
-        # Run tests
+        # Run tests with result capturing
         if [[ $run_django_tests == true ]]; then
-            echo "Running Django tests..."
-            exec_backend pytest
+            echo -e "\n${BOLD}Running Django tests...${NC}"
+            if ! exec_backend pytest -q; then
+                django_exit_code=1
+                failed_tests+=("Django tests")
+            fi
         fi
+
         if [[ $run_cypress_e2e_tests == true ]]; then
-            echo "Running Cypress end-to-end (E2E) tests..."
-            (cd client && npx cypress run --browser chrome --e2e)
+            echo -e "\n${BOLD}Running Cypress end-to-end (E2E) tests...${NC}"
+            if ! (cd client && npx cypress run --browser chrome --e2e); then
+                cypress_e2e_exit_code=1
+                failed_tests+=("Cypress E2E tests")
+            fi
         fi
+
         if [[ $run_cypress_component_tests == true ]]; then
-            echo "Running Cypress component tests..."
-            (cd client && npx cypress run --browser chrome --component)        fi
+            echo -e "\n${BOLD}Running Cypress component tests...${NC}"
+            if ! (cd client && npx cypress run --browser chrome --component); then
+                cypress_component_exit_code=1
+                failed_tests+=("Cypress component tests")
+            fi
+        fi
+
         if [[ $cypress_open_command ]]; then
-            echo "Opening Cypress test runner..."
+            echo -e "\n${BOLD}Opening Cypress test runner...${NC}"
             eval "$cypress_open_command"
         fi
-        if [[ $cypress_open_command ]]; then
-            echo "Opening Cypress test runner..."
-            eval "$cypress_open_command"
-        fi
+
+        # Display test summary at the end
+        display_test_summary
         ;;
     clean)
         if [[ "$1" == "--help" ]]; then
