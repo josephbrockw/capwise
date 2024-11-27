@@ -283,9 +283,9 @@ case $workflow in
 
         if [ "$run_vitest_tests" = true ]; then
             echo "Running Vitest tests..."
-            cd client && npm test
-            vitest_exit_code=$?
-            cd ..
+            if ! (cd client && npm run test:run); then
+                vitest_exit_code=1
+            fi
         fi
 
         display_test_summary

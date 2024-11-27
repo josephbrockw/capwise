@@ -5,7 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import inlineLogo from '../../../assets/images/inlineLogo.png';
 import './AuthLayout.css';
 
-const AuthLayout = ({ title, subtext, sublinkText, sublinkUrl, message, errorMessage, children }) => {
+const AuthLayout = ({
+  title,
+  subtext = '',
+  sublinkText = '',
+  sublinkUrl = '',
+  message = '',
+  errorMessage = '',
+  children
+}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -69,14 +77,6 @@ AuthLayout.propTypes = {
   message: PropTypes.string,
   errorMessage: PropTypes.string,
   children: PropTypes.node.isRequired,
-};
-
-AuthLayout.defaultProps = {
-  subtext: '',
-  sublinkText: '',
-  sublinkUrl: '',
-  message: '',
-  errorMessage: '',
 };
 
 export default AuthLayout;
