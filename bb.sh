@@ -11,6 +11,7 @@ declare -a failed_tests
 django_exit_code=0
 cypress_e2e_exit_code=0
 cypress_component_exit_code=0
+vitest_exit_code=0
 
 exec_backend() {
     docker compose exec backend "$@"
@@ -26,11 +27,12 @@ usage() {
     echo "Available workflows:"
     echo "  test           - Run the full test suite or selective tests."
     echo "                   - Accepts '-b' to run only Django tests."
-    echo "                   - Accepts '-c' to run only Cypress tests."
-    echo "                   - Accepts '--type=testtype' and '--k=keyword' for filtering Django tests."
-    echo "                   - Accepts '--open' to open Cypress test client."
+    echo "                   - Accepts '-c' to run all client tests (Cypress E2E, Cypress Component, Vitest)."
+    echo "                   - Accepts '-v' to run only Vitest tests."
     echo "                   - Accepts '--component' to run only Cypress component tests."
     echo "                   - Accepts '--e2e' to run only Cypress end-to-end tests."
+    echo "                   - Accepts '--type=testtype' and '--k=keyword' for filtering Django tests."
+    echo "                   - Accepts '--open' to open Cypress test client."
     echo "  clean          - Shuts down Docker containers and rebuilds new ones."
     echo "  shell          - Enters the user into a Django shell inside the backend container."
     echo "  psql           - Enters the user into a Postgres shell inside the db container."
@@ -51,8 +53,12 @@ test_help() {
     echo "Description: Runs the full test suite or specific test subsets."
     echo "Options:"
     echo "  -b                Run only the Django tests."
-    echo "  -c                Run only the Cypress tests."
-    echo "  --type=testtype   Run functional or unit tests in isolation."
+    echo "  -c                Run all the client tests (E2E, component, and unit)."
+    echo "  --client-unit     Run only the Vitest tests."
+    echo "  --e2e             Run only Cypress end-to-end (E2E) tests."
+    echo "  --component       Run only Cypress component tests."
+    echo "  --open            Open the Cypress test runner."
+    echo "  --type=testtype   Run functional or unit tests in isolation (Django tests)."
     echo "  --k=keyword       Run Django tests matching a specific keyword in the name."
 }
 
@@ -113,7 +119,7 @@ coverage_help() {
 quality_help() {
     echo "Quality Help"
     echo "Usage: $0 quality [options]"
-    echo "Description: Runs flake8, black, and isort before running a coverage report for the full test suite"
+    echo "Description: Runs flake8, black, and isort."
 }
 
 dumpdata_help() {
@@ -152,6 +158,19 @@ loaddata_help() {
 display_test_summary() {
     echo -e "\n${BOLD}Test Summary:${NC}"
 
+    if [ $django_exit_code -ne 0 ]; then
+        failed_tests+=("Django tests")
+    fi
+    if [ $cypress_e2e_exit_code -ne 0 ]; then
+        failed_tests+=("Cypress E2E tests")
+    fi
+    if [ $cypress_component_exit_code -ne 0 ]; then
+        failed_tests+=("Cypress Component tests")
+    fi
+    if [ $vitest_exit_code -ne 0 ]; then
+        failed_tests+=("Vitest tests")
+    fi
+
     if [ ${#failed_tests[@]} -eq 0 ]; then
         echo -e "${GREEN}✓ All tests passed successfully!${NC}"
     else
@@ -182,88 +201,93 @@ case $workflow in
         run_django_tests=true
         run_cypress_e2e_tests=true
         run_cypress_component_tests=true
-
-#        if [ $# -eq 0 ]; then
-#            echo "Running full test suite..."
-#            run_django_tests=true
-#            run_cypress_tests=true
-#            run_cypress_component_tests=true
-#            run_cypress_e2e_tests=true
-#        fi
+        run_vitest_tests=true
 
         for arg in "$@"; do
             case $arg in
                 -b)
                     run_cypress_e2e_tests=false
                     run_cypress_component_tests=false
+                    run_vitest_tests=false
                     ;;
                 -c)
                     run_django_tests=false
                     ;;
-                --e2e)
-                    run_cypress_component_tests=false
+                -v)
                     run_django_tests=false
+                    run_cypress_e2e_tests=false
+                    run_cypress_component_tests=false
+                    ;;
+                --e2e)
+                    run_django_tests=false
+                    run_cypress_component_tests=false
+                    run_vitest_tests=false
                     ;;
                 --component)
-                    run_cypress_e2e_tests=false
                     run_django_tests=false
+                    run_cypress_e2e_tests=false
+                    run_vitest_tests=false
                     ;;
                 --open)
                     cypress_open_command="(cd client && npm run cypress:open)"
                     run_cypress_e2e_tests=false
                     run_cypress_component_tests=false
                     run_django_tests=false
+                    run_vitest_tests=false
                     ;;
                 --type=*)
-                    type="${arg#*=}"
-                    django_command+=" /$type"
+                    test_type="${arg#*=}"
                     ;;
                 --k=*)
-                    k=" -k ${arg#*=}"
-                    django_command+="$k"
-                    ;;
-                -s)
-                    django_command+=" -s"
+                    test_keyword="${arg#*=}"
                     ;;
                 *)
                     echo "Unknown argument: $arg"
                     test_help
-                    exit 2
+                    exit 1
                     ;;
             esac
         done
 
-        # Run tests with result capturing
-        if [[ $run_django_tests == true ]]; then
-            echo -e "\n${BOLD}Running Django tests...${NC}"
-            if ! exec_backend pytest -q; then
-                django_exit_code=1
-                failed_tests+=("Django tests")
-            fi
+        if [ -n "$cypress_open_command" ]; then
+            echo "Opening Cypress test runner..."
+            eval "$cypress_open_command"
+            exit 0
         fi
 
-        if [[ $run_cypress_e2e_tests == true ]]; then
-            echo -e "\n${BOLD}Running Cypress end-to-end (E2E) tests...${NC}"
+        if [ "$run_django_tests" = true ]; then
+            echo "Running Django tests..."
+            if [ -n "$test_type" ]; then
+                exec_backend pytest -p no:warnings -v -k "$test_type"
+            elif [ -n "$test_keyword" ]; then
+                exec_backend pytest -p no:warnings -v -k "$test_keyword"
+            else
+                exec_backend pytest -p no:warnings
+            fi
+            django_exit_code=$?
+        fi
+
+        if [ "$run_cypress_e2e_tests" = true ]; then
+            echo "Running Cypress E2E tests..."
             if ! (cd client && npx cypress run --browser chrome --e2e); then
                 cypress_e2e_exit_code=1
-                failed_tests+=("Cypress E2E tests")
             fi
         fi
 
-        if [[ $run_cypress_component_tests == true ]]; then
-            echo -e "\n${BOLD}Running Cypress component tests...${NC}"
+        if [ "$run_cypress_component_tests" = true ]; then
+            echo "Running Cypress Component tests..."
             if ! (cd client && npx cypress run --browser chrome --component); then
                 cypress_component_exit_code=1
-                failed_tests+=("Cypress component tests")
             fi
         fi
 
-        if [[ $cypress_open_command ]]; then
-            echo -e "\n${BOLD}Opening Cypress test runner...${NC}"
-            eval "$cypress_open_command"
+        if [ "$run_vitest_tests" = true ]; then
+            echo "Running Vitest tests..."
+            cd client && npm test
+            vitest_exit_code=$?
+            cd ..
         fi
 
-        # Display test summary at the end
         display_test_summary
         ;;
     clean)
@@ -383,7 +407,7 @@ case $workflow in
         fi
         CMD="docker compose exec backend python manage.py makemigrations"
         if [[ "$1" == "--name" ]]; then
-            CMD"$CMD --name $2"
+            CMD="$CMD --name $2"
         fi
         echo "Making migrations..."
         $CMD

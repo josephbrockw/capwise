@@ -8,11 +8,14 @@ from rest_framework.exceptions import (
     ValidationError,
 )
 from rest_framework.views import APIView
-from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 
 STANDARD_MESSAGES = {
     "request_successful": "Request successful",
     "error_occurred": "An error occurred",
+    "token_invalid": "Your session has expired. Please sign in again.",
+    "token_not_found": "Authentication required. Please sign in.",
+    "permission_denied": "You don't have permission to perform this action.",
 }
 
 
@@ -38,7 +41,6 @@ class StandardException(Exception):
 
 class StandardMixin:
     def handle_exception(self, exc):
-        print(type(exc))
         if isinstance(exc, StandardException):
             response = StandardResponse(
                 error=exc.message,
@@ -46,17 +48,30 @@ class StandardMixin:
                 status=exc.status,
             )
             return response
-        elif isinstance(exc, AuthenticationFailed):
+        elif isinstance(exc, (AuthenticationFailed, InvalidToken)):
+            error_detail = force_str(exc)
+            if "token_not_valid" in error_detail:
+                return StandardResponse(
+                    error=STANDARD_MESSAGES["token_invalid"],
+                    error_code="TOKEN_EXPIRED",
+                    status=401,
+                )
             return StandardResponse(
-                error=force_str(exc), error_code="AUTHENTICATION_FAILED", status=401
+                error=STANDARD_MESSAGES["token_not_found"],
+                error_code="AUTHENTICATION_FAILED",
+                status=401,
             )
         elif isinstance(exc, NotAuthenticated):
             return StandardResponse(
-                error=force_str(exc), error_code="NOT_AUTHENTICATED", status=401
+                error=STANDARD_MESSAGES["token_not_found"],
+                error_code="NOT_AUTHENTICATED",
+                status=401,
             )
         elif isinstance(exc, PermissionDenied):
             return StandardResponse(
-                error=force_str(exc), error_code="PERMISSION_DENIED", status=403
+                error=STANDARD_MESSAGES["permission_denied"],
+                error_code="PERMISSION_DENIED",
+                status=403,
             )
         elif isinstance(exc, ValidationError):
             # Extracting the validation error messages
@@ -78,7 +93,7 @@ class StandardMixin:
                 and "blacklisted" in combined_message.lower()
             ):
                 return StandardResponse(
-                    error=combined_message,
+                    error=STANDARD_MESSAGES["token_invalid"],
                     error_code="BLACKLISTED_TOKEN",
                     status=401,
                 )
@@ -90,15 +105,12 @@ class StandardMixin:
             )
 
         elif isinstance(exc, TokenError):
-            error_message = force_str(exc)
-            response = StandardResponse(
-                data={},
-                message="",
-                error=error_message,
+            return StandardResponse(
+                error=STANDARD_MESSAGES["token_invalid"],
                 error_code="INVALID_CREDENTIAL",
                 status=401,
             )
-            return response
+
         return super().handle_exception(exc)
 
     def finalize_response(self, request, response, *args, **kwargs):

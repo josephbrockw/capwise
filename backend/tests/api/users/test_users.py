@@ -68,7 +68,7 @@ class UserViewSetTest(APITestCase):
         data, msg, err, code = read_api_response(response)
 
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(err, "Authentication credentials were not provided.")
+        self.assertEqual(err, "Authentication required. Please sign in.")
 
     def test_update_user_unauthenticated(self):
         # Remove credentials to simulate unauthenticated request
@@ -81,4 +81,4 @@ class UserViewSetTest(APITestCase):
         data, msg, err, code = read_api_response(response)
 
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(err, "Authentication credentials were not provided.")
+        self.assertEqual(err, "Authentication required. Please sign in.")

@@ -5,7 +5,7 @@ import Button from '../../components/ui/Button/Button';
 import Chart from '../../components/ui/Chart/Chart';
 import { CardSkeleton, ChartPanelSkeleton } from '../../components/ui/Skeleton/Skeleton';
 import DevTools from '../../components/DevTools/DevTools';
-import storageHelper from '../../utils/storageHelper';
+import { storageHelper } from '../../utils/apiInit';
 import DashboardLayout from '../../components/layout/DashboardLayout/DashboardLayout';
 
 const Dashboard = () => {

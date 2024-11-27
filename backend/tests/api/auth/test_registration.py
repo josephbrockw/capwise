@@ -281,13 +281,9 @@ class AuthenticationTest(APITestCase):
                     "password": "wrongpassword",
                 },
             ),
-            show=True,
         )
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(
-            err,
-            "No active account found with the given credentials",
-        )
+        self.assertEqual(err, "Authentication required. Please sign in.")
 
     def test_user_can_not_log_in_if_unverified(self):
         """Test that login fails if the user's email is not verified."""
@@ -301,4 +297,4 @@ class AuthenticationTest(APITestCase):
             )
         )
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(err, "No active account found with the given credentials")
+        self.assertEqual(err, "Authentication required. Please sign in.")

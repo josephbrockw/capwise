@@ -1,14 +1,16 @@
-import axios from 'axios';
+export class StorageHelper {
+  constructor(deps = { localStorage: window.localStorage }) {
+    this.deps = deps;
+  }
 
-class StorageHelper {
   setItem(key, value) {
     // Only stringify if the value is an object
     const item = typeof value === 'object' ? JSON.stringify(value) : value;
-    localStorage.setItem(key, item);
+    this.deps.localStorage.setItem(key, item);
   }
 
   getItem(key) {
-    const item = localStorage.getItem(key);
+    const item = this.deps.localStorage.getItem(key);
 
     // Only parse if the item appears to be JSON (e.g., starts with '{' or '[')
     if (item && (item.startsWith('{') || item.startsWith('['))) {
@@ -21,18 +23,12 @@ class StorageHelper {
     const accessToken = this.getItem('token');
     const userData = this.getItem('userData');
 
-    if (accessToken && !userData) {
+    if (accessToken && !userData && this.deps.api) {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await this.deps.api.get('/api/users/me');
         const user = response.data.data;
         this.setItem('userData', user);
         return user;
-
       } catch(error) {
         console.error('Error fetching user data:', error);
         return null;
@@ -42,14 +38,18 @@ class StorageHelper {
   }
 
   removeData(key) {
-    localStorage.removeItem(key);
+    this.deps.localStorage.removeItem(key);
   }
 
   logout() {
     this.removeData('token');
     this.removeData('userData');
   }
+
+  setDependencies(deps) {
+    this.deps = { ...this.deps, ...deps };
+  }
 }
 
-const storageHelper = new StorageHelper();
-export default storageHelper;
+// Export the factory function
+export const createStorageHelper = (deps) => new StorageHelper(deps);

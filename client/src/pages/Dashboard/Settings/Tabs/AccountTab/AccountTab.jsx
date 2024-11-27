@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Button from '@/components/ui/Button/Button';
 import FloatLabel from '@/components/ui/FloatLabel/FloatLabel';
 import Toast from '@/components/ui/Toast/Toast';
-import storageHelper from '@/utils/storageHelper';
+import api, { storageHelper } from '@/utils/apiInit';
 import './AccountTab.css';
 
 const AccountTab = () => {
@@ -33,16 +32,7 @@ const AccountTab = () => {
         }
 
         // If no data in localStorage, fetch from API
-        const token = storageHelper.getItem('token');
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/api/users/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
+        const response = await api.get('/api/users/me');
         if (response.data?.data) {
           const { first_name, last_name, preferred_name } = response.data.data;
           setFormData({
@@ -86,18 +76,8 @@ const AccountTab = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const token = storageHelper.getItem('token');
       const changedFields = getChangedFields();
-
-      const response = await axios.patch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/users/me`,
-        changedFields,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.patch('/api/users/me', changedFields);
 
       if (response.data?.data) {
         storageHelper.setItem('userData', response.data.data);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CardSkeleton } from '../../../components/ui/Skeleton/Skeleton';
 import 'chart.js/auto';
-import storageHelper from '../../../utils/storageHelper';
+import { storageHelper } from '../../../utils/apiInit';
 import DashboardLayout from '../../../components/layout/DashboardLayout/DashboardLayout';
 import Tabs from '../../../components/ui/Tabs/Tabs';
 import AccountTab from './Tabs/AccountTab/AccountTab';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import LogoutButton from '../../src/components/LogoutButton';
-import storageHelper from '../../src/utils/storageHelper';
+import { storageHelper } from '../../src/utils/apiInit';
 
 describe('LogoutButton Component', () => {
   beforeEach(() => {

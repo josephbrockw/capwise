@@ -1,7 +1,7 @@
-// client/src/components/LogoutButton.jsx.js
+// client/src/components/LogoutButton.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import storageHelper from '../utils/storageHelper';
+import { storageHelper } from '../utils/apiInit';
 import Button from './ui/Button/Button';
 
 const LogoutButton = () => {

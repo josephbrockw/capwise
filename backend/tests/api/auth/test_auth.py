@@ -25,7 +25,7 @@ class LogInViewTestCase(APITestCase):
             self.client.post(url, payload, format="json")
         )
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(err, "No active account found with the given credentials")
+        self.assertEqual(err, "Authentication required. Please sign in.")
 
         # Verify the user
         user = get_user_model().objects.get(username="magrat")
@@ -34,7 +34,7 @@ class LogInViewTestCase(APITestCase):
 
         # Users should be able to login if they are verified
         data, msg, err, code = read_api_response(
-            self.client.post(url, payload, format="json"), show=True
+            self.client.post(url, payload, format="json")
         )
         self.assertEqual(code, status.HTTP_200_OK)
         self.assertIn("access", data)
@@ -142,4 +142,4 @@ class UserViewSetTest(APITestCase):
         data, msg, err, code = read_api_response(response)
 
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
-        self.assertEqual(err, "Authentication credentials were not provided.")
+        self.assertEqual(err, "Authentication required. Please sign in.")
