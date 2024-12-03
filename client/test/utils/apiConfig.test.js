@@ -218,4 +218,167 @@ describe('ApiClient', () => {
       expect(axios.post).not.toHaveBeenCalled();
     });
   });
+
+  describe('Token Refresh Handling', () => {
+    // eslint-disable-next-line no-unused-vars
+    let apiClient;
+    let mockApi;
+
+    beforeEach(() => {
+      mockApi = {
+        interceptors: {
+          request: { use: vi.fn() },
+          response: { use: vi.fn() }
+        },
+        get: vi.fn(),
+        post: vi.fn(),
+        put: vi.fn(),
+        patch: vi.fn(),
+        delete: vi.fn()
+      };
+
+      apiClient = new ApiClient({ api: mockApi });
+    });
+
+    it('should retry failed request with new token after successful refresh', async () => {
+      const originalRequest = {
+        headers: {},
+        url: '/api/data',
+        _retry: false
+      };
+
+      const error = {
+        config: originalRequest,
+        response: { status: 401 }
+      };
+
+      const newToken = 'new-token';
+      const refreshToken = 'refresh-token';
+
+      // Mock auth store state
+      vi.spyOn(useAuthStore.getState(), 'refreshToken', 'get')
+        .mockReturnValue(refreshToken);
+      vi.spyOn(useAuthStore.getState(), 'setToken')
+        .mockImplementation(() => {});
+
+      // Mock successful token refresh
+      axios.post.mockResolvedValueOnce({
+        data: {
+          data: { access: newToken }
+        }
+      });
+
+      // Mock successful retry of original request
+      mockApi.mockResolvedValueOnce({ data: 'success' });
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+      const result = await responseInterceptor(error);
+
+      expect(axios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/api/auth/refresh'),
+        { refresh: refreshToken }
+      );
+      expect(useAuthStore.getState().setToken).toHaveBeenCalledWith(newToken);
+      expect(originalRequest.headers.Authorization).toBe(`Bearer ${newToken}`);
+      expect(result).toEqual({ data: 'success' });
+    });
+
+    it('should not retry non-401 errors', async () => {
+      const error = {
+        config: { url: '/api/data' },
+        response: { status: 500, data: { error: 'Server error' } }
+      };
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+
+      await expect(responseInterceptor(error)).rejects.toThrow('Server error');
+      expect(axios.post).not.toHaveBeenCalled();
+    });
+
+    it('should not retry login endpoint', async () => {
+      const error = {
+        config: { url: '/api/auth/login' },
+        response: { status: 401, data: { error: 'Invalid credentials' } }
+      };
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+
+      await expect(responseInterceptor(error)).rejects.toThrow('Invalid credentials');
+      expect(axios.post).not.toHaveBeenCalled();
+    });
+
+    it('should handle missing refresh token', async () => {
+      const error = {
+        config: { url: '/api/data', headers: {} },
+        response: { status: 401 }
+      };
+
+      // Mock auth store with no refresh token
+      vi.spyOn(useAuthStore.getState(), 'refreshToken', 'get')
+        .mockReturnValue(null);
+      vi.spyOn(useAuthStore.getState(), 'logout')
+        .mockImplementation(() => {});
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+
+      await expect(responseInterceptor(error)).rejects.toThrow('No refresh token available');
+      expect(useAuthStore.getState().logout).toHaveBeenCalled();
+    });
+
+    it('should handle refresh token failure', async () => {
+      const error = {
+        config: { url: '/api/data', headers: {} },
+        response: { status: 401 }
+      };
+
+      vi.spyOn(useAuthStore.getState(), 'refreshToken', 'get')
+        .mockReturnValue('refresh-token');
+      vi.spyOn(useAuthStore.getState(), 'logout')
+        .mockImplementation(() => {});
+
+      // Mock failed token refresh
+      axios.post.mockRejectedValueOnce(new Error('Invalid refresh token'));
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+
+      await expect(responseInterceptor(error)).rejects.toThrow('Session expired');
+      expect(useAuthStore.getState().logout).toHaveBeenCalled();
+    });
+
+    it('should handle network errors during refresh', async () => {
+      const error = {
+        config: { url: '/api/data', headers: {} },
+        response: { status: 401 }
+      };
+
+      vi.spyOn(useAuthStore.getState(), 'refreshToken', 'get')
+        .mockReturnValue('refresh-token');
+      vi.spyOn(useAuthStore.getState(), 'logout')
+        .mockImplementation(() => {});
+
+      // Mock network error during refresh
+      axios.post.mockRejectedValueOnce({ message: 'Network Error' });
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+
+      await expect(responseInterceptor(error)).rejects.toThrow('Session expired');
+      expect(useAuthStore.getState().logout).toHaveBeenCalled();
+    });
+
+    it('should prevent infinite refresh loops', async () => {
+      const error = {
+        config: {
+          url: '/api/data',
+          headers: {},
+          _retry: true // Request has already been retried
+        },
+        response: { status: 401 }
+      };
+
+      const responseInterceptor = mockApi.interceptors.response.use.mock.calls[0][1];
+
+      await expect(responseInterceptor(error)).rejects.toThrow('Session expired');
+      expect(axios.post).not.toHaveBeenCalled();
+    });
+  });
 });

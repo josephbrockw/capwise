@@ -31,7 +31,6 @@ export class ApiClient {
     // Request interceptor for adding auth token
     this.api.interceptors.request.use(
       (config) => {
-        // Get token from auth store
         const token = useAuthStore.getState().token;
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
@@ -51,35 +50,29 @@ export class ApiClient {
       async (error) => {
         const originalRequest = error.config;
 
-        // If error is 401 and we haven't tried refreshing yet, and it's not the login endpoint
-        if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/api/auth/login')) {
-          originalRequest._retry = true;
-
-          try {
-            // Get refresh token from auth store
-            const refreshToken = useAuthStore.getState().refreshToken;
-            if (!refreshToken) {
-              throw new ApiError('No refresh token available', 'AUTH_ERROR');
-            }
-
-            // Attempt to refresh token
-            const response = await axios.post(
-              `${import.meta.env.VITE_API_BASE_URL}/api/auth/refresh`,
-              { refresh: refreshToken }
-            );
-
-            const { access: newToken } = response.data.data;
-
-            // Update token in auth store
-            useAuthStore.getState().setToken(newToken);
-
-            // Retry the original request
-            originalRequest.headers.Authorization = `Bearer ${newToken}`;
-            return this.api(originalRequest);
-          } catch (refreshError) {
-            // If refresh fails, log out
+        // If error is 401 and we haven't tried refreshing yet
+        if (error.response?.status === 401) {
+          // If this is a refresh token request that failed, logout
+          if (originalRequest.url?.includes('/api/auth/refresh')) {
             useAuthStore.getState().logout();
+            // eslint-disable-next-line no-restricted-globals
+            window.location.href = '/login';
             return Promise.reject(new ApiError('Session expired', 'AUTH_ERROR'));
+          }
+
+          // For other requests, try refreshing token once
+          if (!originalRequest._retry && !originalRequest.url?.includes('/api/auth/login')) {
+            originalRequest._retry = true;
+
+            try {
+              await useAuthStore.getState().refreshAccessToken(this.deps);
+              return this.api(originalRequest);
+            } catch (refreshError) {
+              useAuthStore.getState().logout();
+              // eslint-disable-next-line no-restricted-globals
+              window.location.href = '/login';
+              return Promise.reject(new ApiError('Session expired', 'AUTH_ERROR'));
+            }
           }
         }
 

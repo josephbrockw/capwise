@@ -25,6 +25,21 @@ export const useAuthStore = create(
         refreshToken: null,
         loading: false,
         error: null,
+        isAuthenticated: false,
+
+        init: () => {
+          // Initialize store from localStorage
+          const token = get().getStorageItem('token');
+          const refreshToken = get().getStorageItem('refreshToken');
+          const userData = get().getStorageItem('userData');
+
+          set({
+            token,
+            refreshToken,
+            user: userData ? JSON.parse(userData) : null,
+            isAuthenticated: !!token
+          });
+        },
 
         setStorageItem: (key, value) => {
           const item = typeof value === 'object' ? JSON.stringify(value) : value;
@@ -131,13 +146,35 @@ export const useAuthStore = create(
             user: null,
             token: null,
             refreshToken: null,
+            error: null,
             loading: false,
-            error: null
+            isAuthenticated: false
           });
 
           get().removeStorageItem('userData');
           get().removeStorageItem('token');
           get().removeStorageItem('refreshToken');
+        },
+
+        refreshAccessToken: async (deps) => {
+          try {
+            const refreshToken = get().getStorageItem('refreshToken');
+
+            if (!refreshToken) {
+              throw new Error('No refresh token available');
+            }
+
+            const response = await getApi(deps).post('/api/auth/refresh', { refresh: refreshToken });
+            const { access: newToken, refresh: newRefreshToken } = response.data.data;
+
+            get().setToken(newToken);
+            get().setRefreshToken(newRefreshToken);
+
+            return newToken;
+          } catch (error) {
+            get().logout();
+            throw error;
+          }
         }
       }),
       {

@@ -215,3 +215,177 @@ describe('Password Reset Flow', () => {
     cy.contains('An error occurred. Please try again.').should('be.visible');
   });
 });
+
+describe('Token Refresh and Session Handling', () => {
+  beforeEach(() => {
+    // Clear localStorage and reset API client
+    cy.clearLocalStorage();
+
+    // Handle uncaught exceptions
+    cy.on('uncaught:exception', (err) => {
+      console.log('Uncaught exception:', err);
+      return false;
+    });
+
+    // Set up initial localStorage state before visit
+    cy.visit('/settings', {
+      onBeforeLoad(win) {
+        // Set up initial localStorage state with just tokens
+        win.localStorage.setItem('token', 'expired-token');
+        win.localStorage.setItem('refreshToken', 'valid-refresh-token');
+        // Explicitly remove userData to trigger token refresh flow
+        win.localStorage.removeItem('userData');
+
+        console.log('Test - Initial localStorage state:', {
+          token: win.localStorage.getItem('token'),
+          refreshToken: win.localStorage.getItem('refreshToken'),
+          userData: win.localStorage.getItem('userData')
+        });
+      }
+    });
+  });
+
+  it('should automatically refresh token on 401 response', () => {
+
+    // Set up interceptors
+    cy.intercept('GET', '**/api/users/me', {
+      statusCode: 401,
+      body: {
+        error: 'Token expired'
+      }
+    }).as('expiredToken');
+
+    // Intercept refresh token request
+    cy.intercept('POST', '**/api/auth/refresh', (req) => {
+      console.log('Test - Refresh request received:', {
+        url: req.url,
+        body: req.body,
+        headers: req.headers
+      });
+
+      expect(req.body).to.deep.equal({
+        refresh: 'valid-refresh-token'
+      });
+
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: {
+            access: 'new-valid-token',
+            refresh: 'new-refresh-token'
+          }
+        }
+      });
+    }).as('tokenRefresh');
+
+    // After refresh, the original request should be retried
+    cy.intercept('GET', '**/api/users/me', (req) => {
+      console.log('Test - Retry request received:', {
+        url: req.url,
+        headers: req.headers
+      });
+
+      expect(req.headers.authorization).to.equal('Bearer new-valid-token');
+
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: {
+            id: 1,
+            username: 'testuser'
+          }
+        }
+      });
+    }).as('retryRequest');
+
+    // Wait for the full sequence of requests
+    cy.wait('@expiredToken').then((interception) => {
+      console.log('Test - Expired token response:', interception.response);
+    });
+
+    cy.wait('@tokenRefresh').then((interception) => {
+      console.log('Test - Token refresh response:', interception.response);
+    });
+
+    cy.wait('@retryRequest').then((interception) => {
+      console.log('Test - Retry request response:', interception.response);
+    });
+  });
+
+  it('should redirect to login when refresh token is invalid', () => {
+    // First request fails with 401
+    cy.intercept('GET', '**/api/users/me', {
+      statusCode: 401,
+      body: {
+        error: 'Token expired'
+      }
+    }).as('expiredToken');
+
+    // Refresh token request fails - note this will use raw axios
+    cy.intercept('POST', '**/api/auth/refresh', {
+      statusCode: 401,
+      body: {
+        error: 'Invalid refresh token'
+      }
+    }).as('failedRefresh');
+
+    // Visit settings page which triggers user data fetch
+    cy.visit('/settings');
+
+    // Wait for requests
+    cy.wait('@expiredToken');
+    cy.wait('@failedRefresh');
+
+    // Should be redirected to login
+    cy.url().should('include', '/login');
+
+    // Local storage should be cleared
+    cy.window().then((win) => {
+      expect(win.localStorage.getItem('token')).to.be.null;
+      expect(win.localStorage.getItem('refreshToken')).to.be.null;
+      expect(win.localStorage.getItem('userData')).to.be.null;
+    });
+  });
+
+  it('should maintain authentication across page reloads', () => {
+    // Set up initial auth state with user data
+    cy.window().then((win) => {
+      win.localStorage.setItem('userData', JSON.stringify({
+        id: '123',
+        username: 'testuser',
+        email: 'test@example.com'
+      }));
+    });
+
+    // Set up successful user data request for any subsequent fetches
+    cy.intercept('GET', '**/api/users/me', (req) => {
+      expect(req.headers.authorization).to.equal('Bearer expired-token');
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: {
+            id: '123',
+            username: 'testuser',
+            email: 'test@example.com'
+          }
+        }
+      });
+    }).as('getUserData');
+
+    // Visit settings page and verify initial load
+    cy.visit('/settings');
+
+    // Reload page and verify auth state is maintained
+    cy.reload();
+
+    // Verify auth state
+    cy.window().then((win) => {
+      const userData = JSON.parse(win.localStorage.getItem('userData'));
+      expect(userData).to.deep.equal({
+        id: '123',
+        username: 'testuser',
+        email: 'test@example.com'
+      });
+    });
+  });
+});
