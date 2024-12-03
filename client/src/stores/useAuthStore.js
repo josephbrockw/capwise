@@ -15,73 +15,99 @@ export const useAuthStore = create(
 
         // Simple state setters
         setUser: (user) => set({ user }),
-        setToken: (token) => set({ token }),
-        setRefreshToken: (refreshToken) => set({ refreshToken }),
+        setToken: (token) => {
+          localStorage.setItem('token', token);
+          set({ token });
+        },
+        setRefreshToken: (refreshToken) => {
+          localStorage.setItem('refreshToken', refreshToken);
+          set({ refreshToken });
+        },
         setError: (error) => set({ error }),
         setLoading: (loading) => set({ loading }),
 
+        // Fetch user data
+        fetchUserData: async () => {
+          try {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, {
+              headers: {
+                'Authorization': `Bearer ${get().token}`
+              }
+            });
+
+            const { data, error } = await response.json();
+
+            if (!response.ok || error) {
+              throw new Error(error || 'Failed to fetch user data');
+            }
+
+            set({ user: data });
+            return data;
+          } catch (error) {
+            set({
+              error: error instanceof Error ? error.message : 'Failed to fetch user data'
+            });
+            throw error;
+          }
+        },
+
         // Login action
         login: async (username, password) => {
-          // Start loading and clear any previous errors
-          set({ loading: true, error: null })
+          set({ loading: true, error: null });
 
           try {
-            // Make API call to your login endpoint
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ username, password })
-            })
+            });
 
-            const data = await response.json()
+            const { data, error } = await response.json();
 
-            // If response isn't ok, throw the error message
-            if (!response.ok) {
-              throw new Error(data.error || 'Login failed')
+            if (!response.ok || error) {
+              throw new Error(error || 'Login failed');
             }
 
-            // Decode the JWT payload to get user info
-            const [, payload] = data.access.split('.')
-            const decodedUser = JSON.parse(atob(payload))
+            // Store tokens in localStorage
+            localStorage.setItem('token', data.access);
+            localStorage.setItem('refreshToken', data.refresh);
 
-            // On success, update the state with user and tokens
+            // Set tokens in state
             set({
-              user: {
-                id: decodedUser.id,
-                username: decodedUser.username,
-                email: decodedUser.email,
-                first_name: decodedUser.first_name,
-                last_name: decodedUser.last_name
-              },
               token: data.access,
               refreshToken: data.refresh,
-              loading: false
-            })
+              loading: false,
+              error: null
+            });
+
+            // Fetch user data
+            await get().fetchUserData();
           } catch (error) {
-            // On error, store the error message and clear loading state
             set({
               error: error instanceof Error ? error.message : 'An error occurred',
               loading: false
-            })
+            });
+            throw error;
           }
         },
 
         // Logout action
         logout: () => {
-          // Clear all auth-related state
+          // Clear all tokens from localStorage
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+
           set({
             user: null,
             token: null,
             refreshToken: null,
             error: null
-          })
-          // You can add additional cleanup here if needed
+          });
         }
       }),
       {
-        name: 'auth-storage', // Name for localStorage key
+        name: 'auth-storage',
         partialize: (state) => ({
-          // Only persist these fields in localStorage
           user: state.user,
           token: state.token,
           refreshToken: state.refreshToken
