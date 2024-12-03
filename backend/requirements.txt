@@ -22,5 +22,3 @@ redis==4.5.5
 django-celery-beat==2.7.0
 stripe==11.1.1
 drf-spectacular==0.27.1
-django-stubs==5.1.1
-djangorestframework-stub==3.15.1
