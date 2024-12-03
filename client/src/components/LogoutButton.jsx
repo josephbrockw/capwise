@@ -1,14 +1,14 @@
 // client/src/components/LogoutButton.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { storageHelper } from '../utils/apiInit';
+import { useAuthStore } from '../stores';
 import Button from './ui/Button/Button';
 
 const LogoutButton = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    storageHelper.logout();
+    useAuthStore.getState().logout();
     navigate('/login');
   };
 

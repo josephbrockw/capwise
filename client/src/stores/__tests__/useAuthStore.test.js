@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { useAuthStore } from '../useAuthStore';
+import { describe, it, expect, beforeEach, vi, fail } from 'vitest';
+import { useAuthStore, resetApi } from '../useAuthStore';
 
 // Mock storage
 const mockStorage = {
@@ -11,14 +11,9 @@ const mockStorage = {
 // Set up localStorage mock
 global.localStorage = mockStorage;
 
-// Mock fetch
-global.fetch = vi.fn();
-
-// Mock JWT token with user data
-const mockJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzMjQ5MzQzLCJpYXQiOjE3MzMyNDU3NDMsImp0aSI6ImU3NWM1ZWVhYjI3MzRkYTA4MDcxOWU0NDBkNDM0NzQ0IiwiaWQiOiIzNmNhMzgzYS1lOGQ5LTQ3MWEtODNkYy05MGViMjU1OGI5YmMiLCJ1c2VybmFtZSI6ImpvZSIsImVtYWlsIjoibWVAdGhlam9ld2lsa2luc29uLmNvbSIsImZpcnN0X25hbWUiOiJKb2UiLCJsYXN0X25hbWUiOiJXaWxraW5zb24ifQ.Oz9E4mn7L3n6gaB6rGofVzrhaNlyzXfWXIenPPe2jAo';
-const mockRefreshToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMzMzMjE0MywiaWF0IjoxNzMzMjQ1NzQzLCJqdGkiOiJkNzczYjM4ZjY0ODA0N2M5YWIwYmZmNmUwZGU2YjdlNSIsImlkIjoiMzZjYTM4M2EtZThkOS00NzFhLTgzZGMtOTBlYjI1NThiOWJjIiwidXNlcm5hbWUiOiJqb2UiLCJlbWFpbCI6Im1lQHRoZWpvZXdpbGtpbnNvbi5jb20iLCJmaXJzdF9uYW1lIjoiSm9lIiwibGFzdF9uYW1lIjoiV2lsa2luc29uIn0.PHSDQyZntH_oxtGIBiRrtnhATpUW_YaEqYf5gP6zcpA';
-
 describe('useAuthStore', () => {
+  let mockAxiosInstance;
+
   beforeEach(() => {
     // Reset store state
     useAuthStore.setState({
@@ -33,7 +28,23 @@ describe('useAuthStore', () => {
     mockStorage.getItem.mockReset();
     mockStorage.setItem.mockReset();
     mockStorage.removeItem.mockReset();
-    fetch.mockReset();
+    vi.clearAllMocks();
+
+    // Create mock axios instance
+    mockAxiosInstance = {
+      interceptors: {
+        request: { use: vi.fn() },
+        response: { use: vi.fn() }
+      },
+      get: vi.fn(),
+      post: vi.fn(),
+      put: vi.fn(),
+      patch: vi.fn(),
+      delete: vi.fn()
+    };
+
+    // Reset API instance
+    resetApi();
   });
 
   it('should initialize with default values', () => {
@@ -47,195 +58,194 @@ describe('useAuthStore', () => {
 
   it('should set user', () => {
     const testUser = {
-      id: '36ca383a-e8d9-471a-83dc-90eb2558b9bc',
-      username: 'joe',
-      email: 'me@thejoewilkinson.com',
-      first_name: 'Joe',
-      last_name: 'Wilkinson'
+      id: '123',
+      username: 'testuser',
+      email: 'test@example.com'
     };
-
     useAuthStore.getState().setUser(testUser);
     expect(useAuthStore.getState().user).toEqual(testUser);
+    expect(mockStorage.setItem).toHaveBeenCalledWith('userData', JSON.stringify(testUser));
   });
 
   it('should set token', () => {
-    useAuthStore.getState().setToken(mockJWT);
-    expect(useAuthStore.getState().token).toBe(mockJWT);
-    expect(mockStorage.setItem).toHaveBeenCalledWith('token', mockJWT);
+    const testToken = 'test-token';
+    useAuthStore.getState().setToken(testToken);
+    expect(useAuthStore.getState().token).toBe(testToken);
+    expect(mockStorage.setItem).toHaveBeenCalledWith('token', testToken);
   });
 
   it('should set refresh token', () => {
-    useAuthStore.getState().setRefreshToken(mockRefreshToken);
-    expect(useAuthStore.getState().refreshToken).toBe(mockRefreshToken);
-    expect(mockStorage.setItem).toHaveBeenCalledWith('refreshToken', mockRefreshToken);
+    const testRefreshToken = 'test-refresh-token';
+    useAuthStore.getState().setRefreshToken(testRefreshToken);
+    expect(useAuthStore.getState().refreshToken).toBe(testRefreshToken);
+    expect(mockStorage.setItem).toHaveBeenCalledWith('refreshToken', testRefreshToken);
   });
 
   it('should set loading state', () => {
     useAuthStore.getState().setLoading(true);
     expect(useAuthStore.getState().loading).toBe(true);
-
-    useAuthStore.getState().setLoading(false);
-    expect(useAuthStore.getState().loading).toBe(false);
   });
 
   it('should set error', () => {
-    const testError = 'Test error message';
+    const testError = 'test error';
     useAuthStore.getState().setError(testError);
     expect(useAuthStore.getState().error).toBe(testError);
   });
 
   it('should fetch user data', async () => {
     const mockUserData = {
-      id: '36ca383a-e8d9-471a-83dc-90eb2558b9bc',
-      username: 'joe',
-      email: 'me@thejoewilkinson.com',
-      first_name: 'Joe',
-      last_name: 'Wilkinson'
+      id: '123',
+      username: 'testuser',
+      email: 'test@example.com'
     };
 
-    const mockResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        data: mockUserData,
-        message: "Request successful",
-        error: "",
-        error_code: null
-      })
-    };
+    mockAxiosInstance.get.mockResolvedValueOnce({
+      data: {
+        data: mockUserData
+      }
+    });
 
-    fetch.mockResolvedValueOnce(mockResponse);
+    useAuthStore.getState().setToken('test-token');
+    await useAuthStore.getState().fetchUserData({ api: mockAxiosInstance });
 
-    // Set token first
-    useAuthStore.getState().setToken(mockJWT);
-
-    await useAuthStore.getState().fetchUserData();
-
+    expect(mockAxiosInstance.get).toHaveBeenCalledWith('/api/users/me');
     const state = useAuthStore.getState();
     expect(state.user).toEqual(mockUserData);
+    expect(state.error).toBeNull();
   });
 
   it('should handle fetch user data failure', async () => {
-    const mockResponse = {
-      ok: false,
-      json: () => Promise.resolve({
-        data: null,
-        message: "Request failed",
-        error: "Unauthorized",
-        error_code: "AUTH_002"
-      })
-    };
+    mockAxiosInstance.get.mockRejectedValueOnce({
+      response: {
+        status: 401,
+        data: {
+          error: 'Unauthorized'
+        }
+      }
+    });
 
-    fetch.mockResolvedValueOnce(mockResponse);
-
-    // Set token first
-    useAuthStore.getState().setToken(mockJWT);
+    useAuthStore.getState().setToken('test-token');
 
     try {
-      await useAuthStore.getState().fetchUserData();
-      // If fetchUserData doesn't throw, fail the test
-      expect(true).toBe(false);
+      await useAuthStore.getState().fetchUserData({ api: mockAxiosInstance });
+      fail('Expected an error to be thrown');
     } catch (error) {
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/api/users/me');
       const state = useAuthStore.getState();
       expect(state.error).toBe('Unauthorized');
+      expect(state.user).toBeNull();
     }
   });
 
-  it('should handle login success', async () => {
-    // Mock login response
-    const mockLoginResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        data: {
-          refresh: mockRefreshToken,
-          access: mockJWT
-        },
-        message: "Request successful",
-        error: "",
-        error_code: null
-      })
+  it('should fetch user data from localStorage if available', async () => {
+    const mockUserData = {
+      id: '123',
+      username: 'testuser',
+      email: 'test@example.com'
     };
 
-    // Mock user data response
-    const mockUserResponse = {
-      ok: true,
-      json: () => Promise.resolve({
-        data: {
-          id: '36ca383a-e8d9-471a-83dc-90eb2558b9bc',
-          username: 'joe',
-          email: 'me@thejoewilkinson.com',
-          first_name: 'Joe',
-          last_name: 'Wilkinson'
-        },
-        message: "Request successful",
-        error: "",
-        error_code: null
-      })
+    mockStorage.getItem.mockReturnValueOnce(JSON.stringify(mockUserData));
+    useAuthStore.getState().setToken('test-token');
+
+    const result = await useAuthStore.getState().fetchUserData({ api: mockAxiosInstance });
+
+    expect(result).toEqual(mockUserData);
+    expect(mockAxiosInstance.get).not.toHaveBeenCalled();
+  });
+
+  it('should fetch user data from API if not in localStorage', async () => {
+    const mockUserData = {
+      id: '123',
+      username: 'testuser',
+      email: 'test@example.com'
     };
 
-    // Setup fetch to return login response first, then user data response
-    fetch
-      .mockResolvedValueOnce(mockLoginResponse)
-      .mockResolvedValueOnce(mockUserResponse);
+    // Mock localStorage without user data
+    mockStorage.getItem.mockReturnValue(null);
 
-    await useAuthStore.getState().login('joe', 'password');
-
-    const state = useAuthStore.getState();
-    expect(state.loading).toBe(false);
-    expect(state.error).toBeNull();
-    expect(state.token).toBe(mockJWT);
-    expect(state.refreshToken).toBe(mockRefreshToken);
-    expect(state.user).toEqual({
-      id: '36ca383a-e8d9-471a-83dc-90eb2558b9bc',
-      username: 'joe',
-      email: 'me@thejoewilkinson.com',
-      first_name: 'Joe',
-      last_name: 'Wilkinson'
+    mockAxiosInstance.get.mockResolvedValueOnce({
+      data: {
+        data: mockUserData
+      }
     });
 
-    // Verify localStorage calls
-    expect(mockStorage.setItem).toHaveBeenCalledWith('token', mockJWT);
-    expect(mockStorage.setItem).toHaveBeenCalledWith('refreshToken', mockRefreshToken);
+    useAuthStore.getState().setToken('test-token');
+
+    const result = await useAuthStore.getState().fetchUserData({ api: mockAxiosInstance });
+
+    expect(result).toEqual(mockUserData);
+    expect(mockAxiosInstance.get).toHaveBeenCalledWith('/api/users/me');
+    expect(mockStorage.setItem).toHaveBeenCalledWith('userData', JSON.stringify(mockUserData));
+  });
+
+  it('should handle login success', async () => {
+    const mockLoginResponse = {
+      data: {
+        data: {
+          access: 'test-token',
+          refresh: 'test-refresh',
+          id: '123',
+          username: 'testuser',
+          email: 'test@example.com'
+        }
+      }
+    };
+
+    mockAxiosInstance.post.mockResolvedValueOnce(mockLoginResponse);
+
+    await useAuthStore.getState().login('testuser', 'password', { api: mockAxiosInstance });
+
+    expect(mockAxiosInstance.post).toHaveBeenCalledWith('/api/auth/login', {
+      username: 'testuser',
+      password: 'password'
+    });
+
+    const state = useAuthStore.getState();
+    expect(state.token).toBe('test-token');
+    expect(state.refreshToken).toBe('test-refresh');
+    expect(state.user).toEqual({
+      id: '123',
+      username: 'testuser',
+      email: 'test@example.com'
+    });
+    expect(state.error).toBeNull();
   });
 
   it('should handle login failure', async () => {
-    const mockResponse = {
-      ok: false,
-      json: () => Promise.resolve({
-        data: null,
-        message: "Request failed",
-        error: "Invalid credentials",
-        error_code: "AUTH_001"
-      })
-    };
-
-    fetch.mockResolvedValueOnce(mockResponse);
+    mockAxiosInstance.post.mockRejectedValueOnce({
+      response: {
+        status: 401,
+        data: {
+          error: 'Invalid credentials'
+        }
+      }
+    });
 
     try {
-      await useAuthStore.getState().login('joe', 'wrong-password');
-      // If login doesn't throw, fail the test
-      expect(true).toBe(false);
+      await useAuthStore.getState().login('testuser', 'wrong-password', { api: mockAxiosInstance });
+      fail('Expected an error to be thrown');
     } catch (error) {
+      expect(mockAxiosInstance.post).toHaveBeenCalledWith('/api/auth/login', {
+        username: 'testuser',
+        password: 'wrong-password'
+      });
+
       const state = useAuthStore.getState();
       expect(state.loading).toBe(false);
       expect(state.error).toBe('Invalid credentials');
       expect(state.user).toBeNull();
       expect(state.token).toBeNull();
-      expect(state.refreshToken).toBeNull();
     }
   });
 
   it('should handle logout', () => {
-    // Set up initial state
+    // Set initial state
     useAuthStore.setState({
-      user: {
-        id: '36ca383a-e8d9-471a-83dc-90eb2558b9bc',
-        username: 'joe',
-        email: 'me@thejoewilkinson.com',
-        first_name: 'Joe',
-        last_name: 'Wilkinson'
-      },
-      token: mockJWT,
-      refreshToken: mockRefreshToken
+      user: { id: '123' },
+      token: 'test-token',
+      refreshToken: 'test-refresh',
+      loading: false,
+      error: null
     });
 
     useAuthStore.getState().logout();
@@ -245,8 +255,7 @@ describe('useAuthStore', () => {
     expect(state.token).toBeNull();
     expect(state.refreshToken).toBeNull();
     expect(state.error).toBeNull();
-
-    // Verify localStorage cleanup
+    expect(mockStorage.removeItem).toHaveBeenCalledWith('userData');
     expect(mockStorage.removeItem).toHaveBeenCalledWith('token');
     expect(mockStorage.removeItem).toHaveBeenCalledWith('refreshToken');
   });

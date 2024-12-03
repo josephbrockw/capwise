@@ -1,98 +1,137 @@
 import axios from 'axios';
+import { useAuthStore } from '../stores';
+
+export class ApiError extends Error {
+  constructor(message, type = 'API_ERROR', statusCode = null) {
+    super(message);
+    this.name = 'ApiError';
+    this.type = type;
+    this.statusCode = statusCode;
+  }
+}
 
 export class ApiClient {
-  constructor(baseURL, deps = { axios }) {
-    this.isRefreshing = false;
-    this.refreshSubscribers = [];
-    this.baseURL = baseURL;
+  constructor(deps = {}) {
     this.deps = deps;
 
-    this.instance = this.deps.axios.create({
-      baseURL: this.baseURL,
+    // If deps.api is provided, use it (for testing)
+    if (deps.api) {
+      this.api = deps.api;
+      return;
+    }
+
+    this.api = axios.create({
+      baseURL: import.meta.env.VITE_API_BASE_URL,
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    this.setupInterceptors();
-  }
-
-  setupInterceptors() {
-    // Request interceptor
-    this.instance.interceptors.request.use(
+    // Request interceptor for adding auth token
+    this.api.interceptors.request.use(
       (config) => {
-        const token = this.deps.storageHelper?.getItem('token');
+        // Get token from auth store
+        const token = useAuthStore.getState().token;
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
       (error) => {
-        return Promise.reject(error);
+        return Promise.reject(new ApiError(error.message, 'REQUEST_ERROR'));
       }
     );
 
-    // Response interceptor
-    this.instance.interceptors.response.use(
-      (response) => response,
-      (error) => this.handleResponseError(error)
+    // Response interceptor for handling token refresh and errors
+    this.api.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      async (error) => {
+        const originalRequest = error.config;
+
+        // If error is 401 and we haven't tried refreshing yet, and it's not the login endpoint
+        if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/api/auth/login')) {
+          originalRequest._retry = true;
+
+          try {
+            // Get refresh token from auth store
+            const refreshToken = useAuthStore.getState().refreshToken;
+            if (!refreshToken) {
+              throw new ApiError('No refresh token available', 'AUTH_ERROR');
+            }
+
+            // Attempt to refresh token
+            const response = await axios.post(
+              `${import.meta.env.VITE_API_BASE_URL}/api/auth/refresh`,
+              { refresh: refreshToken }
+            );
+
+            const { access: newToken } = response.data.data;
+
+            // Update token in auth store
+            useAuthStore.getState().setToken(newToken);
+
+            // Retry the original request
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return this.api(originalRequest);
+          } catch (refreshError) {
+            // If refresh fails, log out
+            useAuthStore.getState().logout();
+            return Promise.reject(new ApiError('Session expired', 'AUTH_ERROR'));
+          }
+        }
+
+        // Handle network errors
+        if (!error.response) {
+          return Promise.reject(new ApiError('Network error occurred', 'NETWORK_ERROR'));
+        }
+
+        // Handle API errors
+        const message = error.response.data?.error || error.message || 'An error occurred';
+        return Promise.reject(new ApiError(message, 'API_ERROR', error.response.status));
+      }
     );
   }
 
-  async handleResponseError(error) {
-    const originalRequest = error.config;
-
-    if (error.response?.data?.error_code === 'TOKEN_EXPIRED' && !originalRequest._retry) {
-      if (this.isRefreshing) {
-        return new Promise((resolve) => {
-          this.refreshSubscribers.push((token) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            resolve(this.deps.axios(originalRequest));
-          });
-        });
+  async handleRequest(requestPromise) {
+    try {
+      const response = await requestPromise;
+      return response;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
       }
-
-      this.isRefreshing = true;
-      originalRequest._retry = true;
-
-      try {
-        const response = await this.deps.axios.post(
-          `${this.baseURL}/api/auth/refresh`,
-          {},
-          { withCredentials: true }
-        );
-        const newToken = response.data.data.token;
-
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-        this.onTokenRefreshed(newToken);
-        return this.deps.axios(originalRequest);
-      } catch (refreshError) {
-        this.handleLogout();
-        return Promise.reject(refreshError);
+      if (error.response) {
+        const message = error.response.data?.error || error.message || 'An error occurred';
+        throw new ApiError(message, 'API_ERROR', error.response.status);
       }
+      throw new ApiError(error.message || 'Network error occurred', 'NETWORK_ERROR');
     }
-
-    return Promise.reject(error);
   }
 
-  onTokenRefreshed(token) {
-    this.deps.storageHelper?.setItem('token', token);
-    this.refreshSubscribers.forEach((callback) => callback(token));
-    this.refreshSubscribers = [];
-    this.isRefreshing = false;
+  async get(url) {
+    return this.handleRequest(this.api.get(url));
   }
 
-  handleLogout() {
-    this.deps.storageHelper?.logout();
-    window.location.href = '/login';
+  async post(url, data) {
+    return this.handleRequest(this.api.post(url, data));
   }
 
-  getInstance() {
-    return this.instance;
+  async put(url, data) {
+    return this.handleRequest(this.api.put(url, data));
   }
 
-  setDependencies(deps) {
-    this.deps = { ...this.deps, ...deps };
-    this.setupInterceptors();
+  async patch(url, data) {
+    return this.handleRequest(this.api.patch(url, data));
+  }
+
+  async delete(url) {
+    return this.handleRequest(this.api.delete(url));
   }
 }
 
-// Export the class only, initialization will be handled elsewhere
-export const createApiClient = (baseURL, deps) => new ApiClient(baseURL, deps);
+export const createApiClient = (deps = {}) => {
+  return new ApiClient(deps);
+};

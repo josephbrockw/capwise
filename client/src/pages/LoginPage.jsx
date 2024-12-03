@@ -16,10 +16,12 @@ const Login = () => {
   const login = useAuthStore((state) => state.login);
   const error = useAuthStore((state) => state.error);
   const loading = useAuthStore((state) => state.loading);
+  const clearError = useAuthStore((state) => state.setError);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    if (error) clearError(null);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -31,8 +33,8 @@ const Login = () => {
     try {
       await login(formData.username, formData.password);
       navigate('/');
-    } catch (error) {
-      // Error handling is managed by the store
+    } catch (err) {
+      // Error is handled by the store and displayed via AuthLayout
     }
   };
 

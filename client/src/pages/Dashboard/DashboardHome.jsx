@@ -5,7 +5,7 @@ import Button from '../../components/ui/Button/Button';
 import Chart from '../../components/ui/Chart/Chart';
 import { CardSkeleton, ChartPanelSkeleton } from '../../components/ui/Skeleton/Skeleton';
 import DevTools from '../../components/DevTools/DevTools';
-import { storageHelper } from '../../utils/apiInit';
+import { useAuthStore } from '../../stores';
 import DashboardLayout from '../../components/layout/DashboardLayout/DashboardLayout';
 
 const Dashboard = () => {
@@ -15,7 +15,7 @@ const Dashboard = () => {
   useEffect(() => {
     // Fetch user data from API after component mounts
     const fetchData = async () => {
-      const user = await storageHelper.getUserData();
+      const user = await useAuthStore.getState().fetchUserData();
       setUserData(user);
       setIsLoading(false);
     };

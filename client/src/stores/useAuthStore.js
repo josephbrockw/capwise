@@ -1,108 +1,143 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+import { createApiClient } from '@/utils/apiConfig'
+
+// Create API client lazily to allow for testing
+let api;
+const getApi = (deps) => {
+  if (!api) {
+    api = createApiClient(deps);
+  }
+  return api;
+};
+
+// For testing purposes
+export const resetApi = () => {
+  api = null;
+};
 
 export const useAuthStore = create(
   devtools(
     persist(
-      // eslint-disable-next-line no-unused-vars
       (set, get) => ({
-        // Initial state
-        user: null,        // Stores user data (id, email, username, etc.)
-        token: null,       // Stores the JWT or session token
-        refreshToken: null, // Stores the refresh token
-        loading: false,    // Tracks loading state during async operations
-        error: null,       // Stores any error messages
+        user: null,
+        token: null,
+        refreshToken: null,
+        loading: false,
+        error: null,
 
-        // Simple state setters
-        setUser: (user) => set({ user }),
+        setStorageItem: (key, value) => {
+          const item = typeof value === 'object' ? JSON.stringify(value) : value;
+          localStorage.setItem(key, item);
+        },
+
+        getStorageItem: (key) => {
+          const item = localStorage.getItem(key);
+          if (item && (item.startsWith('{') || item.startsWith('['))) {
+            return JSON.parse(item);
+          }
+          return item;
+        },
+
+        removeStorageItem: (key) => {
+          localStorage.removeItem(key);
+        },
+
+        setUser: (user) => {
+          set({ user });
+          get().setStorageItem('userData', user);
+        },
+
         setToken: (token) => {
-          localStorage.setItem('token', token);
           set({ token });
+          get().setStorageItem('token', token);
         },
+
         setRefreshToken: (refreshToken) => {
-          localStorage.setItem('refreshToken', refreshToken);
           set({ refreshToken });
+          get().setStorageItem('refreshToken', refreshToken);
         },
+
         setError: (error) => set({ error }),
         setLoading: (loading) => set({ loading }),
 
-        // Fetch user data
-        fetchUserData: async () => {
+        fetchUserData: async (deps) => {
           try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, {
-              headers: {
-                'Authorization': `Bearer ${get().token}`
-              }
-            });
-
-            const { data, error } = await response.json();
-
-            if (!response.ok || error) {
-              throw new Error(error || 'Failed to fetch user data');
+            // First try to get from localStorage
+            const localUserData = get().getStorageItem('userData');
+            if (localUserData) {
+              set({ user: localUserData });
+              return localUserData;
             }
 
-            set({ user: data });
-            return data;
+            // If not in localStorage, fetch from API
+            const response = await getApi(deps).get('/api/users/me');
+            const userData = response.data.data;
+
+            set({ user: userData });
+            get().setStorageItem('userData', userData);
+            return userData;
           } catch (error) {
-            set({
-              error: error instanceof Error ? error.message : 'Failed to fetch user data'
-            });
+            const errorMessage = error.message;
+            set({ error: errorMessage });
             throw error;
           }
         },
 
-        // Login action
-        login: async (username, password) => {
-          set({ loading: true, error: null });
-
+        updateUser: async (userData, deps) => {
           try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ username, password })
-            });
+            const response = await getApi(deps).patch('/api/users/me', userData);
+            const updatedData = response.data.data;
+            const updatedUser = { ...get().user, ...updatedData };
 
-            const { data, error } = await response.json();
+            set({ user: updatedUser });
+            get().setStorageItem('userData', updatedUser);
+            return updatedUser;
+          } catch (error) {
+            const errorMessage = error.message;
+            set({ error: errorMessage });
+            throw error;
+          }
+        },
 
-            if (!response.ok || error) {
-              throw new Error(error || 'Login failed');
-            }
+        login: async (username, password, deps) => {
+          set({ loading: true, error: null });
+          try {
+            const response = await getApi(deps).post('/api/auth/login', { username, password });
+            const { data } = response.data;
+            const { access, refresh, ...userData } = data;
 
-            // Store tokens in localStorage
-            localStorage.setItem('token', data.access);
-            localStorage.setItem('refreshToken', data.refresh);
-
-            // Set tokens in state
             set({
-              token: data.access,
-              refreshToken: data.refresh,
+              user: userData,
+              token: access,
+              refreshToken: refresh,
               loading: false,
               error: null
             });
 
-            // Fetch user data
-            await get().fetchUserData();
+            get().setStorageItem('userData', userData);
+            get().setStorageItem('token', access);
+            get().setStorageItem('refreshToken', refresh);
+
+            return userData;
           } catch (error) {
-            set({
-              error: error instanceof Error ? error.message : 'An error occurred',
-              loading: false
-            });
+            set({ loading: false, error: error.message });
             throw error;
           }
         },
 
-        // Logout action
         logout: () => {
-          // Clear all tokens from localStorage
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
-
           set({
             user: null,
             token: null,
             refreshToken: null,
+            loading: false,
             error: null
           });
+
+          get().removeStorageItem('userData');
+          get().removeStorageItem('token');
+          get().removeStorageItem('refreshToken');
         }
       }),
       {
@@ -115,4 +150,4 @@ export const useAuthStore = create(
       }
     )
   )
-)
+);
