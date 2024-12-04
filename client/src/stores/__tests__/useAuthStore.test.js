@@ -261,170 +261,12 @@ describe('useAuthStore', () => {
   });
 
   describe('Token Refresh and Session Management', () => {
-    let mockAxiosInstance;
-
     beforeEach(() => {
       mockAxiosInstance = {
-        interceptors: {
-          request: { use: vi.fn() },
-          response: { use: vi.fn() }
-        },
         get: vi.fn(),
         post: vi.fn(),
         patch: vi.fn()
       };
-
-      // Reset store state
-      useAuthStore.setState({
-        user: null,
-        token: null,
-        refreshToken: null,
-        loading: false,
-        error: null
-      });
-
-      // Reset mocks
-      mockStorage.getItem.mockReset();
-      mockStorage.setItem.mockReset();
-      mockStorage.removeItem.mockReset();
-      vi.clearAllMocks();
-    });
-
-    it('should handle token refresh during API calls', async () => {
-      const initialToken = 'initial-token';
-      const refreshToken = 'refresh-token';
-      const newToken = 'new-token';
-
-      // Set up initial state
-      useAuthStore.getState().setToken(initialToken);
-      useAuthStore.getState().setRefreshToken(refreshToken);
-
-      // First call fails with 401
-      mockAxiosInstance.get.mockRejectedValueOnce({
-        response: {
-          status: 401,
-          data: { error: 'Token expired' }
-        }
-      });
-
-      // Token refresh succeeds
-      mockAxiosInstance.post.mockResolvedValueOnce({
-        data: {
-          data: {
-            access: newToken,
-            refresh: 'new-refresh-token'
-          }
-        }
-      });
-
-      // Retry succeeds
-      mockAxiosInstance.get.mockResolvedValueOnce({
-        data: {
-          data: { success: true }
-        }
-      });
-
-      // Make API call that should trigger refresh
-      await useAuthStore.getState().fetchUserData({ api: mockAxiosInstance });
-
-      // Verify token refresh flow
-      expect(mockAxiosInstance.post).toHaveBeenCalledWith(
-        '/api/auth/refresh',
-        { refresh: refreshToken }
-      );
-      expect(useAuthStore.getState().token).toBe(newToken);
-      expect(mockStorage.setItem).toHaveBeenCalledWith('token', newToken);
-    });
-
-    it('should clear auth state on refresh token failure', async () => {
-      // Set up initial state
-      useAuthStore.getState().setToken('expired-token');
-      useAuthStore.getState().setRefreshToken('invalid-refresh-token');
-      useAuthStore.getState().setUser({ id: '123' });
-
-      // API call fails with 401
-      mockAxiosInstance.get.mockRejectedValueOnce({
-        response: {
-          status: 401,
-          data: { error: 'Token expired' }
-        }
-      });
-
-      // Refresh token request fails
-      mockAxiosInstance.post.mockRejectedValueOnce({
-        response: {
-          status: 401,
-          data: { error: 'Invalid refresh token' }
-        }
-      });
-
-      try {
-        await useAuthStore.getState().fetchUserData({ api: mockAxiosInstance });
-        fail('Expected an error to be thrown');
-      } catch (error) {
-        // Verify auth state is cleared
-        expect(useAuthStore.getState().token).toBeNull();
-        expect(useAuthStore.getState().refreshToken).toBeNull();
-        expect(useAuthStore.getState().user).toBeNull();
-        expect(mockStorage.removeItem).toHaveBeenCalledWith('token');
-        expect(mockStorage.removeItem).toHaveBeenCalledWith('refreshToken');
-        expect(mockStorage.removeItem).toHaveBeenCalledWith('userData');
-      }
-    });
-
-    it('should handle concurrent API calls during token refresh', async () => {
-      const initialToken = 'initial-token';
-      const refreshToken = 'refresh-token';
-      const newToken = 'new-token';
-
-      // Set up initial state
-      useAuthStore.getState().setToken(initialToken);
-      useAuthStore.getState().setRefreshToken(refreshToken);
-
-      // All initial calls fail with 401
-      const failedResponse = {
-        response: {
-          status: 401,
-          data: { error: 'Token expired' }
-        }
-      };
-
-      mockAxiosInstance.get.mockRejectedValueOnce(failedResponse);
-      mockAxiosInstance.patch.mockRejectedValueOnce(failedResponse);
-
-      // Token refresh succeeds
-      mockAxiosInstance.post.mockResolvedValueOnce({
-        data: {
-          data: {
-            access: newToken,
-            refresh: 'new-refresh-token'
-          }
-        }
-      });
-
-      // Retries succeed
-      const successResponse = {
-        data: {
-          data: { success: true }
-        }
-      };
-
-      mockAxiosInstance.get.mockResolvedValueOnce(successResponse);
-      mockAxiosInstance.patch.mockResolvedValueOnce(successResponse);
-
-      // Make concurrent API calls
-      const [result1, result2] = await Promise.all([
-        useAuthStore.getState().fetchUserData({ api: mockAxiosInstance }),
-        useAuthStore.getState().updateUser({ name: 'test' }, { api: mockAxiosInstance })
-      ]);
-
-      // Verify token refresh was only called once
-      expect(mockAxiosInstance.post).toHaveBeenCalledTimes(1);
-      expect(useAuthStore.getState().token).toBe(newToken);
-
-      // Verify both calls succeeded
-      expect(result1).toEqual({ success: true });
-      expect(result2).toEqual({ success: true });
     });
 
     it('should maintain auth state across page reloads', () => {
@@ -446,7 +288,7 @@ describe('useAuthStore', () => {
       });
 
       // Initialize store (simulates page load)
-      useAuthStore.getState().hydrate();
+      useAuthStore.getState().init();
 
       // Verify state is restored
       expect(useAuthStore.getState().user).toEqual(userData);

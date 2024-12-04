@@ -36,7 +36,7 @@ export const useAuthStore = create(
           set({
             token,
             refreshToken,
-            user: userData ? JSON.parse(userData) : null,
+            user: userData,
             isAuthenticated: !!token
           });
         },
