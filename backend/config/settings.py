@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "main",
     "worker",
     "experiment",
+    "payment",
 ]
 
 MIDDLEWARE = [
