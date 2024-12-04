@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CardSkeleton } from '../../../components/ui/Skeleton/Skeleton';
 import 'chart.js/auto';
-import { storageHelper } from '../../../utils/apiInit';
+import { useAuthStore } from '../../../stores';
 import DashboardLayout from '../../../components/layout/DashboardLayout/DashboardLayout';
 import Tabs from '../../../components/ui/Tabs/Tabs';
 import AccountTab from './Tabs/AccountTab/AccountTab';
@@ -14,7 +14,7 @@ const Settings = () => {
   useEffect(() => {
     // Fetch user data from API after component mounts
     const fetchData = async () => {
-      const user = await storageHelper.getUserData();
+      const user = await useAuthStore.getState().fetchUserData();
       setUserData(user);
       setIsLoading(false);
     };

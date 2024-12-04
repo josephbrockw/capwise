@@ -554,7 +554,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18", "@types/react@^18.2.64":
+"@types/react@*", "@types/react@^18", "@types/react@^18.2.64", "@types/react@>=18.0.0":
   version "18.3.12"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.3.12.tgz"
   integrity sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==
@@ -3405,7 +3405,7 @@ react-router@6.28.0:
   dependencies:
     "@remix-run/router" "1.21.0"
 
-react@^18, react@^18.0.0, react@^18.3.1, react@>=16.8:
+react@^18, react@^18.0.0, react@^18.3.1, react@>=16.8, react@>=18.0.0:
   version "18.3.1"
   resolved "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
@@ -4330,3 +4330,8 @@ yocto-queue@^1.0.0:
   version "1.1.1"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-1.1.1.tgz"
   integrity sha512-b4JR1PFR10y1mKjhHY9LaGo6tmrgjit7hxVIeAmyMw3jegXR4dhYqLaQF5zMXZxY7tLpMyJeLjr1C4rLmkVe8g==
+
+zustand@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.1.tgz"
+  integrity sha512-pRET7Lao2z+n5R/HduXMio35TncTlSW68WsYBq2Lg1ASspsNGjpwLAsij3RpouyV6+kHMwwwzP0bZPD70/Jx/w==

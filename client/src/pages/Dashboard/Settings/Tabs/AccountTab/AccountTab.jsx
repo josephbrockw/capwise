@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@/components/ui/Button/Button';
 import FloatLabel from '@/components/ui/FloatLabel/FloatLabel';
 import Toast from '@/components/ui/Toast/Toast';
-import api, { storageHelper } from '@/utils/apiInit';
+import { useAuthStore } from '@/stores';
 import './AccountTab.css';
 
 const AccountTab = () => {
@@ -14,13 +14,13 @@ const AccountTab = () => {
   const [originalData, setOriginalData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const { updateUser } = useAuthStore();
 
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        // First try to load from localStorage
-        const userData = await storageHelper.getUserData();
-        if (userData?.first_name) {
+        const userData = await useAuthStore.getState().fetchUserData();
+        if (userData) {
           const { first_name, last_name, preferred_name } = userData;
           setFormData({
             first_name: first_name || '',
@@ -28,25 +28,11 @@ const AccountTab = () => {
             preferred_name: preferred_name || ''
           });
           setOriginalData({ first_name, last_name, preferred_name });
-          return;
-        }
-
-        // If no data in localStorage, fetch from API
-        const response = await api.get('/api/users/me');
-        if (response.data?.data) {
-          const { first_name, last_name, preferred_name } = response.data.data;
-          setFormData({
-            first_name: first_name || '',
-            last_name: last_name || '',
-            preferred_name: preferred_name || ''
-          });
-          setOriginalData({ first_name, last_name, preferred_name });
-          storageHelper.setItem('userData', response.data.data);
         }
       } catch (err) {
         setToast({
           type: 'error',
-          message: err.response?.data?.error || 'Failed to load user data'
+          message: err.message || 'Failed to load user data'
         });
       }
     };
@@ -59,7 +45,6 @@ const AccountTab = () => {
       ...prev,
       [name]: value
     }));
-    setToast(null);
   };
 
   const getChangedFields = () => {
@@ -75,22 +60,22 @@ const AccountTab = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setToast(null);
+
     try {
       const changedFields = getChangedFields();
-      const response = await api.patch('/api/users/me', changedFields);
+      await updateUser(changedFields);
 
-      if (response.data?.data) {
-        storageHelper.setItem('userData', response.data.data);
-        setOriginalData({ ...formData });
-        setToast({
-          type: 'success',
-          message: response.data.message || 'User information updated successfully.'
-        });
-      }
+      setOriginalData({ ...formData });
+      setToast({
+        type: 'success',
+        message: 'User information updated successfully.'
+      });
     } catch (err) {
+      console.error('Update error:', err);
       setToast({
         type: 'error',
-        message: err.response?.data?.error || 'An error occurred while updating your information.'
+        message: err.message || 'Failed to update user data'
       });
     } finally {
       setIsLoading(false);
@@ -109,7 +94,7 @@ const AccountTab = () => {
           message={toast.message}
           type={toast.type}
           onClose={() => setToast(null)}
-          data-cy={`${toast.type}-message`}
+          data-cy={`toast-${toast.type}`}
         />
       )}
 

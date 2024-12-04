@@ -9,61 +9,81 @@ describe('Account Settings Page', () => {
   };
 
   beforeEach(() => {
-    // Mock initial user data in localStorage
-    cy.window().then((win) => {
-      win.localStorage.setItem('token', 'mock-token');
-      win.localStorage.setItem('userData', JSON.stringify(mockUserData));
+    // Clear localStorage before each test
+    cy.clearLocalStorage();
+
+    // Always set up the intercept for potential API calls
+    cy.intercept('GET', '**/api/users/me', {
+      statusCode: 200,
+      body: {
+        data: mockUserData,
+        message: '',
+        error: '',
+        error_code: null
+      }
+    }).as('getUserData');
+  });
+
+  describe('with localStorage data', () => {
+    beforeEach(() => {
+      // Set up initial state in localStorage
+      cy.window().then((win) => {
+        win.localStorage.setItem('token', 'mock-token');
+        win.localStorage.setItem('userData', JSON.stringify(mockUserData));
+      });
+
+      cy.visit('/settings');
+      // No need to wait for API call since data is in localStorage
     });
 
-    // Intercept GET request for user data
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '**/api/users/me',
-        headers: {
-          Authorization: 'Bearer mock-token'
-        }
-      },
-      {
-        statusCode: 200,
-        body: {
-          data: mockUserData,
-          message: '',
-          error: '',
-          error_code: null
-        }
-      }
-    ).as('getUserData');
-
-    // Visit the settings page
-    cy.visit('/settings');
+    it('loads user data from localStorage', () => {
+      cy.get('[data-cy="first-name-input"]')
+        .should('have.value', mockUserData.first_name);
+      cy.get('[data-cy="last-name-input"]')
+        .should('have.value', mockUserData.last_name);
+      cy.get('[data-cy="preferred-name-input"]')
+        .should('have.value', mockUserData.preferred_name);
+    });
   });
 
-  it('loads and displays user data correctly', () => {
-    cy.get('[data-cy="first-name-input"]')
-      .should('have.value', mockUserData.first_name);
-    cy.get('[data-cy="last-name-input"]')
-      .should('have.value', mockUserData.last_name);
-    cy.get('[data-cy="preferred-name-input"]')
-      .should('have.value', mockUserData.preferred_name);
+  describe('without localStorage data', () => {
+    beforeEach(() => {
+      // Only set token, no user data
+      cy.window().then((win) => {
+        win.localStorage.setItem('token', 'mock-token');
+      });
+
+      cy.visit('/settings');
+      cy.wait('@getUserData'); // Wait for API call since no data in localStorage
+    });
+
+    it('loads user data from API', () => {
+      cy.get('[data-cy="first-name-input"]')
+        .should('have.value', mockUserData.first_name);
+      cy.get('[data-cy="last-name-input"]')
+        .should('have.value', mockUserData.last_name);
+      cy.get('[data-cy="preferred-name-input"]')
+        .should('have.value', mockUserData.preferred_name);
+    });
   });
 
-  it('successfully updates user information', () => {
-    const updatedData = {
-      ...mockUserData,
-      preferred_name: 'Mother'
-    };
+  describe('user interactions', () => {
+    beforeEach(() => {
+      // Set up initial state in localStorage
+      cy.window().then((win) => {
+        win.localStorage.setItem('token', 'mock-token');
+        win.localStorage.setItem('userData', JSON.stringify(mockUserData));
+      });
+      cy.visit('/settings');
+    });
 
-    // Intercept the PATCH request
-    cy.intercept(
-      {
-        method: 'PATCH',
-        url: '**/api/users/me',
-        headers: {
-          Authorization: 'Bearer mock-token'
-        }
-      },
-      {
+    it('successfully updates user information', () => {
+      const updatedData = {
+        ...mockUserData,
+        preferred_name: 'Mother'
+      };
+
+      cy.intercept('PATCH', '**/api/users/me', {
         statusCode: 200,
         body: {
           data: updatedData,
@@ -71,151 +91,83 @@ describe('Account Settings Page', () => {
           error: '',
           error_code: null
         }
-      }
-    ).as('updateUser');
+      }).as('updateUser');
 
-    // Update preferred name
-    cy.get('[data-cy="preferred-name-input"]').as('prefNameInput');
-    cy.get('@prefNameInput').clear();
-    cy.get('@prefNameInput').type(updatedData.preferred_name);
+      cy.get('[data-cy="preferred-name-input"]').clear();
+      cy.get('[data-cy="preferred-name-input"]').type(updatedData.preferred_name);
+      cy.get('[data-cy="save-profile-button"]').click();
 
-    // Submit form
-    cy.get('[data-cy="save-profile-button"]').click();
+      cy.wait('@updateUser').then((interception) => {
+        expect(interception.request.body).to.deep.equal({
+          preferred_name: updatedData.preferred_name
+        });
+      });
 
-    // Wait for the request and verify
-    cy.wait('@updateUser').then((interception) => {
-      expect(interception.request.body).to.have.property('preferred_name', updatedData.preferred_name);
+      cy.get('[data-cy="toast-success"]')
+        .should('be.visible')
+        .and('contain', 'User information updated successfully');
     });
 
-    // Check success toast
-    cy.get('[data-cy="success-message"]')
-      .should('be.visible')
-      .and('contain', 'User information updated successfully');
-
-    // Verify local storage was updated
-    cy.window().then((win) => {
-      const storedData = JSON.parse(win.localStorage.getItem('userData'));
-      expect(storedData.preferred_name).to.equal(updatedData.preferred_name);
-    });
-  });
-
-  it('handles API errors appropriately', () => {
-    // Intercept the PATCH request with an error response
-    cy.intercept(
-      {
-        method: 'PATCH',
-        url: '**/api/users/me',
-        headers: {
-          Authorization: 'Bearer mock-token'
-        }
-      },
-      {
+    it('handles API errors appropriately', () => {
+      cy.intercept('PATCH', '**/api/users/me', {
         statusCode: 400,
         body: {
-          data: {},
+          data: null,
           message: '',
           error: 'Invalid input provided.',
-          error_code: null
+          error_code: 'VALIDATION_ERROR'
         }
-      }
-    ).as('updateUserError');
+      }).as('updateUserError');
 
-    // Make an invalid update
-    cy.get('[data-cy="first-name-input"]').as('firstNameInput');
-    cy.get('@firstNameInput').clear();
-    cy.get('@firstNameInput').type('   '); // Empty or whitespace name
+      cy.get('[data-cy="first-name-input"]').clear();
+      cy.get('[data-cy="first-name-input"]').type('   ');
+      cy.get('[data-cy="save-profile-button"]').click();
 
-    // Submit form
-    cy.get('[data-cy="save-profile-button"]').click();
-
-    // Wait for the request
-    cy.wait('@updateUserError');
-
-    // Check error toast
-    cy.get('[data-cy="error-message"]')
-      .should('be.visible')
-      .and('contain', 'Invalid input provided');
-
-    // Verify local storage wasn't updated
-    cy.window().then((win) => {
-      const storedData = JSON.parse(win.localStorage.getItem('userData'));
-      expect(storedData).to.deep.equal(mockUserData);
+      cy.wait('@updateUserError');
+      cy.get('[data-cy="toast-error"]')
+        .should('be.visible')
+        .and('contain', 'Invalid input provided');
     });
-  });
 
-  it('disables save button when no changes are made', () => {
-    cy.get('[data-cy="save-profile-button"]')
-      .should('be.disabled');
+    it('disables save button when no changes are made', () => {
+      cy.get('[data-cy="save-profile-button"]')
+        .should('be.disabled');
 
-    // Make a change
-    cy.get('[data-cy="preferred-name-input"]').as('prefNameInput');
-    cy.get('@prefNameInput').clear();
-    cy.get('@prefNameInput').type('New Name');
+      cy.get('[data-cy="preferred-name-input"]').clear();
+      cy.get('[data-cy="preferred-name-input"]').type('New Name');
+      cy.get('[data-cy="save-profile-button"]')
+        .should('not.be.disabled');
 
-    // Button should be enabled
-    cy.get('[data-cy="save-profile-button"]')
-      .should('not.be.disabled');
+      cy.get('[data-cy="preferred-name-input"]').clear();
+      cy.get('[data-cy="preferred-name-input"]').type(mockUserData.preferred_name);
+      cy.get('[data-cy="save-profile-button"]')
+        .should('be.disabled');
+    });
 
-    // Revert the change
-    cy.get('@prefNameInput').clear();
-    cy.get('@prefNameInput').type(mockUserData.preferred_name);
-
-    // Button should be disabled again
-    cy.get('[data-cy="save-profile-button"]')
-      .should('be.disabled');
-  });
-
-  it('handles network errors gracefully', () => {
-    // Intercept the PATCH request with a network error
-    cy.intercept(
-      {
-        method: 'PATCH',
-        url: '**/api/users/me',
-        headers: {
-          Authorization: 'Bearer mock-token'
-        }
-      },
-      {
+    it('handles network errors gracefully', () => {
+      cy.intercept('PATCH', '**/api/users/me', {
         forceNetworkError: true
-      }
-    ).as('networkError');
+      }).as('networkError');
 
-    // Make a change and submit
-    cy.get('[data-cy="preferred-name-input"]').as('prefNameInput');
-    cy.get('@prefNameInput').clear();
-    cy.get('@prefNameInput').type('New Name');
+      cy.get('[data-cy="preferred-name-input"]').clear();
+      cy.get('[data-cy="preferred-name-input"]').type('New Name');
+      cy.get('[data-cy="save-profile-button"]').click();
 
-    cy.get('[data-cy="save-profile-button"]').click();
-
-    // Check error toast
-    cy.get('[data-cy="error-message"]')
-      .should('be.visible')
-      .and('contain', 'An error occurred');
-
-    // Verify local storage wasn't updated
-    cy.window().then((win) => {
-      const storedData = JSON.parse(win.localStorage.getItem('userData'));
-      expect(storedData).to.deep.equal(mockUserData);
+      // Wait for the network error and verify the error toast
+      cy.wait('@networkError');
+      cy.get('[data-cy="toast-error"]')
+        .should('be.visible')
+        .and('contain', 'Network error');
     });
-  });
 
-  it('reverts unsaved changes on page reload', () => {
-    const newName = 'Gy';
+    it('reverts unsaved changes on page reload', () => {
+      cy.get('[data-cy="preferred-name-input"]').clear();
+      cy.get('[data-cy="preferred-name-input"]').type('Unsaved Name');
 
-    // Make a change
-    cy.get('[data-cy="preferred-name-input"]').as('prefNameInput');
-    cy.get('@prefNameInput').clear();
-    cy.get('@prefNameInput').type(newName);
-
-    // Verify change is there before reload
-    cy.get('[data-cy="preferred-name-input"]')
-      .should('have.value', newName);
-
-    // Reload the page
-    cy.reload();
-
-    // Verify the value reverts to what's in localStorage
-    cy.get('[data-cy="preferred-name-input"]')
-      .should('have.value', mockUserData.preferred_name);
+      // Reload and verify original data is displayed
+      cy.reload();
+      cy.get('[data-cy="preferred-name-input"]')
+        .should('have.value', mockUserData.preferred_name);
+    });
   });
 });
