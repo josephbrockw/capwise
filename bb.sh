@@ -43,6 +43,7 @@ usage() {
     echo "  loaddata       - Loads data from a given file path into the database."
     echo "  makemigrations - Makes migrations for the database."
     echo "  migrate        - Runs Django migrations inside the backend container."
+    echo "  app            - Creates a new Django app with the given name."
     echo "Use '$0 workflow_name --help' for more information on a specific workflow."
 }
 
@@ -152,6 +153,14 @@ loaddata_help() {
     echo "Loaddata Help"
     echo "Usage: $0 loaddata filepath"
     echo "Description: Loads data from a specified fixture file path into the database."
+}
+
+# Function for app help
+app_help() {
+    echo "App Help:"
+    echo "Usage: $0 app [app_name]"
+    echo "Description: Creates a new Django app with the given name."
+    echo "Example: $0 app users"
 }
 
 # Function to display test summary
@@ -431,6 +440,23 @@ case $workflow in
         fi
         echo "Running migrations..."
         $CMD
+        ;;
+    app)
+        if [[ "$1" == "--help" ]]; then
+            app_help
+            exit 0
+        fi
+        if [ -z "$1" ]; then
+            echo -e "${RED}Error: App name is required${NC}"
+            app_help
+            exit 1
+        fi
+        exec_backend python manage.py startapp "$1"
+        echo -e "${GREEN}Successfully created Django app: $1${NC}"
+        echo -e "${BOLD}Remember to:${NC}"
+        echo "1. Add '$1' to INSTALLED_APPS in settings.py"
+        echo "2. Create your models in $1/models.py"
+        echo "3. Register your models in $1/admin.py"
         ;;
     *)
         echo "Unknown workflow: $workflow"
