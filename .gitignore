@@ -3,6 +3,7 @@ bb-dev
 *.sqlite3
 .idea
 backend/.env.secrets
+client/.env.secrets
 
 # pre-commit cache
 .pre-commit/
