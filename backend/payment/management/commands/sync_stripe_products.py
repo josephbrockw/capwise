@@ -47,20 +47,23 @@ class Command(BaseCommand):
                 else:
                     billing_cycle = "lifetime"
 
-                price, created = Price.objects.get_or_create(
-                    tier=tier,
-                    stripe_price_id=stripe_price["id"],
-                    billing_cycle=billing_cycle,
-                )
+                if Price.objects.filter(stripe_price_id=stripe_price["id"]).exists():
+                    price = Price.objects.get(stripe_price_id=stripe_price["id"])
 
-                if price.price != stripe_price["unit_amount"]:
-                    self.stdout.write(
-                        self.style.SUCCESS(f"  - Updated Price: {price.__str__()}")
+                    if price.price != stripe_price["unit_amount"]:
+                        price.price = stripe_price["unit_amount"]
+                        price.save()
+                        self.stdout.write(
+                            self.style.SUCCESS(f"Updated Price: {price.__str__()}")
+                        )
+                else:
+                    price = Price.objects.create(
+                        tier=tier,
+                        stripe_price_id=stripe_price["id"],
+                        billing_cycle=billing_cycle,
+                        price=stripe_price["unit_amount"],
                     )
-                price.price = stripe_price["unit_amount"]
-                price.save()
 
-                if created:
                     self.stdout.write(
                         self.style.SUCCESS(f"Created Price: {price.__str__()}")
                     )
