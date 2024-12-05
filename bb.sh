@@ -44,6 +44,7 @@ usage() {
     echo "  makemigrations - Makes migrations for the database."
     echo "  migrate        - Runs Django migrations inside the backend container."
     echo "  app            - Creates a new Django app with the given name."
+    echo "  manage         - Execute Django management commands inside the backend container."
     echo "Use '$0 workflow_name --help' for more information on a specific workflow."
 }
 
@@ -161,6 +162,14 @@ app_help() {
     echo "Usage: $0 app [app_name]"
     echo "Description: Creates a new Django app with the given name."
     echo "Example: $0 app users"
+}
+
+# Function for manage help
+manage_help() {
+    echo "Manage Help:"
+    echo "Usage: $0 manage [command]"
+    echo "Description: Execute Django management commands inside the backend container."
+    echo "Example: $0 manage createsuperuser"
 }
 
 # Function to display test summary
@@ -440,6 +449,13 @@ case $workflow in
         fi
         echo "Running migrations..."
         $CMD
+        ;;
+    manage)
+        if [[ "$1" == "--help" ]]; then
+            manage_help
+            exit 0
+        fi
+        exec_backend python manage.py "$@"
         ;;
     app)
         if [[ "$1" == "--help" ]]; then
