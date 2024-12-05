@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
 
@@ -19,11 +21,8 @@ class Product(models.Model):
 class Tier(models.Model):
     name = models.CharField(max_length=255)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price_monthly = models.IntegerField()
-    price_yearly = models.IntegerField()
-    price_lifetime = models.IntegerField()
-    features = models.JSONField()
-    stripe_price_id = models.CharField(max_length=255)
+    features = models.JSONField(blank=True, null=True)
+    stripe_product_id = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.product.name} - {self.name}" if self.product else self.name
@@ -35,6 +34,37 @@ class Tier(models.Model):
         unique_together = ("product", "name")
 
 
+class Price(models.Model):
+    BILLING_CYCLE_CHOICES = [
+        ("monthly", "Monthly"),
+        ("yearly", "Yearly"),
+        ("lifetime", "Lifetime"),
+    ]
+    tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
+    billing_cycle = models.CharField(
+        max_length=20, choices=BILLING_CYCLE_CHOICES, default="monthly"
+    )
+    price = models.PositiveIntegerField()
+    stripe_price_id = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "Payment Cycle"
+        verbose_name_plural = "Payment Cycles"
+        db_table = "payment_cycles"
+        unique_together = ("tier", "billing_cycle")
+
+    def __str__(self):
+        product_name = self.tier.product.name
+        tier_name = self.tier.name
+        price = f"{self.billing_cycle} @ {self.display_price}"
+        return f"{product_name} - {tier_name} ({price})"
+
+    @property
+    def display_price(self):
+        # I want to turn the price field (cents) into a dollar amount
+        return f"${Decimal(self.price) / 100:.2f}"
+
+
 class Subscription(models.Model):
     BILLING_CYCLE_CHOICES = [
         ("monthly", "Monthly"),
@@ -44,21 +74,22 @@ class Subscription(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     tier = models.ForeignKey(Tier, on_delete=models.CASCADE)
-    price = models.IntegerField()
     is_active = models.BooleanField(default=True)
     stripe_customer_id = models.CharField(max_length=255)
     stripe_subscription_id = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    next_billing_date = models.DateField()
+    price = models.IntegerField()
     billing_cycle = models.CharField(
         max_length=20, choices=BILLING_CYCLE_CHOICES, default="monthly"
     )
-    next_billing_date = models.DateField()
 
     class Meta:
         verbose_name = "Subscription"
         verbose_name_plural = "Subscriptions"
         db_table = "subscriptions"
+        unique_together = ("user", "tier")
 
     def __str__(self):
         return f"{self.user.email} - {self.tier.name}"
