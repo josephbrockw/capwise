@@ -55,6 +55,9 @@ test_help() {
     echo "Description: Runs the full test suite or specific test subsets."
     echo "Options:"
     echo "  -b                Run only the Django tests."
+    echo "                    Additional options for Django tests:"
+    echo "                    -k pattern     Run tests matching the given pattern"
+    echo "                    -s             Show print statements during test execution"
     echo "  -c                Run all the client tests (E2E, component, and unit)."
     echo "  --client-unit     Run only the Vitest tests."
     echo "  --e2e             Run only Cypress end-to-end (E2E) tests."
@@ -227,6 +230,25 @@ case $workflow in
                     run_cypress_e2e_tests=false
                     run_cypress_component_tests=false
                     run_vitest_tests=false
+
+                    shift
+                    backend_args="-p no:warnings"
+                    while [[ $# -gt 0 ]]; do
+                        case $1 in
+                            -k)
+                                shift
+                                backend_args="$backend_args -k $1"
+                                ;;
+                            -s)
+                                backend_args="$backend_args -s"
+                                ;;
+                            *)
+                                echo "Unknown option for backend tests: $1"
+                                exit 1
+                                ;;
+                        esac
+                        shift
+                    done
                     ;;
                 -c)
                     run_django_tests=false
@@ -273,14 +295,15 @@ case $workflow in
             exit 0
         fi
 
+        # Run Django tests if enabled
         if [ "$run_django_tests" = true ]; then
             echo "Running Django tests..."
-            if [ -n "$test_type" ]; then
+            if [ ! -z "$test_type" ]; then
                 exec_backend pytest -p no:warnings -v -k "$test_type"
-            elif [ -n "$test_keyword" ]; then
+            elif [ ! -z "$test_keyword" ]; then
                 exec_backend pytest -p no:warnings -v -k "$test_keyword"
             else
-                exec_backend pytest -p no:warnings
+                exec_backend pytest $backend_args
             fi
             django_exit_code=$?
         fi

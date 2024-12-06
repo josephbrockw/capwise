@@ -8,6 +8,7 @@ from rest_framework_simplejwt.serializers import (
 from rest_framework_simplejwt.tokens import TokenError
 
 from experiment.models import Experiment, Variation
+from payment.models import Price, Product, Tier
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -114,3 +115,25 @@ class ExperimentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experiment
         fields = ["id", "name", "description", "created_at", "active", "variations"]
+
+
+class PriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Price
+        fields = ["id", "billing_cycle", "price"]
+
+
+class TierSerializer(serializers.ModelSerializer):
+    prices = PriceSerializer(many=True, read_only=True, source="price_set")
+
+    class Meta:
+        model = Tier
+        fields = ["id", "name", "stripe_product_id", "prices"]
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    tiers = TierSerializer(many=True, read_only=True, source="tier_set")
+
+    class Meta:
+        model = Product
+        fields = ["id", "name", "description", "is_active", "tiers"]
