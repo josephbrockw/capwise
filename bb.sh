@@ -67,21 +67,6 @@ test_help() {
     echo "  --k=keyword       Run Django tests matching a specific keyword in the name."
 }
 
-# Function for cypress help
-test_help() {
-    echo "Test Help:"
-    echo "Usage: $0 test [options]"
-    echo "Description: Runs the full test suite or specific test subsets."
-    echo "Options:"
-    echo "  -b                Run only the Django tests."
-    echo "  -c                Run only the Cypress tests (E2E and component)."
-    echo "  --e2e             Run only Cypress end-to-end (E2E) tests."
-    echo "  --component       Run only Cypress component tests."
-    echo "  --open            Open the Cypress test runner."
-    echo "  --type=testtype   Run functional or unit tests in isolation (Django tests)."
-    echo "  --k=keyword       Run Django tests matching a specific keyword in the name."
-}
-
 # Function for full suite testing help
 full_test_help() {
     echo "Full Test Help:"
@@ -224,31 +209,26 @@ case $workflow in
         run_cypress_component_tests=true
         run_vitest_tests=true
 
-        for arg in "$@"; do
-            case $arg in
+        while [[ $# -gt 0 ]]; do
+            case $1 in
                 -b)
                     run_cypress_e2e_tests=false
                     run_cypress_component_tests=false
                     run_vitest_tests=false
-
-                    shift
                     backend_args="-p no:warnings"
-                    while [[ $# -gt 0 ]]; do
-                        case $1 in
-                            -k)
-                                shift
-                                backend_args="$backend_args -k $1"
-                                ;;
-                            -s)
-                                backend_args="$backend_args -s"
-                                ;;
-                            *)
-                                echo "Unknown option for backend tests: $1"
-                                exit 1
-                                ;;
-                        esac
-                        shift
-                    done
+                    ;;
+                -k)
+                    if [[ -z "$2" ]]; then
+                        echo "Error: -k requires a test pattern"
+                        exit 1
+                    fi
+                    backend_args="$backend_args -k $2"
+                    shift  # skip the -k
+                    shift  # skip the pattern
+                    continue
+                    ;;
+                -s)
+                    backend_args="$backend_args -s"
                     ;;
                 -c)
                     run_django_tests=false
@@ -282,11 +262,12 @@ case $workflow in
                     test_keyword="${arg#*=}"
                     ;;
                 *)
-                    echo "Unknown argument: $arg"
+                    echo "Unknown argument: $1"
                     test_help
                     exit 1
                     ;;
             esac
+            shift
         done
 
         if [ -n "$cypress_open_command" ]; then
@@ -302,8 +283,10 @@ case $workflow in
                 exec_backend pytest -p no:warnings -v -k "$test_type"
             elif [ ! -z "$test_keyword" ]; then
                 exec_backend pytest -p no:warnings -v -k "$test_keyword"
-            else
+            elif [ ! -z "$backend_args" ]; then
                 exec_backend pytest $backend_args
+            else
+                exec_backend pytest -p no:warnings
             fi
             django_exit_code=$?
         fi

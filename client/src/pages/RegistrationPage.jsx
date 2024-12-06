@@ -3,8 +3,8 @@ import axios from 'axios';
 import FloatLabel from "../components/ui/FloatLabel/FloatLabel";
 import Button from "../components/ui/Button/Button";
 import AuthLayout from "../components/layout/AuthLayout/AuthLayout";
-import Stepper from "../components/ui/Stepper/Stepper";
 import VerticalStepper from "../components/ui/Stepper/VerticalStepper";
+import Product from "../components/Product/Product";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ const Register = () => {
     username: '',
     password1: '',
     password2: '',
+    selectedProduct: null,
   });
   const [currentStep, setCurrentStep] = useState(0);
   const steps = ['Personal Info', 'Product', 'Confirmation'];
@@ -99,6 +100,7 @@ const Register = () => {
         return (
           <div>
             <h2>Choose a Product</h2>
+            <Product />
           </div>
         );
       case 2:
