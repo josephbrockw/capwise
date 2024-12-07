@@ -128,7 +128,7 @@ class TierSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tier
-        fields = ["id", "name", "stripe_product_id", "prices"]
+        fields = ["id", "name", "stripe_product_id", "prices", "features"]
 
 
 class ProductSerializer(serializers.ModelSerializer):

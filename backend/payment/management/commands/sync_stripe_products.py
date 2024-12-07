@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from payment.models import Price, Product, Tier
+from payment.process import validate_and_update_tier_features
 
 
 class Command(BaseCommand):
@@ -12,6 +13,7 @@ class Command(BaseCommand):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         self.sync_products()
         self.sync_prices()
+        validate_and_update_tier_features()
 
     def sync_products(self):
         products = stripe.Product.list(active=True)

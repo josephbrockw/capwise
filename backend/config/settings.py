@@ -323,3 +323,24 @@ LOGGING = {
 STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 APP_NAME = os.environ.get("APP_NAME", "BaseBuild")
+
+# Product Feature Master List
+MASTER_FEATURE_LIST = {
+    "BaseBuild": {
+        "priority_support": {
+            "display_name": "Priority Support",
+            "description": "Access to 24/7 priority support",
+            "included": False,
+        },
+        "unlimited_projects": {
+            "display_name": "Unlimited Projects",
+            "description": "Create unlimited projects",
+            "included": False,
+        },
+        "team_members": {
+            "display_name": "Team Members",
+            "description": "Invite team members to your projects",
+            "included": False,
+        },
+    },
+}
