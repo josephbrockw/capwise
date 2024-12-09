@@ -4,7 +4,7 @@ import FloatLabel from "../components/ui/FloatLabel/FloatLabel";
 import Button from "../components/ui/Button/Button";
 import AuthLayout from "../components/layout/AuthLayout/AuthLayout";
 import VerticalStepper from "../components/ui/Stepper/VerticalStepper";
-import Product from "../components/Product/Product";
+import Product from "../components/ui/Product/Product";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,9 @@ const Register = () => {
     username: '',
     password1: '',
     password2: '',
-    selectedProduct: null,
+    productId: null,
+    tierId: null,
+    priceId: null,
   });
   const [currentStep, setCurrentStep] = useState(0);
   const steps = ['Personal Info', 'Product', 'Confirmation'];
@@ -28,12 +30,18 @@ const Register = () => {
 
   const handleContinue = (e) => {
     e.preventDefault();
-    if (currentStep < steps.length -1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-        handleSubmit(e);
+    // Only validate product selection when trying to advance from the product step
+    if (currentStep === 1 && !formData.productId) {
+      setErrorMessage('Please select a product plan to continue');
+      return;
     }
-  }
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+      setErrorMessage(''); // Clear any error message when moving forward
+    } else {
+      handleSubmit(e);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,8 +107,17 @@ const Register = () => {
       case 1:
         return (
           <div>
-            <h2>Choose a Product</h2>
-            <Product />
+            <Product
+              onSelect={(productId, tierId, priceId) => {
+                setFormData(prev => ({
+                  ...prev,
+                  productId,
+                  tierId,
+                  priceId
+                }));
+                setErrorMessage('');
+              }}
+            />
           </div>
         );
       case 2:

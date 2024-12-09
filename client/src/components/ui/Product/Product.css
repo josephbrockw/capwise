@@ -1,0 +1,141 @@
+.products-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.billing-selector {
+  display: flex;
+  justify-content: center;
+}
+
+.billing-select {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: white;
+  font-size: 1rem;
+  color: #1a1a1a;
+  cursor: pointer;
+  min-width: 200px;
+  text-align: center;
+}
+
+.billing-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.product-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+.product-tier-container {
+  display: contents;
+}
+
+.product-card {
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  margin-bottom: 0;
+  height: auto !important; /* Force override any other height settings */
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-card.selected {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.02);
+}
+
+.product-price {
+  text-align: center;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.price-amount {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.price-cycle {
+  color: #666;
+  font-size: 1rem;
+}
+
+.product-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.feature-icon.included {
+  background: #22c55e;
+  color: white;
+}
+
+.feature-icon.not-included {
+  background: #ef4444;
+  color: white;
+}
+
+.feature-text {
+  color: #4a5568;
+}
+
+.select-button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select-button:hover {
+  background: #2563eb;
+}
+
+.select-button.selected {
+  background: #22c55e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .products-container {
+    padding: 1rem;
+  }
+
+  .product-cards {
+    grid-template-columns: 1fr;
+  }
+}
