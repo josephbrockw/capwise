@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useProductStore from '../../../stores/useProductStore';
 import Card from '../Card/Card';
 import './Product.css';
+import { capitalize } from '../../../utils/stringMagic';
 
 const Product = ({ onSelect }) => {
   const { products, loading, error, fetchProducts } = useProductStore();
@@ -44,6 +45,18 @@ const Product = ({ onSelect }) => {
     return price;
   };
 
+  const getBillingCycleOptions = () => Array.from(
+    new Set(
+      products.flatMap(
+        product => product.tiers.flatMap(
+          tier => tier.prices.map(
+            price => price.billing_cycle
+          )
+        )
+      )
+    )
+  );
+
   return (
     <div className="products-container">
       <div className="billing-selector">
@@ -53,8 +66,13 @@ const Product = ({ onSelect }) => {
           className="billing-select"
           defaultValue="month"
         >
-          <option value="month">Monthly Billing</option>
-          <option value="year">Annual Billing</option>
+          {getBillingCycleOptions().map((option) => (
+            <option key={option} value={option}>
+              {capitalize(option)}
+            </option>
+          ))}
+          {/*<option value="month">Monthly Billing</option>*/}
+          {/*<option value="year">Annual Billing</option>*/}
         </select>
       </div>
 
@@ -81,7 +99,7 @@ const Product = ({ onSelect }) => {
                   </div>
 
                   <div className="product-features">
-                    {Object.entries(tier.features).map(([key, feature]) => (
+                    {tier.features && Object.entries(tier.features).map(([key, feature]) => (
                       <div key={key} className="feature-item">
                         {feature.included ? (
                           <span className="feature-icon included">✓</span>

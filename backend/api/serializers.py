@@ -128,7 +128,7 @@ class TierSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tier
-        fields = ["id", "name", "stripe_product_id", "prices", "features"]
+        fields = ["id", "name", "stripe_product_id", "prices", "features", "order"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -137,3 +137,8 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ["id", "name", "description", "is_active", "tiers"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["tiers"] = sorted(data["tiers"], key=lambda tier: tier["order"])
+        return data

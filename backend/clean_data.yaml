@@ -51,7 +51,8 @@
         "name": "Pro",
         "product": 1,
         "features": null,
-        "stripe_product_id": "prod_RLPfX4AP3OxW1n"
+        "stripe_product_id": "prod_RLPfX4AP3OxW1n",
+        "order": 1
     }
 },
 {
@@ -61,7 +62,8 @@
         "name": "Basic",
         "product": 1,
         "features": null,
-        "stripe_product_id": "prod_RLPYE8gAch5s6q"
+        "stripe_product_id": "prod_RLPYE8gAch5s6q",
+        "order": 0
     }
 },
 {
