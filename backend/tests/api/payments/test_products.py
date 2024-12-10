@@ -24,6 +24,11 @@ class ProductViewSetTests(APITestCase):
         # Check if the number of products returned matches the fixture
         self.assertEqual(len(data), Product.objects.count())
 
+        # Check if the tiers within each product are ordered by their "order" field
+        for product in data:
+            tiers = product["tiers"]
+            self.assertEqual(tiers, sorted(tiers, key=lambda tier: tier["order"]))
+
     def test_product_structure(self):
         response = self.client.get(self.url)
         data, msg, err, code = read_api_response(response, show=True)
