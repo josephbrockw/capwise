@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import FloatLabel from "../components/ui/FloatLabel/FloatLabel";
-import Button from "../components/ui/Button/Button";
-import AuthLayout from "../components/layout/AuthLayout/AuthLayout";
-import VerticalStepper from "../components/ui/Stepper/VerticalStepper";
-import Product from "../components/ui/Product/Product";
+import FloatLabel from "../../components/ui/FloatLabel/FloatLabel.jsx";
+import Button from "../../components/ui/Button/Button.jsx";
+import AuthLayout from "../../components/layout/AuthLayout/AuthLayout.jsx";
+import VerticalStepper from "../../components/ui/Stepper/VerticalStepper.jsx";
+import Product from "../../components/ui/Product/Product.jsx";
+import './Registration.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,9 +23,14 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
+    const newValue = e.target.value.trim();
+    setFormData(prevData => {
+      const newData = {
+        ...prevData,
+        [e.target.name]: newValue,
+      };
+      console.log('Updated form data:', newData);
+      return newData;
     });
   };
 
@@ -65,7 +71,7 @@ const Register = () => {
       case 0:
         return (
           <div>
-            <h2>Account Details</h2>
+            <h2 className="step-header">Account Details</h2>
             <FloatLabel
                 id="email"
                 label="Email"
@@ -107,14 +113,19 @@ const Register = () => {
       case 1:
         return (
           <div>
+            <h2 className="step-header">Product Selection</h2>
             <Product
               onSelect={(productId, tierId, priceId) => {
-                setFormData(prev => ({
-                  ...prev,
-                  productId,
-                  tierId,
-                  priceId
-                }));
+                setFormData(prev => {
+                  const newData = {
+                    ...prev,
+                    productId,
+                    tierId,
+                    priceId
+                  };
+                  console.log('Updated registration data with product:', newData);
+                  return newData;
+                });
                 setErrorMessage('');
               }}
             />
@@ -123,7 +134,7 @@ const Register = () => {
       case 2:
         return (
           <div>
-            <h2>Confirmation</h2>
+            <h2 className="step-header">Confirmation</h2>
           </div>
         );
       default:
@@ -133,7 +144,7 @@ const Register = () => {
 
   return (
     <AuthLayout
-      title="Welcome Back"
+      title="Welcome!"
       subtext="Already have an account?"
       sublinkText="Login!"
       sublinkUrl="/login"

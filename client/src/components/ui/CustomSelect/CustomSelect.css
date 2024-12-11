@@ -1,0 +1,110 @@
+.custom-select {
+  position: relative;
+  width: 100%;
+  font-family: var(--fontFamily);
+  z-index: 1;
+}
+
+.custom-select:focus-within {
+  z-index: 2;
+}
+
+.select-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background-color: var(--inputBackground, white);
+  border: 1px solid var(--primaryColor, blue);
+  border-radius: var(--border-radius, 4px);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.select-header:hover {
+  border-color: var(--primaryColor);
+}
+
+.select-header:focus {
+  outline: none;
+  border-color: var(--primaryColor);
+  box-shadow: 0 0 0 0.2rem rgba(var(--primaryColorRgb), 0.25);
+}
+
+.select-header.open {
+  background: var(--surface);
+  border-color: var(--primaryColor);
+  box-shadow: 0 0 0 0.2rem rgba(var(--primaryColorRgb), 0.25);
+}
+
+.selected-value {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--textColor);
+  font-weight: 500;
+}
+
+.select-header i {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  color: var(--primaryColor);
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.select-header.open i {
+  transform: rotate(180deg);
+}
+
+.select-dropdown {
+  position: absolute;
+  top: calc(100% + 0px);
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, var(--surface) 0%, var(--backgroundColor) 100%);
+  border: 1px solid var(--inputBorder, #ced4da);
+  border-radius: var(--border-radius, 4px);
+  box-shadow: var(--shadowMedium);
+  z-index: 1000;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  transform-origin: top;
+  transform: scaleY(0);
+}
+
+.select-dropdown.visible {
+  max-height: 200px;
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.select-option {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  user-select: none;
+  color: var(--textColor);
+  border-left: 2px solid transparent;
+}
+
+.select-option:hover {
+  background-color: var(--lightGray);
+  border-left: 2px solid var(--primaryColor);
+  padding-left: 1.25rem;
+}
+
+.select-option.selected {
+  background: linear-gradient(to right, var(--primaryColorLight) 0%, var(--surface) 100%);
+  color: var(--primaryColor);
+  font-weight: 500;
+  border-left: 2px solid var(--contrastColor, organge);
+}
+
+.select-option.selected:hover {
+  border-left: 2px solid var(--primaryColor, blue);
+}

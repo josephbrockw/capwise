@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import useProductStore from '../../../stores/useProductStore';
 import Card from '../Card/Card';
+import CustomSelect from '../CustomSelect/CustomSelect';
 import './Product.css';
-import { capitalize } from '../../../utils/stringMagic';
 
 const Product = ({ onSelect }) => {
   const { products, loading, error, fetchProducts } = useProductStore();
@@ -15,8 +15,10 @@ const Product = ({ onSelect }) => {
 
   useEffect(() => {
     fetchProducts();
-    console.log(`Products:\n${JSON.stringify(products, null, 2)}`);
   }, [fetchProducts]);
+
+  useEffect(() => {
+  }, [selectedIds, selectedBillingCycle, products]);
 
   if (loading) {
     return <div>Loading products...</div>;
@@ -27,13 +29,21 @@ const Product = ({ onSelect }) => {
   }
 
   const handleProductSelect = (productId, tierId, priceId) => {
-    console.log(`Selected: Product ID: ${productId}, Tier ID: ${tierId}, Price ID: ${priceId}`);
-    setSelectedIds({
-      productId,
-      tierId,
-      priceId
+    setSelectedIds(prevIds => {
+      const newIds = {
+        productId,
+        tierId,
+        priceId
+      };
+      console.log('Selected product details:', {
+        ids: newIds,
+        product: products.find(p => p.id === productId),
+        tier: products.find(p => p.id === productId)?.tiers.find(t => t.id === tierId),
+        price: products.find(p => p.id === productId)?.tiers.find(t => t.id === tierId)?.prices.find(p => p.id === priceId)
+      });
+      onSelect?.(productId, tierId, priceId);
+      return newIds;
     });
-    onSelect?.(productId, tierId, priceId);
   };
 
   const getBillingCyclePrice = (prices) => {
@@ -60,20 +70,13 @@ const Product = ({ onSelect }) => {
   return (
     <div className="products-container">
       <div className="billing-selector">
-        <select
+        <CustomSelect
           value={selectedBillingCycle}
           onChange={(e) => setSelectedBillingCycle(e.target.value)}
-          className="billing-select"
+          options={getBillingCycleOptions()}
           defaultValue="month"
-        >
-          {getBillingCycleOptions().map((option) => (
-            <option key={option} value={option}>
-              {capitalize(option)}
-            </option>
-          ))}
-          {/*<option value="month">Monthly Billing</option>*/}
-          {/*<option value="year">Annual Billing</option>*/}
-        </select>
+          className="billing-select"
+        />
       </div>
 
       <div className="product-cards">
