@@ -17,6 +17,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
 
     def validate(self, data):
+        # If username is not in data, use email as username
+        if "username" not in data:
+            data["username"] = data["email"]
+
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords must match.")
         User = get_user_model()

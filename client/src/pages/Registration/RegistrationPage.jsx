@@ -18,7 +18,52 @@ const Register = () => {
     priceId: null,
   });
   const [currentStep, setCurrentStep] = useState(0);
-  const steps = ['Personal Info', 'Product', 'Confirmation'];
+
+  const validateAccountDetails = (data) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!data.email ||  !data.password1 || !data.password2) {
+      return { isValid: false, error: 'All fields are required' };
+    }
+    if (!emailRegex.test(data.email)) {
+      return { isValid: false, error: 'Please enter a valid email address' };
+    }
+    if (data.password1 !== data.password2) {
+      return { isValid: false, error: 'Passwords do not match' };
+    }
+    if (data.password1.length < 8) {
+      return { isValid: false, error: 'Password must be at least 8 characters long' };
+    }
+    return { isValid: true };
+  };
+
+  const validateProductSelection = (data) => {
+    if (!data.productId || !data.tierId || !data.priceId) {
+      return { isValid: false, error: 'Please select a product plan to continue' };
+    }
+    return { isValid: true };
+  };
+
+  const validateConfirmation = () => ({ isValid: true });
+
+  const steps = [
+    {
+      title: 'Personal Info',
+      validate: validateAccountDetails
+    },
+    {
+      title: 'Product',
+      validate: validateProductSelection
+    },
+    {
+      title: 'Payment',
+      validate: () => ({ isValid: true })
+    },
+    {
+      title: 'Confirmation',
+      validate: validateConfirmation
+    }
+  ];
+
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -36,9 +81,9 @@ const Register = () => {
 
   const handleContinue = (e) => {
     e.preventDefault();
-    // Only validate product selection when trying to advance from the product step
-    if (currentStep === 1 && !formData.productId) {
-      setErrorMessage('Please select a product plan to continue');
+    const validation = steps[currentStep].validate(formData);
+    if (!validation.isValid) {
+      setErrorMessage(validation.error);
       return;
     }
     if (currentStep < steps.length - 1) {
@@ -66,6 +111,11 @@ const Register = () => {
     }
   };
 
+  const handleNext = (e) => {
+    e.preventDefault();
+    setCurrentStep(prev => prev + 1);
+  };
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
@@ -79,15 +129,6 @@ const Register = () => {
                 onChange={handleChange}
                 name="email"
                 type="email"
-                required
-            />
-            <FloatLabel
-                id="username"
-                label="Username"
-                value={formData.username}
-                onChange={handleChange}
-                name="username"
-                type="text"
                 required
             />
             <FloatLabel
@@ -123,7 +164,6 @@ const Register = () => {
                     tierId,
                     priceId
                   };
-                  console.log('Updated registration data with product:', newData);
                   return newData;
                 });
                 setErrorMessage('');
@@ -134,7 +174,13 @@ const Register = () => {
       case 2:
         return (
           <div>
-            <h2 className="step-header">Confirmation</h2>
+            <h2 className="step-header">Payment</h2>
+          </div>
+        );
+      case 3:
+        return (
+          <div>
+            <h2 className="step-header">Summary</h2>
           </div>
         );
       default:
@@ -144,23 +190,21 @@ const Register = () => {
 
   return (
     <AuthLayout
-      title="Welcome!"
-      subtext="Already have an account?"
-      sublinkText="Login!"
-      sublinkUrl="/login"
-      message={successMessage}
+      title="Register"
+      subtitle="Create your account"
       errorMessage={errorMessage}
     >
-      <form onSubmit={handleContinue}>
-        <VerticalStepper steps={steps} currentStep={currentStep}>
+      <form onSubmit={handleSubmit}>
+        <VerticalStepper
+          steps={steps}
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+          onSubmit={handleSubmit}
+          formData={formData}
+          dataCy="registration"
+        >
           {renderStepContent()}
         </VerticalStepper>
-        <Button
-            type="submit"
-            label={currentStep === steps.length - 1 ? "Submit" : "Next"}
-            data-cy={`${currentStep === steps.length - 1 ? "registration-submit-button" : "registration-continue-button"}`}
-        />
-        {/*<Button label="Register" icon="pi pi-user" type="submit" fullWidth data-cy="registration-submit-button" />*/}
       </form>
     </AuthLayout>
   );

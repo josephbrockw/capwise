@@ -81,7 +81,7 @@ class Email:
 
 
 def verification_email(user):
-    otp = OneTimePassword.objects.create(user=user, token_length=20)
+    otp = OneTimePassword.objects.create(user=user, token_length=6)
     email = Email(subject="Verify your email", to=[user.email], template="default")
     email.add_paragraph(user.salutation())
     email.add_paragraph("Please click the button below to verify your email address.")

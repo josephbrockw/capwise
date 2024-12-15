@@ -2,6 +2,7 @@
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
 }
 
 .vertical-step {
@@ -40,12 +41,12 @@
 }
 
 .vertical-step.active .vertical-step-indicator {
-  background-color: #007bff;
+  background-color: var(--primaryColor);
   transform: scale(1.1);
 }
 
 .vertical-step.completed .vertical-step-indicator {
-  background-color: #28a745;
+  background-color: var(--successColor, #28a745);
 }
 
 .vertical-step-label {
@@ -55,34 +56,19 @@
 }
 
 .vertical-step.active .vertical-step-label {
-  color: #007bff;
+  color: var(--primaryColor);
 }
 
 .vertical-step-content {
-  background-color: var(--surface, white);
-  padding: 0;
-  border-radius: var(--border-radius, 4px);
-  margin-top: 0;
-  height: 0;
+  display: none;
   opacity: 0;
-  overflow: hidden;
-  transform-origin: top;
-  transform: scaleY(0);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
-  transition-delay: 0s;
-  will-change: height, opacity, transform;
+  transition: opacity 0.3s ease-in-out;
+  margin: 1rem 0;
 }
 
 .vertical-step-content.visible {
-  padding: 1rem;
-  margin-top: 1rem;
-  height: auto;
+  display: block;
   opacity: 1;
-  transform: scaleY(1);
-  pointer-events: auto;
-  transition-delay: 0.2s;
-  overflow: visible;
 }
 
 .vertical-step-content form {
@@ -107,4 +93,53 @@
   padding-top: 0;
   padding-bottom: 0;
   transform: scaleY(0);
+}
+
+.vertical-stepper-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--lightGray);
+}
+
+/* When there's only one button (Next on first step), align it to the right */
+.vertical-stepper-actions:has(> :only-child) {
+  justify-content: flex-end;
+}
+
+.vertical-stepper-actions button {
+  min-width: 120px;
+}
+
+.button-with-tooltip {
+  cursor: pointer !important;
+  position: relative;
+}
+
+.button-with-tooltip:disabled {
+  opacity: 0.8;
+}
+
+.validation-error {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--borderRadius);
+  background-color: var(--errorBackground, #fde8e8);
+  color: var(--errorColor, #e53e3e);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

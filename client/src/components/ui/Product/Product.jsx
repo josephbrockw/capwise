@@ -46,6 +46,18 @@ const Product = ({ onSelect }) => {
     });
   };
 
+  const handleBillingCycleChange = (e) => {
+    setSelectedBillingCycle(e.target.value);
+    // Clear selected product when billing cycle changes
+    setSelectedIds({
+      productId: null,
+      tierId: null,
+      priceId: null
+    });
+    // Notify parent component that selection was cleared
+    onSelect?.(null, null, null);
+  };
+
   const getBillingCyclePrice = (prices) => {
     const price = prices.find(price => price.billing_cycle.toLowerCase() === selectedBillingCycle.toLowerCase());
     if (!price) {
@@ -72,7 +84,7 @@ const Product = ({ onSelect }) => {
       <div className="billing-selector">
         <CustomSelect
           value={selectedBillingCycle}
-          onChange={(e) => setSelectedBillingCycle(e.target.value)}
+          onChange={handleBillingCycleChange}
           options={getBillingCycleOptions()}
           defaultValue="month"
           className="billing-select"

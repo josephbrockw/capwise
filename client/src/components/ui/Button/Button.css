@@ -1,22 +1,31 @@
 /* Button.css */
 .custom-button {
-  background-color: var(--primaryColor, blue);
-  color: var(--light, white);
-  padding: var(--buttonPadding, 10px 20px);
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
   border-radius: var(--borderRadius, 4px);
-  font-size: var(--buttonFontSize, 16px);
+  border: none;
+  background-color: var(--primaryColor, blue);
+  color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-block;
+  transition: all 0.2s ease-in-out;
 }
 
-.custom-button:hover {
+.custom-button:hover:not([aria-disabled="true"]) {
   background-color: var(--buttonPrimaryHover, #1a73e8);
 }
 
+.custom-button[aria-disabled="true"] {
+  opacity: 0.7;
+  cursor: pointer;
+}
+
 .custom-button .icon {
-  margin-right: 8px;
+  margin-right: 0.5rem;
 }
 
 .custom-button.full-width {
@@ -31,7 +40,7 @@
   color: var(--primaryColor, blue);
 }
 
-.custom-button.outlined:hover {
+.custom-button.outlined:hover:not([aria-disabled="true"]) {
   background-color: var(--primaryColor, blue);
   color: var(--light, white);
 }
