@@ -38,3 +38,100 @@
     created: "2024-03-30T20:20:03.265Z"
     expires: "2054-03-30T20:20:03.265Z"
     is_active: true
+
+- model: payment.product
+  pk: 1
+  fields:
+    name: BaseBuild
+    description: ''
+    is_active: true
+
+- model: payment.tier
+  pk: 1
+  fields:
+    name: Pro
+    product: 1
+    features:
+      unlimited_projects:
+        display_name: Unlimited Projects
+        description: Create unlimited projects
+        included: true
+      priority_support:
+        display_name: Priority Support
+        description: Access to 24/7 priority support
+        included: true
+      team_members:
+        display_name: Team Members
+        description: Add unlimited team members
+        included: true
+    stripe_product_id: prod_RLPfX4AP3OxW1n
+    order: 1
+
+- model: payment.tier
+  pk: 2
+  fields:
+    name: Basic
+    product: 1
+    features:
+      unlimited_projects:
+        display_name: Unlimited Projects
+        description: Create unlimited projects
+        included: true
+      priority_support:
+        display_name: Priority Support
+        description: Access to 24/7 priority support
+        included: false
+      team_members:
+        display_name: Team Members
+        description: Add unlimited team members
+        included: false
+    stripe_product_id: prod_RLPYE8gAch5s6q
+    order: 0
+
+- model: payment.price
+  pk: 2
+  fields:
+    tier: 1
+    billing_cycle: lifetime
+    price: 19900
+    stripe_price_id: price_1QSivyDTjaiWCCukA3U2dCJV
+
+- model: payment.price
+  pk: 3
+  fields:
+    tier: 1
+    billing_cycle: year
+    price: 8500
+    stripe_price_id: price_1QSivWDTjaiWCCukkGfFIz8h
+
+- model: payment.price
+  pk: 4
+  fields:
+    tier: 2
+    billing_cycle: lifetime
+    price: 8500
+    stripe_price_id: price_1QSitvDTjaiWCCukqlPEq0DH
+
+- model: payment.price
+  pk: 5
+  fields:
+    tier: 2
+    billing_cycle: year
+    price: 5000
+    stripe_price_id: price_1QSit1DTjaiWCCukmzthyl3i
+
+- model: payment.price
+  pk: 6
+  fields:
+    tier: 1
+    billing_cycle: month
+    price: 1000
+    stripe_price_id: price_1QSiqFDTjaiWCCukT4S6i8IN
+
+- model: payment.price
+  pk: 7
+  fields:
+    tier: 2
+    billing_cycle: month
+    price: 500
+    stripe_price_id: price_1QSijrDTjaiWCCukzCtn3uIw

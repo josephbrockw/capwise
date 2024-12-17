@@ -40,11 +40,12 @@ const CustomSelect = ({ value, onChange, options, defaultValue, className }) => 
         }}
         role="button"
         tabIndex={0}
+        data-cy="select-header"
       >
         <span className="selected-value">{capitalize(selectedOption)}</span>
         <i className={`pi ${isOpen ? 'pi-angle-up' : 'pi-angle-down'}`} />
       </div>
-      <div className={`select-dropdown ${isOpen ? 'visible' : ''}`}>
+      <div className={`select-dropdown ${isOpen ? 'visible' : ''}`} data-cy="select-dropdown">
         {options.map((option) => (
           <div
             key={option}
@@ -55,6 +56,7 @@ const CustomSelect = ({ value, onChange, options, defaultValue, className }) => 
             }}
             role="option"
             aria-selected={option === selectedOption}
+            data-cy={`select-option-${option}`}
           >
             {capitalize(option)}
           </div>

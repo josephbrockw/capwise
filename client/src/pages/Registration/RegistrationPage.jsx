@@ -10,7 +10,6 @@ import './Registration.css';
 const Register = () => {
   const [formData, setFormData] = useState({
     email: '',
-    username: '',
     password1: '',
     password2: '',
     productId: null,

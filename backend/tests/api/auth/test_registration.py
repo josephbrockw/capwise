@@ -32,18 +32,20 @@ class AuthenticationTest(APITestCase):
             self.client.post(
                 "/api/auth/sign-up",
                 data={
-                    "username": "granny",
                     "email": "esme@lancre.gov",
                     "first_name": "Esmerelda",
                     "last_name": "Weatherwax",
                     "password1": PASSWORD,
                     "password2": PASSWORD,
+                    "priceId": 4,
+                    "productId": 1,
+                    "tierId": 2,
                 },
             )
         )
 
         # Check that the user was created
-        user = get_user_model().objects.get(username="granny")
+        user = get_user_model().objects.get(username="esme@lancre.gov")
         self.assertEqual(status.HTTP_201_CREATED, code)
         self.assertEqual(data["id"], str(user.id))
         self.assertEqual(data["username"], user.username)
@@ -57,7 +59,7 @@ class AuthenticationTest(APITestCase):
         # Check that an OTP was created
         otp = OneTimePassword.objects.get(user=user)
         self.assertTrue(otp.is_active)
-        self.assertEqual(len(otp.token), 20)
+        self.assertEqual(len(otp.token), 6)
 
         # Verify that one email was sent
         self.assertEqual(len(mail.outbox), 1)
@@ -189,7 +191,7 @@ class AuthenticationTest(APITestCase):
         # Check that an OTP was created
         otp = OneTimePassword.objects.filter(user=user).order_by("-created").first()
         self.assertTrue(otp.is_active)
-        self.assertEqual(len(otp.token), 20)
+        self.assertEqual(len(otp.token), 6)
 
         # Verify that one email was sent
         self.assertEqual(len(mail.outbox), 1)

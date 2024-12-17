@@ -132,6 +132,7 @@ const Product = ({ onSelect }) => {
                       e.preventDefault();
                       handleProductSelect(product.id, tier.id, price.id);
                     }}
+                    data-cy={`select-${product.id}-${tier.name}-${selectedBillingCycle}`}
                   >
                     {isSelected ? 'Selected' : 'Select Plan'}
                   </button>

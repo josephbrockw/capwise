@@ -280,9 +280,9 @@ case $workflow in
         if [ "$run_django_tests" = true ]; then
             echo "Running Django tests..."
             if [ ! -z "$test_type" ]; then
-                exec_backend pytest -p no:warnings -v -k "$test_type"
+                exec_backend pytest $backend_args -v -k "$test_type"
             elif [ ! -z "$test_keyword" ]; then
-                exec_backend pytest -p no:warnings -v -k "$test_keyword"
+                exec_backend pytest $backend_args -v -k "$test_keyword"
             elif [ ! -z "$backend_args" ]; then
                 exec_backend pytest $backend_args
             else

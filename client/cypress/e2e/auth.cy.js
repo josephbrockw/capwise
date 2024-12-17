@@ -2,10 +2,12 @@ describe('User Registration Flow', () => {
   it('Registers a new user and shows a success message', () => {
     cy.intercept('POST', '**/api/auth/sign-up', (req) => {
       expect(req.body).to.deep.equal({
-        username: 'nanny',
         email: 'gytha@lancre.gov',
         password1: 'Password123!',
         password2: 'Password123!',
+        priceId: 4,
+        productId: 1,
+        tierId: 2
       });
       req.reply({
         statusCode: 201,
@@ -20,13 +22,150 @@ describe('User Registration Flow', () => {
         },
       });
     }).as('registerUser');
+    cy.intercept('GET', '**/api/products', (req) => {
+      req.reply({
+        statusCode: 200,
+        body: {
+          data: [
+            {
+              id: 1,
+              name: 'BaseBuild',
+              description: 'A template for building SaaS applications.',
+              is_active: true,
+              tiers: [
+                {
+                  id: 1,
+                  name: 'Basic',
+                  stripe_product_id: 'prod_123',
+                  order: 0,
+                  prices: [
+                    {
+                      id: 1,
+                      billing_cycle: 'lifetime',
+                      price: 9900
+                    },
+                    {
+                      id: 2,
+                      billing_cycle: 'year',
+                      price: 5000
+                    },
+                    {
+                      id: 3,
+                      billing_cycle: 'month',
+                      price: 500
+                    }
+                  ],
+                  features: {
+                    team_members: {
+                      included: false,
+                      description: 'Add unlimited team members.',
+                      display_name: 'Team Members'
+                    },
+                    priority_support: {
+                      included: false,
+                      description: 'Access to 24/7 priority support.',
+                      display_name: 'Priority Support'
+                    },
+                    unlimited_projects: {
+                      included: true,
+                      description: 'Create unlimited projects.',
+                      display_name: 'Unlimited Projects'
+                    }
+                  }
+                },
+                {
+                  id: 2,
+                  name: 'Pro',
+                  stripe_product_id: 'prod_456',
+                  order: 1,
+                  prices: [
+                    {
+                      id: 4,
+                      billing_cycle: 'lifetime',
+                      price: 19900
+                    },
+                    {
+                      id: 5,
+                      billing_cycle: 'year',
+                      price: 8500
+                    },
+                    {
+                      id: 6,
+                      billing_cycle: 'month',
+                      price: 1000
+                    }
+                  ],
+                  features: {
+                    team_members: {
+                      included: true,
+                      description: 'Add unlimited team members.',
+                      display_name: 'Team Members'
+                    },
+                    priority_support: {
+                      included: true,
+                      description: 'Access to 24/7 priority support.',
+                      display_name: 'Priority Support'
+                    },
+                    unlimited_projects: {
+                      included: true,
+                      description: 'Create unlimited projects.',
+                      display_name: 'Unlimited Projects'
+                    }
+                  }
+                },
+              ]
+            },
+          ],
+        },
+      });
+    }).as('getProducts');
     cy.visit('/register');
 
     // Fill in registration form
-    cy.get('input[name="username"]').type('nanny');
     cy.get('input[name="email"]').type('gytha@lancre.gov');
     cy.get('input[name="password1"]').type('Password123!');
     cy.get('input[name="password2"]').type('Password123!');
+    cy.get('[data-cy="registration-continue-button-0"]').click();
+    cy.wait('@getProducts');
+    // Should display Monthly plans
+    cy.contains('Month').should('be.visible');
+    cy.contains('Basic').should('be.visible');
+    cy.contains('$5.00/month').should('be.visible');
+    cy.contains('Pro').should('be.visible');
+    cy.contains('$10.00/month').should('be.visible');
+
+    // Continue button should be disabled before selection
+    cy.get('[data-cy="registration-continue-button-1"]').should('be.disabled');
+
+    // Toggling billing cycle should bring up new prices
+    cy.get('[data-cy="select-header"]').click();
+    cy.get('[data-cy="select-dropdown"]').should('be.visible');
+    cy.get('[data-cy="select-option-year"]').click();
+    // Prices should match yearly plans
+    cy.contains('Year').should('be.visible');
+    cy.contains('Basic').should('be.visible');
+    cy.contains('$50.00/year').should('be.visible');
+    cy.contains('Pro').should('be.visible');
+    cy.contains('$85.00/year').should('be.visible');
+
+    // Select lifetime plan options
+    cy.get('[data-cy="select-header"]').click();
+    cy.get('[data-cy="select-option-lifetime"]').click();
+    cy.contains('Lifetime').should('be.visible');
+    cy.contains('Basic').should('be.visible');
+    cy.contains('$99.00/lifetime').should('be.visible');
+    cy.contains('Pro').should('be.visible');
+    cy.contains('$199.00/lifetime').should('be.visible');
+
+    cy.get('[data-cy="select-1-Basic-lifetime"]').click();
+
+    // Continue to payment step
+    cy.get('[data-cy="registration-continue-button-1"]').click();
+
+    // Continue to confirmation step
+    cy.get('[data-cy="registration-continue-button-2"]').click();
+
+    // Submit registration
     cy.get('[data-cy="registration-submit-button"]').click();
     cy.wait('@registerUser');
     // Verify successful registration prompt

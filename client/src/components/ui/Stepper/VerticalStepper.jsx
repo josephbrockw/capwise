@@ -114,7 +114,7 @@ const VerticalStepper = ({
           onClick={!validateStep(currentStep).isValid ? handleDisabledClick : (isLastStep ? onSubmit : handleNext)}
           className={!validateStep(currentStep).isValid ? 'button-with-tooltip' : ''}
           disabled={!validateStep(currentStep).isValid}
-          data-cy={isLastStep ? `${dataCy}-submit-button` : `${dataCy}-continue-button`}
+          data-cy={isLastStep ? `${dataCy}-submit-button` : `${dataCy}-continue-button-${currentStep}`}
           type={isLastStep ? 'submit' : 'button'}
         />
       </div>

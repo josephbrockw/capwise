@@ -24,6 +24,7 @@ const Button = ({
       type={type}
       className={`custom-button ${fullWidth ? 'full-width' : ''} ${disabled ? 'disabled' : ''} ${className}`}
       aria-disabled={disabled}
+      disabled={disabled}
       onClick={handleClick}
       {...props}
     >
