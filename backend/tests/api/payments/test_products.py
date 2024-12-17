@@ -31,7 +31,7 @@ class ProductViewSetTests(APITestCase):
 
     def test_product_structure(self):
         response = self.client.get(self.url)
-        data, msg, err, code = read_api_response(response, show=True)
+        data, msg, err, code = read_api_response(response)
 
         product = data[0]  # Get the first product
 

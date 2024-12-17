@@ -105,11 +105,12 @@ db_help() {
 
 coverage_help() {
     echo "Coverage Help"
-    echo "Usage: $0 coverage [--html]"
-    echo "Description: Runs a coverage report for the full test suite"
+    echo "Usage: $0 coverage [options]"
+    echo "Description: Runs a coverage report for the Django test suite"
     echo ""
     echo "Options:"
-    echo "  --html   Generate an HTML report."
+    echo "  --html   Generate HTML coverage report"
+    echo "  --xml    Generate XML coverage report"
 }
 
 quality_help() {
@@ -404,18 +405,49 @@ case $workflow in
             exit 0
         fi
 
-        command="docker compose exec backend pytest -p no:warnings --cov=."
+        echo "Running coverage..."
 
-        # Check if the user wants an HTML report
-        if [[ "$1" == "--html" ]]; then
-            command+=" --cov-report=html"
+        # Ensure coverage config exists
+        if [ ! -f "/usr/src/backend/.coveragerc" ]; then
+            echo "[run]
+source = .
+omit =
+    */migrations/*
+    */tests/*
+    */env/*
+    manage.py
+    */asgi.py
+    */wsgi.py
+    */settings.py
+    */urls.py
+    */admin.py
+    */apps.py" > /usr/src/backend/.coveragerc
         fi
 
-        echo "Running coverage..."
-        eval "$command"
+        # Run tests with coverage
+        exec_backend coverage run manage.py test
 
-        if [[ "$1" == "--html" ]]; then
-            echo "Coverage HTML report generated. You can view it at 'htmlcov/index.html'."
+        # Generate reports based on flags
+        report_generated=false
+        while [[ $# -gt 0 ]]; do
+            case $1 in
+                --html)
+                    exec_backend coverage html
+                    echo "HTML report generated in htmlcov/"
+                    report_generated=true
+                    ;;
+                --xml)
+                    exec_backend coverage xml
+                    echo "XML report generated in coverage.xml"
+                    report_generated=true
+                    ;;
+            esac
+            shift
+        done
+
+        # If no specific report format was requested, show console report
+        if [ "$report_generated" = false ]; then
+            exec_backend coverage report
         fi
         ;;
     quality)

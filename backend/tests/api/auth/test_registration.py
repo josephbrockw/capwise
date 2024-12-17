@@ -6,7 +6,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.test import override_settings
+from django.test import override_settings, tag
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -14,9 +14,10 @@ from rest_framework.test import APITestCase
 from account.models import OneTimePassword, User
 from tests import read_api_response
 
-PASSWORD = "testpass123"
+PASSWORD = "password123"
 
 
+@tag("auth")
 class AuthenticationTest(APITestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
@@ -249,16 +250,17 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "User is already verified.")
 
-    def test_user_can_log_in(self):  # new
+    def test_user_can_log_in(self):
         user = User.objects.get(username="nanny")
         data, msg, err, code = read_api_response(
             self.client.post(
                 "/api/auth/login",
                 data={
                     "username": "nanny",
-                    "password": PASSWORD,
+                    "password": "password123",
                 },
-            )
+            ),
+            show=True,
         )
 
         # Parse payload data from access token.

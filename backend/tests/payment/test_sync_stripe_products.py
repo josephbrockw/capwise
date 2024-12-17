@@ -71,7 +71,6 @@ class TestSyncStripeProducts(TestCase):
             ),
         ]
 
-    @tag("test")
     @patch("stripe.Product.list")
     @patch("stripe.Price.list")
     def test_sync_new_products_and_prices(self, mock_price_list, mock_product_list):
