@@ -1,20 +1,21 @@
-import pytest
+from django.test import TestCase
+
 from account.models import User
 
 
-@pytest.mark.django_db
-def test_user_model():
-    user = User(
-        username="jsullivan",
-        email="james@minc.com",
-        password="password",
-        first_name="James",
-        last_name="Sullivan",
-    )
-    user.save()
+class TestUser(TestCase):
+    def test_user_model(self):
+        user = User(
+            username="jsullivan",
+            email="james@minc.com",
+            password="password",
+            first_name="James",
+            last_name="Sullivan",
+        )
+        user.save()
 
-    assert user.username == "jsullivan"
-    assert user.email == "james@minc.com"
-    assert user.password == "password"
-    assert user.first_name == "James"
-    assert user.last_name == "Sullivan"
+        self.assertEqual(user.username, "jsullivan")
+        self.assertEqual(user.email, "james@minc.com")
+        self.assertEqual(user.password, "password")
+        self.assertEqual(user.first_name, "James")
+        self.assertEqual(user.last_name, "Sullivan")

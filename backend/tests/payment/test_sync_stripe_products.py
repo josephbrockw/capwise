@@ -1,8 +1,8 @@
 from unittest.mock import patch
 
-import pytest
 from django.conf import settings
 from django.core.management import call_command
+from django.test import TestCase, tag
 
 from payment.models import Price, Product, Tier
 
@@ -23,34 +23,31 @@ class StripeMockObject:
         return self._data.get(key, default)
 
 
-@pytest.fixture
-def mock_stripe_products():
-    return [
-        StripeMockObject(
-            id="prod_123",
-            name="Basic Plan|Starter",
-            metadata={"app": settings.APP_NAME},
-            active=True,
-        ),
-        StripeMockObject(
-            id="prod_456",
-            name="Pro Plan|Premium",
-            metadata={"app": settings.APP_NAME},
-            active=True,
-        ),
-        StripeMockObject(
-            id="prod_789",
-            name="Other App|Premium",
-            metadata={"app": "other_app"},
-            active=True,
-        ),
-    ]
+@tag("payment")
+class TestSyncStripeProducts(TestCase):
+    def setUp(self):
+        self.mock_stripe_products = [
+            StripeMockObject(
+                id="prod_123",
+                name="Basic Plan|Starter",
+                metadata={"app": settings.APP_NAME},
+                active=True,
+            ),
+            StripeMockObject(
+                id="prod_456",
+                name="Pro Plan|Premium",
+                metadata={"app": settings.APP_NAME},
+                active=True,
+            ),
+            StripeMockObject(
+                id="prod_789",
+                name="Other App|Premium",
+                metadata={"app": "other_app"},
+                active=True,
+            ),
+        ]
 
-
-@pytest.fixture
-def mock_stripe_prices():
-    return {
-        "data": [
+        self.mock_stripe_prices = [
             StripeMockObject(
                 id="price_123",
                 product="prod_123",
@@ -73,23 +70,12 @@ def mock_stripe_prices():
                 active=True,
             ),
         ]
-    }
 
-
-@pytest.mark.django_db
-class TestSyncStripeProducts:
     @patch("stripe.Product.list")
     @patch("stripe.Price.list")
-    def test_sync_new_products_and_prices(
-        self,
-        mock_price_list,
-        mock_product_list,
-        mock_stripe_products,
-        mock_stripe_prices,
-    ):
-        # Setup mocks
-        mock_product_list.return_value = mock_stripe_products
-        mock_price_list.return_value = mock_stripe_prices
+    def test_sync_new_products_and_prices(self, mock_price_list, mock_product_list):
+        mock_product_list.return_value = self.mock_stripe_products
+        mock_price_list.return_value = {"data": self.mock_stripe_prices}
 
         # Run command
         call_command("sync_stripe_products")
@@ -133,8 +119,6 @@ class TestSyncStripeProducts:
         self,
         mock_price_list,
         mock_product_list,
-        mock_stripe_products,
-        mock_stripe_prices,
     ):
         # Setup existing data
         product = Product.objects.create(name="Basic Plan")
@@ -149,8 +133,8 @@ class TestSyncStripeProducts:
         )
 
         # Setup mocks
-        mock_product_list.return_value = mock_stripe_products
-        mock_price_list.return_value = mock_stripe_prices
+        mock_product_list.return_value = self.mock_stripe_products
+        mock_price_list.return_value = {"data": self.mock_stripe_prices}
 
         # Run command
         call_command("sync_stripe_products")
@@ -166,12 +150,10 @@ class TestSyncStripeProducts:
         self,
         mock_price_list,
         mock_product_list,
-        mock_stripe_products,
-        mock_stripe_prices,
     ):
         # Setup mocks
-        mock_product_list.return_value = mock_stripe_products
-        mock_price_list.return_value = mock_stripe_prices
+        mock_product_list.return_value = self.mock_stripe_products
+        mock_price_list.return_value = {"data": self.mock_stripe_prices}
 
         # Run command
         call_command("sync_stripe_products")
@@ -186,12 +168,10 @@ class TestSyncStripeProducts:
         self,
         mock_price_list,
         mock_product_list,
-        mock_stripe_products,
-        mock_stripe_prices,
     ):
         # Setup mocks
-        mock_product_list.return_value = mock_stripe_products
-        mock_price_list.return_value = mock_stripe_prices
+        mock_product_list.return_value = self.mock_stripe_products
+        mock_price_list.return_value = {"data": self.mock_stripe_prices}
 
         # Run command twice
         call_command("sync_stripe_products")
@@ -208,15 +188,13 @@ class TestSyncStripeProducts:
         self,
         mock_price_list,
         mock_product_list,
-        mock_stripe_products,
-        mock_stripe_prices,
     ):
         # Setup existing product without the tier
         product = Product.objects.create(name="Basic Plan")
 
         # Setup mocks
-        mock_product_list.return_value = mock_stripe_products
-        mock_price_list.return_value = mock_stripe_prices
+        mock_product_list.return_value = self.mock_stripe_products
+        mock_price_list.return_value = {"data": self.mock_stripe_prices}
 
         # Run command
         call_command("sync_stripe_products")
@@ -249,8 +227,6 @@ class TestSyncStripeProducts:
         self,
         mock_price_list,
         mock_product_list,
-        mock_stripe_products,
-        mock_stripe_prices,
     ):
         # Setup existing product and tier without prices
         product = Product.objects.create(name="Basic Plan")
@@ -259,8 +235,8 @@ class TestSyncStripeProducts:
         )
 
         # Setup mocks
-        mock_product_list.return_value = mock_stripe_products
-        mock_price_list.return_value = mock_stripe_prices
+        mock_product_list.return_value = self.mock_stripe_products
+        mock_price_list.return_value = {"data": self.mock_stripe_prices}
 
         # Run command
         call_command("sync_stripe_products")

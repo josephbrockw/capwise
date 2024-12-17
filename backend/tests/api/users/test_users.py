@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.test import tag
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -6,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from tests import read_api_response
 
 
+@tag("users")
 class UserViewSetTest(APITestCase):
     def setUp(self):
         # Create a user to authenticate

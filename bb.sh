@@ -56,15 +56,21 @@ test_help() {
     echo "Options:"
     echo "  -b                Run only the Django tests."
     echo "                    Additional options for Django tests:"
-    echo "                    -k pattern     Run tests matching the given pattern"
-    echo "                    -s             Show print statements during test execution"
+    echo "                    --failfast       Stop running tests after first failure"
+    echo "                    --keepdb         Preserve test DB between runs"
+    echo "                    -k PATTERN       Only run tests matching pattern"
+    echo "                    --parallel [N]   Run tests in parallel (N processes)"
+    echo "                    --tag TAG        Only run tests with the specified tag"
+    echo "                    --exclude-tag TAG Skip tests with the specified tag"
+    echo "                    -v {0,1,2}       Verbosity level"
+    echo "                    --debug-mode     Run tests in debug mode"
+    echo "                    --noinput        Suppress all user prompts"
+    echo "                    --collect-only   List tests without running them"
     echo "  -c                Run all the client tests (E2E, component, and unit)."
     echo "  --client-unit     Run only the Vitest tests."
     echo "  --e2e             Run only Cypress end-to-end (E2E) tests."
     echo "  --component       Run only Cypress component tests."
     echo "  --open            Open the Cypress test runner."
-    echo "  --type=testtype   Run functional or unit tests in isolation (Django tests)."
-    echo "  --k=keyword       Run Django tests matching a specific keyword in the name."
 }
 
 # Function for full suite testing help
@@ -99,11 +105,12 @@ db_help() {
 
 coverage_help() {
     echo "Coverage Help"
-    echo "Usage: $0 coverage [--html]"
-    echo "Description: Runs a coverage report for the full test suite"
+    echo "Usage: $0 coverage [options]"
+    echo "Description: Runs a coverage report for the Django test suite"
     echo ""
     echo "Options:"
-    echo "  --html   Generate an HTML report."
+    echo "  --html   Generate HTML coverage report"
+    echo "  --xml    Generate XML coverage report"
 }
 
 quality_help() {
@@ -208,6 +215,7 @@ case $workflow in
         run_cypress_e2e_tests=true
         run_cypress_component_tests=true
         run_vitest_tests=true
+        backend_args=""
 
         while [[ $# -gt 0 ]]; do
             case $1 in
@@ -215,7 +223,6 @@ case $workflow in
                     run_cypress_e2e_tests=false
                     run_cypress_component_tests=false
                     run_vitest_tests=false
-                    backend_args="-p no:warnings"
                     ;;
                 -k)
                     if [[ -z "$2" ]]; then
@@ -227,8 +234,52 @@ case $workflow in
                     shift  # skip the pattern
                     continue
                     ;;
-                -s)
-                    backend_args="$backend_args -s"
+                --failfast)
+                    backend_args="$backend_args --failfast"
+                    ;;
+                --keepdb)
+                    backend_args="$backend_args --keepdb"
+                    ;;
+                --parallel)
+                    if [[ ! -z "$2" && "$2" =~ ^[0-9]+$ ]]; then
+                        backend_args="$backend_args --parallel $2"
+                        shift
+                    else
+                        backend_args="$backend_args --parallel"
+                    fi
+                    ;;
+                --tag)
+                    if [[ -z "$2" ]]; then
+                        echo "Error: --tag requires a tag name"
+                        exit 1
+                    fi
+                    backend_args="$backend_args --tag $2"
+                    shift
+                    ;;
+                --exclude-tag)
+                    if [[ -z "$2" ]]; then
+                        echo "Error: --exclude-tag requires a tag name"
+                        exit 1
+                    fi
+                    backend_args="$backend_args --exclude-tag $2"
+                    shift
+                    ;;
+                -v)
+                    if [[ "$2" =~ ^[0-2]$ ]]; then
+                        backend_args="$backend_args -v $2"
+                        shift
+                    else
+                        backend_args="$backend_args -v 1"
+                    fi
+                    ;;
+                --debug-mode)
+                    backend_args="$backend_args --debug-mode"
+                    ;;
+                --noinput)
+                    backend_args="$backend_args --noinput"
+                    ;;
+                --collect-only)
+                    backend_args="$backend_args --collect-only"
                     ;;
                 -c)
                     run_django_tests=false
@@ -255,12 +306,6 @@ case $workflow in
                     run_django_tests=false
                     run_vitest_tests=false
                     ;;
-                --type=*)
-                    test_type="${arg#*=}"
-                    ;;
-                --k=*)
-                    test_keyword="${arg#*=}"
-                    ;;
                 *)
                     echo "Unknown argument: $1"
                     test_help
@@ -279,14 +324,10 @@ case $workflow in
         # Run Django tests if enabled
         if [ "$run_django_tests" = true ]; then
             echo "Running Django tests..."
-            if [ ! -z "$test_type" ]; then
-                exec_backend pytest $backend_args -v -k "$test_type"
-            elif [ ! -z "$test_keyword" ]; then
-                exec_backend pytest $backend_args -v -k "$test_keyword"
-            elif [ ! -z "$backend_args" ]; then
-                exec_backend pytest $backend_args
+            if [ ! -z "$backend_args" ]; then
+                exec_backend python manage.py test $backend_args
             else
-                exec_backend pytest -p no:warnings
+                exec_backend python manage.py test
             fi
             django_exit_code=$?
         fi
@@ -364,18 +405,49 @@ case $workflow in
             exit 0
         fi
 
-        command="docker compose exec backend pytest -p no:warnings --cov=."
+        echo "Running coverage..."
 
-        # Check if the user wants an HTML report
-        if [[ "$1" == "--html" ]]; then
-            command+=" --cov-report=html"
+        # Ensure coverage config exists
+        if [ ! -f "/usr/src/backend/.coveragerc" ]; then
+            echo "[run]
+source = .
+omit =
+    */migrations/*
+    */tests/*
+    */env/*
+    manage.py
+    */asgi.py
+    */wsgi.py
+    */settings.py
+    */urls.py
+    */admin.py
+    */apps.py" > /usr/src/backend/.coveragerc
         fi
 
-        echo "Running coverage..."
-        eval "$command"
+        # Run tests with coverage
+        exec_backend coverage run manage.py test
 
-        if [[ "$1" == "--html" ]]; then
-            echo "Coverage HTML report generated. You can view it at 'htmlcov/index.html'."
+        # Generate reports based on flags
+        report_generated=false
+        while [[ $# -gt 0 ]]; do
+            case $1 in
+                --html)
+                    exec_backend coverage html
+                    echo "HTML report generated in htmlcov/"
+                    report_generated=true
+                    ;;
+                --xml)
+                    exec_backend coverage xml
+                    echo "XML report generated in coverage.xml"
+                    report_generated=true
+                    ;;
+            esac
+            shift
+        done
+
+        # If no specific report format was requested, show console report
+        if [ "$report_generated" = false ]; then
+            exec_backend coverage report
         fi
         ;;
     quality)

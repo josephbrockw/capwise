@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import datetime
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -104,6 +105,42 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
+
+# Test settings
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
+
+    # Disable migrations for tests
+    class DisableMigrations:
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+
+    # Disable unnecessary apps during testing
+    INSTALLED_APPS = [
+        app
+        for app in INSTALLED_APPS
+        if app
+        not in [
+            "django_celery_beat",
+            "anymail",
+            "drf_spectacular",
+        ]
+    ]
+
+    # Use fast MD5 hasher for tests
+    PASSWORD_HASHERS = [
+        "django.contrib.auth.hashers.MD5PasswordHasher",
+    ]
 
 
 # Password validation
@@ -251,6 +288,35 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 OWNER_EMAIL = os.environ.get("OWNER_EMAIL", "test@test.com")
 
+APP_NAME = os.environ.get("APP_NAME", "BaseBuild")
+
+# Test Runner
+TEST_RUNNER = "tests.test_runner.CollectOnlyTestRunner"
+
+# STRIPE
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+
+# Product Feature Master List
+MASTER_FEATURE_LIST = {
+    "BaseBuild": {
+        "priority_support": {
+            "display_name": "Priority Support",
+            "description": "Access to 24/7 priority support",
+            "included": False,
+        },
+        "unlimited_projects": {
+            "display_name": "Unlimited Projects",
+            "description": "Create unlimited projects",
+            "included": False,
+        },
+        "team_members": {
+            "display_name": "Team Members",
+            "description": "Invite team members to your projects",
+            "included": False,
+        },
+    },
+}
 
 # LOGGING
 LOGGING = {
@@ -315,32 +381,5 @@ LOGGING = {
             "propagate": False,
         },
         "django.email": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
-    },
-}
-
-
-# STRIPE
-STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
-STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
-APP_NAME = os.environ.get("APP_NAME", "BaseBuild")
-
-# Product Feature Master List
-MASTER_FEATURE_LIST = {
-    "BaseBuild": {
-        "priority_support": {
-            "display_name": "Priority Support",
-            "description": "Access to 24/7 priority support",
-            "included": False,
-        },
-        "unlimited_projects": {
-            "display_name": "Unlimited Projects",
-            "description": "Create unlimited projects",
-            "included": False,
-        },
-        "team_members": {
-            "display_name": "Team Members",
-            "description": "Invite team members to your projects",
-            "included": False,
-        },
     },
 }

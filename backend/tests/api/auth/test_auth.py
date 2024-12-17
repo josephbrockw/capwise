@@ -20,7 +20,7 @@ class LogInViewTestCase(APITestCase):
     def test_login_success(self):
         # Users should not be able to login if they are not verified
         url = "/api/auth/login"
-        payload = {"username": "magrat", "password": "testpass123"}
+        payload = {"username": "magrat", "password": "password123"}
         data, msg, err, code = read_api_response(
             self.client.post(url, payload, format="json")
         )
@@ -72,7 +72,7 @@ class TokenRefreshViewTests(APITestCase):
         data, msg, err, code = read_api_response(
             self.client.post(
                 "/api/auth/login",
-                {"username": "nanny", "password": "testpass123"},
+                {"username": "nanny", "password": "password123"},
                 format="json",
             )
         )
