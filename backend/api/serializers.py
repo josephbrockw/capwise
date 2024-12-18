@@ -84,6 +84,26 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LogInSerializer(TokenObtainPairSerializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, attrs):
+        User = get_user_model()
+        username = attrs["username"]
+        password = attrs["password"]
+
+        # If input looks like an email, try to find the user by email first
+        if "@" in username:
+            try:
+                user = User.objects.get(email=username)
+                if user.check_password(password):
+                    attrs["username"] = user.username
+            except User.DoesNotExist:
+                pass
+
+        # Now proceed with standard validation
+        return super().validate(attrs)
+
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)

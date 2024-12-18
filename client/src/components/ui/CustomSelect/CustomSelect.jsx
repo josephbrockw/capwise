@@ -38,6 +38,12 @@ const CustomSelect = ({ value, onChange, options, defaultValue, className }) => 
         onClick={() => {
           setIsOpen(!isOpen);
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }
+        }}
         role="button"
         tabIndex={0}
         data-cy="select-header"

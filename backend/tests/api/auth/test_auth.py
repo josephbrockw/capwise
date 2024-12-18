@@ -50,13 +50,49 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(payload["first_name"], user.first_name)
         self.assertEqual(payload["last_name"], user.last_name)
 
-    def test_login_failure(self):
+    def test_login_with_email(self):
         url = "/api/auth/login"
-        data = {"username": "test_user", "password": "wrongpassword"}
+        payload = {"username": "gytha@lancre.gov", "password": "password123"}
         data, msg, err, code = read_api_response(
-            self.client.post(url, data, format="json")
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("access", data)
+        self.assertIn("refresh", data)
+
+    def test_login_with_username_matching_email(self):
+        user = get_user_model().objects.get(email="gytha@lancre.gov")
+        user.username = "gytha@lancre.gov"
+        user.save()
+
+        url = "/api/auth/login"
+        payload = {"username": "gytha@lancre.gov", "password": "password123"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("access", data)
+        self.assertIn("refresh", data)
+
+    def test_login_with_nonexistent_email(self):
+        url = "/api/auth/login"
+        payload = {"username": "nonexistent@lancre.gov", "password": "password123"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
         )
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(err, "Authentication required. Please sign in.")
+        self.assertNotIn("access", data)
+        self.assertNotIn("refresh", data)
+
+    def test_login_with_email_wrong_password(self):
+        url = "/api/auth/login"
+        payload = {"username": "gytha@lancre.gov", "password": "wrongpassword"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(err, "Authentication required. Please sign in.")
         self.assertNotIn("access", data)
         self.assertNotIn("refresh", data)
 
