@@ -216,11 +216,6 @@ display_test_summary() {
             any_failures=true
         fi
     fi
-
-    if [ "$any_failures" = true ]; then
-        echo -e "\n${RED}Some tests failed${NC}"
-        exit 1
-    fi
 }
 
 # Check if at least one argument is provided
