@@ -27,6 +27,7 @@ class AuthenticationTest(APITestCase):
     otp_token = "123456"
     new_user = "magrat"
 
+    @tag("test")
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_user_can_sign_up(self):
         data, msg, err, code = read_api_response(
@@ -42,7 +43,8 @@ class AuthenticationTest(APITestCase):
                     "productId": 1,
                     "tierId": 2,
                 },
-            )
+            ),
+            show=True,
         )
 
         # Check that the user was created
@@ -95,7 +97,7 @@ class AuthenticationTest(APITestCase):
             )
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
-        self.assertEqual(error, "A user with that username already exists.")
+        self.assertEqual(error, "Username is already taken.")
 
     def test_user_cannot_sign_up_with_existing_email(self):
         data, msg, err, code = read_api_response(

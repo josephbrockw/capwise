@@ -76,13 +76,20 @@ class StandardMixin:
         elif isinstance(exc, ValidationError):
             # Extracting the validation error messages
             if isinstance(exc.detail, dict):
-                # Flattening the validation error messages
+                # Format validation error messages with field names
                 error_messages = []
                 for field, messages in exc.detail.items():
-                    if isinstance(messages, list):
-                        error_messages.extend([str(msg) for msg in messages])
+                    if field == "non_field_errors":
+                        if isinstance(messages, list):
+                            error_messages.extend([str(msg) for msg in messages])
+                        else:
+                            error_messages.append(str(messages))
                     else:
-                        error_messages.append(str(messages))
+                        if isinstance(messages, list):
+                            for msg in messages:
+                                error_messages.append(f"{field}: {str(msg)}")
+                        else:
+                            error_messages.append(f"{field}: {str(messages)}")
                 combined_message = " ".join(error_messages)
             else:
                 combined_message = str(exc.detail)

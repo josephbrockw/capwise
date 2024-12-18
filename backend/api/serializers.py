@@ -15,6 +15,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     email = serializers.EmailField()
+    username = serializers.CharField(required=False)
 
     def validate(self, data):
         # If username is not in data, use email as username

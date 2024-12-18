@@ -94,7 +94,7 @@ class TokenRefreshViewTests(APITestCase):
             self.client.post(reverse("token_refresh"), {})
         )
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(err, "No refresh token provided.")
+        self.assertEqual(err, "refresh: No refresh token provided.")
 
 
 class UserViewSetTest(APITestCase):
