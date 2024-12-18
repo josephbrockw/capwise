@@ -191,6 +191,7 @@ const Register = () => {
     <AuthLayout
       title="Register"
       subtitle="Create your account"
+      message={successMessage}
       errorMessage={errorMessage}
     >
       <form onSubmit={handleSubmit}>

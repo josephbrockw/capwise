@@ -5,9 +5,9 @@ describe('User Registration Flow', () => {
         email: 'gytha@lancre.gov',
         password1: 'Password123!',
         password2: 'Password123!',
-        priceId: 4,
+        priceId: 1,
         productId: 1,
-        tierId: 2
+        tierId: 1
       });
       req.reply({
         statusCode: 201,
@@ -167,25 +167,30 @@ describe('User Registration Flow', () => {
 
     // Submit registration
     cy.get('[data-cy="registration-submit-button"]').click();
-    cy.wait('@registerUser');
+    cy.wait('@registerUser').then((interception) => {
+        console.log(`Request Body: ${JSON.stringify(interception.request.body, null, 2)}`);
+    });
     // Verify successful registration prompt
     cy.contains('Registration successful! Please check your email to verify your account.').should('be.visible');
   });
 
   it('Shows error when registering with duplicate email', () => {
-  cy.intercept('POST', '**/api/auth/sign-up', {
-    statusCode: 400,
-    body: { error: 'A user with this email already exists.' },
-  }).as('registerUser');
-  cy.visit('/register');
-  cy.get('input[name="username"]').type('nanny');
-  cy.get('input[name="email"]').type('gytha@lancre.gov');
-  cy.get('input[name="password1"]').type('Password123!');
-  cy.get('input[name="password2"]').type('Password123!');
-  cy.get('[data-cy="registration-submit-button"]').click();
-  cy.wait('@registerUser');
-  cy.contains('A user with this email already exists.').should('be.visible');
-});
+    cy.intercept('POST', '**/api/auth/sign-up', {
+      statusCode: 400,
+      body: { error: 'A user with this email already exists.' },
+    }).as('registerUser');
+    cy.visit('/register');
+    cy.get('input[name="email"]').type('gytha@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('Password123!');
+    cy.get('[data-cy="registration-continue-button-0"]').click();
+    cy.get('[data-cy="select-1-Basic-month"]').click();
+    cy.get('[data-cy="registration-continue-button-1"]').click();
+    cy.get('[data-cy="registration-continue-button-2"]').click();
+    cy.get('[data-cy="registration-submit-button"]').click();
+    cy.wait('@registerUser');
+    cy.contains('A user with this email already exists.').should('be.visible');
+  });
 });
 
 describe('Email Verification', () => {
