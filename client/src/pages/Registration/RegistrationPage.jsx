@@ -73,7 +73,6 @@ const Register = () => {
         ...prevData,
         [e.target.name]: newValue,
       };
-      console.log('Updated form data:', newData);
       return newData;
     });
   };

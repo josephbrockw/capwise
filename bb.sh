@@ -167,30 +167,58 @@ manage_help() {
     echo "Example: $0 manage createsuperuser"
 }
 
+# Function to format duration in MM:SS format
+format_duration() {
+    local duration=$1
+    local minutes=$((duration / 60))
+    local seconds=$((duration % 60))
+    printf "%02d:%02d" $minutes $seconds
+}
+
 # Function to display test summary
 display_test_summary() {
     echo -e "\n${BOLD}Test Summary:${NC}"
 
-    if [ $django_exit_code -ne 0 ]; then
-        failed_tests+=("Django tests")
-    fi
-    if [ $cypress_e2e_exit_code -ne 0 ]; then
-        failed_tests+=("Cypress E2E tests")
-    fi
-    if [ $cypress_component_exit_code -ne 0 ]; then
-        failed_tests+=("Cypress Component tests")
-    fi
-    if [ $vitest_exit_code -ne 0 ]; then
-        failed_tests+=("Vitest tests")
+    local any_failures=false
+
+    if [ "$run_django_tests" = true ]; then
+        if [ $django_exit_code -eq 0 ]; then
+            echo -e "${GREEN}✓ Django tests passed${NC} ($(format_duration $django_duration))"
+        else
+            echo -e "${RED}✗ Django tests failed${NC} ($(format_duration $django_duration))"
+            any_failures=true
+        fi
     fi
 
-    if [ ${#failed_tests[@]} -eq 0 ]; then
-        echo -e "${GREEN}✓ All tests passed successfully!${NC}"
-    else
-        echo -e "${RED}⨯ The following tests failed:${NC}"
-        for failure in "${failed_tests[@]}"; do
-            echo -e "${RED}  - $failure${NC}"
-        done
+    if [ "$run_cypress_e2e_tests" = true ]; then
+        if [ $cypress_e2e_exit_code -eq 0 ]; then
+            echo -e "${GREEN}✓ Cypress E2E tests passed${NC} ($(format_duration $cypress_e2e_duration))"
+        else
+            echo -e "${RED}✗ Cypress E2E tests failed${NC} ($(format_duration $cypress_e2e_duration))"
+            any_failures=true
+        fi
+    fi
+
+    if [ "$run_cypress_component_tests" = true ]; then
+        if [ $cypress_component_exit_code -eq 0 ]; then
+            echo -e "${GREEN}✓ Cypress Component tests passed${NC} ($(format_duration $cypress_component_duration))"
+        else
+            echo -e "${RED}✗ Cypress Component tests failed${NC} ($(format_duration $cypress_component_duration))"
+            any_failures=true
+        fi
+    fi
+
+    if [ "$run_vitest_tests" = true ]; then
+        if [ $vitest_exit_code -eq 0 ]; then
+            echo -e "${GREEN}✓ Vitest tests passed${NC} ($(format_duration $vitest_duration))"
+        else
+            echo -e "${RED}✗ Vitest tests failed${NC} ($(format_duration $vitest_duration))"
+            any_failures=true
+        fi
+    fi
+
+    if [ "$any_failures" = true ]; then
+        echo -e "\n${RED}Some tests failed${NC}"
         exit 1
     fi
 }
@@ -324,33 +352,41 @@ case $workflow in
         # Run Django tests if enabled
         if [ "$run_django_tests" = true ]; then
             echo "Running Django tests..."
+            start_time=$SECONDS
             if [ ! -z "$backend_args" ]; then
                 exec_backend python manage.py test $backend_args
             else
                 exec_backend python manage.py test
             fi
             django_exit_code=$?
+            django_duration=$((SECONDS - start_time))
         fi
 
         if [ "$run_cypress_e2e_tests" = true ]; then
             echo "Running Cypress E2E tests..."
+            start_time=$SECONDS
             if ! (cd client && npx cypress run --browser chrome --e2e); then
                 cypress_e2e_exit_code=1
             fi
+            cypress_e2e_duration=$((SECONDS - start_time))
         fi
 
         if [ "$run_cypress_component_tests" = true ]; then
             echo "Running Cypress Component tests..."
+            start_time=$SECONDS
             if ! (cd client && npx cypress run --browser chrome --component); then
                 cypress_component_exit_code=1
             fi
+            cypress_component_duration=$((SECONDS - start_time))
         fi
 
         if [ "$run_vitest_tests" = true ]; then
             echo "Running Vitest tests..."
+            start_time=$SECONDS
             if ! (cd client && npm run test:run); then
                 vitest_exit_code=1
             fi
+            vitest_duration=$((SECONDS - start_time))
         fi
 
         display_test_summary
