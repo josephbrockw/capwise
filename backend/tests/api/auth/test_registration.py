@@ -27,7 +27,6 @@ class AuthenticationTest(APITestCase):
     otp_token = "123456"
     new_user = "magrat"
 
-    @tag("test")
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_user_can_sign_up(self):
         data, msg, err, code = read_api_response(
@@ -81,6 +80,24 @@ class AuthenticationTest(APITestCase):
         self.assertIn(
             "Please click the button below to verify your email address.", html_content
         )
+
+    def test_user_can_signup_with_custom_username(self):
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                },
+            )
+        )
+        self.assertEqual(status.HTTP_201_CREATED, code)
+        self.assertEqual(data["username"], "jasonogg")
+        self.assertTrue(User.objects.filter(username="jasonogg").exists())
 
     def test_user_cannot_sign_up_with_existing_username(self):
         data, message, error, code = read_api_response(
