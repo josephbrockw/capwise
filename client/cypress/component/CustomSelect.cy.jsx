@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomSelect from './CustomSelect';
+import CustomSelect from '@/components/ui/CustomSelect/CustomSelect.jsx';
 
 describe('CustomSelect', () => {
   const options = ['option1', 'option2', 'option3'];

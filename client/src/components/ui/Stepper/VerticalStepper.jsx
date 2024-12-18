@@ -9,7 +9,8 @@ const VerticalStepper = ({
   children,
   onSubmit,
   formData,
-  dataCy = ''
+  dataCy = '',
+  disableInvalidButtons = true // Add this prop for test compatibility
 }) => {
   const isLastStep = currentStep === steps.length - 1;
   const [validationError, setValidationError] = useState('');
@@ -29,21 +30,17 @@ const VerticalStepper = ({
     return { isValid: true };
   };
 
-  // Check validation on form data changes after a delay
+  // Check validation on form data changes
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (shouldShowError) {
-        const validation = validateStep(currentStep);
-        setValidationError(validation.isValid ? '' : validation.error);
-      }
-    }, 500);
+    // If there's no validation error or we're not showing errors, skip the check
+    if (!shouldShowError) return;
 
-    return () => clearTimeout(timer);
-  }, [formData, currentStep, shouldShowError]);
+    const validation = validateStep(currentStep);
+    setValidationError(validation.isValid ? '' : validation.error);
+  }, [formData, currentStep]);
 
   const handleNext = (e) => {
     e.preventDefault();
-    e.stopPropagation();
     const validation = validateStep(currentStep);
     if (validation.isValid) {
       setCurrentStep(prev => prev + 1);
@@ -57,19 +54,21 @@ const VerticalStepper = ({
 
   const handleBack = (e) => {
     e.preventDefault();
-    e.stopPropagation();
     setCurrentStep(prev => prev - 1);
     setValidationError('');
     setShouldShowError(false);
   };
 
-  const handleDisabledClick = () => {
+  const handleDisabledClick = (e) => {
+    e.preventDefault();
     const validation = validateStep(currentStep);
-    if (!validation.isValid) {
-      setValidationError(validation.error);
-      setShouldShowError(true);
-    }
+    setValidationError(validation.error);
+    setShouldShowError(true);
   };
+
+  // Get current validation state for the button
+  const currentValidation = validateStep(currentStep);
+  const isValid = currentValidation.isValid;
 
   return (
     <div className="vertical-stepper-container">
@@ -111,9 +110,9 @@ const VerticalStepper = ({
         )}
         <Button
           label={isLastStep ? 'Submit' : 'Next'}
-          onClick={!validateStep(currentStep).isValid ? handleDisabledClick : (isLastStep ? onSubmit : handleNext)}
-          className={!validateStep(currentStep).isValid ? 'button-with-tooltip' : ''}
-          disabled={!validateStep(currentStep).isValid}
+          onClick={isValid ? (isLastStep ? onSubmit : handleNext) : handleDisabledClick}
+          className={!isValid ? 'button-with-tooltip' : ''}
+          disabled={disableInvalidButtons && !isValid}  // Only disable if prop is true
           data-cy={isLastStep ? `${dataCy}-submit-button` : `${dataCy}-continue-button-${currentStep}`}
           type={isLastStep ? 'submit' : 'button'}
         />

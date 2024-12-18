@@ -4,8 +4,8 @@ import Card from '../Card/Card';
 import CustomSelect from '../CustomSelect/CustomSelect';
 import './Product.css';
 
-const Product = ({ onSelect }) => {
-  const { products, loading, error, fetchProducts } = useProductStore();
+const Product = ({ onSelect, store = useProductStore }) => {
+  const { products, loading, error, fetchProducts } = store();
   const [selectedBillingCycle, setSelectedBillingCycle] = useState('month');
   const [selectedIds, setSelectedIds] = useState({
     productId: null,
