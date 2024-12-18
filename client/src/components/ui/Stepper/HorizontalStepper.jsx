@@ -1,8 +1,8 @@
 import React from 'react';
 import Stepper from './Stepper';
-import './VerticalStepper.css';
+import './HorizontalStepper.css';
 
-const VerticalStepper = ({
+const HorizontalStepper = ({
   steps = [],
   currentStep = 0,
   setCurrentStep = () => {},
@@ -21,11 +21,11 @@ const VerticalStepper = ({
       formData={formData}
       dataCy={dataCy}
       disableInvalidButtons={disableInvalidButtons}
-      prefix="vertical"
+      prefix=""
     >
       {children}
     </Stepper>
   );
 };
 
-export default VerticalStepper;
+export default HorizontalStepper;

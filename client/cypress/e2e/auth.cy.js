@@ -134,8 +134,9 @@ describe('User Registration Flow', () => {
     cy.contains('Pro').should('be.visible');
     cy.contains('$10.00/month').should('be.visible');
 
-    // Continue button should be disabled before selection
-    cy.get('[data-cy="registration-continue-button-1"]').should('be.disabled');
+    // Clicking continue before selecting a plan should show an error
+    cy.get('[data-cy="registration-continue-button-1"]').click();
+    cy.contains('Please select a product plan to continue').should('be.visible');
 
     // Toggling billing cycle should bring up new prices
     cy.get('[data-cy="select-header"]').click();

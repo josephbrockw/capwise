@@ -6,13 +6,13 @@
 }
 
 .vertical-step {
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   border-left: 2px solid #e0e0e0;
   padding-left: 1.5rem;
   position: relative;
 }
 
-.vertical-step:last-child {
+.vertical-step.last-step {
   border-left: none;
 }
 

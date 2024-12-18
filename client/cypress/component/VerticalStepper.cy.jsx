@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VerticalStepper from './VerticalStepper';
+import VerticalStepper from '@/components/ui/Stepper/Stepper.jsx';
 
 describe('VerticalStepper Component', () => {
   const mockSteps = [
