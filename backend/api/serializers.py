@@ -8,14 +8,20 @@ from rest_framework_simplejwt.serializers import (
 from rest_framework_simplejwt.tokens import TokenError
 
 from experiment.models import Experiment, Variation
+from payment.models import Price, Product, Tier
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
     email = serializers.EmailField()
+    username = serializers.CharField(required=False)
 
     def validate(self, data):
+        # If username is not in data, use email as username
+        if "username" not in data:
+            data["username"] = data["email"]
+
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords must match.")
         User = get_user_model()
@@ -78,6 +84,26 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LogInSerializer(TokenObtainPairSerializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, attrs):
+        User = get_user_model()
+        username = attrs["username"]
+        password = attrs["password"]
+
+        # If input looks like an email, try to find the user by email first
+        if "@" in username:
+            try:
+                user = User.objects.get(email=username)
+                if user.check_password(password):
+                    attrs["username"] = user.username
+            except User.DoesNotExist:
+                pass
+
+        # Now proceed with standard validation
+        return super().validate(attrs)
+
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -114,3 +140,31 @@ class ExperimentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experiment
         fields = ["id", "name", "description", "created_at", "active", "variations"]
+
+
+class PriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Price
+        fields = ["id", "billing_cycle", "price"]
+
+
+class TierSerializer(serializers.ModelSerializer):
+    prices = PriceSerializer(many=True, read_only=True, source="price_set")
+
+    class Meta:
+        model = Tier
+        fields = ["id", "name", "stripe_product_id", "prices", "features", "order"]
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    tiers = TierSerializer(many=True, read_only=True, source="tier_set")
+    trial_days = serializers.IntegerField(source="default_trial_days")
+
+    class Meta:
+        model = Product
+        fields = ["id", "name", "description", "is_active", "tiers", "trial_days"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["tiers"] = sorted(data["tiers"], key=lambda tier: tier["order"])
+        return data

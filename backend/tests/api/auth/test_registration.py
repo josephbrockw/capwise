@@ -6,7 +6,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.test import override_settings
+from django.test import override_settings, tag
 from django.utils.timezone import now
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -14,9 +14,10 @@ from rest_framework.test import APITestCase
 from account.models import OneTimePassword, User
 from tests import read_api_response
 
-PASSWORD = "testpass123"
+PASSWORD = "password123"
 
 
+@tag("auth")
 class AuthenticationTest(APITestCase):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     fixtures = [
@@ -32,18 +33,21 @@ class AuthenticationTest(APITestCase):
             self.client.post(
                 "/api/auth/sign-up",
                 data={
-                    "username": "granny",
                     "email": "esme@lancre.gov",
                     "first_name": "Esmerelda",
                     "last_name": "Weatherwax",
                     "password1": PASSWORD,
                     "password2": PASSWORD,
+                    "priceId": 4,
+                    "productId": 1,
+                    "tierId": 2,
                 },
-            )
+            ),
+            show=True,
         )
 
         # Check that the user was created
-        user = get_user_model().objects.get(username="granny")
+        user = get_user_model().objects.get(username="esme@lancre.gov")
         self.assertEqual(status.HTTP_201_CREATED, code)
         self.assertEqual(data["id"], str(user.id))
         self.assertEqual(data["username"], user.username)
@@ -57,7 +61,7 @@ class AuthenticationTest(APITestCase):
         # Check that an OTP was created
         otp = OneTimePassword.objects.get(user=user)
         self.assertTrue(otp.is_active)
-        self.assertEqual(len(otp.token), 20)
+        self.assertEqual(len(otp.token), 6)
 
         # Verify that one email was sent
         self.assertEqual(len(mail.outbox), 1)
@@ -77,6 +81,24 @@ class AuthenticationTest(APITestCase):
             "Please click the button below to verify your email address.", html_content
         )
 
+    def test_user_can_signup_with_custom_username(self):
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                },
+            )
+        )
+        self.assertEqual(status.HTTP_201_CREATED, code)
+        self.assertEqual(data["username"], "jasonogg")
+        self.assertTrue(User.objects.filter(username="jasonogg").exists())
+
     def test_user_cannot_sign_up_with_existing_username(self):
         data, message, error, code = read_api_response(
             self.client.post(
@@ -92,7 +114,7 @@ class AuthenticationTest(APITestCase):
             )
         )
         self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
-        self.assertEqual(error, "A user with that username already exists.")
+        self.assertEqual(error, "Username is already taken.")
 
     def test_user_cannot_sign_up_with_existing_email(self):
         data, msg, err, code = read_api_response(
@@ -189,7 +211,7 @@ class AuthenticationTest(APITestCase):
         # Check that an OTP was created
         otp = OneTimePassword.objects.filter(user=user).order_by("-created").first()
         self.assertTrue(otp.is_active)
-        self.assertEqual(len(otp.token), 20)
+        self.assertEqual(len(otp.token), 6)
 
         # Verify that one email was sent
         self.assertEqual(len(mail.outbox), 1)
@@ -247,16 +269,17 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "User is already verified.")
 
-    def test_user_can_log_in(self):  # new
+    def test_user_can_log_in(self):
         user = User.objects.get(username="nanny")
         data, msg, err, code = read_api_response(
             self.client.post(
                 "/api/auth/login",
                 data={
                     "username": "nanny",
-                    "password": PASSWORD,
+                    "password": "password123",
                 },
-            )
+            ),
+            show=True,
         )
 
         # Parse payload data from access token.

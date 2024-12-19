@@ -1,0 +1,4 @@
+.step-header {
+    color: var(--primaryColor, blue);
+    text-align: center;
+}

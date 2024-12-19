@@ -8,6 +8,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
+    default_trial_days = models.PositiveIntegerField(default=7)
 
     def __str__(self):
         return self.name
@@ -23,6 +24,7 @@ class Tier(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     features = models.JSONField(blank=True, null=True)
     stripe_product_id = models.CharField(max_length=255)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.product.name} - {self.name}" if self.product else self.name
@@ -32,6 +34,7 @@ class Tier(models.Model):
         verbose_name_plural = "Tiers"
         db_table = "tiers"
         unique_together = ("product", "name")
+        ordering = ["order"]
 
 
 class Price(models.Model):

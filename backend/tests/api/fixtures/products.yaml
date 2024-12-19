@@ -1,0 +1,118 @@
+- fields:
+    date_joined: '2024-03-30T20:20:03.265Z'
+    email: esme@lancre.gov
+    first_name: Esmerelda
+    groups: []
+    is_active: true
+    is_staff: false
+    is_superuser: false
+    last_login: null
+    last_name: Weatherwax
+    password: md5$salt123$6d19eb6c78af2c6d3e9f8157a555c45f
+    preferred_name: ''
+    user_permissions: []
+    username: granny
+  model: account.user
+- fields:
+    date_joined: '2024-03-30T20:20:03.265Z'
+    email: me@thejoewilkinson.com
+    first_name: Joe
+    groups: []
+    is_active: true
+    is_staff: true
+    is_superuser: true
+    last_login: null
+    last_name: Wilkinson
+    password: md5$salt123$6d19eb6c78af2c6d3e9f8157a555c45f
+    preferred_name: ''
+    user_permissions: []
+    username: joe
+  model: account.user
+- fields:
+    description: ''
+    is_active: true
+    name: BaseBuild
+  model: payment.product
+  pk: 1
+- fields:
+    features:
+      priority_support:
+        description: Access to 24/7 priority support
+        display_name: Priority Support
+        included: true
+      team_members:
+        description: Add unlimited team members
+        display_name: Team Members
+        included: true
+      unlimited_projects:
+        description: Create unlimited projects
+        display_name: Unlimited Projects
+        included: true
+    name: Pro
+    order: 1
+    product: 1
+    stripe_product_id: prod_RLPfX4AP3OxW1n
+  model: payment.tier
+  pk: 1
+- fields:
+    features:
+      priority_support:
+        description: Access to 24/7 priority support
+        display_name: Priority Support
+        included: false
+      team_members:
+        description: Add unlimited team members
+        display_name: Team Members
+        included: false
+      unlimited_projects:
+        description: Create unlimited projects
+        display_name: Unlimited Projects
+        included: true
+    name: Basic
+    order: 0
+    product: 1
+    stripe_product_id: prod_RLPYE8gAch5s6q
+  model: payment.tier
+  pk: 2
+- fields:
+    billing_cycle: lifetime
+    price: 19900
+    stripe_price_id: price_1QSivyDTjaiWCCukA3U2dCJV
+    tier: 1
+  model: payment.price
+  pk: 2
+- fields:
+    billing_cycle: year
+    price: 8500
+    stripe_price_id: price_1QSivWDTjaiWCCukkGfFIz8h
+    tier: 1
+  model: payment.price
+  pk: 3
+- fields:
+    billing_cycle: lifetime
+    price: 8500
+    stripe_price_id: price_1QSitvDTjaiWCCukqlPEq0DH
+    tier: 2
+  model: payment.price
+  pk: 4
+- fields:
+    billing_cycle: year
+    price: 5000
+    stripe_price_id: price_1QSit1DTjaiWCCukmzthyl3i
+    tier: 2
+  model: payment.price
+  pk: 5
+- fields:
+    billing_cycle: month
+    price: 1000
+    stripe_price_id: price_1QSiqFDTjaiWCCukT4S6i8IN
+    tier: 1
+  model: payment.price
+  pk: 6
+- fields:
+    billing_cycle: month
+    price: 500
+    stripe_price_id: price_1QSijrDTjaiWCCukzCtn3uIw
+    tier: 2
+  model: payment.price
+  pk: 7
