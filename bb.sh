@@ -287,14 +287,6 @@ case $workflow in
                     backend_args="$backend_args --exclude-tag $2"
                     shift
                     ;;
-                -v)
-                    if [[ "$2" =~ ^[0-2]$ ]]; then
-                        backend_args="$backend_args -v $2"
-                        shift
-                    else
-                        backend_args="$backend_args -v 1"
-                    fi
-                    ;;
                 --debug-mode)
                     backend_args="$backend_args --debug-mode"
                     ;;
