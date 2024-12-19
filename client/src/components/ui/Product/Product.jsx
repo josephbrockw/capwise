@@ -93,53 +93,55 @@ const Product = ({ onSelect, store = useProductStore }) => {
 
       <div className="product-cards">
         {products.map((product) => (
-          <div key={product.id} className="product-tier-container">
+          <>
             <h3>{product.name}</h3>
-            {product.tiers.map((tier) => {
-              const price = getBillingCyclePrice(tier.prices);
-              const isSelected =
-                selectedIds.productId === product.id &&
-                selectedIds.tierId === tier.id &&
-                selectedIds.priceId === price.id;
+            <div key={product.id} className="product-tier-container">
+              {product.tiers.map((tier) => {
+                const price = getBillingCyclePrice(tier.prices);
+                const isSelected =
+                  selectedIds.productId === product.id &&
+                  selectedIds.tierId === tier.id &&
+                  selectedIds.priceId === price.id;
 
-              return (
-                <Card
-                  key={tier.id}
-                  className={`product-card ${isSelected ? 'selected' : ''}`}
-                  title={tier.name}
-                >
-                  <div className="product-price">
-                    <span className="price-amount">${(price.price / 100).toFixed(2)}</span>
-                    <span className="price-cycle">/{selectedBillingCycle}</span>
-                  </div>
-
-                  <div className="product-features">
-                    {tier.features && Object.entries(tier.features).map(([key, feature]) => (
-                      <div key={key} className="feature-item">
-                        {feature.included ? (
-                          <span className="feature-icon included">✓</span>
-                        ) : (
-                          <span className="feature-icon not-included">✕</span>
-                        )}
-                        <span className="feature-text">{feature.display_name}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <button
-                    className={`select-button ${isSelected ? 'selected' : ''}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleProductSelect(product.id, tier.id, price.id);
-                    }}
-                    data-cy={`select-${product.id}-${tier.name}-${selectedBillingCycle}`}
+                return (
+                  <Card
+                    key={tier.id}
+                    className={`product-card ${isSelected ? 'selected' : ''}`}
+                    title={tier.name}
                   >
-                    {isSelected ? 'Selected' : 'Select Plan'}
-                  </button>
-                </Card>
-              );
-            })}
-          </div>
+                    <div className="product-price">
+                      <span className="price-amount">${(price.price / 100).toFixed(2)}</span>
+                      <span className="price-cycle">/{selectedBillingCycle}</span>
+                    </div>
+
+                    <div className="product-features">
+                      {tier.features && Object.entries(tier.features).map(([key, feature]) => (
+                        <div key={key} className="feature-item">
+                          {feature.included ? (
+                            <span className="feature-icon included">✓</span>
+                          ) : (
+                            <span className="feature-icon not-included">✕</span>
+                          )}
+                          <span className="feature-text">{feature.display_name}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      className={`select-button ${isSelected ? 'selected' : ''}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleProductSelect(product.id, tier.id, price.id);
+                      }}
+                      data-cy={`select-${product.id}-${tier.name}-${selectedBillingCycle}`}
+                    >
+                      {isSelected ? 'Selected' : 'Select Plan'}
+                    </button>
+                  </Card>
+                );
+              })}
+            </div>
+          </>
         ))}
       </div>
     </div>

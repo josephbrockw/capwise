@@ -25,7 +25,7 @@ const AuthLayout = ({
 
   return (
     <div className="auth-layout flex align-items-center justify-content-center">
-      <div className="w-full lg:w-6" style={{ maxWidth: '450px', margin: '1rem 2rem' }}>
+      <div className="w-full" style={{ margin: '1rem 2rem' }}>
         <div className="text-center header">
           <img src={inlineLogo} alt="hyper" height={50} className="logo" />
 

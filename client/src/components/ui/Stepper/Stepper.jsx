@@ -72,31 +72,93 @@ const Stepper = ({
 
   return (
     <div className={`${prefix}-stepper-container`}>
-      {steps.map((step, index) => (
-        <div
-          key={index}
-          className={`${prefix}-step ${index === currentStep ? 'active' : ''} ${
-            index < currentStep ? 'completed' : ''
-          } ${index === steps.length - 1 ? 'last-step' : ''}`}
-        >
-          <div className={`${prefix}-step-header`}>
-            <div className={`${prefix}-step-indicator`}>{index + 1}</div>
-            <div className={`${prefix}-step-label`}>{step.title}</div>
-          </div>
-          <div className={`${prefix}-step-content ${index === currentStep ? 'visible' : ''}`}>
-            {index === currentStep && (
-              <>
-                {validationError && shouldShowError && (
-                  <div className="validation-error" data-cy={`${dataCy}-validation-error`}>
-                    {validationError}
+      {prefix === 'horizontal' ? (
+        <>
+          <div className="horizontal-stepper-header">
+            <div className="horizontal-steps-wrapper">
+              {steps.map((step, index) => {
+                const isActive = index === currentStep;
+                const isCompleted = index < currentStep;
+
+                // Calculate which steps should be visible in the sliding window
+                let isVisible = false;
+                if (steps.length <= 3) {
+                  // If 3 or fewer steps, show all
+                  isVisible = true;
+                } else if (currentStep === 0) {
+                  // First step - show first three
+                  isVisible = index < 3;
+                } else if (currentStep === steps.length - 1) {
+                  // Last step - show last three
+                  isVisible = index >= steps.length - 3;
+                } else {
+                  // Middle steps - show previous, current, and next
+                  isVisible = Math.abs(index - currentStep) <= 1;
+                }
+
+                return (
+                  <div
+                    key={index}
+                    className={`horizontal-step ${isActive ? 'active' : ''} ${
+                      isCompleted ? 'completed' : ''
+                    } ${isVisible ? 'active-adjacent' : ''} ${
+                      index === steps.length - 1 ? 'last-step' : ''
+                    }`}
+                  >
+                    <div className="horizontal-step-indicator">{index + 1}</div>
+                    <div className="horizontal-step-label">{step.title}</div>
                   </div>
-                )}
-                {children}
-              </>
-            )}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className={`horizontal-step-content ${index === currentStep ? 'visible' : ''}`}
+            >
+              {index === currentStep && (
+                <>
+                  {validationError && shouldShowError && (
+                    <div className="validation-error" data-cy={`${dataCy}-validation-error`}>
+                      {validationError}
+                    </div>
+                  )}
+                  {children}
+                </>
+              )}
+            </div>
+          ))}
+        </>
+      ) : (
+        steps.map((step, index) => (
+          <div
+            key={index}
+            className={`${prefix}-step ${index === currentStep ? 'active' : ''} ${
+              index < currentStep ? 'completed' : ''
+            } ${index === steps.length - 1 ? 'last-step' : ''}`}
+          >
+            <div className={`${prefix}-step-header`}>
+              <div className={`${prefix}-step-indicator`}>{index + 1}</div>
+              <div className={`${prefix}-step-label`}>{step.title}</div>
+            </div>
+            <div className={`${prefix}-step-content ${index === currentStep ? 'visible' : ''}`}>
+              {index === currentStep && (
+                <>
+                  {validationError && shouldShowError && (
+                    <div className="validation-error" data-cy={`${dataCy}-validation-error`}>
+                      {validationError}
+                    </div>
+                  )}
+                  {children}
+                </>
+              )}
+            </div>
+          </div>
+        ))
+      )}
+
       <div className={`${prefix}-stepper-actions`}>
         {currentStep > 0 && (
           <Button

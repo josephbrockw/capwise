@@ -4,6 +4,7 @@ import FloatLabel from "../../components/ui/FloatLabel/FloatLabel.jsx";
 import Button from "../../components/ui/Button/Button.jsx";
 import AuthLayout from "../../components/layout/AuthLayout/AuthLayout.jsx";
 import VerticalStepper from "../../components/ui/Stepper/VerticalStepper.jsx";
+import HorizontalStepper from "@/components/ui/Stepper/HorizontalStepper.jsx";
 import Product from "../../components/ui/Product/Product.jsx";
 import './Registration.css';
 
@@ -197,7 +198,7 @@ const Register = () => {
       errorMessage={errorMessage}
     >
       <form onSubmit={handleSubmit}>
-        <VerticalStepper
+        <HorizontalStepper
           steps={steps}
           currentStep={currentStep}
           setCurrentStep={setCurrentStep}
@@ -206,7 +207,7 @@ const Register = () => {
           dataCy="registration"
         >
           {renderStepContent()}
-        </VerticalStepper>
+        </HorizontalStepper>
       </form>
     </AuthLayout>
   );

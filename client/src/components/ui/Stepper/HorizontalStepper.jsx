@@ -21,7 +21,7 @@ const HorizontalStepper = ({
       formData={formData}
       dataCy={dataCy}
       disableInvalidButtons={disableInvalidButtons}
-      prefix=""
+      prefix="horizontal"
     >
       {children}
     </Stepper>
