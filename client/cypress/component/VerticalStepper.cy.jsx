@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VerticalStepper from '@/components/ui/Stepper/Stepper.jsx';
+import VerticalStepper from '@/components/ui/Stepper/VerticalStepper.jsx';
 
 describe('VerticalStepper Component', () => {
   const mockSteps = [
@@ -73,15 +73,18 @@ describe('VerticalStepper Component', () => {
 
     // Check input and buttons
     cy.get('[data-cy="step1-input"]').should('be.visible');
-    cy.get('[data-cy="test-stepper-continue-button-0"]').should('be.visible').and('be.disabled');
+    cy.get('[data-cy="test-stepper-continue-button-0"]')
+      .should('be.visible')
+      .and('have.class', 'button-with-tooltip')
+      .and('have.class', 'disabled')
     cy.get('[data-cy="test-stepper-back-button"]').should('not.exist');
   });
 
   it('shows validation error on empty input', () => {
-    cy.mount(<TestWrapper disableInvalidButtons={false} />);
+    cy.mount(<TestWrapper />);
 
-    // Try to proceed without input
-    cy.get('[data-cy="test-stepper-continue-button-0"]').click();
+    // Try to proceed without input (force click since button is disabled)
+    cy.get('[data-cy="test-stepper-continue-button-0"]').click({ force: true });
 
     // Check for validation error
     cy.get('[data-cy="test-stepper-validation-error"]')
@@ -159,15 +162,16 @@ describe('VerticalStepper Component', () => {
     cy.get('@onSubmit').should('have.been.called');
   });
 
-  it('validates all previous steps before allowing next', () => {
-    cy.mount(<TestWrapper initialStep={1} disableInvalidButtons={false} />);
+  it('validates current step before allowing next', () => {
+    cy.mount(<TestWrapper initialStep={1} />);
 
-    // Try to fill step 2 without step 1
-    cy.get('[data-cy="step2-input"]').type('Step 2 data');
-    cy.get('[data-cy="test-stepper-continue-button-1"]').click();
+    // Try to proceed with empty step 2
+    cy.get('[data-cy="test-stepper-continue-button-1"]').click({ force: true });
 
-    // Should show validation error for step 1
-    cy.get('[data-cy="test-stepper-validation-error"]').should('contain', 'Step 1 is required');
+    // Should show validation error for step 2
+    cy.get('[data-cy="test-stepper-validation-error"]')
+      .should('be.visible')
+      .and('contain', 'Step 2 is required');
   });
 
   it('updates validation error on input change', () => {

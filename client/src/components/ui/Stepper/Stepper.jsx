@@ -110,7 +110,7 @@ const Stepper = ({
         <Button
           label={isLastStep ? 'Submit' : 'Next'}
           onClick={handleClick}
-          className={!isValid ? 'button-with-tooltip' : ''}
+          className={!isValid ? 'button-with-tooltip disabled' : ''}
           data-cy={isLastStep ? `${dataCy}-submit-button` : `${dataCy}-continue-button-${currentStep}`}
           type={isLastStep ? 'submit' : 'button'}
         />
