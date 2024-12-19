@@ -54,9 +54,10 @@
 /* Mobile view - hide non-adjacent steps */
 @media (max-width: 768px) {
   .horizontal-stepper-header::before {
-    left: 20%;
-    right: 10%;
+    left: 45px;
+    right: 45px;
   }
+
   .horizontal-step {
     display: none;
     opacity: 0;
