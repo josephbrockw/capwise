@@ -92,7 +92,7 @@ describe('Stepper.cy.jsx', () => {
       />
     );
 
-    cy.get('[data-cy="test-stepper-submit"]').click();
+    cy.get('[data-cy="test-stepper-submit-button"]').click();
     cy.get('@onSubmit').should('have.been.called');
   });
 
@@ -109,7 +109,7 @@ describe('Stepper.cy.jsx', () => {
       />
     );
 
-    cy.get('[data-cy="test-stepper-continue-button-0"]').should('be.disabled');
+    cy.get('[data-cy="test-stepper-continue-button-0"]').should('have.class', 'disabled');
   });
 
   it('allows back navigation even with validation errors', () => {
@@ -125,12 +125,10 @@ describe('Stepper.cy.jsx', () => {
       />
     );
 
-    cy.get('[data-cy="test-stepper-back-button-1"]').click();
+    cy.get('[data-cy="test-stepper-back-button"]').click();
     cy.get('@setCurrentStep').should(spy => {
       expect(spy).to.have.been.called;
-      // Get the function that was passed to setCurrentStep
       const updateFn = spy.getCall(0).args[0];
-      // Call it with the current step (1) to verify it returns 0
       expect(updateFn(1)).to.equal(0);
     });
   });

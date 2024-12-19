@@ -165,16 +165,15 @@ const Stepper = ({
             label="Back"
             onClick={handleBack}
             className="p-button-secondary"
-            data-cy={`${dataCy}-back-button-${currentStep}`}
+            data-cy={`${dataCy}-back-button`}
             type="button"
           />
         )}
         <Button
           label={isLastStep ? 'Submit' : 'Next'}
           onClick={handleClick}
-          className={!isValid ? 'button-with-tooltip' : ''}
-          disabled={!isValid && disableInvalidButtons}
-          data-cy={`${dataCy}-${isLastStep ? 'submit' : `continue-button-${currentStep}`}`}
+          className={!isValid ? 'button-with-tooltip disabled' : ''}
+          data-cy={isLastStep ? `${dataCy}-submit-button` : `${dataCy}-continue-button-${currentStep}`}
           type={isLastStep ? 'submit' : 'button'}
         />
       </div>
