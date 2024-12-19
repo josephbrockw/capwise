@@ -158,10 +158,11 @@ class TierSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     tiers = TierSerializer(many=True, read_only=True, source="tier_set")
+    trial_days = serializers.IntegerField(source="default_trial_days")
 
     class Meta:
         model = Product
-        fields = ["id", "name", "description", "is_active", "tiers"]
+        fields = ["id", "name", "description", "is_active", "tiers", "trial_days"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

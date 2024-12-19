@@ -94,7 +94,14 @@ const Product = ({ onSelect, store = useProductStore }) => {
       <div className="product-cards">
         {products.map((product) => (
           <>
-            <h3>{product.name}</h3>
+            <div className="product-title">
+              <h3>{product.name}</h3>
+              {product.trial_days > 0 && (
+                <div className="product-trial">
+                  {product.trial_days} day free trial
+                </div>
+              )}
+            </div>
             <div key={product.id} className="product-tier-container">
               {product.tiers.map((tier) => {
                 const price = getBillingCyclePrice(tier.prices);
@@ -113,6 +120,7 @@ const Product = ({ onSelect, store = useProductStore }) => {
                       <span className="price-amount">${(price.price / 100).toFixed(2)}</span>
                       <span className="price-cycle">/{selectedBillingCycle}</span>
                     </div>
+
 
                     <div className="product-features">
                       {tier.features && Object.entries(tier.features).map(([key, feature]) => (

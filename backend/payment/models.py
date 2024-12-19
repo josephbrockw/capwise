@@ -8,6 +8,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
+    default_trial_days = models.PositiveIntegerField(default=7)
 
     def __str__(self):
         return self.name
