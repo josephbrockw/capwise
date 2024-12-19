@@ -32,6 +32,7 @@ describe('User Registration Flow', () => {
               name: 'BaseBuild',
               description: 'A template for building SaaS applications.',
               is_active: true,
+              trial_days: 7,
               tiers: [
                 {
                   id: 1,
@@ -133,6 +134,7 @@ describe('User Registration Flow', () => {
     cy.contains('$5.00/month').should('be.visible');
     cy.contains('Pro').should('be.visible');
     cy.contains('$10.00/month').should('be.visible');
+    cy.contains('7 day free trial').should('be.visible');
 
     // Clicking continue before selecting a plan should show an error
     cy.get('[data-cy="registration-continue-button-1"]').click();
