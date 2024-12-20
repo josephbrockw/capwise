@@ -33,7 +33,7 @@ from api.views.auth import (  # type: ignore
     TokenRefreshView,
 )
 from api.views.experiment import ExperimentViewSet  # type: ignore
-from api.views.payment import ProductViewSet  # type: ignore
+from api.views.payment import ProductViewSet, PurchaseViewSet  # type: ignore
 from api.views.user import UserViewSet  # type: ignore
 
 router = DefaultRouter(trailing_slash=False)
@@ -41,6 +41,7 @@ router.register(r"auth", AuthViewSet, basename="auth")
 router.register(r"users", UserViewSet, basename="users")
 router.register(r"experiments", ExperimentViewSet, basename="experiments")
 router.register(r"products", ProductViewSet, basename="products")
+router.register(r"purchases", PurchaseViewSet, basename="purchases")
 
 urlpatterns = [
     path("admin", admin.site.urls),

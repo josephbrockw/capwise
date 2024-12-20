@@ -8,7 +8,7 @@ from rest_framework_simplejwt.serializers import (
 from rest_framework_simplejwt.tokens import TokenError
 
 from experiment.models import Experiment, Variation
-from payment.models import Price, Product, Tier
+from payment.models import DiscountCode, Price, Product, Tier
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -168,3 +168,9 @@ class ProductSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data["tiers"] = sorted(data["tiers"], key=lambda tier: tier["order"])
         return data
+
+
+class DiscountCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiscountCode
+        fields = ["id", "code", "percentage", "money", "trial_days", "product"]

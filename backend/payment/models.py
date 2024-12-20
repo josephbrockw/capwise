@@ -96,3 +96,22 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.tier.name}"
+
+
+class DiscountCode(models.Model):
+    code = models.CharField(max_length=255, unique=True)
+    percentage = models.PositiveIntegerField(null=True, blank=True)
+    money = models.PositiveIntegerField(null=True, blank=True)
+    trial_days = models.PositiveIntegerField(null=True, blank=True)
+    product = models.ForeignKey(
+        Product, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Discount Code"
+        verbose_name_plural = "Discount Codes"
+        db_table = "discount_codes"
+
+    def __str__(self):
+        return self.code.upper()

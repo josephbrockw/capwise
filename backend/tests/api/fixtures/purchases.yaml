@@ -1,0 +1,36 @@
+- model: payment.product
+  pk: 1
+  fields:
+    description: ''
+    is_active: true
+    name: BaseBuild
+
+- model: payment.product
+  pk: 2
+  fields:
+    description: ''
+    is_active: true
+    name: Alternate Build
+
+- model: payment.discountcode
+  pk: 1
+  fields:
+    code: 'ACTIVE10'
+    money: null
+    percentage: 10
+    is_active: true
+
+- model: payment.discountcode
+  pk: 2
+  fields:
+    code: 'PRODUCT20'
+    percentage: 20
+    is_active: true
+    product: 1
+
+- model: payment.discountcode
+  pk: 3
+  fields:
+    code: 'INACTIVE30'
+    percentage: 30
+    is_active: false
