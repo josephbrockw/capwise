@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Button from '../Button/Button';
 import Chip from '../Chip/Chip';
@@ -10,6 +10,13 @@ const AddDiscount = ({ onApplyDiscount }) => {
   const [appliedCode, setAppliedCode] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isExpanded && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isExpanded]);
 
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return;
@@ -70,6 +77,7 @@ const AddDiscount = ({ onApplyDiscount }) => {
       ) : (
         <div className="discount-form">
           <input
+            ref={inputRef}
             type="text"
             value={discountCode}
             onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
