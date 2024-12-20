@@ -6,6 +6,8 @@ import AuthLayout from "../../components/layout/AuthLayout/AuthLayout.jsx";
 import VerticalStepper from "../../components/ui/Stepper/VerticalStepper.jsx";
 import HorizontalStepper from "@/components/ui/Stepper/HorizontalStepper.jsx";
 import Product from "../../components/ui/Product/Product.jsx";
+import PaymentForm from "../../components/ui/PaymentForm/PaymentForm.jsx";
+import StripeProvider from "../../components/providers/StripeProvider.jsx";
 import './Registration.css';
 
 const Register = () => {
@@ -16,8 +18,12 @@ const Register = () => {
     productId: null,
     tierId: null,
     priceId: null,
+    paymentMethodId: null,
+    selectedProduct: null,
+    selectedPrice: null
   });
   const [currentStep, setCurrentStep] = useState(0);
+  const [validatePayment, setValidatePayment] = useState(() => async () => ({ isValid: true }));
 
   const validateAccountDetails = (data) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,6 +51,13 @@ const Register = () => {
 
   const validateConfirmation = () => ({ isValid: true });
 
+  const validatePaymentStep = (data) => {
+    if (!data.paymentMethodId) {
+      return { isValid: false, error: 'Please add your payment details to continue' };
+    }
+    return { isValid: true };
+  };
+
   const steps = [
     {
       title: 'Personal Info',
@@ -56,7 +69,7 @@ const Register = () => {
     },
     {
       title: 'Payment',
-      validate: () => ({ isValid: true })
+      validate: validatePaymentStep
     },
     {
       title: 'Confirmation',
@@ -96,7 +109,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/sign-up`, formData);
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/sign-up`, {
+        email: formData.email,
+        password1: formData.password1,
+        password2: formData.password2,
+        productId: formData.productId,
+        tierId: formData.tierId,
+        priceId: formData.priceId,
+        paymentMethodId: formData.paymentMethodId
+      });
       if (res.status === 201) {
         setSuccessMessage('Registration successful! Please check your email to verify your account.');
         setErrorMessage(''); // Clear any previous errors
@@ -155,16 +176,15 @@ const Register = () => {
           <div>
             <h2 className="step-header">Product Selection</h2>
             <Product
-              onSelect={(productId, tierId, priceId) => {
-                setFormData(prev => {
-                  const newData = {
-                    ...prev,
-                    productId,
-                    tierId,
-                    priceId
-                  };
-                  return newData;
-                });
+              onSelect={(productId, tierId, priceId, product, price) => {
+                setFormData(prev => ({
+                  ...prev,
+                  productId,
+                  tierId,
+                  priceId,
+                  selectedProduct: product,
+                  selectedPrice: price
+                }));
                 setErrorMessage('');
               }}
             />
@@ -174,6 +194,17 @@ const Register = () => {
         return (
           <div>
             <h2 className="step-header">Payment</h2>
+            <StripeProvider>
+              <PaymentForm
+                formData={formData}
+                onSubmit={({ paymentMethodId }) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    paymentMethodId
+                  }));
+                }}
+              />
+            </StripeProvider>
           </div>
         );
       case 3:
