@@ -126,3 +126,11 @@
     billing_cycle: month
     price: 500
     stripe_price_id: price_1QSijrDTjaiWCCukzCtn3uIw
+
+- model: payment.discountcode
+  pk: 1
+  fields:
+    code: 'CODE'
+    percentage: 10
+    is_active: true
+    trial_days: 30

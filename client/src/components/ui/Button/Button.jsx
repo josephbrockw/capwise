@@ -7,18 +7,43 @@ const Button = ({
   label,
   icon,
   onClick,
+  tag,
   type = 'button',
   disabled = false,
   fullWidth = false,
   className = '',
   ...props
 }) => {
+  const finalTag = tag || 'button';
+  console.log('Button props:', {
+    label,
+    tag,
+    finalTag
+  });
+
   const handleClick = (e) => {
     if (onClick) {
       onClick(e);
     }
   };
 
+  if (finalTag=== 'div') {
+    console.log('Rendering as div');
+    return (
+      <div
+        className={`custom-button ${fullWidth ? 'full-width' : ''} ${disabled ? 'disabled' : ''} ${className}`}
+        aria-disabled={disabled}
+        onClick={handleClick}
+        tabIndex={0}
+        {...props}
+      >
+        {icon && <i className={`icon ${icon}`}></i>}
+        {label}
+      </div>
+    )
+  }
+
+  console.log('Rendering as button');
   return (
     <button
       type={type}
@@ -42,6 +67,7 @@ Button.propTypes = {
   className: PropTypes.string,
   fullWidth: PropTypes.bool,
   disabled: PropTypes.bool,
+  tag: PropTypes.oneOf(['button', 'div']),
 };
 
 export default Button;

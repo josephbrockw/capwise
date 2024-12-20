@@ -1,5 +1,7 @@
 /* Button.css */
-.custom-button {
+/* Shared styles between buttons and button-like elements */
+.custom-button,
+.button-like {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -8,39 +10,61 @@
   font-weight: 500;
   line-height: 1.5;
   border-radius: var(--borderRadius, 4px);
-  border: none;
-  background-color: var(--primaryColor, blue);
   color: white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  background-color: var(--primaryColor, blue);
 }
 
-.custom-button:hover:not([aria-disabled="true"]) {
+/* Button-specific styles */
+.custom-button {
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Non-button element styles */
+.button-like {
+  user-select: none;
+}
+
+/* Hover states */
+.custom-button:hover:not([aria-disabled="true"]),
+.button-like:hover:not(.disabled) {
   background-color: var(--buttonPrimaryHover, #1a73e8);
 }
 
-.custom-button[aria-disabled="true"] {
+/* Disabled states */
+.custom-button[aria-disabled="true"],
+.button-like.disabled {
   opacity: 0.7;
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
-.custom-button .icon {
+/* Icon styles */
+.custom-button .icon,
+.button-like .icon {
   margin-right: 0.5rem;
 }
 
-.custom-button.full-width {
+/* Full width styles */
+.custom-button.full-width,
+.button-like.full-width {
   width: 100%;
-  display: block; /* Ensure it behaves as a block-level element */
+  display: block;
 }
 
 /* Outlined variant */
-.custom-button.outlined {
+.custom-button.outlined,
+.button-like.outlined {
   background-color: transparent;
   border: 2px solid var(--primaryColor, blue);
   color: var(--primaryColor, blue);
 }
 
-.custom-button.outlined:hover:not([aria-disabled="true"]) {
+.custom-button.outlined:hover:not([aria-disabled="true"]),
+.button-like.outlined:hover:not(.disabled) {
   background-color: var(--primaryColor, blue);
   color: var(--light, white);
 }

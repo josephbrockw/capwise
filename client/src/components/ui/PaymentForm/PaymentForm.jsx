@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import Button from '../Button/Button';
+import AddDiscount from '../AddDiscount/AddDiscount';
 import './PaymentForm.css';
 
 const PaymentForm = ({ onSubmit, formData }) => {
@@ -9,7 +10,6 @@ const PaymentForm = ({ onSubmit, formData }) => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [isEditing, setIsEditing] = useState(!formData.paymentMethodId);
-  const [cardComplete, setCardComplete] = useState(false);
 
   const handleValidateCard = async () => {
     if (!stripe || !elements) {
@@ -35,12 +35,21 @@ const PaymentForm = ({ onSubmit, formData }) => {
       }
 
       onSubmit({ paymentMethodId: paymentMethod.id });
-      setIsEditing(false); // Switch to saved card view after successful validation
+      setIsEditing(false);
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
       console.error('Setup error:', err);
     } finally {
       setProcessing(false);
+    }
+  };
+
+  const handleDiscount = (discountData) => {
+    if (discountData?.trial_days != null) {
+      onSubmit({
+        ...formData,
+        trialDays: discountData.trial_days
+      });
     }
   };
 
@@ -101,7 +110,6 @@ const PaymentForm = ({ onSubmit, formData }) => {
           }}
           onChange={(e) => {
             setError(e.error ? e.error.message : null);
-            setCardComplete(e.complete);
             if (e.complete && !processing && stripe && elements) {
               handleValidateCard();
             }
@@ -114,6 +122,8 @@ const PaymentForm = ({ onSubmit, formData }) => {
           <p>Your card won't be charged until after your {formData.selectedProduct.trial_days}-day free trial.</p>
         </div>
       )}
+
+      <AddDiscount onApplyDiscount={handleDiscount} />
 
       {error && (
         <div className="payment-error">
