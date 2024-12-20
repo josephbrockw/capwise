@@ -90,7 +90,10 @@ const PaymentForm = ({ onSubmit, formData }) => {
             label="Use Different Card"
           />
         </div>
-        <AddDiscount onApplyDiscount={handleDiscount} />
+        <AddDiscount
+          onApplyDiscount={handleDiscount}
+          initialCode={formData.discountCode}
+        />
       </div>
     );
   }
@@ -128,7 +131,10 @@ const PaymentForm = ({ onSubmit, formData }) => {
         </div>
       )}
 
-      <AddDiscount onApplyDiscount={handleDiscount} />
+      <AddDiscount
+        onApplyDiscount={handleDiscount}
+        initialCode={formData.discountCode}
+      />
 
       {error && (
         <div className="payment-error">

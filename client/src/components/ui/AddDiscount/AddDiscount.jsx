@@ -4,13 +4,19 @@ import Button from '../Button/Button';
 import Chip from '../Chip/Chip';
 import './AddDiscount.css';
 
-const AddDiscount = ({ onApplyDiscount }) => {
+const AddDiscount = ({ onApplyDiscount, initialCode }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
-  const [appliedCode, setAppliedCode] = useState(null);
+  const [appliedCode, setAppliedCode] = useState(initialCode || null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (initialCode !== undefined) {
+      setAppliedCode(initialCode);
+    }
+  }, [initialCode]);
 
   useEffect(() => {
     if (isExpanded && inputRef.current) {
