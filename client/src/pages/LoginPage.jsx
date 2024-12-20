@@ -46,7 +46,7 @@ const Login = () => {
       sublinkUrl="/register"
       errorMessage={error}
     >
-      <div className="login-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <div className="login-container" style={{ maxWidth: '600px', margin: '0 auto' }}>
         <form onSubmit={handleSubmit}>
           <FloatLabel
             id="username"
