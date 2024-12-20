@@ -20,7 +20,8 @@ const Register = () => {
     priceId: null,
     paymentMethodId: null,
     selectedProduct: null,
-    selectedPrice: null
+    selectedPrice: null,
+    trialDays: 0,
   });
   const [currentStep, setCurrentStep] = useState(0);
   const [validatePayment, setValidatePayment] = useState(() => async () => ({ isValid: true }));
@@ -183,7 +184,8 @@ const Register = () => {
                   tierId,
                   priceId,
                   selectedProduct: product,
-                  selectedPrice: price
+                  selectedPrice: price,
+                  trialDays: product?.trial_days || 0
                 }));
                 setErrorMessage('');
               }}

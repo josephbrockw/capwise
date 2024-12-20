@@ -35,13 +35,11 @@ const Product = ({ onSelect, store = useProductStore }) => {
         tierId,
         priceId
       };
-      console.log('Selected product details:', {
-        ids: newIds,
-        product: products.find(p => p.id === productId),
-        tier: products.find(p => p.id === productId)?.tiers.find(t => t.id === tierId),
-        price: products.find(p => p.id === productId)?.tiers.find(t => t.id === tierId)?.prices.find(p => p.id === priceId)
-      });
-      onSelect?.(productId, tierId, priceId);
+      const selectedProduct = products.find(p => p.id === productId);
+      const selectedTier = selectedProduct?.tiers.find(t => t.id === tierId);
+      const selectedPrice = selectedTier?.prices.find(p => p.id === priceId);
+
+      onSelect?.(productId, tierId, priceId, selectedProduct, selectedPrice);
       return newIds;
     });
   };

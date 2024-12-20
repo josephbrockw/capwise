@@ -81,16 +81,8 @@ const PaymentForm = ({ onSubmit, formData }) => {
     );
   }
 
-  console.log(`formData.selectedProduct: ${JSON.stringify(formData.selectedProduct)}`);
-
   return (
     <div className="payment-form">
-      <h3>Payment Information</h3>
-      {formData.selectedProduct?.trial_days > 0 && (
-        <div className="trial-notice">
-          <p>Your card won't be charged until after your {formData.selectedProduct.trial_days}-day free trial.</p>
-        </div>
-      )}
       <div className="card-element-container">
         <CardElement
           options={{
@@ -116,6 +108,12 @@ const PaymentForm = ({ onSubmit, formData }) => {
           }}
         />
       </div>
+
+      {formData.selectedProduct?.trial_days > 0 && (
+        <div className="trial-notice">
+          <p>Your card won't be charged until after your {formData.selectedProduct.trial_days}-day free trial.</p>
+        </div>
+      )}
 
       {error && (
         <div className="payment-error">
