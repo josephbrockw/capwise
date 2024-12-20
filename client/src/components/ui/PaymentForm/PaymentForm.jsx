@@ -9,6 +9,7 @@ const PaymentForm = ({ onSubmit, formData }) => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [isEditing, setIsEditing] = useState(!formData.paymentMethodId);
+  const [cardComplete, setCardComplete] = useState(false);
 
   const handleValidateCard = async () => {
     if (!stripe || !elements) {
@@ -80,6 +81,8 @@ const PaymentForm = ({ onSubmit, formData }) => {
     );
   }
 
+  console.log(`formData.selectedProduct: ${JSON.stringify(formData.selectedProduct)}`);
+
   return (
     <div className="payment-form">
       <h3>Payment Information</h3>
@@ -104,6 +107,13 @@ const PaymentForm = ({ onSubmit, formData }) => {
               },
             },
           }}
+          onChange={(e) => {
+            setError(e.error ? e.error.message : null);
+            setCardComplete(e.complete);
+            if (e.complete && !processing && stripe && elements) {
+              handleValidateCard();
+            }
+          }}
         />
       </div>
 
@@ -118,14 +128,6 @@ const PaymentForm = ({ onSubmit, formData }) => {
           Validating card...
         </div>
       )}
-
-      <Button
-        type="button"
-        onClick={handleValidateCard}
-        disabled={!stripe || processing}
-        className="payment-button"
-        label={processing ? 'Validating...' : 'Save Card Details'}
-      />
     </div>
   );
 };
