@@ -45,10 +45,11 @@ const PaymentForm = ({ onSubmit, formData }) => {
   };
 
   const handleDiscount = (discountData) => {
-    if (discountData?.trial_days != null) {
+    if (discountData) {
       onSubmit({
         ...formData,
-        trialDays: discountData.trial_days
+        discountCode: discountData.discountCode,
+        trialDays: discountData.trialDays
       });
     }
   };
@@ -60,7 +61,10 @@ const PaymentForm = ({ onSubmit, formData }) => {
         cardElement.clear();
       }
     }
-    onSubmit({ paymentMethodId: null });
+    onSubmit({
+      ...formData,
+      paymentMethodId: null
+    });
     setIsEditing(true);
     setError(null);
   };
@@ -86,6 +90,7 @@ const PaymentForm = ({ onSubmit, formData }) => {
             label="Use Different Card"
           />
         </div>
+        <AddDiscount onApplyDiscount={handleDiscount} />
       </div>
     );
   }

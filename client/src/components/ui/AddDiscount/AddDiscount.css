@@ -15,16 +15,18 @@
 .discount-form {
   display: flex;
   gap: 8px;
-  align-items: flex-start;
+  align-items: center;
   margin-top: 8px;
 }
 
 .discount-input {
   flex: 1;
+  height: 40px;
   padding: 8px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .discount-input:disabled {

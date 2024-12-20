@@ -2,7 +2,8 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 12px;
-  background-color: #e0e0e0;
+  background-color: var(--contrastColor);
+  color: var(--light);
   border-radius: 16px;
   margin: 4px;
   font-size: 14px;
@@ -19,9 +20,9 @@
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
-  color: #666;
+  color: var(--light);
 }
 
 .chip-delete:hover {
-  color: #333;
+  opacity: 0.8;
 }

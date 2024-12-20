@@ -36,7 +36,7 @@ class PurchaseViewSet(StandardViewSet):
         url_name="check_discount",
     )
     def check_discount(self, request):
-        code = request.data.get("code")
+        code = request.data.get("code").upper()
         product_id = request.data.get("product_id")
 
         discount = get_object_or_404(DiscountCode, code=code)

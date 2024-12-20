@@ -18,13 +18,20 @@ const AddDiscount = ({ onApplyDiscount }) => {
     setError(null);
 
     try {
+      const code = discountCode.trim().toUpperCase();
       const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/purchases/check-discount`, {
-        code: discountCode.trim()
+        code
       });
 
-      setAppliedCode(discountCode);
+      const discountData = response.data.data;
+      setAppliedCode(code);
       setIsExpanded(false);
-      onApplyDiscount(response.data);
+      onApplyDiscount({
+        discountCode: discountData.code,
+        trialDays: discountData.trial_days,
+        percentage: discountData.percentage,
+        money: discountData.money
+      });
     } catch (err) {
       console.error('Discount code error:', err);
       setError(err.response?.data?.error || 'Failed to apply discount code');
@@ -65,7 +72,7 @@ const AddDiscount = ({ onApplyDiscount }) => {
           <input
             type="text"
             value={discountCode}
-            onChange={(e) => setDiscountCode(e.target.value)}
+            onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
@@ -77,6 +84,7 @@ const AddDiscount = ({ onApplyDiscount }) => {
             placeholder="Enter discount code"
             className="discount-input"
             disabled={isLoading}
+            style={{ textTransform: 'uppercase' }}
           />
           {console.log('AddDiscount Button props:', {
             tag: 'div',

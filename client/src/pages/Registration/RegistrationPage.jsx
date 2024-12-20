@@ -22,6 +22,7 @@ const Register = () => {
     selectedProduct: null,
     selectedPrice: null,
     trialDays: 0,
+    discountCode: ''
   });
   const [currentStep, setCurrentStep] = useState(0);
   const [validatePayment, setValidatePayment] = useState(() => async () => ({ isValid: true }));
@@ -117,7 +118,9 @@ const Register = () => {
         productId: formData.productId,
         tierId: formData.tierId,
         priceId: formData.priceId,
-        paymentMethodId: formData.paymentMethodId
+        paymentMethodId: formData.paymentMethodId,
+        discountCode: formData.discountCode,
+        trialDays: formData.trialDays
       });
       if (res.status === 201) {
         setSuccessMessage('Registration successful! Please check your email to verify your account.');
@@ -199,10 +202,10 @@ const Register = () => {
             <StripeProvider>
               <PaymentForm
                 formData={formData}
-                onSubmit={({ paymentMethodId }) => {
+                onSubmit={(updates) => {
                   setFormData(prev => ({
                     ...prev,
-                    paymentMethodId
+                    ...updates
                   }));
                 }}
               />
