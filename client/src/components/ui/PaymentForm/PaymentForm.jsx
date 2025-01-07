@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import Button from '../Button/Button';
 import AddDiscount from '../AddDiscount/AddDiscount';
@@ -10,6 +10,18 @@ const PaymentForm = ({ onSubmit, formData }) => {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [isEditing, setIsEditing] = useState(!formData.paymentMethodId);
+  const [trialDays, setTrialDays] = useState(
+    formData.trialDays ?? formData.selectedProduct?.trial_days ?? 0
+  );
+
+  useEffect(() => {
+    setTrialDays(formData.trialDays ?? formData.selectedProduct?.trial_days ?? 0);
+    formData = {
+      ...formData,
+      trialDays: trialDays
+    }
+  }, [formData.trialDays, formData.selectedProduct?.trial_days]);
+
 
   const handleValidateCard = async () => {
     if (!stripe || !elements) {
@@ -72,10 +84,9 @@ const PaymentForm = ({ onSubmit, formData }) => {
   if (!isEditing && formData.paymentMethodId) {
     return (
       <div className="payment-form">
-        <h3>Payment Information</h3>
-        {formData.selectedProduct?.trial_days > 0 && (
+        {trialDays > 0 && (
           <div className="trial-notice">
-            <p>Your card won't be charged until after your {formData.selectedProduct.trial_days}-day free trial.</p>
+            <p>Your card won't be charged until after your {trialDays}-day free trial.</p>
           </div>
         )}
         <div className="saved-payment-method">
@@ -93,6 +104,7 @@ const PaymentForm = ({ onSubmit, formData }) => {
         <AddDiscount
           onApplyDiscount={handleDiscount}
           initialCode={formData.discountCode}
+          formData={formData}
         />
       </div>
     );
@@ -125,15 +137,16 @@ const PaymentForm = ({ onSubmit, formData }) => {
         />
       </div>
 
-      {formData.selectedProduct?.trial_days > 0 && (
+      {trialDays > 0 && (
         <div className="trial-notice">
-          <p>Your card won't be charged until after your {formData.selectedProduct.trial_days}-day free trial.</p>
+          <p>Your card won't be charged until after your {trialDays}-day free trial.</p>
         </div>
       )}
 
       <AddDiscount
         onApplyDiscount={handleDiscount}
         initialCode={formData.discountCode}
+        formData={formData}
       />
 
       {error && (

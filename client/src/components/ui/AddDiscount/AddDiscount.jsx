@@ -4,17 +4,19 @@ import Button from '../Button/Button';
 import Chip from '../Chip/Chip';
 import './AddDiscount.css';
 
-const AddDiscount = ({ onApplyDiscount, initialCode }) => {
+const AddDiscount = ({ onApplyDiscount, initialCode, formData }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
-  const [appliedCode, setAppliedCode] = useState(initialCode || null);
+  const [appliedCode, setAppliedCode] = useState(initialCode?.code || null);
+  const [discountData, setDiscountData] = useState(initialCode || null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
     if (initialCode !== undefined) {
-      setAppliedCode(initialCode);
+      setAppliedCode(initialCode?.code || null);
+      setDiscountData(initialCode);
     }
   }, [initialCode]);
 
@@ -36,14 +38,13 @@ const AddDiscount = ({ onApplyDiscount, initialCode }) => {
         code
       });
 
-      const discountData = response.data.data;
+      const data = response.data.data;
       setAppliedCode(code);
+      setDiscountData(data);
       setIsExpanded(false);
       onApplyDiscount({
-        discountCode: discountData.code,
-        trialDays: discountData.trial_days,
-        percentage: discountData.percentage,
-        money: discountData.money
+        discountCode: data,
+        trialDays: data.trial_days
       });
     } catch (err) {
       console.error('Discount code error:', err);
@@ -57,14 +58,18 @@ const AddDiscount = ({ onApplyDiscount, initialCode }) => {
   const handleRemoveDiscount = () => {
     setAppliedCode(null);
     setDiscountCode('');
-    onApplyDiscount(null);
+    setDiscountData(null);
+    onApplyDiscount({
+      discountCode: null,
+      trialDays: formData.selectedProduct?.trial_days ?? 0
+    });
   };
 
   if (appliedCode) {
     return (
       <div className="discount-section">
         <Chip
-          label={`Discount applied: ${appliedCode}`}
+          label={`${discountData.code} (${discountData.percentage ? `${discountData.percentage}% off` : `$${discountData.money/100} off`})`}
           onDelete={handleRemoveDiscount}
         />
       </div>

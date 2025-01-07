@@ -8,6 +8,7 @@ import HorizontalStepper from "@/components/ui/Stepper/HorizontalStepper.jsx";
 import Product from "../../components/ui/Product/Product.jsx";
 import PaymentForm from "../../components/ui/PaymentForm/PaymentForm.jsx";
 import StripeProvider from "../../components/providers/StripeProvider.jsx";
+import { calculateDiscountedPrice, formatPrice } from '../../utils/price';
 import './Registration.css';
 
 const Register = () => {
@@ -22,7 +23,7 @@ const Register = () => {
     selectedProduct: null,
     selectedPrice: null,
     trialDays: 0,
-    discountCode: ''
+    discountCode: null
   });
   const [currentStep, setCurrentStep] = useState(0);
   const [validatePayment, setValidatePayment] = useState(() => async () => ({ isValid: true }));
@@ -199,6 +200,7 @@ const Register = () => {
         return (
           <div>
             <h2 className="step-header">Payment</h2>
+            {console.log('formData:', formData)}
             <StripeProvider>
               <PaymentForm
                 formData={formData}
@@ -216,6 +218,42 @@ const Register = () => {
         return (
           <div>
             <h2 className="step-header">Summary</h2>
+            {console.log('formData:', formData)}
+            <div className="summary-section">
+              <div className="summary-group">
+                <h3>Account Details</h3>
+                <p><strong>Email:</strong> {formData.email}</p>
+              </div>
+
+              <div className="summary-group">
+                <h3>Plan Details</h3>
+                <p><strong>Product:</strong> {formData.selectedProduct.name}</p>
+                <p><strong>Tier:</strong> {formData.selectedProduct.tiers.find(t => t.id === formData.tierId)?.name}</p>
+                <p>
+                  <strong>Price:</strong>{' '}
+                  {formData.discountCode ? (
+                    <>
+                      <span style={{ textDecoration: 'line-through' }}>
+                        ${formatPrice(formData.selectedPrice.price)}
+                      </span>
+                      {' → '}
+                      <span>
+                        ${formatPrice(calculateDiscountedPrice(formData.selectedPrice.price, formData.discountCode))}
+                      </span>
+                    </>
+                  ) : (
+                    `$${formatPrice(formData.selectedPrice.price)}`
+                  )}
+                  /{formData.selectedPrice.billing_cycle}
+                </p>
+                {formData.discountCode && (
+                  <p><strong>Discount Code:</strong> {formData.discountCode.code} ({formData.discountCode.percentage ? `${formData.discountCode.percentage}% off` : `$${formData.discountCode.money/100} off`})</p>
+                )}
+                {formData.trialDays > 0 && (
+                  <p><strong>Free Trial:</strong> {formData.trialDays} days</p>
+                )}
+              </div>
+            </div>
           </div>
         );
       default:
