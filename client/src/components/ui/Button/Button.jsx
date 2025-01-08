@@ -15,20 +15,15 @@ const Button = ({
   ...props
 }) => {
   const finalTag = tag || 'button';
-  console.log('Button props:', {
-    label,
-    tag,
-    finalTag
-  });
 
   const handleClick = (e) => {
+    if (disabled) return;
     if (onClick) {
       onClick(e);
     }
   };
 
   if (finalTag=== 'div') {
-    console.log('Rendering as div');
     return (
       <div
         className={`custom-button ${fullWidth ? 'full-width' : ''} ${disabled ? 'disabled' : ''} ${className}`}
@@ -43,7 +38,6 @@ const Button = ({
     )
   }
 
-  console.log('Rendering as button');
   return (
     <button
       type={type}

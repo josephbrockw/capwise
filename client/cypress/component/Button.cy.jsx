@@ -44,4 +44,36 @@ describe('Button', () => {
         cy.mount(<Button label="Custom Class" className="custom-test-class" />);
         cy.get('button').should('have.class', 'custom-test-class');
     });
+
+    it('should render as a div when tag is "div"', () => {
+        cy.mount(<Button label="Div Button" tag="div" />);
+        cy.get('div.custom-button').should('exist');
+        cy.get('div.custom-button').should('contain', 'Div Button');
+    });
+
+    it('should handle click events when rendered as div', () => {
+        const onClick = cy.stub().as('onClick');
+        cy.mount(<Button label="Div Button" tag="div" onClick={onClick} />);
+        cy.get('div.custom-button').click();
+        cy.get('@onClick').should('have.been.calledOnce');
+    });
+
+    it('should handle disabled state when rendered as div', () => {
+        const onClick = cy.stub().as('onClick');
+        cy.mount(<Button label="Div Button" tag="div" disabled onClick={onClick} />);
+        cy.get('div.custom-button').should('have.class', 'disabled');
+        cy.get('div.custom-button').click({ force: true });
+        cy.get('@onClick').should('not.have.been.called');
+    });
+
+    it('should render with different button types', () => {
+        cy.mount(<Button label="Submit" type="submit" />);
+        cy.get('button').should('have.attr', 'type', 'submit');
+
+        cy.mount(<Button label="Reset" type="reset" />);
+        cy.get('button').should('have.attr', 'type', 'reset');
+
+        cy.mount(<Button label="Button" type="button" />);
+        cy.get('button').should('have.attr', 'type', 'button');
+    });
 });
