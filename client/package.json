@@ -34,6 +34,7 @@
     "@types/react-dom": "^18.2.21",
     "@vitejs/plugin-react": "^4.3.4",
     "cypress": "^13.16.0",
+    "cypress-iframe": "^1.0.1",
     "cypress-localstorage-commands": "^2.2.6",
     "cypress-vite": "^1.5.0",
     "eslint": "^8.57.1",

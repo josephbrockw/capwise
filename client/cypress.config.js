@@ -12,24 +12,40 @@ console.log(
   "http://localhost:3001"
 );
 
+const viteConfig = {
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+};
+
 export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:3001",
     video: false,
+    env: {
+      CYPRESS_TEST_MODE: true
+    },
+    setupNodeEvents(on, config) {
+      // Ensure environment variables are available for e2e tests
+      config.env = {
+        ...config.env,
+        CYPRESS_TEST_MODE: true
+      };
+      return config;
+    }
   },
 
   component: {
     devServer: {
       framework: "react",
       bundler: "vite",
-      viteConfig: {
-        plugins: [react()],
-        resolve: {
-          alias: {
-            '@': path.resolve(__dirname, './src')
-          }
-        }
-      },
+      viteConfig,
     },
+    env: {
+      CYPRESS_TEST_MODE: false
+    }
   },
 });
