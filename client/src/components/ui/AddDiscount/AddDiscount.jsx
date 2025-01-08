@@ -65,7 +65,7 @@ const AddDiscount = ({ onApplyDiscount, initialCode, formData }) => {
     });
   };
 
-  if (appliedCode) {
+  if (appliedCode && discountData) {
     return (
       <div className="discount-section">
         <Chip
@@ -116,6 +116,7 @@ const AddDiscount = ({ onApplyDiscount, initialCode, formData }) => {
             label={isLoading ? 'Applying...' : 'Apply'}
             disabled={isLoading || !discountCode.trim()}
             className="apply-button"
+            data-cy="apply-button"
             preventFormSubmit={true}
           />
           {error && <div className="discount-error">{error}</div>}
