@@ -105,11 +105,6 @@ const AddDiscount = ({ onApplyDiscount, initialCode, formData }) => {
             disabled={isLoading}
             style={{ textTransform: 'uppercase' }}
           />
-          {console.log('AddDiscount Button props:', {
-            tag: 'div',
-            label: isLoading ? 'Applying...' : 'Apply',
-            disabled: isLoading || !discountCode.trim()
-          })}
           <Button
             tag={'div'}
             onClick={handleApplyDiscount}

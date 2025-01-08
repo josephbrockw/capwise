@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import Button from '../Button/Button';
 import AddDiscount from '../AddDiscount/AddDiscount';
 import './PaymentForm.css';
 
-const PaymentForm = ({ onSubmit, formData }) => {
+const PaymentForm = forwardRef(({ onSubmit, formData }, ref) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState(null);
@@ -13,6 +13,11 @@ const PaymentForm = ({ onSubmit, formData }) => {
   const [trialDays, setTrialDays] = useState(
     formData.trialDays ?? formData.selectedProduct?.trial_days ?? 0
   );
+
+  useImperativeHandle(ref, () => ({
+    setError,
+    setProcessing
+  }));
 
   useEffect(() => {
     setTrialDays(formData.trialDays ?? formData.selectedProduct?.trial_days ?? 0);
@@ -112,7 +117,7 @@ const PaymentForm = ({ onSubmit, formData }) => {
 
   return (
     <div className="payment-form">
-      <div className="card-element-container">
+      <div className="card-element-container" data-cy="card-element">
         <CardElement
           options={{
             style: {
@@ -150,7 +155,7 @@ const PaymentForm = ({ onSubmit, formData }) => {
       />
 
       {error && (
-        <div className="payment-error">
+        <div className="payment-error" data-cy="payment-error">
           {error}
         </div>
       )}
@@ -162,6 +167,6 @@ const PaymentForm = ({ onSubmit, formData }) => {
       )}
     </div>
   );
-};
+});
 
 export default PaymentForm;
