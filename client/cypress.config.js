@@ -35,7 +35,10 @@ export default defineConfig({
         CYPRESS_TEST_MODE: true
       };
       return config;
-    }
+    },
+    // Reduce logging noise
+    experimentalMemoryManagement: true,
+    numTestsKeptInMemory: 0
   },
 
   component: {
