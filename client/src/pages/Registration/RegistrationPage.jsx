@@ -19,7 +19,7 @@ const Register = () => {
     productId: null,
     tierId: null,
     priceId: null,
-    paymentMethodId: null,
+    payment_method_id: null,
     selectedProduct: null,
     selectedPrice: null,
     trialDays: 0,
@@ -55,7 +55,7 @@ const Register = () => {
   const validateConfirmation = () => ({ isValid: true });
 
   const validatePaymentStep = (data) => {
-    if (!data.paymentMethodId) {
+    if (!data.payment_method_id) {
       return { isValid: false, error: 'Please add your payment details to continue' };
     }
     return { isValid: true };
@@ -119,7 +119,7 @@ const Register = () => {
         productId: formData.productId,
         tierId: formData.tierId,
         priceId: formData.priceId,
-        paymentMethodId: formData.paymentMethodId,
+        payment_method_id: formData.payment_method_id,
         discountCode: formData.discountCode,
         trialDays: formData.trialDays
       });

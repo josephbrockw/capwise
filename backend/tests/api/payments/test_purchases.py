@@ -58,7 +58,6 @@ class PurchasesTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @tag("test")
     def test_missing_code(self):
         data = {"product_id": str(1)}
         response = self.client.post(self.url, data)

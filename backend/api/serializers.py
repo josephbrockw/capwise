@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.utils.encoding import force_str
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import (
@@ -9,6 +10,7 @@ from rest_framework_simplejwt.tokens import TokenError
 
 from experiment.models import Experiment, Variation
 from payment.models import DiscountCode, Price, Product, Tier
+from payment.process import create_user_subscription
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
@@ -16,6 +18,12 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     email = serializers.EmailField()
     username = serializers.CharField(required=False)
+    payment_method_id = serializers.CharField(required=True)
+    productId = serializers.IntegerField(required=False)
+    tierId = serializers.IntegerField(required=False)
+    priceId = serializers.IntegerField(required=False)
+    discountCode = serializers.DictField(required=False, allow_null=True)
+    trialDays = serializers.IntegerField(required=False)
 
     def validate(self, data):
         # If username is not in data, use email as username
@@ -24,7 +32,12 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords must match.")
+
+        if "payment_method_id" not in data:
+            raise serializers.ValidationError("Payment method is required.")
+
         User = get_user_model()
+
         if User.objects.filter(username=data["username"]).exists():
             raise serializers.ValidationError("Username is already taken.")
         if User.objects.filter(email=data["email"]).exists():
@@ -34,19 +47,39 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        # Remove password1 and password2 from the validated data
-        data = {
-            key: value
-            for key, value in validated_data.items()
-            if key not in ("password1", "password2")
-        }
-        data["password"] = validated_data["password1"]
+        with transaction.atomic():
+            # Remove password1 and password2 from the validated data
+            data = {
+                key: value
+                for key, value in validated_data.items()
+                if key
+                not in (
+                    "password1",
+                    "password2",
+                    "productId",
+                    "tierId",
+                    "priceId",
+                    "discountCode",
+                    "trialDays",
+                )
+            }
+            data["password"] = validated_data["password1"]
 
-        # Create the user with the provided data
-        user = self.Meta.model.objects.create_user(**data)
-        user.is_active = False
-        user.save()
-        return user
+            # Create the user with the provided data
+            user = self.Meta.model.objects.create_user(**data)
+            user.is_active = False
+            user.save()
+
+            # Handle subscription
+            try:
+                create_user_subscription(
+                    user,
+                    validated_data,
+                )
+            except Exception as e:
+                raise serializers.ValidationError(str(e))
+
+            return user
 
     class Meta:
         model = get_user_model()
@@ -58,6 +91,12 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             "password2",
             "first_name",
             "last_name",
+            "payment_method_id",
+            "productId",
+            "tierId",
+            "priceId",
+            "discountCode",
+            "trialDays",
         )
         read_only_fields = ("id",)
 
@@ -173,4 +212,15 @@ class ProductSerializer(serializers.ModelSerializer):
 class DiscountCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiscountCode
-        fields = ["id", "code", "percentage", "money", "trial_days", "product"]
+        fields = [
+            "id",
+            "code",
+            "discount_type",
+            "percentage",
+            "amount",
+            "duration",
+            "duration_in_months",
+            "trial_days",
+            "product",
+            "is_active",
+        ]

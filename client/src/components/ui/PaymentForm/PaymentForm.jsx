@@ -9,7 +9,7 @@ const PaymentForm = forwardRef(({ onSubmit, formData }, ref) => {
   const elements = useElements();
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const [isEditing, setIsEditing] = useState(!formData.paymentMethodId);
+  const [isEditing, setIsEditing] = useState(!formData.payment_method_id);
   const [trialDays, setTrialDays] = useState(
     formData.trialDays ?? formData.selectedProduct?.trial_days ?? 0
   );
@@ -43,7 +43,7 @@ const PaymentForm = forwardRef(({ onSubmit, formData }, ref) => {
 
     if (isTestMode) {
       console.log('Using test card');
-      onSubmit({ paymentMethodId: 'pm_test_123' });
+      onSubmit({ payment_method_id: 'pm_test_123' });
       setIsEditing(false);
       setProcessing(false);
       return;
@@ -71,7 +71,7 @@ const PaymentForm = forwardRef(({ onSubmit, formData }, ref) => {
         return;
       }
 
-      onSubmit({ paymentMethodId: paymentMethod.id });
+      onSubmit({ payment_method_id: paymentMethod.id });
       setIsEditing(false);
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -100,13 +100,13 @@ const PaymentForm = forwardRef(({ onSubmit, formData }, ref) => {
     }
     onSubmit({
       ...formData,
-      paymentMethodId: null
+      payment_method_id: null
     });
     setIsEditing(true);
     setError(null);
   };
 
-  if (!isEditing && formData.paymentMethodId) {
+  if (!isEditing && formData.payment_method_id) {
     return (
       <div className="payment-form">
         {trialDays > 0 && (

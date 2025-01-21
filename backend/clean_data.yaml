@@ -131,6 +131,9 @@
   pk: 1
   fields:
     code: 'CODE'
+    discount_type: percent_off
     percentage: 10
     is_active: true
     trial_days: 30
+    duration: forever
+    duration_in_months: null

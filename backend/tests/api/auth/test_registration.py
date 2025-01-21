@@ -13,6 +13,7 @@ from rest_framework.test import APITestCase
 
 from account.models import OneTimePassword, User
 from tests import read_api_response
+from tests.utils import mock_stripe
 
 PASSWORD = "password123"
 
@@ -27,6 +28,7 @@ class AuthenticationTest(APITestCase):
     otp_token = "123456"
     new_user = "magrat"
 
+    @mock_stripe()
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_user_can_sign_up(self):
         data, msg, err, code = read_api_response(
@@ -41,9 +43,9 @@ class AuthenticationTest(APITestCase):
                     "priceId": 4,
                     "productId": 1,
                     "tierId": 2,
+                    "payment_method_id": "pm_123",
                 },
             ),
-            show=True,
         )
 
         # Check that the user was created
@@ -81,6 +83,7 @@ class AuthenticationTest(APITestCase):
             "Please click the button below to verify your email address.", html_content
         )
 
+    @mock_stripe()
     def test_user_can_signup_with_custom_username(self):
         data, msg, err, code = read_api_response(
             self.client.post(
@@ -92,6 +95,10 @@ class AuthenticationTest(APITestCase):
                     "last_name": "Ogg",
                     "password1": PASSWORD,
                     "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
+                    "priceId": 4,
+                    "productId": 1,
+                    "tierId": 2,
                 },
             )
         )
@@ -110,6 +117,7 @@ class AuthenticationTest(APITestCase):
                     "last_name": "Ogg",
                     "password1": PASSWORD,
                     "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
                 },
             )
         )
@@ -127,6 +135,7 @@ class AuthenticationTest(APITestCase):
                     "last_name": "Ogg",
                     "password1": PASSWORD,
                     "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
                 },
             )
         )
@@ -145,6 +154,7 @@ class AuthenticationTest(APITestCase):
                     "last_name": "Weatherwax",
                     "password1": PASSWORD,
                     "password2": PASSWORD + "123",
+                    "payment_method_id": "pm_123",
                 },
             )
         )
@@ -279,7 +289,6 @@ class AuthenticationTest(APITestCase):
                     "password": "password123",
                 },
             ),
-            show=True,
         )
 
         # Parse payload data from access token.

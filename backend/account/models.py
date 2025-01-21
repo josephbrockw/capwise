@@ -12,6 +12,7 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     preferred_name = models.CharField(max_length=30, blank=True)
+    payment_method_id = models.CharField(max_length=255, blank=True)
 
     @property
     def name(self):

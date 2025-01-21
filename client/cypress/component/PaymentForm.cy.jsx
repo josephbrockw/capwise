@@ -78,7 +78,7 @@ describe('PaymentForm Component', () => {
     const onSubmit = cy.stub().as('onSubmit');
     const formDataWithPayment = {
       ...mockFormData,
-      paymentMethodId: 'pm_123'
+      payment_method_id: 'pm_123'
     };
 
     mount(<TestPaymentForm onSubmit={onSubmit} formData={formDataWithPayment} />);
@@ -92,7 +92,7 @@ describe('PaymentForm Component', () => {
     const onSubmit = cy.stub().as('onSubmit');
     const formDataWithPayment = {
       ...mockFormData,
-      paymentMethodId: 'pm_123'
+      payment_method_id: 'pm_123'
     };
 
     mount(<TestPaymentForm onSubmit={onSubmit} formData={formDataWithPayment} />);
@@ -108,7 +108,7 @@ describe('PaymentForm Component', () => {
       const actualArgs = stub.firstCall.args[0];
       const expectedArgs = {
         ...formDataWithPayment,
-        paymentMethodId: null
+        payment_method_id: null
       };
 
       // Find all keys in both objects
