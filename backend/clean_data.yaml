@@ -137,3 +137,5 @@
     trial_days: 30
     duration: forever
     duration_in_months: null
+    created_at: '2024-03-30T20:20:03.265Z'
+    updated_at: '2024-03-30T20:20:03.265Z'
