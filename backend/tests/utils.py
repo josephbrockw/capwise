@@ -7,7 +7,9 @@ from django.utils import timezone
 
 def mock_stripe():
     """
-    Decorator to mock Stripe API calls in create_user_subscription.
+    Decorator to mock all Stripe API calls.
+    Handles customer, subscription, and coupon operations.
+
     Usage:
         @mock_stripe()
         def test_something(self):
@@ -48,16 +50,55 @@ def mock_stripe():
 
             # Mock customer deletion for cleanup
             delete_customer_mock = patch("stripe.Customer.delete").start()
-            delete_customer_mock.return_value = {"deleted": True}
+            delete_customer_mock.return_value = stripe.Customer.construct_from(
+                {"deleted": True, "id": "cus_mock123"}, "mock_key"
+            )
 
             # Mock subscription deletion for cleanup
             delete_subscription_mock = patch("stripe.Subscription.delete").start()
-            delete_subscription_mock.return_value = {"deleted": True}
+            delete_subscription_mock.return_value = stripe.Subscription.construct_from(
+                {"deleted": True, "id": "sub_mock123"}, "mock_key"
+            )
+
+            # Mock coupon creation
+            coupon_create_mock = patch("stripe.Coupon.create").start()
+            coupon_create_mock.return_value = stripe.Coupon.construct_from(
+                {
+                    "id": "coupon_mock123",
+                    "duration": "once",
+                    "percent_off": 50,
+                    "name": "TEST50",
+                    "valid": True,
+                    "metadata": {},
+                    "livemode": False,
+                },
+                "mock_key",
+            )
+
+            # Mock coupon modification
+            coupon_modify_mock = patch("stripe.Coupon.modify").start()
+            coupon_modify_mock.return_value = stripe.Coupon.construct_from(
+                {
+                    "id": "coupon_mock123",
+                    "duration": "once",
+                    "percent_off": 50,
+                    "name": "TEST50",
+                    "valid": True,
+                    "metadata": {},
+                    "livemode": False,
+                },
+                "mock_key",
+            )
+
+            # Mock coupon deletion
+            coupon_delete_mock = patch("stripe.Coupon.delete").start()
+            coupon_delete_mock.return_value = stripe.Coupon.construct_from(
+                {"id": "coupon_mock123", "deleted": True}, "mock_key"
+            )
 
             try:
                 return test_func(*args, **kwargs)
             finally:
-                # Stop all patches
                 patch.stopall()
 
         return wrapper

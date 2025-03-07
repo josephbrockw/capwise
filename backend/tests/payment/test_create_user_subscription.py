@@ -26,6 +26,12 @@ class TestCreateUserSubscription(TestCase):
         self.tier = Tier.objects.get(product=self.product, name="Basic")
         self.price = Price.objects.get(tier=self.tier, billing_cycle="lifetime")
 
+    def tearDown(self):
+        # Clean up any test data
+        DiscountCode.objects.all().delete()
+        Subscription.objects.all().delete()
+        self.user.delete()
+
     @mock_stripe()
     def test_basic_subscription_creation(self):
         """Test creating a basic subscription without discount or trial."""
@@ -56,6 +62,7 @@ class TestCreateUserSubscription(TestCase):
             percentage=10,
             duration="once",
             is_active=True,
+            product=self.product,
         )
 
         subscription = create_user_subscription(
