@@ -6,6 +6,7 @@ const mockProducts = [
   {
     id: 'prod_1',
     name: 'Basic',
+    trial_days: 14,  // Add trial days
     tiers: [
       {
         id: 'tier_1',
@@ -38,6 +39,7 @@ const mockProducts = [
   {
     id: 'prod_2',
     name: 'Pro',
+    trial_days: 0,  // No trial for Pro
     tiers: [
       {
         id: 'tier_2',
@@ -159,6 +161,38 @@ describe('Product Component', () => {
     // Check not included feature
     cy.get('.feature-icon.not-included').should('contain', '✕');
     cy.get('.feature-text').contains('Feature 2');
+  });
+
+  it('displays trial days when available', () => {
+    cy.mount(<Product onSelect={cy.stub()} store={createMockStore()} />);
+
+    // Check Basic plan with trial days
+    cy.contains('Basic').parent().within(() => {
+      cy.contains('14 day free trial').should('be.visible');
+    });
+
+    // Check Pro plan without trial days
+    cy.contains('Pro').parent().within(() => {
+      cy.contains('free trial').should('not.exist');
+    });
+  });
+
+  it('uses correct data-cy attributes for selection', () => {
+    const onSelect = cy.stub().as('onSelect');
+    cy.mount(<Product onSelect={onSelect} store={createMockStore()} />);
+
+    // Verify data-cy attributes are present
+    cy.get('[data-cy="select-prod_1-Starter-month"]').should('exist');
+    cy.get('[data-cy="select-prod_2-Professional-month"]').should('exist');
+
+    // Test selection with data-cy attribute
+    cy.get('[data-cy="select-prod_1-Starter-month"]').click();
+    cy.get('@onSelect').should('have.been.calledWith', 'prod_1', 'tier_1', 'price_1');
+
+    // Change billing cycle and verify data-cy updates
+    cy.get('.billing-select [data-cy="select-header"]').click();
+    cy.get('[data-cy="select-option-year"]').click();
+    cy.get('[data-cy="select-prod_1-Starter-year"]').should('exist');
   });
 
   it('fetches products on mount', () => {

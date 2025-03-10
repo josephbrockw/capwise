@@ -1,0 +1,28 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background-color: var(--contrastColor);
+  color: var(--light);
+  border-radius: 16px;
+  margin: 4px;
+  font-size: 14px;
+}
+
+.chip-label {
+  margin-right: 8px;
+}
+
+.chip-delete {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--light);
+}
+
+.chip-delete:hover {
+  opacity: 0.8;
+}

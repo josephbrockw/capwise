@@ -15,6 +15,11 @@ import os
 import sys
 from pathlib import Path
 
+
+def get_env_bool(env_var, default=False):
+    return os.environ.get(env_var, default).lower() == "true"
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -294,6 +299,7 @@ APP_NAME = os.environ.get("APP_NAME", "BaseBuild")
 TEST_RUNNER = "tests.test_runner.CollectOnlyTestRunner"
 
 # STRIPE
+PAYMENT_REQUIRED = get_env_bool("PAYMENT_REQUIRED", "True")
 STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 

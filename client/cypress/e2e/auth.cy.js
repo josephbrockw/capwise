@@ -1,13 +1,21 @@
 describe('User Registration Flow', () => {
+  beforeEach(() => {
+    // Verify test mode is enabled
+    cy.log('CYPRESS_TEST_MODE:', Cypress.env('CYPRESS_TEST_MODE'));
+  });
+
   it('Registers a new user and shows a success message', () => {
     cy.intercept('POST', '**/api/auth/sign-up', (req) => {
       expect(req.body).to.deep.equal({
+        discountCode: null,
         email: 'gytha@lancre.gov',
         password1: 'Password123!',
         password2: 'Password123!',
+        payment_method_id: 'pm_test_123',
         priceId: 1,
         productId: 1,
-        tierId: 1
+        tierId: 1,
+        trialDays: 7
       });
       req.reply({
         statusCode: 201,
@@ -120,7 +128,7 @@ describe('User Registration Flow', () => {
         },
       });
     }).as('getProducts');
-    cy.visit('/register');
+    cy.visit('/register/payment');
 
     // Fill in registration form
     cy.get('input[name="email"]').type('gytha@lancre.gov');
@@ -165,15 +173,30 @@ describe('User Registration Flow', () => {
     // Continue to payment step
     cy.get('[data-cy="registration-continue-button-1"]').click();
 
-    // Continue to confirmation step
-    cy.get('[data-cy="registration-continue-button-2"]').click();
-
-    // Submit registration
-    cy.get('[data-cy="registration-submit-button"]').click();
-    cy.wait('@registerUser').then((interception) => {
-        console.log(`Request Body: ${JSON.stringify(interception.request.body, null, 2)}`);
+    // Wait for card element and verify test mode
+    cy.window().then((win) => {
+      cy.log('Window Cypress:', !!win.Cypress);
+      cy.log('Test Mode:', win.Cypress?.env('CYPRESS_TEST_MODE'));
     });
-    // Verify successful registration prompt
+
+    // Continue to confirmation step
+    cy.get('[data-cy="registration-continue-button-2"]').should('be.visible').click();
+
+    cy.contains('Email: gytha@lancre.gov').should('be.visible');
+    cy.contains('Plan Details').should('be.visible');
+    cy.contains('Product: BaseBuild').should('be.visible');
+    cy.contains('Tier: Basic').should('be.visible');
+    cy.contains('Price: $99.00/lifetime').should('be.visible');
+    cy.contains('Free Trial: 7 days').should('be.visible');
+    // Submit registration
+    cy.get('[data-cy="registration-submit-button"]').should('be.visible').click();
+
+    // Wait for the registration API call
+    cy.wait('@registerUser').then((interception) => {
+      expect(interception.response.statusCode).to.equal(201);
+    });
+
+    // Verify success state
     cy.contains('Registration successful! Please check your email to verify your account.').should('be.visible');
   });
 
@@ -182,7 +205,7 @@ describe('User Registration Flow', () => {
       statusCode: 400,
       body: { error: 'A user with this email already exists.' },
     }).as('registerUser');
-    cy.visit('/register');
+    cy.visit('/register/payment');
     cy.get('input[name="email"]').type('gytha@lancre.gov');
     cy.get('input[name="password1"]').type('Password123!');
     cy.get('input[name="password2"]').type('Password123!');
@@ -194,6 +217,75 @@ describe('User Registration Flow', () => {
     cy.wait('@registerUser');
     cy.contains('A user with this email already exists.').should('be.visible');
   });
+
+  it('Successfully registers a new user with basic registration', () => {
+    cy.intercept('POST', '**/api/auth/sign-up', (req) => {
+      expect(req.body).to.deep.equal({
+        email: 'agnes@lancre.gov',
+        password1: 'Password123!',
+        password2: 'Password123!'
+      });
+      req.reply({
+        statusCode: 201,
+        body: {
+          data: {
+            id: '4f086fe8-35bb-4a1a-9bbb-1d2f9a0e4643',
+            email: 'agnes@lancre.gov'
+          },
+        },
+      });
+    }).as('registerUser');
+
+    cy.visit('/register');
+    cy.get('input[name="email"]').type('agnes@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('Password123!');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@registerUser').then((interception) => {
+      expect(interception.response.statusCode).to.equal(201);
+    });
+
+    cy.contains('Registration successful! Please check your email to verify your account.').should('be.visible');
+    cy.get('form').should('not.exist');
+  });
+
+  it('Shows validation errors on basic registration', () => {
+    cy.visit('/register');
+
+    // Test password mismatch
+    cy.get('input[name="email"]').clear();
+    cy.get('input[name="email"]').type('agnes@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('DifferentPassword123!');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Passwords do not match').should('be.visible');
+
+    // Test password too short
+    cy.get('input[name="password1"]').clear();
+    cy.get('input[name="password2"]').clear();
+    cy.get('input[name="password1"]').type('short');
+    cy.get('input[name="password2"]').type('short');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Password must be at least 8 characters long').should('be.visible');
+  });
+
+  it('Shows error for duplicate email on basic registration', () => {
+    cy.intercept('POST', '**/api/auth/sign-up', {
+      statusCode: 400,
+      body: { error: 'A user with this email already exists.' },
+    }).as('registerUser');
+
+    cy.visit('/register');
+    cy.get('input[name="email"]').type('agnes@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('Password123!');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@registerUser');
+    cy.contains('A user with this email already exists.').should('be.visible');
+  });
+
 });
 
 describe('Email Verification', () => {
@@ -369,119 +461,111 @@ describe('Token Refresh and Session Handling', () => {
     cy.clearLocalStorage();
 
     // Handle uncaught exceptions
-    cy.on('uncaught:exception', (err) => {
-      console.log('Uncaught exception:', err);
+    cy.on('uncaught:exception', () => {
       return false;
     });
 
-    // Set up initial localStorage state before visit
-    cy.visit('/settings', {
-      onBeforeLoad(win) {
-        // Set up initial localStorage state with just tokens
-        win.localStorage.setItem('token', 'expired-token');
-        win.localStorage.setItem('refreshToken', 'valid-refresh-token');
-        // Explicitly remove userData to trigger token refresh flow
-        win.localStorage.removeItem('userData');
-
-        console.log('Test - Initial localStorage state:', {
-          token: win.localStorage.getItem('token'),
-          refreshToken: win.localStorage.getItem('refreshToken'),
-          userData: win.localStorage.getItem('userData')
+    // Set up interceptors before any requests
+    cy.intercept('GET', 'http://localhost:8009/api/users/me', (req) => {
+      // Only return 401 for the first request with the expired token
+      if (req.headers.authorization === 'Bearer expired-token') {
+        req.reply({
+          statusCode: 401,
+          body: {
+            error: 'Token expired'
+          }
+        });
+      } else if (req.headers.authorization === 'Bearer new-valid-token') {
+        req.reply({
+          statusCode: 200,
+          body: {
+            data: {
+              id: 1,
+              username: 'testuser'
+            }
+          }
         });
       }
-    });
+    }).as('userRequest');
+
+    cy.intercept('POST', 'http://localhost:8009/api/auth/refresh', (req) => {
+      if (req.body.refresh === 'valid-refresh-token') {
+        req.reply({
+          statusCode: 200,
+          body: {
+            data: {
+              access: 'new-valid-token',
+              refresh: 'new-refresh-token'
+            }
+          }
+        });
+      } else if (req.body.refresh === 'invalid-refresh-token') {
+        req.reply({
+          statusCode: 401,
+          body: {
+            error: 'Invalid refresh token'
+          }
+        });
+      }
+    }).as('tokenRefresh');
   });
 
   it('should automatically refresh token on 401 response', () => {
-
-    // Set up interceptors
-    cy.intercept('GET', '**/api/users/me', {
-      statusCode: 401,
-      body: {
-        error: 'Token expired'
+    // Set up initial localStorage state and visit page
+    cy.visit('/settings', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'expired-token');
+        win.localStorage.setItem('refreshToken', 'valid-refresh-token');
+        win.localStorage.removeItem('userData');
       }
-    }).as('expiredToken');
-
-    // Intercept refresh token request
-    cy.intercept('POST', '**/api/auth/refresh', (req) => {
-      console.log('Test - Refresh request received:', {
-        url: req.url,
-        body: req.body,
-        headers: req.headers
-      });
-
-      expect(req.body).to.deep.equal({
-        refresh: 'valid-refresh-token'
-      });
-
-      req.reply({
-        statusCode: 200,
-        body: {
-          data: {
-            access: 'new-valid-token',
-            refresh: 'new-refresh-token'
-          }
-        }
-      });
-    }).as('tokenRefresh');
-
-    // After refresh, the original request should be retried
-    cy.intercept('GET', '**/api/users/me', (req) => {
-      console.log('Test - Retry request received:', {
-        url: req.url,
-        headers: req.headers
-      });
-
-      expect(req.headers.authorization).to.equal('Bearer new-valid-token');
-
-      req.reply({
-        statusCode: 200,
-        body: {
-          data: {
-            id: 1,
-            username: 'testuser'
-          }
-        }
-      });
-    }).as('retryRequest');
-
-    // Wait for the full sequence of requests
-    cy.wait('@expiredToken').then((interception) => {
-      console.log('Test - Expired token response:', interception.response);
     });
 
+    // First request should fail with 401
+    cy.wait('@userRequest').then((interception) => {
+      expect(interception.response.statusCode).to.equal(401);
+    });
+
+    // Token refresh request should succeed
     cy.wait('@tokenRefresh').then((interception) => {
-      console.log('Test - Token refresh response:', interception.response);
+      expect(interception.response.statusCode).to.equal(200);
+      expect(interception.response.body.data).to.deep.equal({
+        access: 'new-valid-token',
+        refresh: 'new-refresh-token'
+      });
     });
 
-    cy.wait('@retryRequest').then((interception) => {
-      console.log('Test - Retry request response:', interception.response);
+    // Second request should succeed with new token
+    cy.wait('@userRequest').then((interception) => {
+      expect(interception.response.statusCode).to.equal(200);
+      expect(interception.request.headers.authorization).to.equal('Bearer new-valid-token');
+    });
+
+    // Verify localStorage was updated
+    cy.window().then((win) => {
+      expect(win.localStorage.getItem('token')).to.equal('new-valid-token');
+      expect(win.localStorage.getItem('refreshToken')).to.equal('new-refresh-token');
     });
   });
 
   it('should redirect to login when refresh token is invalid', () => {
-    // First request fails with 401
-    cy.intercept('GET', '**/api/users/me', {
-      statusCode: 401,
-      body: {
-        error: 'Token expired'
+    // Set up initial localStorage state and visit page
+    cy.visit('/settings', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('token', 'expired-token');
+        win.localStorage.setItem('refreshToken', 'invalid-refresh-token');
+        win.localStorage.removeItem('userData');
       }
-    }).as('expiredToken');
+    });
 
-    // Refresh token request fails - note this will use raw axios
-    cy.intercept('POST', '**/api/auth/refresh', {
-      statusCode: 401,
-      body: {
-        error: 'Invalid refresh token'
-      }
-    }).as('failedRefresh');
+    // First request should fail with 401
+    cy.wait('@userRequest').then((interception) => {
+      expect(interception.response.statusCode).to.equal(401);
+    });
 
-    // Visit settings page which triggers user data fetch
-    cy.visit('/settings');
-
-    // Wait for requests
-    cy.wait('@expiredToken');
-    cy.wait('@failedRefresh');
+    // Refresh token request should fail
+    cy.wait('@tokenRefresh').then((interception) => {
+      expect(interception.response.statusCode).to.equal(401);
+    });
 
     // Should be redirected to login
     cy.url().should('include', '/login');
@@ -505,7 +589,7 @@ describe('Token Refresh and Session Handling', () => {
     });
 
     // Set up successful user data request for any subsequent fetches
-    cy.intercept('GET', '**/api/users/me', (req) => {
+    cy.intercept('GET', 'http://localhost:8009/api/users/me', (req) => {
       expect(req.headers.authorization).to.equal('Bearer expired-token');
       req.reply({
         statusCode: 200,

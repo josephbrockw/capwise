@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useProductStore from '../../../stores/useProductStore';
 import Card from '../Card/Card';
 import CustomSelect from '../CustomSelect/CustomSelect';
+import { formatPrice } from '../../../utils/price';
 import './Product.css';
 
 const Product = ({ onSelect, store = useProductStore }) => {
@@ -35,13 +36,11 @@ const Product = ({ onSelect, store = useProductStore }) => {
         tierId,
         priceId
       };
-      console.log('Selected product details:', {
-        ids: newIds,
-        product: products.find(p => p.id === productId),
-        tier: products.find(p => p.id === productId)?.tiers.find(t => t.id === tierId),
-        price: products.find(p => p.id === productId)?.tiers.find(t => t.id === tierId)?.prices.find(p => p.id === priceId)
-      });
-      onSelect?.(productId, tierId, priceId);
+      const selectedProduct = products.find(p => p.id === productId);
+      const selectedTier = selectedProduct?.tiers.find(t => t.id === tierId);
+      const selectedPrice = selectedTier?.prices.find(p => p.id === priceId);
+
+      onSelect?.(productId, tierId, priceId, selectedProduct, selectedPrice);
       return newIds;
     });
   };
@@ -117,10 +116,10 @@ const Product = ({ onSelect, store = useProductStore }) => {
                     title={tier.name}
                   >
                     <div className="product-price">
-                      <span className="price-amount">${(price.price / 100).toFixed(2)}</span>
+                      <span className="currency">$</span>
+                      <span className="price-amount">{formatPrice(price.price)}</span>
                       <span className="price-cycle">/{selectedBillingCycle}</span>
                     </div>
-
 
                     <div className="product-features">
                       {tier.features && Object.entries(tier.features).map(([key, feature]) => (

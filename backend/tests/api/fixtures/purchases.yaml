@@ -1,0 +1,113 @@
+- model: payment.product
+  pk: 1
+  fields:
+    name: BaseBuild
+    description: ''
+    is_active: true
+    default_trial_days: 7
+
+- model: payment.product
+  pk: 2
+  fields:
+    name: Alternate Build
+    description: ''
+    is_active: true
+    default_trial_days: 7
+
+- model: payment.tier
+  pk: 1
+  fields:
+    name: Basic
+    product: 1
+    features: {"feature1": true, "feature2": false}
+    stripe_product_id: prod_basic_1
+    order: 0
+
+- model: payment.tier
+  pk: 2
+  fields:
+    name: Pro
+    product: 1
+    features: {"feature1": true, "feature2": true}
+    stripe_product_id: prod_pro_1
+    order: 1
+
+- model: payment.price
+  pk: 1
+  fields:
+    tier: 1
+    billing_cycle: monthly
+    price: 1000
+    stripe_price_id: price_basic_monthly_1
+
+- model: payment.price
+  pk: 2
+  fields:
+    tier: 1
+    billing_cycle: yearly
+    price: 10000
+    stripe_price_id: price_basic_yearly_1
+
+- model: payment.price
+  pk: 3
+  fields:
+    tier: 2
+    billing_cycle: monthly
+    price: 2000
+    stripe_price_id: price_pro_monthly_1
+
+- model: payment.price
+  pk: 4
+  fields:
+    tier: 2
+    billing_cycle: yearly
+    price: 20000
+    stripe_price_id: price_pro_yearly_1
+
+- model: payment.discountcode
+  pk: 1
+  fields:
+    code: 'ACTIVE10'
+    discount_type: percent_off
+    percentage: 10
+    amount: null
+    duration: once
+    duration_in_months: null
+    trial_days: null
+    product: null
+    is_active: true
+    stripe_coupon_id: coup_active10
+    created_at: 2022-10-17T00:00:00Z
+    updated_at: 2022-10-17T00:00:00Z
+
+- model: payment.discountcode
+  pk: 2
+  fields:
+    code: 'PRODUCT20'
+    discount_type: percent_off
+    percentage: 20
+    amount: null
+    duration: forever
+    duration_in_months: null
+    trial_days: null
+    product: 1
+    is_active: true
+    stripe_coupon_id: coup_product20
+    created_at: 2022-10-17T00:00:00Z
+    updated_at: 2022-10-17T00:00:00Z
+
+- model: payment.discountcode
+  pk: 3
+  fields:
+    code: 'INACTIVE30'
+    discount_type: percent_off
+    percentage: 30
+    amount: null
+    duration: once
+    duration_in_months: null
+    trial_days: null
+    product: null
+    is_active: false
+    stripe_coupon_id: coup_inactive30
+    created_at: 2022-10-17T00:00:00Z
+    updated_at: 2022-10-17T00:00:00Z

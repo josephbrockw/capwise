@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase
 
 from account.models import OneTimePassword
 from tests import read_api_response
+from tests.utils import mock_stripe
 
 PASSWORD = "testpass123"
 NEW_PASSWORD = "newtestpass123"
@@ -17,6 +18,7 @@ class AuthenticationTest(APITestCase):
         os.path.join(base_dir, "fixtures/auth.yaml"),
     ]
 
+    @mock_stripe()
     def test_full_auth_flow(self):
         # Step 1: Register new user
         data, msg, err, code = read_api_response(
@@ -29,8 +31,12 @@ class AuthenticationTest(APITestCase):
                     "last_name": "Weatherwax",
                     "password1": PASSWORD,
                     "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
+                    "productId": 1,
+                    "tierId": 2,
+                    "priceId": 4,
                 },
-            )
+            ),
         )
         assert code == status.HTTP_201_CREATED
 

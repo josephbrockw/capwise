@@ -1,0 +1,44 @@
+.discount-section {
+  margin: 16px 0;
+}
+
+.discount-link {
+  background: none;
+  border: none;
+  color: #2196f3;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.discount-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.discount-input {
+  flex: 1;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.discount-input:disabled {
+  background-color: #f5f5f5;
+}
+
+.discount-error {
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.apply-button {
+  min-width: 80px;
+}

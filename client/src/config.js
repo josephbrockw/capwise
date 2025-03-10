@@ -144,6 +144,7 @@ const config = {
   version: import.meta.env.APP_VERSION || '0.1.0',
   apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8009',
   showSidebar: true,
+  stripePublishableKey: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
   theme: {
     ...colors,
     ...typography,

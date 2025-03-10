@@ -46,46 +46,48 @@ const Login = () => {
       sublinkUrl="/register"
       errorMessage={error}
     >
-      <form onSubmit={handleSubmit}>
-        <FloatLabel
-          id="username"
-          name="username"
-          label="Username"
-          value={formData.username}
-          onChange={handleChange}
-          type="text"
-          required
-          disabled={loading}
-        />
-        <FloatLabel
-          id="password"
-          name="password"
-          label="Password"
-          value={formData.password}
-          onChange={handleChange}
-          type="password"
-          required
-          disabled={loading}
-        />
-        <div className="flex align-items-center justify-content-between mb-6">
-          <Link
-            to="/password/initiate"
-            className="text-primary-color"
-            style={{ textDecoration: 'none' }}
-            data-cy='reset-password-link'
-          >
-            Forgot your password?
-          </Link>
-        </div>
-        <Button
-          label={loading ? "Signing In..." : "Sign In"}
-          icon="pi pi-user"
-          fullWidth
-          type="submit"
-          data-cy="login-submit-button"
-          disabled={loading}
-        />
-      </form>
+      <div className="login-container" style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <form onSubmit={handleSubmit}>
+          <FloatLabel
+            id="username"
+            name="username"
+            label="Username"
+            value={formData.username}
+            onChange={handleChange}
+            type="text"
+            required
+            disabled={loading}
+          />
+          <FloatLabel
+            id="password"
+            name="password"
+            label="Password"
+            value={formData.password}
+            onChange={handleChange}
+            type="password"
+            required
+            disabled={loading}
+          />
+          <div className="flex align-items-center justify-content-between mb-6">
+            <Link
+              to="/password/initiate"
+              className="text-primary-color"
+              style={{ textDecoration: 'none' }}
+              data-cy='reset-password-link'
+            >
+              Forgot your password?
+            </Link>
+          </div>
+          <Button
+            label={loading ? "Signing In..." : "Sign In"}
+            icon="pi pi-user"
+            fullWidth
+            type="submit"
+            data-cy="login-submit-button"
+            disabled={loading}
+          />
+        </form>
+      </div>
     </AuthLayout>
   );
 };
