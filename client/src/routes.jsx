@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LandingPage from './pages/LandingPage';
 import DashboardHome from './pages/Dashboard/DashboardHome';
 import RegistrationPage from './pages/Registration/RegistrationPage.jsx';
+import PaymentRegistrationPage from './pages/Registration/PaymentRegistrationPage.jsx';
 import LoginPage from './pages/LoginPage';
 import VerifyEmail from './pages/VerifyEmail';
 import ResetPassword from './pages/ResetPassword';
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         {/* Public Routes */}
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/register/payment" element={<PaymentRegistrationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/password/initiate" element={<ResetPassword />} />
         <Route path="/password/confirm" element={<ResetConfirm />} />

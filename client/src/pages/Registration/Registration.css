@@ -1,6 +1,12 @@
-.step-header {
+.step-header,
+.registration-header {
     color: var(--primaryColor, blue);
     text-align: center;
+}
+
+.registration-container {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .summary-section {
