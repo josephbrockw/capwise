@@ -11,7 +11,7 @@ const MenuBar = ({ menuItems, isMobile }) => {
   return (
     <div className="menu-bar">
       <div className="menu-bar-logo">
-        <Link to="/dashboard">
+        <Link to="/">
           <img src={inlineLogoWhite} alt="Logo" />
         </Link>
       </div>
