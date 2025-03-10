@@ -128,7 +128,7 @@ describe('User Registration Flow', () => {
         },
       });
     }).as('getProducts');
-    cy.visit('/register');
+    cy.visit('/register/payment');
 
     // Fill in registration form
     cy.get('input[name="email"]').type('gytha@lancre.gov');
@@ -205,7 +205,7 @@ describe('User Registration Flow', () => {
       statusCode: 400,
       body: { error: 'A user with this email already exists.' },
     }).as('registerUser');
-    cy.visit('/register');
+    cy.visit('/register/payment');
     cy.get('input[name="email"]').type('gytha@lancre.gov');
     cy.get('input[name="password1"]').type('Password123!');
     cy.get('input[name="password2"]').type('Password123!');
@@ -217,6 +217,75 @@ describe('User Registration Flow', () => {
     cy.wait('@registerUser');
     cy.contains('A user with this email already exists.').should('be.visible');
   });
+
+  it('Successfully registers a new user with basic registration', () => {
+    cy.intercept('POST', '**/api/auth/sign-up', (req) => {
+      expect(req.body).to.deep.equal({
+        email: 'agnes@lancre.gov',
+        password1: 'Password123!',
+        password2: 'Password123!'
+      });
+      req.reply({
+        statusCode: 201,
+        body: {
+          data: {
+            id: '4f086fe8-35bb-4a1a-9bbb-1d2f9a0e4643',
+            email: 'agnes@lancre.gov'
+          },
+        },
+      });
+    }).as('registerUser');
+
+    cy.visit('/register');
+    cy.get('input[name="email"]').type('agnes@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('Password123!');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@registerUser').then((interception) => {
+      expect(interception.response.statusCode).to.equal(201);
+    });
+
+    cy.contains('Registration successful! Please check your email to verify your account.').should('be.visible');
+    cy.get('form').should('not.exist');
+  });
+
+  it('Shows validation errors on basic registration', () => {
+    cy.visit('/register');
+
+    // Test password mismatch
+    cy.get('input[name="email"]').clear();
+    cy.get('input[name="email"]').type('agnes@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('DifferentPassword123!');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Passwords do not match').should('be.visible');
+
+    // Test password too short
+    cy.get('input[name="password1"]').clear();
+    cy.get('input[name="password2"]').clear();
+    cy.get('input[name="password1"]').type('short');
+    cy.get('input[name="password2"]').type('short');
+    cy.get('button[type="submit"]').click();
+    cy.contains('Password must be at least 8 characters long').should('be.visible');
+  });
+
+  it('Shows error for duplicate email on basic registration', () => {
+    cy.intercept('POST', '**/api/auth/sign-up', {
+      statusCode: 400,
+      body: { error: 'A user with this email already exists.' },
+    }).as('registerUser');
+
+    cy.visit('/register');
+    cy.get('input[name="email"]').type('agnes@lancre.gov');
+    cy.get('input[name="password1"]').type('Password123!');
+    cy.get('input[name="password2"]').type('Password123!');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@registerUser');
+    cy.contains('A user with this email already exists.').should('be.visible');
+  });
+
 });
 
 describe('Email Verification', () => {

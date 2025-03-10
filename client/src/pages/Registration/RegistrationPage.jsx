@@ -70,6 +70,7 @@ const Register = () => {
   return (
     <AuthLayout
       title="Register"
+      subtitle="Create your account"
       subtext="Already have an account?"
       sublinkText="Log in here."
       sublinkUrl="/login"

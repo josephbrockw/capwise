@@ -161,6 +161,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "Passwords must match.")
 
+    @override_settings(PAYMENT_REQUIRED=True)
     def test_user_cannot_sign_up_without_required_fields(self):
         # payment method id
         data, msg, err, code = read_api_response(
