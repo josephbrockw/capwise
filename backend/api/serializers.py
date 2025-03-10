@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils.encoding import force_str
@@ -18,12 +19,19 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     email = serializers.EmailField()
     username = serializers.CharField(required=False)
-    payment_method_id = serializers.CharField(required=True)
+    payment_method_id = serializers.CharField(required=False)
     productId = serializers.IntegerField(required=False)
     tierId = serializers.IntegerField(required=False)
     priceId = serializers.IntegerField(required=False)
     discountCode = serializers.DictField(required=False, allow_null=True)
     trialDays = serializers.IntegerField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Dynamically set 'required' based on PAYMENT_REQUIRED
+        if settings.PAYMENT_REQUIRED:
+            self.fields["payment_method_id"].required = True
 
     def validate(self, data):
         # If username is not in data, use email as username
@@ -33,7 +41,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords must match.")
 
-        if "payment_method_id" not in data:
+        if settings.PAYMENT_REQUIRED and "payment_method_id" not in data:
             raise serializers.ValidationError("Payment method is required.")
 
         User = get_user_model()
@@ -49,19 +57,31 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         with transaction.atomic():
             # Remove password1 and password2 from the validated data
-            data = {
-                key: value
-                for key, value in validated_data.items()
-                if key
-                not in (
-                    "password1",
-                    "password2",
+            required_fields = (
+                "password1",
+                "password2",
+            )
+
+            if settings.PAYMENT_REQUIRED:
+                required_fields += (
                     "productId",
                     "tierId",
                     "priceId",
                     "discountCode",
                     "trialDays",
                 )
+            else:
+                validated_data.pop("productId", None)
+                validated_data.pop("tierId", None)
+                validated_data.pop("priceId", None)
+                validated_data.pop("discountCode", None)
+                validated_data.pop("trialDays", None)
+                validated_data.pop("payment_method_id", None)
+
+            data = {
+                key: value
+                for key, value in validated_data.items()
+                if key not in required_fields
             }
             data["password"] = validated_data["password1"]
 
@@ -71,13 +91,14 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             user.save()
 
             # Handle subscription
-            try:
-                create_user_subscription(
-                    user,
-                    validated_data,
-                )
-            except Exception as e:
-                raise serializers.ValidationError(str(e))
+            if settings.PAYMENT_REQUIRED:
+                try:
+                    create_user_subscription(
+                        user,
+                        validated_data,
+                    )
+                except Exception as e:
+                    raise serializers.ValidationError(str(e))
 
             return user
 

@@ -161,6 +161,101 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(err, "Passwords must match.")
 
+    def test_user_cannot_sign_up_without_required_fields(self):
+        # payment method id
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                    "priceId": 4,
+                    "productId": 1,
+                    "tierId": 2,
+                },
+            )
+        )
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
+
+        # priceId
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
+                    "productId": 1,
+                    "tierId": 2,
+                },
+            )
+        )
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
+
+        # productId
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
+                    "priceId": 4,
+                    "tierId": 2,
+                },
+            )
+        )
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
+
+        # tierId
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                    "payment_method_id": "pm_123",
+                    "priceId": 4,
+                    "productId": 1,
+                },
+            )
+        )
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, code)
+
+    @override_settings(PAYMENT_REQUIRED=False)
+    def test_user_can_sign_up_without_payment_if_payment_not_required(self):
+        data, msg, err, code = read_api_response(
+            self.client.post(
+                "/api/auth/sign-up",
+                data={
+                    "username": "jasonogg",
+                    "email": "jason@discworld.com",
+                    "first_name": "Jason",
+                    "last_name": "Ogg",
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                },
+            )
+        )
+
+        self.assertEqual(status.HTTP_201_CREATED, code)
+
     def test_user_can_verify_email(self):
         data, msg, err, code = read_api_response(
             self.client.post("/api/auth/verify", data={"token": self.otp_token})

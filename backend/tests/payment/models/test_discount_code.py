@@ -7,7 +7,7 @@ from payment.models import DiscountCode, Product
 from tests.utils import mock_stripe
 
 
-@tag("test")
+@tag("payment", "discount-code")
 class TestDiscountCode(TestCase):
     def setUp(self):
         self.product = Product.objects.create(

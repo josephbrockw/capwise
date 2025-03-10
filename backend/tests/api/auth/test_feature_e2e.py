@@ -37,7 +37,6 @@ class AuthenticationTest(APITestCase):
                     "priceId": 4,
                 },
             ),
-            show=True,
         )
         assert code == status.HTTP_201_CREATED
 
