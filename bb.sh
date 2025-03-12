@@ -502,6 +502,7 @@ omit =
           -e sessions \
           -e admin \
           -e contenttypes \
+          --format yaml \
           ${@: 2} \
           > "$output_file"
         ;;
