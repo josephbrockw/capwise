@@ -10,7 +10,8 @@ const Stepper = ({
   formData = {},
   dataCy = '',
   disableInvalidButtons = true,
-  prefix = '' // 'vertical' or '' (for horizontal)
+  prefix = '', // 'vertical' or '' (for horizontal)
+  fullWidth = false,
 }) => {
   const isLastStep = currentStep === steps.length - 1;
   const [validationError, setValidationError] = useState('');
@@ -71,7 +72,7 @@ const Stepper = ({
   const isValid = currentValidation.isValid;
 
   return (
-    <div className={`${prefix}-stepper-container`}>
+    <div className={`${prefix}-stepper-container ${fullWidth ? 'full-width' : ''}`}>
       {prefix === 'horizontal' ? (
         <>
           <div className="horizontal-stepper-header">

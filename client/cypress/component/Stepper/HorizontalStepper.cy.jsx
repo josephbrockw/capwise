@@ -175,4 +175,51 @@ describe('HorizontalStepper.cy.jsx', () => {
     cy.get('[data-cy="child-content"]').should('be.visible');
     cy.contains('Step Content').should('be.visible');
   });
+
+  it('applies full-width styling when fullWidth prop is true', () => {
+    cy.mount(
+      <HorizontalStepper
+        steps={mockSteps}
+        currentStep={0}
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        fullWidth={true}
+      />
+    );
+
+    cy.get('.horizontal-stepper-container').should('have.class', 'full-width');
+  });
+
+  it('does not apply full-width styling when fullWidth prop is false', () => {
+    cy.mount(
+      <HorizontalStepper
+        steps={mockSteps}
+        currentStep={0}
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        fullWidth={false}
+      />
+    );
+
+    cy.get('.horizontal-stepper-container').should('not.have.class', 'full-width');
+  });
+
+  it('does not apply full-width styling when fullWidth prop is omitted', () => {
+    cy.mount(
+      <HorizontalStepper
+        steps={mockSteps}
+        currentStep={0}
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+      />
+    );
+
+    cy.get('.horizontal-stepper-container').should('not.have.class', 'full-width');
+  });
 });
