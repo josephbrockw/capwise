@@ -25,10 +25,10 @@ describe('Table Component', () => {
     );
 
     // Check that the table container exists
-    cy.get('.wdu-table-container').should('exist');
+    cy.get('.bb-table-container').should('exist');
 
     // Check that the table has the base class
-    cy.get('.wdu-table').should('exist');
+    cy.get('.bb-table').should('exist');
 
     // Check that all headers are rendered
     mockHeaders.forEach(header => {
@@ -76,7 +76,7 @@ describe('Table Component', () => {
       />
     );
 
-    cy.get('.wdu-table').should('have.class', 'wdu-table-striped');
+    cy.get('.bb-table').should('have.class', 'bb-table-striped');
   });
 
   it('applies bordered styling when bordered prop is true', () => {
@@ -88,7 +88,7 @@ describe('Table Component', () => {
       />
     );
 
-    cy.get('.wdu-table').should('have.class', 'wdu-table-bordered');
+    cy.get('.bb-table').should('have.class', 'bb-table-bordered');
   });
 
   it('applies hover styling when hover prop is true', () => {
@@ -100,7 +100,7 @@ describe('Table Component', () => {
       />
     );
 
-    cy.get('.wdu-table').should('have.class', 'wdu-table-hover');
+    cy.get('.bb-table').should('have.class', 'bb-table-hover');
   });
 
   it('applies compact styling when compact prop is true', () => {
@@ -112,7 +112,7 @@ describe('Table Component', () => {
       />
     );
 
-    cy.get('.wdu-table').should('have.class', 'wdu-table-compact');
+    cy.get('.bb-table').should('have.class', 'bb-table-compact');
   });
 
   it('applies custom className when provided', () => {
@@ -125,7 +125,7 @@ describe('Table Component', () => {
       />
     );
 
-    cy.get('.wdu-table').should('have.class', customClass);
+    cy.get('.bb-table').should('have.class', customClass);
   });
 
   it('calls onRowClick when a row is clicked', () => {
@@ -140,7 +140,7 @@ describe('Table Component', () => {
     );
 
     // Check that rows have the clickable class
-    cy.get('tbody tr').should('have.class', 'wdu-table-clickable');
+    cy.get('tbody tr').should('have.class', 'bb-table-clickable');
 
     // Click the first row and verify the callback was called with the correct data
     cy.get('tbody tr').first().click();
@@ -179,7 +179,7 @@ describe('Table Component', () => {
 
     // Check that there's only one row with the empty message
     cy.get('tbody tr').should('have.length', 1);
-    cy.get('.wdu-table-empty').should('contain', 'No data available');
+    cy.get('.bb-table-empty').should('contain', 'No data available');
 
     // Check that the colspan is set to the number of headers
     cy.get('tbody td').should('have.attr', 'colspan', mockHeaders.length.toString());
@@ -216,11 +216,11 @@ describe('Table Component', () => {
       />
     );
 
-    const table = cy.get('.wdu-table');
-    table.should('have.class', 'wdu-table-striped');
-    table.should('have.class', 'wdu-table-bordered');
-    table.should('have.class', 'wdu-table-hover');
-    table.should('have.class', 'wdu-table-compact');
+    const table = cy.get('.bb-table');
+    table.should('have.class', 'bb-table-striped');
+    table.should('have.class', 'bb-table-bordered');
+    table.should('have.class', 'bb-table-hover');
+    table.should('have.class', 'bb-table-compact');
     table.should('have.class', 'custom-class');
   });
 });

@@ -28,16 +28,16 @@ const Table = ({
 }) => {
   // Build class names based on props
   const tableClasses = [
-    'wdu-table',
-    striped ? 'wdu-table-striped' : '',
-    bordered ? 'wdu-table-bordered' : '',
-    hover ? 'wdu-table-hover' : '',
-    compact ? 'wdu-table-compact' : '',
+    'bb-table',
+    striped ? 'bb-table-striped' : '',
+    bordered ? 'bb-table-bordered' : '',
+    hover ? 'bb-table-hover' : '',
+    compact ? 'bb-table-compact' : '',
     className,
   ].filter(Boolean).join(' ');
 
   return (
-    <div className="wdu-table-container">
+    <div className="bb-table-container">
       <table className={tableClasses}>
         <thead>
           <tr>
@@ -49,7 +49,7 @@ const Table = ({
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td colSpan={headers.length} className="wdu-table-empty">
+              <td colSpan={headers.length} className="bb-table-empty">
                 No data available
               </td>
             </tr>
@@ -58,7 +58,7 @@ const Table = ({
               <tr
                 key={row[keyField] || rowIndex}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
-                className={onRowClick ? 'wdu-table-clickable' : ''}
+                className={onRowClick ? 'bb-table-clickable' : ''}
               >
                 {headers.map((header, colIndex) => {
                   // Get the field name from the header if it's an object with a field property
