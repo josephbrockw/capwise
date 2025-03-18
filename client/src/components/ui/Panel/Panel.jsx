@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Panel.css';
 
-const Panel = ({ header, children, className = '', defaultCollapsed = false, ...props }) => {
+const Panel = ({ header, children, className = '', defaultCollapsed = false, highlighted = false, ...props }) => {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
   const toggleCollapse = () => {
@@ -11,7 +11,7 @@ const Panel = ({ header, children, className = '', defaultCollapsed = false, ...
 
   return (
     <div className={`bb-panel ${className}`} {...props}>
-      <div className="bb-panel-header" onClick={toggleCollapse}>
+      <div className={`bb-panel-header ${highlighted ? 'highlighted' : ''}`} onClick={toggleCollapse}>
         <div className="bb-panel-title">{header}</div>
         <button
           className={`bb-panel-toggle ${isCollapsed ? 'collapsed' : ''}`}
@@ -43,6 +43,7 @@ Panel.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   defaultCollapsed: PropTypes.bool,
+  highlighted: PropTypes.bool
 };
 
 export default Panel;
