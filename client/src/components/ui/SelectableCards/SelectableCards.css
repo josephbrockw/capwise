@@ -1,0 +1,102 @@
+/* SelectableCards Component Styles */
+
+.bb-selectable-cards {
+  margin: 1.5rem 0;
+}
+
+.bb-selectable-cards-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--color-text-dark, #1e293b);
+}
+
+.bb-selectable-cards-count {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--color-primary, #3b82f6);
+}
+
+.bb-selectable-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.bb-selectable-card {
+  position: relative;
+  padding: 1.25rem;
+  border-radius: 8px;
+  border: 2px solid var(--color-border, #e2e8f0);
+  background-color: var(--color-background, #ffffff);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+
+/* Compact card styles */
+.bb-selectable-cards-grid-compact {
+  gap: 1rem;
+}
+
+.bb-selectable-card.selectable-card-compact {
+  padding: 0.5rem;
+}
+
+.selectable-card-compact p {
+  margin: .5rem 1rem;
+  font-size: 0.9rem;
+}
+
+
+.bb-selectable-card:hover {
+  border-color: var(--color-primary-light, #93c5fd);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.bb-selectable-card-selected {
+  border-color: var(--color-primary, #3b82f6);
+  background-color: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.bb-selectable-card-selected::before {
+  content: '✓';
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary, #3b82f6);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.bb-selectable-card-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bb-selectable-card-disabled:hover {
+  border-color: var(--color-border, #e2e8f0);
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bb-selectable-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Single column layout option */
+.bb-selectable-cards-single-column .bb-selectable-cards-grid {
+  grid-template-columns: 1fr;
+  max-width: 800px;
+  margin: 0 auto;
+}

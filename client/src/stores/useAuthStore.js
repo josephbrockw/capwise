@@ -80,7 +80,7 @@ export const useAuthStore = create(
           try {
             // First try to get from localStorage
             const localUserData = get().getStorageItem('userData');
-            if (localUserData) {
+            if (localUserData && localUserData.id && localUserData.username && localUserData.email) {
               set({ user: localUserData });
               return localUserData;
             }
@@ -93,6 +93,7 @@ export const useAuthStore = create(
             get().setStorageItem('userData', userData);
             return userData;
           } catch (error) {
+            console.log('Error fetching user data:', error);
             const errorMessage = error.message;
             set({ error: errorMessage });
             throw error;
@@ -136,6 +137,7 @@ export const useAuthStore = create(
 
             return userData;
           } catch (error) {
+            console.log('Login error:', error);
             set({ loading: false, error: error.message });
             throw error;
           }

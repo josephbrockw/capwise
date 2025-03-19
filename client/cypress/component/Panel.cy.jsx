@@ -79,4 +79,34 @@ describe('Panel Component', () => {
 
     cy.get('.bb-panel').should('have.attr', 'data-testid', 'test-panel');
   });
+
+
+  it('applies highlighted styling when highlighted prop is true', () => {
+    cy.mount(
+      <Panel header="Test Panel" highlighted={true}>
+        <p>Test content</p>
+      </Panel>
+    );
+
+    // Check that the highlighted class is applied to the header
+    cy.get('.bb-panel-header').should('have.class', 'highlighted');
+
+    // Verify that the header has the highlighted background color
+    // (We don't check the exact color value as it depends on CSS variables)
+    cy.get('.bb-panel-header').should('have.css', 'background');
+
+    // Verify that the title has the highlighted text color
+    cy.get('.bb-panel-title').should('be.visible');
+  });
+
+  it('does not apply highlighted styling when highlighted prop is false', () => {
+    cy.mount(
+      <Panel header="Test Panel" highlighted={false}>
+        <p>Test content</p>
+      </Panel>
+    );
+
+    // Check that the highlighted class is not applied to the header
+    cy.get('.bb-panel-header').should('not.have.class', 'highlighted');
+  });
 });

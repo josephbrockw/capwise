@@ -7,6 +7,10 @@
   margin: 0 auto;
 }
 
+.horizontal-stepper-container.full-width {
+    max-width: none;
+}
+
 /* Header with step indicators */
 .horizontal-stepper-header {
   display: flex;

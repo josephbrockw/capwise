@@ -38,6 +38,7 @@ export class ApiClient {
         return config;
       },
       (error) => {
+        console.log('Request interceptor error:', error);
         return Promise.reject(new ApiError(error.message, 'REQUEST_ERROR'));
       }
     );

@@ -17,6 +17,11 @@
   transition: background-color var(--transitionDuration) var(--transitionTimingFunction);
 }
 
+.bb-panel-header.highlighted {
+  background: var(--secondaryColor);
+  color: var(--white);
+}
+
 .bb-panel-header:hover {
   background: var(--lightGray);
 }
@@ -26,6 +31,10 @@
   font-size: var(--fontSizeLarge);
   font-weight: var(--fontWeightBold);
   color: var(--textColor);
+}
+
+.bb-panel-header.highlighted .bb-panel-title {
+  color: var(--white);
 }
 
 .bb-panel-toggle {
