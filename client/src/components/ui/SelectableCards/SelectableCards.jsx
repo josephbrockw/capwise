@@ -59,7 +59,7 @@ const SelectableCards = ({
       {maxSelections !== null && (
         <p className="bb-selectable-cards-count">{formattedSelectionCountText}</p>
       )}
-      <div className={`bb-selectable-cards-grid ${compact ? 'bb-selectable-cards-grid-compact' : ''}`}>
+      <div className={`bb-selectable-cards-flex ${compact ? 'bb-selectable-cards-flex-compact' : ''}`}>
         {items.map((item) => {
           const itemId = item[idField];
           const isSelected = selectedIds.includes(itemId);

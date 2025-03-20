@@ -166,7 +166,7 @@ describe('SelectableCards Component', () => {
       />
     );
 
-    cy.get('.bb-selectable-cards-grid').should('have.class', 'bb-selectable-cards-grid-compact');
+    cy.get('.bb-selectable-cards-flex').should('have.class', 'bb-selectable-cards-flex-compact');
     cy.get('.bb-selectable-card').first().should('have.class', 'selectable-card-compact');
   });
 
