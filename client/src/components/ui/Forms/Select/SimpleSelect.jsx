@@ -119,6 +119,7 @@ const SimpleSelect = ({
                     onClick={() => handleSelectOption(option)}
                     role="option"
                     aria-selected={option[optionValueKey] === value}
+                    data-cy={`${id}-simple-select-option-${option[optionValueKey].replace(/\s/g, '')}`}
                   >
                     {option[optionLabelKey]}
                   </div>
