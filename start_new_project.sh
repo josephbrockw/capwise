@@ -52,4 +52,14 @@ git fetch upstream
 # Optionally, merge changes from upstream into the current branch
 git merge upstream/main
 
-echo "Setup complete! Your new project is now connected to the new repository ($NEW_REPO), and updates can be pulled from the original repository."
+echo -e "\nSetup complete! Here are your follow-up instructions:\n"
+echo "1. Go to GitHub and create a new repository with the name: $NEW_REPO_NAME."
+echo "   - Ensure that the repository is empty (don't initialize with a README or any files)."
+echo "   - After creating it, copy the repository URL provided by GitHub."
+echo ""
+echo "2. Run the following command to push your local changes to the new repository:"
+echo "   git push -u origin main"
+echo ""
+echo "3. After pushing, you will be able to continue working on your new project and keep it in sync with the original repository."
+echo ""
+echo "That's it! Your new project is ready, and you can start developing."
