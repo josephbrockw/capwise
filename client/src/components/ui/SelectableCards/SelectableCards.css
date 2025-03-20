@@ -23,19 +23,29 @@
   width: 100%;
 }
 
+.bb-selectable-cards-flex {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .bb-selectable-card {
   position: relative;
   padding: 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--borderRadius);
   border: 2px solid var(--color-border, #e2e8f0);
   background-color: var(--color-background, #ffffff);
   transition: all 0.2s ease;
   cursor: pointer;
+  max-width: 350px;
 }
 
 
 /* Compact card styles */
-.bb-selectable-cards-grid-compact {
+.bb-selectable-cards-grid-compact,
+.bb-selectable-cards-flex-compact {
   gap: 1rem;
 }
 
@@ -91,6 +101,10 @@
 @media (max-width: 768px) {
   .bb-selectable-cards-grid {
     grid-template-columns: 1fr;
+  }
+
+  .bb-selectable-cards-flex {
+    flex-direction: column;
   }
 }
 

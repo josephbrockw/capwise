@@ -26,7 +26,7 @@ describe('MenuBar', () => {
 
     cy.get('.menu-bar-logo').should('exist');
     cy.get('.menu-bar-logo img').should('have.attr', 'alt', 'Logo');
-    cy.get('.menu-bar-logo a').should('have.attr', 'href', '/dashboard');
+    cy.get('.menu-bar-logo a').should('have.attr', 'href', '/');
   });
 
   it('should render all menu items in desktop view', () => {
