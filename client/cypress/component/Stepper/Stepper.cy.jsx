@@ -132,4 +132,56 @@ describe('Stepper.cy.jsx', () => {
       expect(updateFn(1)).to.equal(0);
     });
   });
+
+  it('shows disabled state when isSubmitting is true', () => {
+    cy.mount(
+      <Stepper
+        steps={mockSteps}
+        currentStep={2} // Last step
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        isSubmitting={true}
+      />
+    );
+
+    cy.get('[data-cy="test-stepper-submit-button"]').should('have.attr', 'disabled');
+    cy.get('[data-cy="test-stepper-submit-button"]').should('have.class', 'disabled');
+  });
+
+  it('uses custom submit button text when provided', () => {
+    const customText = 'Save Character';
+    cy.mount(
+      <Stepper
+        steps={mockSteps}
+        currentStep={2} // Last step
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        submitButtonText={customText}
+      />
+    );
+
+    cy.get('[data-cy="test-stepper-submit-button"]').should('contain', customText);
+  });
+
+  it('does not affect Next button when isSubmitting is true but not on last step', () => {
+    cy.mount(
+      <Stepper
+        steps={mockSteps}
+        currentStep={0} // First step, not last
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        isSubmitting={true}
+      />
+    );
+
+    // Next button should not be disabled or loading since we're not on the last step
+    cy.get('[data-cy="test-stepper-continue-button-0"]').should('not.have.attr', 'disabled');
+    cy.get('[data-cy="test-stepper-continue-button-0"]').should('not.have.class', 'disabled');
+  });
 });

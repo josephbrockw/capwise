@@ -11,7 +11,9 @@ const HorizontalStepper = ({
   formData = {},
   dataCy = '',
   disableInvalidButtons = true,
-  fullWidth = false
+  fullWidth = false,
+  isSubmitting = false,
+  submitButtonText = 'Submit'
 }) => {
   return (
     <Stepper
@@ -24,6 +26,8 @@ const HorizontalStepper = ({
       disableInvalidButtons={disableInvalidButtons}
       prefix="horizontal"
       fullWidth={fullWidth}
+      isSubmitting={isSubmitting}
+      submitButtonText={submitButtonText}
     >
       {children}
     </Stepper>

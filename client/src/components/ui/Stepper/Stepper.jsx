@@ -12,6 +12,8 @@ const Stepper = ({
   disableInvalidButtons = true,
   prefix = '', // 'vertical' or '' (for horizontal)
   fullWidth = false,
+  isSubmitting = false,
+  submitButtonText = 'Submit'
 }) => {
   const isLastStep = currentStep === steps.length - 1;
   const [validationError, setValidationError] = useState('');
@@ -171,11 +173,13 @@ const Stepper = ({
           />
         )}
         <Button
-          label={isLastStep ? 'Submit' : 'Next'}
+          label={isLastStep ? submitButtonText : 'Next'}
           onClick={handleClick}
           className={!isValid ? 'button-with-tooltip disabled' : ''}
           data-cy={isLastStep ? `${dataCy}-submit-button` : `${dataCy}-continue-button-${currentStep}`}
           type={isLastStep ? 'submit' : 'button'}
+          loading={isSubmitting && isLastStep}
+          disabled={isSubmitting && isLastStep}
         />
       </div>
     </div>
