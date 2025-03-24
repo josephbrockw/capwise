@@ -222,4 +222,58 @@ describe('HorizontalStepper.cy.jsx', () => {
 
     cy.get('.horizontal-stepper-container').should('not.have.class', 'full-width');
   });
+
+  it('shows disabled state when isSubmitting is true', () => {
+    cy.mount(
+      <HorizontalStepper
+        steps={mockSteps}
+        currentStep={mockSteps.length - 1}
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        isSubmitting={true}
+      />
+    );
+
+    cy.get('[data-cy="test-stepper-submit-button"]').should('have.attr', 'disabled');
+    cy.get('[data-cy="test-stepper-submit-button"]').should('have.class', 'disabled');
+  });
+
+  it('uses custom submit button text when provided', () => {
+    const customText = 'Save Character';
+    cy.mount(
+      <HorizontalStepper
+        steps={mockSteps}
+        currentStep={mockSteps.length - 1}
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        submitButtonText={customText}
+      />
+    );
+
+    cy.get('[data-cy="test-stepper-submit-button"]').should('contain', customText);
+  });
+
+  it('combines isSubmitting and submitButtonText props correctly', () => {
+    const customText = 'Create Character';
+    cy.mount(
+      <HorizontalStepper
+        steps={mockSteps}
+        currentStep={mockSteps.length - 1}
+        setCurrentStep={cy.spy().as('setCurrentStep')}
+        onSubmit={cy.spy().as('onSubmit')}
+        formData={{}}
+        dataCy="test-stepper"
+        isSubmitting={true}
+        submitButtonText={customText}
+      />
+    );
+
+    cy.get('[data-cy="test-stepper-submit-button"]').should('contain', customText);
+    cy.get('[data-cy="test-stepper-submit-button"]').should('have.attr', 'disabled');
+    cy.get('[data-cy="test-stepper-submit-button"]').should('have.class', 'disabled');
+  });
 });
