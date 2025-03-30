@@ -1,36 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './Tabs.css';
 
-const Tabs = ({ tabs }) => {
-  const [activeTab, setActiveTab] = useState(tabs[0].id); // Default to the first tab
-
-  useEffect(() => {
-    const hash = window.location.hash.replace('#', '');
-    const tabIndex = tabs.findIndex((tab) => tab.id === hash);
-    if (tabIndex >= 0) {
-      setActiveTab(tabIndex);
-    } else {
-      setActiveTab(0)
+/**
+ * Tabs component for creating tabbed interfaces
+ *
+ * @param {Object} props Component props
+ * @param {Array} props.tabs Array of tab objects with id and label
+ * @param {string} props.activeTab ID of the currently active tab
+ * @param {Function} props.onTabChange Callback when tab is changed
+ * @param {node} props.children Content to be displayed in the tab panels
+ * @param {string} props.className Additional CSS class
+ */
+const Tabs = ({
+  tabs,
+  activeTab,
+  onTabChange,
+  children,
+  className = ''
+}) => {
+  const handleTabChange = (tabId) => {
+    if (onTabChange) {
+      onTabChange(tabId);
     }
-  }, [tabs]);
-
-  const handleTabChange = (index) => {
-    setActiveTab(index);
-    window.history.replaceState(null, '', `#${tabs[index].id}`);
-  }
+  };
 
   return (
-    <div className="tabs-container">
+    <div className={`tabs-container ${className}`}>
       <div className="tabs-header" role="tablist">
-        {tabs.map((tab, index) => (
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             role="tab"
-            aria-selected={index === activeTab}
+            aria-selected={tab.id === activeTab}
             aria-controls={`tabpanel-${tab.id}`}
-            className={`tab-item ${index === activeTab ? 'active' : ''}`}
-            onClick={() => handleTabChange(index)}
+            className={`tab-item ${tab.id === activeTab ? 'active' : ''}`}
+            onClick={() => handleTabChange(tab.id)}
+            data-cy={`tab-${tab.id}`}
           >
             {tab.label}
           </button>
@@ -38,18 +44,7 @@ const Tabs = ({ tabs }) => {
       </div>
 
       <div className="tabs-content">
-        {tabs.map((tab, index) => (
-          <div
-            key={tab.id}
-            id={`tabpanel-${tab.id}`}
-            role="tabpanel"
-            aria-labelledby={`tab-${tab.id}`}
-            hidden={index !== activeTab}
-            className={`tab-panel ${index === activeTab ? 'visible' : ''}`}
-          >
-            {tab.content}
-          </div>
-        ))}
+        {children}
       </div>
     </div>
   );
@@ -60,9 +55,12 @@ Tabs.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
-      content: PropTypes.node.isRequired,
     })
   ).isRequired,
+  activeTab: PropTypes.string.isRequired,
+  onTabChange: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string
 };
 
 export default Tabs;

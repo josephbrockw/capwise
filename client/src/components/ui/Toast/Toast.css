@@ -53,7 +53,7 @@
 }
 
 .toast-normal {
-  background-color: var(--neutral);
+  background-color: var(--primaryColor);
   color: var(--light);
 }
 

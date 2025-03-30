@@ -1,0 +1,109 @@
+/* Drawer.css */
+.drawer {
+  width: 100%;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.drawer-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: .5rem;
+}
+
+/* .drawer-toggle-container:hover {
+  background-color: var(--backgroundHover, #f1f5f9);
+} */
+
+.drawer-toggle {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background-color: var(--backgroundLight, #f8f9fa);
+  border: 1px solid var(--lightGray, #e2e8f0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondaryColor, #666666);
+  transition: background-color 0.2s ease;
+}
+
+.drawer-toggle-container:hover .drawer-toggle {
+  background-color: var(--primaryColor, #4a90e2);
+  color: white;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--backgroundLight, #f8f9fa);
+  border-bottom: 1px solid var(--lightGray, #e2e8f0);
+}
+
+.drawer-title {
+  font-weight: var(--fontWeightBold, 600);
+  color: var(--primaryColor, #333333);
+}
+
+.drawer-content {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background-color: var(--backgroundColor, #ffffff);
+  border: 0 solid var(--lightGray, #e2e8f0);
+  border-radius: var(--borderRadius, 8px);
+}
+
+.drawer.open .drawer-content {
+  padding: 16px;
+  max-height: 500px; /* Adjust as needed */
+  border-width: 2px;
+}
+
+/* Character info specific styles */
+.character-info-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.character-info-item {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 16px;
+}
+
+.character-info-label {
+  font-weight: var(--fontWeightBold, 600);
+  color: var(--secondaryColor, #666666);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.character-info-value {
+  color: var(--textColor, #333333);
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .drawer-header {
+    padding: 10px 12px;
+  }
+
+  .drawer.open .drawer-content {
+    padding: 12px;
+  }
+
+  .character-info-item {
+    min-width: 100%;
+  }
+}

@@ -15,6 +15,7 @@ const colors = {
   dropdownMenutextColor: '#3D3D3D',
   errorColor: '#ff5c5c',
   successColor: '#5bc85b',
+  warningColor: '#f59e0b',
 }
 
 const typography = {
@@ -47,6 +48,7 @@ const buttons = {
   buttonFontSize: typography.fontSizeBase, // Matches base font size
   buttonPrimaryBackground: colors.primaryColor, // Matches primary color
   buttonPrimaryHover: colors.secondaryColor,
+  buttonSecondaryHover: colors.primaryColor,
   buttonPrimaryText: colors.light, // White text on primary button
   buttonSecondaryBackground: colors.backgroundColor, // Matches background color
   buttonDisabledBackground: colors.lightGray, // Light gray for disabled buttons

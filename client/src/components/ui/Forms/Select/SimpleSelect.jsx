@@ -90,6 +90,7 @@ const SimpleSelect = ({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-labelledby={label ? id : undefined}
+        data-cy={`${id}-simple-select`}
       >
         <div className="simple-select-spacer"></div>
         <div className="simple-select-value">{displayText}</div>
@@ -119,7 +120,7 @@ const SimpleSelect = ({
                     onClick={() => handleSelectOption(option)}
                     role="option"
                     aria-selected={option[optionValueKey] === value}
-                    data-cy={`${id}-simple-select-option-${option[optionValueKey].replace(/\s/g, '')}`}
+                    data-cy={`${id}-simple-select-option-${String(option[optionLabelKey]).replace(/\s/g, '')}`}
                   >
                     {option[optionLabelKey]}
                   </div>

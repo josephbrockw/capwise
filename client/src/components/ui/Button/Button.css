@@ -48,6 +48,10 @@
   margin-right: 0.5rem;
 }
 
+.custom-button.no-icon-margin .icon {
+  margin: 0;
+}
+
 /* Full width styles */
 .custom-button.full-width,
 .button-like.full-width {

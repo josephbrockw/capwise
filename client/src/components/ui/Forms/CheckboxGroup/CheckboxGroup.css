@@ -1,0 +1,56 @@
+/* CheckboxGroup.css */
+.checkbox-group {
+  display: flex;
+  gap: 8px;
+}
+
+.checkbox-group-item {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--borderColor, #e0e0e0);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-group-item:hover:not(.disabled) {
+  border-color: var(--secondaryColor, #4a90e2);
+  background-color: var(--secondaryColor, #4a90e2);
+}
+
+.checkbox-group-item.checked {
+  background-color: var(--primaryColor, #4a90e2);
+  border-color: var(--primaryColor, #4a90e2);
+}
+
+.checkbox-icon {
+  color: white;
+  font-size: 14px;
+}
+
+.checkbox-group-item.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Focus styles for accessibility */
+.checkbox-group-item:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .checkbox-group-item {
+    width: 20px;
+    height: 20px;
+  }
+
+  .checkbox-icon {
+    font-size: 12px;
+  }
+}
