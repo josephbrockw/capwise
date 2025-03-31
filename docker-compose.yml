@@ -84,5 +84,22 @@ services:
     depends_on:
       - broker
 
+  docs:
+    build:
+      context: ./docs
+      dockerfile: Dockerfile.dev
+    container_name: docs
+    volumes:
+      - ./docs:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    stdin_open: true
+    tty: true
+
 volumes:
   postges_data:
