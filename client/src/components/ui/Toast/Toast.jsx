@@ -2,6 +2,17 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import './Toast.css';
 
+/**
+ * Toast notification component
+ * @param {Object} props - Component props
+ * @param {string} props.message - Message to display
+ * @param {string} [props.type='normal'] - Toast type (success, error, normal)
+ * @param {number} [props.duration=3000] - Duration in milliseconds
+ * @param {Function} props.onClose - Callback when toast is closed
+ * @param {string} [props.className=''] - Additional CSS classes
+ * @param {string} [props['data-cy']] - Cypress test attribute
+ * @returns {JSX.Element} Toast component
+ */
 const Toast = ({
   message,
   type = 'normal',
@@ -11,11 +22,12 @@ const Toast = ({
   'data-cy': dataCy
 }) => {
   const [isClosing, setIsClosing] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (duration && onClose) {
       const timer = setTimeout(() => {
-        onClose();
+        handleClose();
       }, duration);
 
       return () => clearTimeout(timer);
@@ -25,13 +37,19 @@ const Toast = ({
   const handleClose = () => {
     if (onClose && !isClosing) {
       setIsClosing(true);
-      onClose();
+      // Add a small delay before calling onClose to allow for exit animation
+      setTimeout(() => {
+        setIsVisible(false);
+        onClose();
+      }, 300);
     }
   };
 
+  if (!isVisible) return null;
+
   return (
     <div
-      className={`toast toast-${type} ${className}`}
+      className={`toast toast-${type} ${isClosing ? 'toast-closing' : ''} ${className}`}
       role="alert"
       data-cy={dataCy}
     >

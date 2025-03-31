@@ -1,15 +1,44 @@
-.toast {
+.toast-container {
   position: fixed;
-  bottom: 2rem;
-  left: 2rem;
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 0;
-  animation: slideIn 0.3s ease-out;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   max-width: 400px;
   width: auto;
+}
+
+/* Position variants */
+.toast-top-left {
+  top: 1rem;
+  left: 1rem;
+}
+
+.toast-top-right {
+  top: 1rem;
+  right: 1rem;
+}
+
+.toast-bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.toast-bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.toast {
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  width: 100%;
+}
+
+.toast-closing {
+  animation: slideOut 0.3s ease-in forwards;
 }
 
 .toast-content {
@@ -57,7 +86,7 @@
   color: var(--light);
 }
 
-/* Animation */
+/* Animations */
 @keyframes slideIn {
   from {
     transform: translateY(100%);
@@ -69,12 +98,65 @@
   }
 }
 
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Position-specific animations */
+.toast-position-top-left,
+.toast-position-top-right {
+  animation: slideInTop 0.3s ease-out;
+}
+
+.toast-position-top-left.toast-closing,
+.toast-position-top-right.toast-closing {
+  animation: slideOutTop 0.3s ease-in forwards;
+}
+
+@keyframes slideInTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutTop {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .toast {
+  .toast-container {
+    max-width: calc(100% - 2rem);
+  }
+
+  .toast-top-left,
+  .toast-bottom-left {
     left: 1rem;
     right: 1rem;
-    bottom: 1rem;
-    max-width: calc(100% - 2rem);
+  }
+
+  .toast-top-right,
+  .toast-bottom-right {
+    left: 1rem;
+    right: 1rem;
   }
 }
