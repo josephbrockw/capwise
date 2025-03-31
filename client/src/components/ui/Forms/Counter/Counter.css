@@ -1,0 +1,59 @@
+/* Counter.css */
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+}
+
+.counter-button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counter-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+  text-align: center;
+}
+
+.counter-value {
+  font-weight: var(--fontWeightBold, 600);
+  font-size: 1rem;
+  color: var(--textColor, #333);
+}
+
+.counter-label {
+  font-size: 0.75rem;
+  color: var(--secondaryTextColor, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Disabled state */
+.counter-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .counter-button {
+    min-width: 28px;
+    height: 28px;
+  }
+
+  .counter-value {
+    font-size: 0.9rem;
+  }
+
+  .counter-label {
+    font-size: 0.7rem;
+  }
+}
