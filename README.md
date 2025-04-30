@@ -1,33 +1,5 @@
 # BaseBuild
 
-## Environment Variables
-
-### Backend
-
-DEBUG
-SECRET_KEY
-DJANGO_ALLOWED_HOSTS
-SQL_ENGINE
-SQL_DATABASE
-SQL_USER
-SQL_PASSWORD
-SQL_HOST
-SQL_PORT
-DATABASE
-
-### DB
-
-POSTGRES_USER
-POSTGRES_PASSWORD
-POSTGRES_DB
-
-### Frontend
-
-CHOKIDAR_USEPOLLING
-REACT_APP_API_BASE_URL
-REACT_APP_NAME
-REACT_APP_URL
-
 ## Process to Sync Changes from the Original Template
 
 1. **Make sure you're in your new project directory**:
@@ -92,3 +64,34 @@ git push origin main
 - **`git fetch upstream`**: This command fetches the latest changes from the upstream repository (the original template) without modifying your working directory.
 - **`git merge upstream/main`**: This command merges the changes from `upstream/main` into your current branch (e.g., `main`).
 - **Push the changes**: After resolving conflicts and merging, push the changes to your GitHub repository to keep it up-to-date with the latest updates from the original template.
+
+## Git Branch Strategy
+See the [Git Branch Documentation](dev_docs/git-branch-documentation.md].
+
+## Environment Variables
+
+### Backend
+
+DEBUG
+SECRET_KEY
+DJANGO_ALLOWED_HOSTS
+SQL_ENGINE
+SQL_DATABASE
+SQL_USER
+SQL_PASSWORD
+SQL_HOST
+SQL_PORT
+DATABASE
+
+### DB
+
+POSTGRES_USER
+POSTGRES_PASSWORD
+POSTGRES_DB
+
+### Frontend
+
+CHOKIDAR_USEPOLLING
+REACT_APP_API_BASE_URL
+REACT_APP_NAME
+REACT_APP_URL
