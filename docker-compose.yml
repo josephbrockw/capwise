@@ -101,5 +101,34 @@ services:
     stdin_open: true
     tty: true
 
+  native-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+    container_name: native-app
+    command: npm run start -- --tunnel # Use tunnel mode for Expo Go
+    volumes:
+      # Mount the app code, excluding node_modules to use container's version
+      - ./app:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      # Expo Metro Bundler
+      - "8081:8081"
+      # Expo Go connection ports
+      - "19000:19000"
+      - "19001:19001"
+      # Expo Dev Tools
+      - "19002:19002"
+    environment:
+      # Ensure Expo server binds to 0.0.0.0 to be accessible outside the container
+      - EXPO_DEV_SERVER_HOSTNAME=0.0.0.0
+      # Enable polling if hot-reloading issues occur within Docker
+      - WATCHPACK_POLLING=true
+    # Keep stdin open for potential interactive prompts from Expo CLI
+    stdin_open: true
+    tty: true # Allocate a TTY for Expo CLI
+    depends_on:
+      - backend
+
 volumes:
   postges_data:

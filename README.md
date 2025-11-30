@@ -1,5 +1,113 @@
 # BaseBuild
 
+## BB CLI Tool
+
+BaseBuild includes a powerful command-line tool (`bb`) that simplifies common development workflows. The tool features a modular architecture that makes it easy to maintain and extend.
+
+### Installation
+
+Run the development setup script to install the `bb` command globally:
+
+```bash
+./dev_setup.sh
+```
+
+This installs both the `bb` executable and its modular framework (`bb.d/`) to `/usr/local/bin/`.
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `bb test` | Run the full test suite or selective tests (Django, Cypress E2E, Cypress Component, Vitest) |
+| `bb clean` | Tear down and rebuild Docker containers |
+| `bb shell` | Open a Django shell in the backend container |
+| `bb db` | Open a PostgreSQL shell in the database container |
+| `bb coverage` | Generate coverage reports for the Django test suite |
+| `bb quality` | Run code quality tools (flake8, black, isort) |
+| `bb migrate` | Run Django migrations |
+| `bb makemigrations` | Create new Django migrations |
+| `bb manage` | Execute any Django management command |
+| `bb app` | Create a new Django app |
+| `bb dumpdata` | Export database data to YAML |
+| `bb loaddata` | Import database data from YAML |
+
+### Usage Examples
+
+```bash
+# Run all tests
+bb test
+
+# Run only Django tests
+bb test -b
+
+# Run only client tests (Cypress + Vitest)
+bb test -c
+
+# Run Django tests with options
+bb test -b --keepdb --parallel
+
+# Open Cypress test runner
+bb test --open
+
+# Get help for any command
+bb test --help
+
+# Execute Django management commands
+bb manage createsuperuser
+bb manage collectstatic
+
+# Create a new Django app
+bb app myapp
+
+# Run migrations
+bb migrate
+
+# Rollback to a specific migration
+bb migrate --rollback myapp 0005_migration_name
+```
+
+### Modular Architecture
+
+The `bb` tool uses a modular plugin-based architecture located in `bb.d/`:
+
+```
+bb.d/
+├── core.sh              # Core framework (command dispatch)
+├── lib/                 # Shared utilities
+│   ├── colors.sh        # Color definitions
+│   ├── docker.sh        # Docker helpers (exec_backend, exec_db)
+│   └── formatters.sh    # Output formatters
+└── commands/            # Individual command modules
+    ├── test.sh
+    ├── clean.sh
+    ├── shell.sh
+    └── ...
+```
+
+### Adding New Commands
+
+To add a new command:
+
+1. Create a new file in `bb.d/commands/` (e.g., `mycommand.sh`)
+2. Implement two required functions:
+   ```bash
+   command_mycommand_help() {
+       echo "Usage: bb mycommand [options]"
+       echo "Description: What your command does"
+   }
+
+   command_mycommand_run() {
+       # Your command implementation
+       exec_backend python manage.py mycommand "$@"
+   }
+   ```
+3. Reinstall: `./dev_setup.sh`
+4. The command is now available as `bb mycommand`
+
+All commands have access to shared utilities like `exec_backend()`, `exec_db()`, and color variables (`$GREEN`, `$RED`, etc.).
+
+For more details, see `bb.d/README.md`.
+
 ## Process to Sync Changes from the Original Template
 
 1. **Make sure you're in your new project directory**:

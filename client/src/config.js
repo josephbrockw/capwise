@@ -164,7 +164,7 @@ const config = {
     ...utilities,
   },
   tabs: {
-    settings: ['account', 'billing'],  // Default tabs for the Settings page
+    settings: ['account', 'billing'],  // Default (tabs) for the Settings page
   },
   navigation: {
     login: '/login',

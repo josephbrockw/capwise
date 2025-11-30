@@ -76,7 +76,7 @@ describe('Tabs Component', () => {
     window.location.hash = '';
   });
 
-  it('renders all tabs with correct labels', () => {
+  it('renders all (tabs) with correct labels', () => {
     cy.mount(<TabsWithContent tabs={sampleTabs} />);
 
     cy.get('.tab-item').should('have.length', 3);
@@ -98,7 +98,7 @@ describe('Tabs Component', () => {
       .and('have.attr', 'aria-selected', 'true');
   });
 
-  it('switches content when clicking different tabs', () => {
+  it('switches content when clicking different (tabs)', () => {
     cy.mount(<TabsWithContent tabs={sampleTabs} />);
 
     // Click second tab
@@ -144,7 +144,7 @@ describe('Tabs Component', () => {
     });
   });
 
-  it('handles complex content in tabs', () => {
+  it('handles complex content in (tabs)', () => {
     const complexTabs = [
       { id: 'tab1', label: 'Tab 1' },
       { id: 'tab2', label: 'Tab 2' }
@@ -170,7 +170,7 @@ describe('Tabs Component', () => {
   it('only shows one tab panel at a time', () => {
     cy.mount(<TabsWithContent tabs={sampleTabs} />);
 
-    // Click through all tabs and verify only one panel is visible
+    // Click through all (tabs) and verify only one panel is visible
     sampleTabs.forEach((_, index) => {
       cy.get('.tab-item').eq(index).click();
       cy.get('.tab-panel.visible').should('have.length', 1);
@@ -181,7 +181,7 @@ describe('Tabs Component', () => {
   it('maintains selected tab styles correctly', () => {
     cy.mount(<TabsWithContent tabs={sampleTabs} />);
 
-    // Click through all tabs and verify styles
+    // Click through all (tabs) and verify styles
     sampleTabs.forEach((_, index) => {
       cy.get('.tab-item').eq(index).click();
 
@@ -194,7 +194,7 @@ describe('Tabs Component', () => {
         .should('have.class', 'active')
         .and('have.attr', 'aria-selected', 'true');
 
-      // Verify other tabs are not active
+      // Verify other (tabs) are not active
       cy.get('.tab-item')
         .not('.active')
         .should('have.attr', 'aria-selected', 'false');
@@ -209,7 +209,7 @@ describe('Tabs Component', () => {
       />
     );
 
-    cy.get('.tabs-container').should('have.class', 'custom-tabs-class');
+    cy.get('.tabs-container').should('have.class', 'custom-(tabs)-class');
   });
 
   it('respects initial activeTab prop', () => {
@@ -241,7 +241,7 @@ describe('Tabs Component', () => {
     cy.get('.tab-panel.visible').should('contain', 'Content 3');
   });
 
-  it('handles empty tabs array gracefully', () => {
+  it('handles empty (tabs) array gracefully', () => {
     cy.mount(
       <Tabs
         tabs={[]}
@@ -252,14 +252,14 @@ describe('Tabs Component', () => {
       </Tabs>
     );
 
-    // Check that no tabs are rendered
+    // Check that no (tabs) are rendered
     cy.get('.tab-item').should('not.exist');
     // But the container should still be there
     cy.get('.tabs-container').should('exist');
   });
 
   it('handles dynamic tab changes', () => {
-    // Create a component with dynamic tabs
+    // Create a component with dynamic (tabs)
     const DynamicTabs = () => {
       const [tabs, setTabs] = useState([
         { id: 'tab1', label: 'Tab 1' },
@@ -312,7 +312,7 @@ describe('Tabs Component', () => {
 
     cy.mount(<DynamicTabs />);
 
-    // Initially should have 2 tabs
+    // Initially should have 2 (tabs)
     cy.get('.tab-item').should('have.length', 2);
 
     // Add a tab

@@ -102,18 +102,34 @@ EOL
     fi
 }
 
-# Install bb.sh helper tool
+# Install bb.sh helper tool and bb.d directory
 install_dev_helper() {
     if [ -w /usr/local/bin ]; then
         green_echo "Installing dev helper tool..."
         chmod +x bb.sh
         cp bb.sh /usr/local/bin/bb
+        # Copy the bb.d directory
+        if [ -d "bb.d" ]; then
+            rm -rf /usr/local/bin/bb.d
+            cp -r bb.d /usr/local/bin/bb.d
+            green_echo "bb.d directory installed successfully."
+        else
+            red_echo "Warning: bb.d directory not found. Tool may not work correctly."
+        fi
     else
         red_echo "Permission denied to copy to /usr/local/bin!"
         read -p "Do you want to use sudo to install the dev helper tool? (y/n): " sudo_response
         if [ "$sudo_response" = "y" ]; then
             sudo chmod +x bb.sh
             sudo cp bb.sh /usr/local/bin/bb
+            # Copy the bb.d directory with sudo
+            if [ -d "bb.d" ]; then
+                sudo rm -rf /usr/local/bin/bb.d
+                sudo cp -r bb.d /usr/local/bin/bb.d
+                green_echo "bb.d directory installed successfully."
+            else
+                red_echo "Warning: bb.d directory not found. Tool may not work correctly."
+            fi
         else
             red_echo "Dev helper tool not installed due to lack of permissions."
         fi

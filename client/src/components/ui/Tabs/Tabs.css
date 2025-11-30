@@ -40,7 +40,7 @@
   background: var(--tabInactiveBackground, transparent);
   border-bottom: var(--tabInactiveBorderBottom, 2px solid transparent);
   transition: border-color 0.3s;
-  flex-shrink: 0; /* Prevent shrinking of tabs */
+  flex-shrink: 0; /* Prevent shrinking of (tabs) */
   scroll-snap-align: var(--scrollbarSnapAlign, center); /* Center each tab when scrolled */
 }
 

@@ -1,4 +1,4 @@
-FROM python:3.11-bullseye
+FROM python:3.13-bookworm
 
 WORKDIR /usr/src/backend
 
@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update \
     && apt-get -y install --no-install-recommends \
-       libpq-dev postgresql-client netcat gcc \
+       libpq-dev postgresql-client netcat-openbsd gcc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
