@@ -10,7 +10,8 @@ bb.d/
 ├── lib/                 # Shared utilities
 │   ├── colors.sh        # Color definitions & output helpers
 │   ├── docker.sh        # exec_backend, exec_db helpers
-│   └── formatters.sh    # format_duration, display_test_summary
+│   ├── formatters.sh    # format_duration, display_test_summary
+│   └── config.sh        # Configuration file parser (basebuild.toml)
 └── commands/            # Individual command modules
     ├── test.sh          # Test command
     ├── clean.sh         # Clean command
@@ -23,7 +24,8 @@ bb.d/
     ├── makemigrations.sh # Makemigrations command
     ├── migrate.sh       # Migrate command
     ├── manage.sh        # Manage command
-    └── app.sh           # App command
+    ├── app.sh           # App command
+    └── config.sh        # Config command
 ```
 
 ## Adding a New Command
@@ -60,6 +62,9 @@ All commands have access to:
 - **Docker helpers**: `exec_backend()`, `exec_db()`
 - **Formatters**: `format_duration()`, `display_test_summary()`
 - **Test state**: `django_exit_code`, `cypress_e2e_exit_code`, etc.
+- **Configuration**:
+  - `is_service_enabled(service)` - Check if a service is enabled
+  - `get_enabled_services()` - Get array of enabled service names
 
 ## Installation
 

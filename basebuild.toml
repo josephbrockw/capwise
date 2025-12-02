@@ -1,0 +1,17 @@
+# BaseBuild Project Configuration
+# Simple service toggles - enable/disable services to spin up with docker-compose
+
+[services]
+# Core services
+django = true               # Django (and db)
+react = true                # React frontend
+
+# Background task services
+celery_django = true        # Django-integrated Celery worker
+celery_worker = true        # Independent Python Celery worker
+broker = true               # Redis message broker
+flower = true               # Celery monitoring dashboard
+
+# Optional services
+docs = true                 # Docusaurus documentation
+mobile = true               # React Native app

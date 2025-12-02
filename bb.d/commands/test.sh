@@ -107,7 +107,7 @@ command_test_run() {
                 run_vitest_tests=false
                 ;;
             --open)
-                cypress_open_command="(cd client && npm run cypress:open)"
+                cypress_open_command="(cd react && npm run cypress:open)"
                 run_cypress_e2e_tests=false
                 run_cypress_component_tests=false
                 run_django_tests=false
@@ -144,7 +144,7 @@ command_test_run() {
     if [ "$run_cypress_e2e_tests" = true ]; then
         echo "Running Cypress E2E tests..."
         start_time=$SECONDS
-        if ! (cd client && npx cypress run --browser chrome --e2e); then
+        if ! (cd react && npx cypress run --browser chrome --e2e); then
             cypress_e2e_exit_code=1
         fi
         cypress_e2e_duration=$((SECONDS - start_time))
@@ -153,7 +153,7 @@ command_test_run() {
     if [ "$run_cypress_component_tests" = true ]; then
         echo "Running Cypress Component tests..."
         start_time=$SECONDS
-        if ! (cd client && npx cypress run --browser chrome --component); then
+        if ! (cd react && npx cypress run --browser chrome --component); then
             cypress_component_exit_code=1
         fi
         cypress_component_duration=$((SECONDS - start_time))
@@ -162,7 +162,7 @@ command_test_run() {
     if [ "$run_vitest_tests" = true ]; then
         echo "Running Vitest tests..."
         start_time=$SECONDS
-        if ! (cd client && npm run test:run); then
+        if ! (cd react && npm run test:run); then
             vitest_exit_code=1
         fi
         vitest_duration=$((SECONDS - start_time))

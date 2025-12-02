@@ -15,6 +15,7 @@ BB_D_DIR="${BB_DIR}/bb.d"
 source "${BB_D_DIR}/lib/colors.sh"
 source "${BB_D_DIR}/lib/docker.sh"
 source "${BB_D_DIR}/lib/formatters.sh"
+source "${BB_D_DIR}/lib/config.sh"
 
 # Function to display general usage
 usage() {
@@ -40,6 +41,8 @@ usage() {
     echo "  migrate        - Runs Django migrations inside the backend container."
     echo "  app            - Creates a new Django app with the given name."
     echo "  manage         - Execute Django management commands inside the backend container."
+    echo "  config         - View and manage project configuration (basebuild.toml)."
+    echo "  sync           - Sync changes from the BaseBuild template repository."
     echo "Use 'bb workflow_name --help' for more information on a specific workflow."
 }
 

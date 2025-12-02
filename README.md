@@ -1,18 +1,30 @@
 # BaseBuild
 
+A full-stack application template with Django, React, and Docker.
+
+## Quick Start
+
+```bash
+# Clone and setup
+git clone <repo-url>
+cd basebuild
+./dev_setup.sh
+
+# Start services
+bb clean
+
+# Run tests
+bb test
+```
+
 ## BB CLI Tool
 
-BaseBuild includes a powerful command-line tool (`bb`) that simplifies common development workflows. The tool features a modular architecture that makes it easy to maintain and extend.
+The `bb` command provides shortcuts for common development tasks.
 
-### Installation
-
-Run the development setup script to install the `bb` command globally:
-
+**Installation:**
 ```bash
 ./dev_setup.sh
 ```
-
-This installs both the `bb` executable and its modular framework (`bb.d/`) to `/usr/local/bin/`.
 
 ### Available Commands
 
@@ -30,176 +42,95 @@ This installs both the `bb` executable and its modular framework (`bb.d/`) to `/
 | `bb app` | Create a new Django app |
 | `bb dumpdata` | Export database data to YAML |
 | `bb loaddata` | Import database data from YAML |
+| `bb config` | View and manage project configuration |
+| `bb sync` | Sync changes from BaseBuild template |
 
-### Usage Examples
+**Common Commands:**
+```bash
+bb test              # Run all tests
+bb test -b           # Django tests only
+bb test -c           # Frontend tests only
+bb clean             # Rebuild containers
+bb migrate           # Run migrations
+bb shell             # Django shell
+bb manage <command>  # Any Django management command
+```
+
+For extending the CLI tool, see `bb.d/README.md`.
+
+## Creating a New Project
 
 ```bash
-# Run all tests
-bb test
-
-# Run only Django tests
-bb test -b
-
-# Run only client tests (Cypress + Vitest)
-bb test -c
-
-# Run Django tests with options
-bb test -b --keepdb --parallel
-
-# Open Cypress test runner
-bb test --open
-
-# Get help for any command
-bb test --help
-
-# Execute Django management commands
-bb manage createsuperuser
-bb manage collectstatic
-
-# Create a new Django app
-bb app myapp
-
-# Run migrations
-bb migrate
-
-# Rollback to a specific migration
-bb migrate --rollback myapp 0005_migration_name
+./start_new_project.sh <new-repo-name>
 ```
 
-### Modular Architecture
+Interactive prompts will configure:
+- **Frontend:** React, Django templates, or none
+- **Backend:** Django or none
+- **Workers:** Django worker, independent worker, or none
+- **Mobile:** React Native app (y/n)
+- **Docs:** Docusaurus (y/n)
 
-The `bb` tool uses a modular plugin-based architecture located in `bb.d/`:
-
-```
-bb.d/
-├── core.sh              # Core framework (command dispatch)
-├── lib/                 # Shared utilities
-│   ├── colors.sh        # Color definitions
-│   ├── docker.sh        # Docker helpers (exec_backend, exec_db)
-│   └── formatters.sh    # Output formatters
-└── commands/            # Individual command modules
-    ├── test.sh
-    ├── clean.sh
-    ├── shell.sh
-    └── ...
-```
-
-### Adding New Commands
-
-To add a new command:
-
-1. Create a new file in `bb.d/commands/` (e.g., `mycommand.sh`)
-2. Implement two required functions:
-   ```bash
-   command_mycommand_help() {
-       echo "Usage: bb mycommand [options]"
-       echo "Description: What your command does"
-   }
-
-   command_mycommand_run() {
-       # Your command implementation
-       exec_backend python manage.py mycommand "$@"
-   }
-   ```
-3. Reinstall: `./dev_setup.sh`
-4. The command is now available as `bb mycommand`
-
-All commands have access to shared utilities like `exec_backend()`, `exec_db()`, and color variables (`$GREEN`, `$RED`, etc.).
-
-For more details, see `bb.d/README.md`.
-
-## Process to Sync Changes from the Original Template
-
-1. **Make sure you're in your new project directory**:
-   Navigate to the directory of your new project that was created based on the template.
-
-2. **Fetch the latest changes from the original template repository (upstream)**:
-   Your new project should already have the original template repo set as an upstream remote (from the script we ran earlier). To fetch the changes from the original template repo, use the following command:
-   ```bash
-   git fetch upstream
-   ```
-
-3. **Review changes (optional)**:
-   If you want to see what changes have been made in the original repository, you can check the difference (diff) between your `main` branch and the `upstream/main` branch:
-   ```bash
-   git diff main..upstream/main
-   ```
-
-4. **Merge the changes from the upstream repository**:
-   Now, you can merge the changes from the original template repository into your new project’s `main` branch:
-   ```bash
-   git merge upstream/main
-   ```
-   If there are no conflicts, this will successfully merge the changes from the original template into your new project.
-
-5. **Resolve conflicts (if any)**:
-   If there are any conflicts between your changes and the changes in the original template, Git will flag those as conflicts, and you'll need to manually resolve them.
-
-   After resolving the conflicts, mark the conflicts as resolved:
-   ```bash
-   git add <resolved-file>
-   ```
-
-   Then, commit the resolved changes:
-   ```bash
-   git commit
-   ```
-
-6. **Push the changes to your repository**:
-   After merging the changes from the upstream repository, push the merged changes to your new repository (on GitHub):
-   ```bash
-   git push origin main
-   ```
-
-### Summary of Commands:
+**After creation:**
 ```bash
-# Fetch changes from the upstream (original template repo)
-git fetch upstream
-
-# Optionally, check the differences between your branch and upstream/main
-git diff main..upstream/main
-
-# Merge changes from upstream/main into your current branch
-git merge upstream/main
-
-# Resolve any conflicts if they arise and commit them
-
-# Push the merged changes to your remote repository
-git push origin main
+cd ../<new-repo-name>
+./dev_setup.sh
+bb clean
 ```
 
-### Explanation:
-- **`git fetch upstream`**: This command fetches the latest changes from the upstream repository (the original template) without modifying your working directory.
-- **`git merge upstream/main`**: This command merges the changes from `upstream/main` into your current branch (e.g., `main`).
-- **Push the changes**: After resolving conflicts and merging, push the changes to your GitHub repository to keep it up-to-date with the latest updates from the original template.
+## Configuration
 
-## Git Branch Strategy
-See the [Git Branch Documentation](dev_docs/git-branch-documentation.md].
+Edit `basebuild.toml` to enable/disable services:
+
+```toml
+[services]
+django = true        # Django + PostgreSQL
+react = true         # React
+celery_django = true # Background tasks
+broker = true        # Redis
+flower = true        # Task monitoring
+docs = false         # Docusaurus
+mobile = false       # React Native
+```
+
+**Commands:**
+```bash
+bb config            # View configuration
+bb config services   # List enabled services
+bb config validate   # Validate basebuild.toml
+```
+
+**Presets:**
+```bash
+cp config-presets/django-monolith.toml basebuild.toml
+cp config-presets/react-django-simple.toml basebuild.toml
+```
+
+## Syncing Template Updates
+
+```bash
+bb sync              # Fetch, merge, and push
+bb sync --no-push    # Fetch and merge only
+bb sync --dry-run    # Preview changes
+```
+
+## Project Structure
+
+```
+basebuild/
+├── django/          # Django backend
+├── react/           # React frontend
+├── celeryworker/    # Independent worker
+├── docs/            # Docusaurus docs
+├── app/             # React Native
+├── bb.d/            # CLI tool modules
+└── basebuild.toml   # Service configuration
+```
 
 ## Environment Variables
 
-### Backend
+Create `django/.env.secrets` and `react/.env.secrets` as needed.
 
-DEBUG
-SECRET_KEY
-DJANGO_ALLOWED_HOSTS
-SQL_ENGINE
-SQL_DATABASE
-SQL_USER
-SQL_PASSWORD
-SQL_HOST
-SQL_PORT
-DATABASE
-
-### DB
-
-POSTGRES_USER
-POSTGRES_PASSWORD
-POSTGRES_DB
-
-### Frontend
-
-CHOKIDAR_USEPOLLING
-REACT_APP_API_BASE_URL
-REACT_APP_NAME
-REACT_APP_URL
+**Django:** `DEBUG`, `SECRET_KEY`, `DATABASE_URL`
+**React:** `REACT_APP_API_BASE_URL`, `REACT_APP_NAME`
+**PostgreSQL:** `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`

@@ -2,8 +2,8 @@ __pycache__
 bb-dev
 *.sqlite3
 .idea
-backend/.env.secrets
-client/.env.secrets
+django/.env.secrets
+react/.env.secrets
 
 # pre-commit cache
 .pre-commit/

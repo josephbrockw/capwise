@@ -1,0 +1,12 @@
+# Django Monolith - Just Django backend, no workers or extras
+
+[services]
+django = true
+react = false
+nextjs = false
+celery_django = false
+celery_worker = false
+broker = false
+flower = false
+docs = false
+mobile = false

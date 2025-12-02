@@ -16,29 +16,29 @@ services:
       - 5432:5432
 
   backend:
-    build: backend
+    build: django
     container_name: backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./backend/:/usr/src/backend/
+      - ./django/:/usr/src/backend/
     ports:
       - 8009:8000
     env_file:
-      - backend/.env.dev
-      - backend/.env.secrets
+      - django/.env.dev
+      - django/.env.secrets
     depends_on:
       - db
       - broker
 
   celery:
-    build: backend
+    build: django
     container_name: django_worker
     command: celery -A worker worker --hostname=djangoworker --loglevel=info -Q default -E -B
     volumes:
-      - ./backend/:/usr/src/backend/
+      - ./django/:/usr/src/backend/
     env_file:
-      - backend/.env.dev
-      - backend/.env.secrets
+      - django/.env.dev
+      - django/.env.secrets
     depends_on:
       - db
       - broker
@@ -46,11 +46,11 @@ services:
 
   frontend:
     build:
-      context: ./client
+      context: ./react
       dockerfile: Dockerfile.dev
     container_name: frontend
     volumes:
-      - ./client:/app
+      - ./react:/app
       - /app/node_modules
     ports:
       - "3001:3001"
@@ -59,7 +59,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
     env_file:
-      - client/.env.dev
+      - react/.env.dev
     stdin_open: true
     depends_on:
       - backend

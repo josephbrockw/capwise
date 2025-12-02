@@ -1,0 +1,12 @@
+# React + Django Simple - Just frontend and backend
+
+[services]
+django = true
+react = true
+nextjs = false
+celery_django = false
+celery_worker = false
+broker = false
+flower = false
+docs = false
+mobile = false

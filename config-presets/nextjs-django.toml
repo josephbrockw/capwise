@@ -1,0 +1,12 @@
+# NextJS + Django - Frontend, backend, and Django worker (Future)
+
+[services]
+django = true
+react = false
+nextjs = true
+celery_django = true
+celery_worker = false
+broker = true
+flower = true
+docs = false
+mobile = false

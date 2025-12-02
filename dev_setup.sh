@@ -60,7 +60,7 @@ create_virtualenv() {
 install_python_dependencies() {
     green_echo "Installing Python dependencies..."
     if source bb-dev/bin/activate; then
-        pip install -r backend/requirements.txt
+        pip install -r django/requirements.txt
     else
         red_echo "Failed to activate the virtual environment. Exiting."
         exit 1
@@ -69,9 +69,9 @@ install_python_dependencies() {
 
 # Install Node.js dependencies for the frontend
 install_node_dependencies() {
-    if [ -d "client" ]; then
+    if [ -d "react" ]; then
         green_echo "Installing Node.js dependencies..."
-        npm install --prefix client
+        npm install --prefix react
     else
         red_echo "Client directory not found. Skipping Node.js dependencies."
     fi
@@ -88,17 +88,17 @@ setup_precommit() {
 
 # Create .env.secrets file if it doesn't exist
 create_env_secrets() {
-    if [ ! -f "backend/.env.secrets" ]; then
-        green_echo "Creating backend/.env.secrets file..."
-        cat <<EOL > backend/.env.secrets
+    if [ ! -f "django/.env.secrets" ]; then
+        green_echo "Creating django/.env.secrets file..."
+        cat <<EOL > django/.env.secrets
 POSTMARK_API_SERVICE_KEY=0
 DEFAULT_FROM_EMAIL=system@wilkinsonventures.io
 OWNER_EMAIL=joe@wilkinsonventures.io
 STRIPE_SECRET_KEY=0
 EOL
-        green_echo "backend/.env.secrets created."
+        green_echo "django/.env.secrets created."
     else
-        green_echo "backend/.env.secrets already exists."
+        green_echo "django/.env.secrets already exists."
     fi
 }
 
