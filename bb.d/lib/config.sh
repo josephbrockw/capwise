@@ -49,9 +49,9 @@ get_enabled_services() {
         services+=("frontend")
     fi
 
-    # NextJS frontend (future)
-    if is_service_enabled "nextjs"; then
-        services+=("frontend")
+    # Next.js frontend
+    if is_service_enabled "next"; then
+        services+=("next")
     fi
 
     # Broker
@@ -94,7 +94,7 @@ show_config() {
     echo -e "${GREEN}Core:${NC}"
     is_service_enabled "django" && echo "  ✓ Django" || echo "  ✗ Django"
     is_service_enabled "react" && echo "  ✓ React" || echo "  ✗ React"
-    is_service_enabled "nextjs" && echo "  ✓ NextJS" || echo "  ✗ NextJS"
+    is_service_enabled "next" && echo "  ✓ Next.js" || echo "  ✗ Next.js"
     echo ""
     echo -e "${GREEN}Workers:${NC}"
     is_service_enabled "celery_django" && echo "  ✓ Django Celery" || echo "  ✗ Django Celery"

@@ -46,7 +46,7 @@ repos:
     hooks:
       - id: eslint
         files: \.(js|jsx|ts|tsx|cy\.js|cy\.jsx)$
-        exclude: (^docs/|^app/)
+        exclude: (^docs/|^app/|^next/)
         additional_dependencies:
           - eslint@8.56.0
           - eslint-plugin-react@7.34.0
@@ -55,3 +55,12 @@ repos:
           - eslint-plugin-cypress@2.15.1
           - "@babel/core"
           - "@babel/eslint-parser"
+
+  - repo: local
+    hooks:
+      - id: nextjs-lint
+        name: Next.js ESLint
+        entry: bash -c 'cd next && npm run lint'
+        language: system
+        files: ^next/.*\.(js|jsx|ts|tsx)$
+        pass_filenames: false

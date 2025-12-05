@@ -4,6 +4,7 @@ bb-dev
 .idea
 django/.env.secrets
 react/.env.secrets
+next/.env.secrets
 
 # pre-commit cache
 .pre-commit/

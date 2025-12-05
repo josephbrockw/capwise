@@ -5,6 +5,7 @@
 # Core services
 django = true               # Django (and db)
 react = true                # React frontend
+next = true                 # Next.js frontend
 
 # Background task services
 celery_django = true        # Django-integrated Celery worker
