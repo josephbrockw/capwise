@@ -43,8 +43,38 @@ class AuthViewSet(StandardViewSet):
     def verify_email(self, request):
         """
         Handle email verification using the OTP token.
+        In DEBUG mode, supports test mode for E2E testing.
         """
+        from django.conf import settings
+
         token = request.data.get("token", None)
+        test_mode = request.data.get("test", False)
+
+        # Test mode only works in DEBUG mode
+        if test_mode and settings.DEBUG:
+            email = request.data.get("email")
+            if not email:
+                return StandardResponse(
+                    error="Email is required in test mode.",
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Verify with test code "000000" or any 6-digit code
+            if token and len(token) == 6:
+                try:
+                    user = get_user_model().objects.get(email=email)
+                    user.is_active = True
+                    user.save()
+                    return StandardResponse(
+                        message="Email verified successfully (test mode).",
+                        status=status.HTTP_200_OK,
+                    )
+                except get_user_model().DoesNotExist:
+                    return StandardResponse(
+                        error="User not found.", status=status.HTTP_400_BAD_REQUEST
+                    )
+
+        # Normal verification flow
         if not token:
             return StandardResponse(
                 error="The 'token' field is required to verify the email.",

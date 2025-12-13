@@ -7,6 +7,7 @@ django_exit_code=0
 cypress_e2e_exit_code=0
 cypress_component_exit_code=0
 vitest_exit_code=0
+playwright_exit_code=0
 
 # Function to format duration in MM:SS format
 format_duration() {
@@ -56,5 +57,18 @@ display_test_summary() {
             echo -e "${RED}✗ Vitest tests failed${NC} ($(format_duration $vitest_duration))"
             any_failures=true
         fi
+    fi
+
+    if [ "$run_playwright_tests" = true ]; then
+        if [ $playwright_exit_code -eq 0 ]; then
+            echo -e "${GREEN}✓ Playwright E2E tests passed${NC} ($(format_duration $playwright_duration))"
+        else
+            echo -e "${RED}✗ Playwright E2E tests failed${NC} ($(format_duration $playwright_duration))"
+            any_failures=true
+        fi
+    fi
+
+    if [ "$any_failures" = true ]; then
+        exit 1
     fi
 }
