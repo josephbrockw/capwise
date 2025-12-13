@@ -37,6 +37,8 @@ export interface LoginResponse {
 
 export interface VerifyEmailRequest {
   token: string;
+  email?: string;
+  test?: boolean;
 }
 
 export interface PasswordResetRequest {

@@ -10,9 +10,12 @@ import { Card, Button } from '@/components/ui';
 export default function VerifyPage() {
   const searchParams = useSearchParams();
   const tokenFromUrl = searchParams.get('token');
+  const emailFromUrl = searchParams.get('email');
+  // Only allow test mode in development environment
+  const testMode = config.isDevelopment && searchParams.get('testMode') === 'true';
 
   const [token, setToken] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(emailFromUrl || '');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -31,7 +34,17 @@ export default function VerifyPage() {
     setIsLoading(true);
 
     try {
-      await verifyEmail({ token: tokenToVerify });
+      const verifyData: { token: string; email?: string; test?: boolean } = {
+        token: tokenToVerify
+      };
+
+      // In test mode, include email and test flag for DEBUG mode verification
+      if (testMode && email) {
+        verifyData.email = email;
+        verifyData.test = true;
+      }
+
+      await verifyEmail(verifyData);
       setIsSuccess(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Verification failed');
@@ -39,7 +52,7 @@ export default function VerifyPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [token, email, testMode]);
 
   useEffect(() => {
     // If token is in URL, verify immediately
