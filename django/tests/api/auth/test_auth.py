@@ -39,6 +39,16 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(code, status.HTTP_200_OK)
         self.assertIn("access", data)
         self.assertIn("refresh", data)
+
+        # Check that user data is in the response body
+        self.assertIn("user", data)
+        self.assertEqual(data["user"]["id"], str(user.id))
+        self.assertEqual(data["user"]["username"], user.username)
+        self.assertEqual(data["user"]["email"], user.email)
+        self.assertEqual(data["user"]["first_name"], user.first_name)
+        self.assertEqual(data["user"]["last_name"], user.last_name)
+
+        # Check that user data is also embedded in JWT token payload
         header, payload, signature = data["access"].split(".")
         header = json.loads(base64.b64decode(header + "==").decode("utf-8"))
         self.assertEqual(header["alg"], "HS256")

@@ -162,7 +162,12 @@ class LogInSerializer(TokenObtainPairSerializer):
                 pass
 
         # Now proceed with standard validation
-        return super().validate(attrs)
+        data = super().validate(attrs)
+
+        # Add user data to response
+        data["user"] = RegisterUserSerializer(self.user).data
+
+        return data
 
     @classmethod
     def get_token(cls, user):

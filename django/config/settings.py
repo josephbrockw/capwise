@@ -229,9 +229,7 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "id",
 }
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3001",
-]
+CORS_ORIGIN_WHITELIST = ["http://localhost:3001", "http://localhost:3002"]
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 
