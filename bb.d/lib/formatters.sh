@@ -7,6 +7,7 @@ django_exit_code=0
 cypress_e2e_exit_code=0
 cypress_component_exit_code=0
 vitest_exit_code=0
+next_vitest_exit_code=0
 playwright_exit_code=0
 
 # Function to format duration in MM:SS format
@@ -52,9 +53,18 @@ display_test_summary() {
 
     if [ "$run_vitest_tests" = true ]; then
         if [ $vitest_exit_code -eq 0 ]; then
-            echo -e "${GREEN}✓ Vitest tests passed${NC} ($(format_duration $vitest_duration))"
+            echo -e "${GREEN}✓ Vitest tests (React) passed${NC} ($(format_duration $vitest_duration))"
         else
-            echo -e "${RED}✗ Vitest tests failed${NC} ($(format_duration $vitest_duration))"
+            echo -e "${RED}✗ Vitest tests (React) failed${NC} ($(format_duration $vitest_duration))"
+            any_failures=true
+        fi
+    fi
+
+    if [ "$run_next_vitest_tests" = true ]; then
+        if [ $next_vitest_exit_code -eq 0 ]; then
+            echo -e "${GREEN}✓ Vitest tests (Next.js) passed${NC} ($(format_duration $next_vitest_duration))"
+        else
+            echo -e "${RED}✗ Vitest tests (Next.js) failed${NC} ($(format_duration $next_vitest_duration))"
             any_failures=true
         fi
     fi

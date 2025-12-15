@@ -18,10 +18,10 @@ command_test_help() {
     echo "                    --debug-mode     Run tests in debug mode"
     echo "                    --noinput        Suppress all user prompts"
     echo "                    --collect-only   List tests without running them"
-    echo "  -c                Run all the client tests (E2E, component, and unit)."
-    echo "  --client-unit     Run only the Vitest tests."
-    echo "  --e2e             Run only Cypress end-to-end (E2E) tests."
-    echo "  --component       Run only Cypress component tests."
+    echo "  -c                Run all the client tests (E2E, component, and unit) for active frontends."
+    echo "  --client-unit     Run only unit tests for active frontends (Vitest for React, Next.js)."
+    echo "  --e2e             Run E2E tests for active frontends (Cypress for React, Playwright for Next.js)."
+    echo "  --component       Run only Cypress component tests (React only)."
     echo "  --playwright      Run only Playwright E2E tests (Next.js)."
     echo "  --open            Open the Cypress test runner."
 }
@@ -31,8 +31,13 @@ command_test_run() {
     run_cypress_e2e_tests=true
     run_cypress_component_tests=true
     run_vitest_tests=true
+    run_next_vitest_tests=true
     run_playwright_tests=true
     backend_args=""
+
+    # Detect active frontend services
+    react_active=$(get_service_status "react")
+    next_active=$(get_service_status "next")
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -40,6 +45,7 @@ command_test_run() {
                 run_cypress_e2e_tests=false
                 run_cypress_component_tests=false
                 run_vitest_tests=false
+                run_next_vitest_tests=false
                 run_playwright_tests=false
                 ;;
             -k)
@@ -93,24 +99,52 @@ command_test_run() {
                 ;;
             -c)
                 run_django_tests=false
-                run_playwright_tests=false
+                # Run client tests based on active services
+                if [ "$react_active" = "false" ]; then
+                    run_cypress_e2e_tests=false
+                    run_cypress_component_tests=false
+                    run_vitest_tests=false
+                fi
+                if [ "$next_active" = "false" ]; then
+                    run_next_vitest_tests=false
+                    run_playwright_tests=false
+                fi
                 ;;
             -v|--client-unit)
                 run_django_tests=false
                 run_cypress_e2e_tests=false
                 run_cypress_component_tests=false
                 run_playwright_tests=false
+                # Run unit tests based on active services
+                if [ "$react_active" = "true" ]; then
+                    run_vitest_tests=true
+                else
+                    run_vitest_tests=false
+                fi
+                if [ "$next_active" = "true" ]; then
+                    run_next_vitest_tests=true
+                else
+                    run_next_vitest_tests=false
+                fi
                 ;;
             --e2e)
                 run_django_tests=false
                 run_cypress_component_tests=false
                 run_vitest_tests=false
-                run_playwright_tests=false
+                run_next_vitest_tests=false
+                # Run E2E tests based on active services
+                if [ "$react_active" = "false" ]; then
+                    run_cypress_e2e_tests=false
+                fi
+                if [ "$next_active" = "false" ]; then
+                    run_playwright_tests=false
+                fi
                 ;;
             --component)
                 run_django_tests=false
                 run_cypress_e2e_tests=false
                 run_vitest_tests=false
+                run_next_vitest_tests=false
                 run_playwright_tests=false
                 ;;
             --playwright)
@@ -118,6 +152,7 @@ command_test_run() {
                 run_cypress_e2e_tests=false
                 run_cypress_component_tests=false
                 run_vitest_tests=false
+                run_next_vitest_tests=false
                 ;;
             --open)
                 cypress_open_command="(cd react && npm run cypress:open)"
@@ -125,6 +160,7 @@ command_test_run() {
                 run_cypress_component_tests=false
                 run_django_tests=false
                 run_vitest_tests=false
+                run_next_vitest_tests=false
                 run_playwright_tests=false
                 ;;
             *)
@@ -143,77 +179,79 @@ command_test_run() {
     fi
 
     # Run Django tests if enabled and service is active
-    if [ "$run_django_tests" = true ]; then
-        if is_service_enabled "django"; then
-            echo "Running Django tests..."
-            start_time=$SECONDS
-            if [ ! -z "$backend_args" ]; then
-                exec_backend python manage.py test $backend_args
-            else
-                exec_backend python manage.py test
-            fi
-            django_exit_code=$?
-            django_duration=$((SECONDS - start_time))
+    if should_run_for_service "django" "$run_django_tests"; then
+        echo "Running Django tests..."
+        start_time=$SECONDS
+        if [ ! -z "$backend_args" ]; then
+            exec_backend python manage.py test $backend_args
         else
-            echo "Skipping Django tests (service disabled in basebuild.toml)"
-            run_django_tests=false
+            exec_backend python manage.py test
         fi
+        django_exit_code=$?
+        django_duration=$((SECONDS - start_time))
+    elif [ "$run_django_tests" = true ]; then
+        echo "Skipping Django tests (service disabled in basebuild.toml)"
+        run_django_tests=false
     fi
 
-    if [ "$run_cypress_e2e_tests" = true ]; then
-        if is_service_enabled "react"; then
-            echo "Running Cypress E2E tests..."
-            start_time=$SECONDS
-            if ! (cd react && npx cypress run --browser chrome --e2e); then
-                cypress_e2e_exit_code=1
-            fi
-            cypress_e2e_duration=$((SECONDS - start_time))
-        else
-            echo "Skipping Cypress E2E tests (React service disabled in basebuild.toml)"
-            run_cypress_e2e_tests=false
+    if should_run_for_service "react" "$run_cypress_e2e_tests"; then
+        echo "Running Cypress E2E tests..."
+        start_time=$SECONDS
+        if ! (cd react && npx cypress run --browser chrome --e2e); then
+            cypress_e2e_exit_code=1
         fi
+        cypress_e2e_duration=$((SECONDS - start_time))
+    elif [ "$run_cypress_e2e_tests" = true ]; then
+        echo "Skipping Cypress E2E tests (React service disabled in basebuild.toml)"
+        run_cypress_e2e_tests=false
     fi
 
-    if [ "$run_cypress_component_tests" = true ]; then
-        if is_service_enabled "react"; then
-            echo "Running Cypress Component tests..."
-            start_time=$SECONDS
-            if ! (cd react && npx cypress run --browser chrome --component); then
-                cypress_component_exit_code=1
-            fi
-            cypress_component_duration=$((SECONDS - start_time))
-        else
-            echo "Skipping Cypress Component tests (React service disabled in basebuild.toml)"
-            run_cypress_component_tests=false
+    if should_run_for_service "react" "$run_cypress_component_tests"; then
+        echo "Running Cypress Component tests..."
+        start_time=$SECONDS
+        if ! (cd react && npx cypress run --browser chrome --component); then
+            cypress_component_exit_code=1
         fi
+        cypress_component_duration=$((SECONDS - start_time))
+    elif [ "$run_cypress_component_tests" = true ]; then
+        echo "Skipping Cypress Component tests (React service disabled in basebuild.toml)"
+        run_cypress_component_tests=false
     fi
 
-    if [ "$run_vitest_tests" = true ]; then
-        if is_service_enabled "react"; then
-            echo "Running Vitest tests..."
-            start_time=$SECONDS
-            if ! (cd react && npm run test:run); then
-                vitest_exit_code=1
-            fi
-            vitest_duration=$((SECONDS - start_time))
-        else
-            echo "Skipping Vitest tests (React service disabled in basebuild.toml)"
-            run_vitest_tests=false
+    if should_run_for_service "react" "$run_vitest_tests"; then
+        echo "Running Vitest tests (React)..."
+        start_time=$SECONDS
+        if ! (cd react && npm run test:run); then
+            vitest_exit_code=1
         fi
+        vitest_duration=$((SECONDS - start_time))
+    elif [ "$run_vitest_tests" = true ]; then
+        echo "Skipping Vitest tests (React service disabled in basebuild.toml)"
+        run_vitest_tests=false
     fi
 
-    if [ "$run_playwright_tests" = true ]; then
-        if is_service_enabled "next"; then
-            echo "Running Playwright E2E tests (Next.js)..."
-            start_time=$SECONDS
-            if ! (cd next && npm run test:e2e); then
-                playwright_exit_code=1
-            fi
-            playwright_duration=$((SECONDS - start_time))
-        else
-            echo "Skipping Playwright tests (Next.js service disabled in basebuild.toml)"
-            run_playwright_tests=false
+    if should_run_for_service "next" "$run_next_vitest_tests"; then
+        echo "Running Vitest tests (Next.js)..."
+        start_time=$SECONDS
+        if ! (cd next && npm test -- --run); then
+            next_vitest_exit_code=1
         fi
+        next_vitest_duration=$((SECONDS - start_time))
+    elif [ "$run_next_vitest_tests" = true ]; then
+        echo "Skipping Vitest tests (Next.js service disabled in basebuild.toml)"
+        run_next_vitest_tests=false
+    fi
+
+    if should_run_for_service "next" "$run_playwright_tests"; then
+        echo "Running Playwright E2E tests (Next.js)..."
+        start_time=$SECONDS
+        if ! (cd next && npm run test:e2e); then
+            playwright_exit_code=1
+        fi
+        playwright_duration=$((SECONDS - start_time))
+    elif [ "$run_playwright_tests" = true ]; then
+        echo "Skipping Playwright tests (Next.js service disabled in basebuild.toml)"
+        run_playwright_tests=false
     fi
 
     display_test_summary

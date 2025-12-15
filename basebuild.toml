@@ -4,7 +4,7 @@
 [services]
 # Core services
 django = true               # Django (and db)
-react = true                # React frontend
+react = false                # React frontend
 next = true                 # Next.js frontend
 
 # Background task services

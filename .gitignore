@@ -485,3 +485,6 @@ gradle-app.setting
 
 next/playwright-report/
 next/test-results/
+next/.vite
+react/.vite
+.windsurf

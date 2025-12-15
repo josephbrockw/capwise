@@ -4,7 +4,8 @@
 command_coverage_help() {
     echo "Coverage Help"
     echo "Usage: bb coverage [options]"
-    echo "Description: Runs a coverage report for the Django test suite"
+    echo "Description: Runs a coverage report for the Django test suite."
+    echo "Note: Requires Django service to be enabled in basebuild.toml."
     echo ""
     echo "Options:"
     echo "  --html   Generate HTML coverage report"
@@ -12,6 +13,13 @@ command_coverage_help() {
 }
 
 command_coverage_run() {
+    # Check if Django service is enabled
+    if ! is_service_enabled "django"; then
+        echo -e "${RED}Error: Django service is disabled in basebuild.toml${NC}"
+        echo "Enable it by setting: django = true"
+        exit 1
+    fi
+
     echo "Running coverage..."
 
     # Ensure coverage config exists

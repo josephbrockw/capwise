@@ -64,7 +64,7 @@ test.describe('Complete Authentication Flow', () => {
 
     // Check if we're on dashboard
     if (!currentUrl.includes('/dashboard')) {
-      const errorMessage = await page.getByText(/error|failed|invalid/i).textContent().catch(() => 'No error found');
+      await page.getByText(/error|failed|invalid/i).textContent().catch(() => 'No error found');
       throw new Error(`Login did not redirect to dashboard. Current URL: ${currentUrl}`);
     }
 

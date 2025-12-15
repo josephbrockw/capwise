@@ -5,6 +5,7 @@ command_migrate_help() {
     echo "Usage: bb migrate [--rollback app_name migration_name]"
     echo ""
     echo "Runs Django migrations inside the backend container."
+    echo "Note: Requires Django service to be enabled in basebuild.toml."
     echo ""
     echo "Options:"
     echo "  --rollback app_name migration_name   Roll back to a specific migration for the given app."
@@ -14,6 +15,13 @@ command_migrate_help() {
 }
 
 command_migrate_run() {
+    # Check if Django service is enabled
+    if ! is_service_enabled "django"; then
+        echo -e "${RED}Error: Django service is disabled in basebuild.toml${NC}"
+        echo "Enable it by setting: django = true"
+        exit 1
+    fi
+
     CMD="docker compose exec backend python manage.py migrate"
 
     if [[ "$1" == "--rollback" && -n "$2" && -n "$3" ]]; then

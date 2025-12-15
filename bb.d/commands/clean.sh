@@ -6,9 +6,17 @@ command_clean_help() {
     echo "Usage: bb clean [options]"
     echo "Description: Tears down the docker containers and builds new ones running"
     echo "in detached mode."
+    echo "Note: Requires Django service to be enabled in basebuild.toml."
 }
 
 command_clean_run() {
+    # Check if Django service is enabled
+    if ! is_service_enabled "django"; then
+        echo -e "${RED}Error: Django service is disabled in basebuild.toml${NC}"
+        echo "Enable it by setting: django = true"
+        exit 1
+    fi
+
     if [[ "$1" == "--data" ]]; then
         echo "Cleaning up data..."
         exec_backend python manage.py flush --noinput

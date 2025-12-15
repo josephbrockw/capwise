@@ -1,7 +1,9 @@
 #!/bin/bash
 # Configuration file parser for basebuild.toml
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Use current working directory as project root (where bb command is run from)
+# This allows the installed bb command to find basebuild.toml in the project
+PROJECT_ROOT="$(pwd)"
 CONFIG_FILE="${PROJECT_ROOT}/basebuild.toml"
 
 # Check if a service is enabled (returns true/false)
@@ -85,6 +87,31 @@ get_enabled_services() {
     fi
 
     echo "${services[@]}"
+}
+
+# Helper function to check if we should run an operation for a service
+# Usage: should_run_for_service "service_name" "$flag_variable"
+# Returns: 0 (true) if both the service is enabled and the flag is true
+should_run_for_service() {
+    local service="$1"
+    local flag="$2"
+
+    if [ "$flag" = true ] && is_service_enabled "$service"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Get active status for a service (returns "true" or "false" as string)
+# Usage: react_active=$(get_service_status "react")
+get_service_status() {
+    local service="$1"
+    if is_service_enabled "$service"; then
+        echo "true"
+    else
+        echo "false"
+    fi
 }
 
 # Display current configuration summary

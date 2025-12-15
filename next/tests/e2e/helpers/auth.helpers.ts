@@ -66,7 +66,7 @@ export async function loginUser(page: Page, email: string, password: string) {
   // Wait for redirect to dashboard (increased timeout for slower backends)
   try {
     await page.waitForURL('**/dashboard', { timeout: 15000 });
-  } catch (error) {
+  } catch {
     // Capture what's on the page if login fails
     const url = page.url();
     const errorMsg = await page.getByText(/error|failed|invalid/i).textContent().catch(() => null);

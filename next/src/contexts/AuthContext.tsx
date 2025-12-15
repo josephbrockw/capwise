@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // If no user data returned, token is likely invalid
             removeAuthToken();
           }
-        } catch (error) {
+        } catch {
           // If fetching user fails, remove invalid token
           console.log('Invalid auth token, clearing...');
           removeAuthToken();

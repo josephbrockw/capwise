@@ -1,8 +1,22 @@
+'use client';
+
+import { useState } from "react";
 import Link from "next/link";
 import config from "@/config";
 import { Card } from "@/components/ui";
+import { Input } from "@/components/bb/ui";
+import { Select } from "@/components/bb/ui";
+import { Button } from "@/components/bb/ui";
+import { Checkbox } from "@/components/bb/ui";
+import { Toggle } from "@/components/bb/ui";
+import { Label } from "@/components/bb/ui";
+
 
 export default function Home() {
+  const [selectValue, setSelectValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
+  const [toggleValue, setToggleValue] = useState<boolean>(false);
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-900 dark:to-black">
       {/* Navigation */}
@@ -99,6 +113,66 @@ export default function Home() {
             </Card>
           </div>
         </div>
+            <Card>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
+                <div>
+                  <Label htmlFor="select">Select Component</Label>
+                  <Select
+                    id="select"
+                    name="select"
+                    value={selectValue}
+                    options={[
+                      { label: 'Option 1', value: '1' },
+                      { label: 'Option 2', value: '2' },
+                      { label: 'Option 3', value: '3' }
+                    ]}
+                    onChange={(e) => {
+                      console.log('Selected:', e.target.value);
+                      setSelectValue(e.target.value);
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="input">Input Component</Label>
+                  <Input
+                    id="input"
+                    name="input"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="Type something..."
+                  />
+                </div>
+
+                <div>
+                  <Checkbox
+                    id="checkbox"
+                    name="checkbox"
+                    label="Checkbox Component"
+                    checked={checkboxValue}
+                    onChange={(e) => setCheckboxValue(e.target.checked)}
+                  />
+                </div>
+
+                <div>
+                  <Toggle
+                    id="toggle"
+                    name="toggle"
+                    label="Toggle Component"
+                    checked={toggleValue}
+                    onChange={(checked) => setToggleValue(checked)}
+                  />
+                </div>
+
+                <div>
+                  <Button variant="primary">Button Component</Button>
+                  <Button variant="secondary">Button Component</Button>
+                  <Button variant="primary" fullWidth>Button Component</Button>
+                  <Button variant="light">Button Component</Button>
+                  <Button variant="ghost">Button Component</Button>
+                </div>
+              </div>
+            </Card>
       </main>
     </div>
   );

@@ -78,6 +78,69 @@ cd ../<new-repo-name>
 bb clean
 ```
 
+## New Project Setup Checklist
+
+Complete these steps when starting a new project to customize your application:
+
+### Repo Setup
+
+- [ ] Run `./start_new_project.sh <new-repo-name>` to create a new project
+- [ ] Update the `basebuild.toml` file with your project name and other relevant information
+- [ ] Push the new project to your repository
+
+### Initial Setup
+- [ ] Run `./dev_setup.sh` to install dependencies and set up the BB CLI
+- [ ] Run `bb clean` to build and start all Docker containers
+- [ ] Verify all services are running with `docker ps`
+
+### Branding & Theming (Next.js/React Frontend)
+
+- [ ] **Generate brand color palette:**
+  1. Go to [UI Colors](https://uicolors.app/create) or [Tailwind Shades](https://www.tailwindshades.com/)
+  2. Enter your primary brand color (e.g., `#FF5733`)
+  3. Copy the generated color scale (50-950 shades)
+
+- [ ] **Update theme in [next/src/app/globals.css](cci:7://file:///Users/joewilkinson/Projects/basebuild/next/src/app/globals.css:0:0-0:0):**
+  1. Open the `@theme` section
+  2. Replace `--color-primary-*` values with your generated palette
+  3. Update `--color-secondary-*` if you have an accent color
+  4. Optionally adjust `--radius-*` values to change component roundness
+  5. Save and refresh your browser - all components update automatically!
+
+- [ ] **Test theme changes:**
+  - View all button variants: primary, secondary, light, ghost
+  - Check form components: inputs, selects, checkboxes, toggles
+  - Verify dark mode works correctly
+  - Test error/success states use the correct colors
+
+### Environment Configuration
+
+- [ ] Create `django/.env.secrets` with required Django environment variables
+- [ ] Create `react/.env.secrets` or `next/.env.local` for frontend API URLs
+- [ ] Update `basebuild.toml` to enable/disable services for your project
+- [ ] Set up database credentials in `.env.secrets`
+
+### Content & Configuration
+
+- [ ] Update application name in `basebuild.toml`
+- [ ] Replace logo and favicon in `public/` directory
+- [ ] Update meta tags and SEO information
+- [ ] Configure API endpoints and base URLs
+
+### Testing
+
+- [ ] Run `bb test` to ensure all tests pass
+- [ ] Run `bb test -b` for backend tests only
+- [ ] Run `bb test -c` for frontend tests only
+- [ ] Add project-specific tests as needed
+
+### Deployment Preparation
+
+- [ ] Review and update `.gitignore` for your specific needs
+- [ ] Set up CI/CD pipelines if needed
+- [ ] Configure production environment variables
+- [ ] Test production build locally
+
 ## Configuration
 
 Edit `basebuild.toml` to enable/disable services:

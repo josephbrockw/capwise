@@ -67,14 +67,58 @@ install_python_dependencies() {
     fi
 }
 
-# Install Node.js dependencies for the frontend
-install_node_dependencies() {
-    if [ -d "react" ]; then
-        green_echo "Installing Node.js dependencies..."
-        npm install --prefix react
-    else
-        red_echo "Client directory not found. Skipping Node.js dependencies."
+# Parse basebuild.toml to get active services
+get_active_services() {
+    if [ ! -f "basebuild.toml" ]; then
+        red_echo "basebuild.toml not found. Skipping service-specific setup."
+        return
     fi
+
+    # Extract service names where value is true
+    grep "= true" basebuild.toml | grep -v "^#" | awk -F' = ' '{print $1}' | awk '{print $1}'
+}
+
+# Install Node.js dependencies for active services
+install_node_dependencies() {
+    green_echo "Checking for active services in basebuild.toml..."
+    local active_services=$(get_active_services)
+
+    if [ -z "$active_services" ]; then
+        red_echo "No active services found in basebuild.toml"
+        return
+    fi
+
+    # Map service names to directories
+    while IFS= read -r service; do
+        case "$service" in
+            react)
+                if [ -d "react" ]; then
+                    green_echo "Installing dependencies for react..."
+                    npm install --prefix react
+                fi
+                ;;
+            next)
+                if [ -d "next" ]; then
+                    green_echo "Installing dependencies for next..."
+                    npm install --prefix next
+                    green_echo "Installing Playwright browsers for next..."
+                    npx --prefix next playwright install
+                fi
+                ;;
+            docs)
+                if [ -d "docs" ]; then
+                    green_echo "Installing dependencies for docs..."
+                    npm install --prefix docs
+                fi
+                ;;
+            mobile)
+                if [ -d "app" ]; then
+                    green_echo "Installing dependencies for mobile (app)..."
+                    npm install --prefix app
+                fi
+                ;;
+        esac
+    done <<< "$active_services"
 }
 
 # Install and set up pre-commit hooks

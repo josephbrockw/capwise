@@ -5,10 +5,18 @@ command_app_help() {
     echo "App Help:"
     echo "Usage: bb app [app_name]"
     echo "Description: Creates a new Django app with the given name."
+    echo "Note: Requires Django service to be enabled in basebuild.toml."
     echo "Example: bb app users"
 }
 
 command_app_run() {
+    # Check if Django service is enabled
+    if ! is_service_enabled "django"; then
+        echo -e "${RED}Error: Django service is disabled in basebuild.toml${NC}"
+        echo "Enable it by setting: django = true"
+        exit 1
+    fi
+
     if [ -z "$1" ]; then
         echo -e "${RED}Error: App name is required${NC}"
         command_app_help

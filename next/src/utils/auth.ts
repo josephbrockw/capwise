@@ -98,7 +98,7 @@ export async function register(email: string, password: string, name: string): P
 export async function logout() {
   try {
     await authAPI.logout();
-  } catch (error) {
+  } catch {
     // Continue with logout even if API call fails
     // Silent fail - token will be removed regardless
   } finally {
