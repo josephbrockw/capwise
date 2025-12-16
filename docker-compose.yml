@@ -26,9 +26,10 @@ services:
     env_file:
       - django/.env.dev
       - django/.env.secrets
+    environment:
+      - WAIT_FOR_BROKER=${WAIT_FOR_BROKER:-false}
     depends_on:
       - db
-      - broker
 
   celery:
     build: django
@@ -63,38 +64,6 @@ services:
     stdin_open: true
     depends_on:
       - backend
-
-  next:
-    build:
-      context: ./next
-      dockerfile: Dockerfile
-    container_name: next
-    develop:
-      watch:
-        - action: sync
-          path: ./src
-          target: /app/src
-          ignore:
-            - .next/
-            - node_modules/
-        - action: rebuild
-          path: ./package.json
-    volumes:
-      - ./next/src:/app/src
-      - ./next/tests:/app/tests
-      - ./next/public:/app/public
-    ports:
-      - "3002:3002"
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-      - WATCHPACK_POLLING=true
-    env_file:
-      - next/.env.dev
-    command: npm run dev -- -p 3002
-    depends_on:
-      - backend
-
 
   celery2:
     build: celeryworker

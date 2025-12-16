@@ -11,6 +11,17 @@ then
     echo "PostgreSQL started"
 fi
 
+if [ "$WAIT_FOR_BROKER" = "true" ]
+then
+    echo "Waiting for broker (Redis)..."
+
+    while ! nc -z broker 6379; do
+      sleep 0.1
+    done
+
+    echo "Broker started"
+fi
+
 python manage.py flush --no-input
 python manage.py migrate
 

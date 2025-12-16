@@ -10,11 +10,11 @@ red_echo() {
 install_homebrew_dependencies() {
     green_echo "Installing system dependencies with Homebrew..."
     # Update Homebrew and install dependencies
-    if brew list jpeg &>/dev/null && brew list zlib &>/dev/null && brew list freetype &>/dev/null; then
+    if brew list jpeg &>/dev/null && brew list zlib &>/dev/null && brew list freetype &>/dev/null && brew list tmux &>/dev/null; then
         green_echo "All required Homebrew dependencies are already installed."
     else
         brew update
-        brew install jpeg zlib freetype lcms2 webp tiff libimagequant postgresql
+        brew install jpeg zlib freetype lcms2 webp libtiff libimagequant postgresql tmux
     fi
 }
 

@@ -51,10 +51,7 @@ get_enabled_services() {
         services+=("frontend")
     fi
 
-    # Next.js frontend
-    if is_service_enabled "next"; then
-        services+=("next")
-    fi
+    # Note: Next.js runs outside Docker via tmux, not as a Docker service
 
     # Broker
     if is_service_enabled "broker"; then
