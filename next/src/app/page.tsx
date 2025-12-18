@@ -1,6 +1,3 @@
-'use client';
-
-import { useState } from "react";
 import Link from "next/link";
 import config from "@/config";
 import { Card } from "@/components/ui";
@@ -21,10 +18,6 @@ import {
 
 
 export default function Home() {
-  const [selectValue, setSelectValue] = useState<string>('');
-  const [inputValue, setInputValue] = useState<string>('');
-  const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
-  const [toggleValue, setToggleValue] = useState<boolean>(false);
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-900 dark:to-black">
       {/* Navigation */}
@@ -37,6 +30,12 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex items-center gap-4">
+              <Link
+                href="/component-library"
+                className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+              >
+                Components
+              </Link>
               <Link
                 href={config.navigation.login}
                 className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
