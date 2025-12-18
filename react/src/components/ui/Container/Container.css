@@ -1,0 +1,30 @@
+.bb-container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.bb-container--centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bb-container--sm {
+  max-width: 640px;
+}
+
+.bb-container--default {
+  max-width: 1024px;
+}
+
+.bb-container--lg {
+  max-width: 1280px;
+}
+
+.bb-container--xl {
+  max-width: 1536px;
+}
+
+.bb-container--full {
+  max-width: 100%;
+}

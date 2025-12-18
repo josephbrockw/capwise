@@ -4,12 +4,20 @@ import { useState } from "react";
 import Link from "next/link";
 import config from "@/config";
 import { Card } from "@/components/ui";
-import { Input } from "@/components/bb/ui";
-import { Select } from "@/components/bb/ui";
-import { Button } from "@/components/bb/ui";
-import { Checkbox } from "@/components/bb/ui";
-import { Toggle } from "@/components/bb/ui";
-import { Label } from "@/components/bb/ui";
+import {
+  Input,
+  Select,
+  Button,
+  Checkbox,
+  Toggle,
+  Label,
+} from "@/components/bb/ui";
+import {
+  Container,
+  Stack,
+  Flex,
+  Divider
+} from "@/components/bb/layout";
 
 
 export default function Home() {
@@ -114,8 +122,9 @@ export default function Home() {
           </div>
         </div>
             <Card>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' }}>
-                <div>
+              <h2 className="text-xl font-semibold mb-4 text-zinc-900 dark:text-white">Form Components</h2>
+              <Stack gap="md">
+                <Stack gap="xs">
                   <Label htmlFor="select">Select Component</Label>
                   <Select
                     id="select"
@@ -131,9 +140,9 @@ export default function Home() {
                       setSelectValue(e.target.value);
                     }}
                   />
-                </div>
+                </Stack>
 
-                <div>
+                <Stack gap="xs">
                   <Label htmlFor="input">Input Component</Label>
                   <Input
                     id="input"
@@ -142,34 +151,91 @@ export default function Home() {
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Type something..."
                   />
-                </div>
+                </Stack>
 
-                <div>
-                  <Checkbox
-                    id="checkbox"
-                    name="checkbox"
-                    label="Checkbox Component"
-                    checked={checkboxValue}
-                    onChange={(e) => setCheckboxValue(e.target.checked)}
-                  />
-                </div>
+                <Checkbox
+                  id="checkbox"
+                  name="checkbox"
+                  label="Checkbox Component"
+                  checked={checkboxValue}
+                  onChange={(e) => setCheckboxValue(e.target.checked)}
+                />
 
-                <div>
-                  <Toggle
-                    id="toggle"
-                    name="toggle"
-                    label="Toggle Component"
-                    checked={toggleValue}
-                    onChange={(checked) => setToggleValue(checked)}
-                  />
-                </div>
+                <Toggle
+                  id="toggle"
+                  name="toggle"
+                  label="Toggle Component"
+                  checked={toggleValue}
+                  onChange={(checked) => setToggleValue(checked)}
+                />
 
-                <div>
-                  <Button variant="primary">Button Component</Button>
-                  <Button variant="secondary">Button Component</Button>
-                  <Button variant="primary" fullWidth>Button Component</Button>
-                  <Button variant="light">Button Component</Button>
-                  <Button variant="ghost">Button Component</Button>
+                <Divider />
+
+                <Stack gap="sm">
+                  <Flex gap="sm" wrap>
+                    <Button variant="primary">Primary</Button>
+                    <Button variant="secondary">Secondary</Button>
+                    <Button variant="light">Light</Button>
+                    <Button variant="ghost">Ghost</Button>
+                  </Flex>
+                  <Button variant="primary" fullWidth>Full Width Button</Button>
+                </Stack>
+              </Stack>
+            </Card>
+
+            {/* Layout Components Demo */}
+            <Card className="mt-8">
+              <h2 className="text-xl font-semibold mb-4 text-zinc-900 dark:text-white">Layout Components</h2>
+
+              {/* Container Demo */}
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Container</h3>
+                <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-2">
+                  <Container size="sm" className="bg-primary-100 dark:bg-primary-900 rounded p-4">
+                    <p className="text-sm text-center">Container (size=&quot;sm&quot;)</p>
+                  </Container>
+                </div>
+              </div>
+
+              <Divider />
+
+              {/* Stack Demo */}
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Stack</h3>
+                <Stack gap="sm" className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-4">
+                  <div className="bg-primary-200 dark:bg-primary-800 rounded p-2 text-center text-sm">Stack Item 1</div>
+                  <div className="bg-primary-200 dark:bg-primary-800 rounded p-2 text-center text-sm">Stack Item 2</div>
+                  <div className="bg-primary-200 dark:bg-primary-800 rounded p-2 text-center text-sm">Stack Item 3</div>
+                </Stack>
+              </div>
+
+              <Divider />
+
+              {/* Flex Demo */}
+              <div className="mb-6">
+                <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Flex</h3>
+                <Flex gap="md" justify="between" className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-4">
+                  <div className="bg-primary-200 dark:bg-primary-800 rounded p-2 text-center text-sm">Flex Item 1</div>
+                  <div className="bg-primary-200 dark:bg-primary-800 rounded p-2 text-center text-sm">Flex Item 2</div>
+                  <div className="bg-primary-200 dark:bg-primary-800 rounded p-2 text-center text-sm">Flex Item 3</div>
+                </Flex>
+              </div>
+
+              <Divider />
+
+              {/* Divider Demo */}
+              <div>
+                <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Divider</h3>
+                <div className="bg-zinc-100 dark:bg-zinc-800 rounded-lg p-4">
+                  <p className="text-sm text-center mb-0">Content above divider</p>
+                  <Divider spacing="md" />
+                  <p className="text-sm text-center mt-0">Content below divider</p>
+
+                  <Flex gap="md" align="stretch" justify="center" className="h-16 mt-4">
+                    <span className="text-sm">Left</span>
+                    <Divider orientation="vertical" spacing="sm" />
+                    <span className="text-sm">Right</span>
+                  </Flex>
                 </div>
               </div>
             </Card>

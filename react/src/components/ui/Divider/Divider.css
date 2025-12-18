@@ -1,0 +1,43 @@
+.bb-divider {
+  border: none;
+  background-color: var(--lightGray, #e9ecef);
+}
+
+.bb-divider--horizontal {
+  width: 100%;
+  height: 1px;
+}
+
+.bb-divider--vertical {
+  width: 1px;
+  height: 100%;
+  align-self: stretch;
+}
+
+.bb-divider--spacing-none {
+  margin: 0;
+}
+
+.bb-divider--spacing-sm {
+  margin: 0.5rem 0;
+}
+
+.bb-divider--spacing-md {
+  margin: 1rem 0;
+}
+
+.bb-divider--spacing-lg {
+  margin: 1.5rem 0;
+}
+
+.bb-divider--vertical.bb-divider--spacing-sm {
+  margin: 0 0.5rem;
+}
+
+.bb-divider--vertical.bb-divider--spacing-md {
+  margin: 0 1rem;
+}
+
+.bb-divider--vertical.bb-divider--spacing-lg {
+  margin: 0 1.5rem;
+}
