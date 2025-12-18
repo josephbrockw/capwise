@@ -44,6 +44,12 @@ import {
   Avatar,
   AvatarGroup,
 } from "@/components/bb/data-display";
+import {
+  Tabs,
+  TabPanel,
+  Breadcrumbs,
+  Dropdown,
+} from "@/components/bb/navigation";
 
 const sampleTableData = [
   { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'active' },
@@ -87,6 +93,7 @@ export default function ComponentLibrary() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [alertVisible, setAlertVisible] = useState<boolean>(true);
+  const [activeTab, setActiveTab] = useState<string>('tab1');
 
   const form = useForm({
     initialValues: {
@@ -685,6 +692,115 @@ export default function ComponentLibrary() {
                   </AvatarGroup>
                 </div>
               </Stack>
+            </div>
+          </Card>
+
+          {/* Navigation Components Demo */}
+          <Card>
+            <h2 className="text-xl font-semibold mb-4 text-zinc-900 dark:text-white">Navigation Components</h2>
+
+            {/* Breadcrumbs Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Breadcrumbs</h3>
+              <Breadcrumbs
+                items={[
+                  { label: 'Products', href: '/products' },
+                  { label: 'Electronics', href: '/products/electronics' },
+                  { label: 'Phones' },
+                ]}
+              />
+            </div>
+
+            <Divider />
+
+            {/* Tabs Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Tabs</h3>
+              <Stack gap="md">
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Line variant (default):</p>
+                  <Tabs
+                    tabs={[
+                      { id: 'tab1', label: 'Overview' },
+                      { id: 'tab2', label: 'Features' },
+                      { id: 'tab3', label: 'Pricing', disabled: true },
+                    ]}
+                    activeTab={activeTab}
+                    onChange={setActiveTab}
+                  />
+                  <div className="p-4 border border-t-0 border-border rounded-b-lg">
+                    <TabPanel tabId="tab1" activeTab={activeTab}>
+                      <p className="text-text-secondary">Overview content goes here.</p>
+                    </TabPanel>
+                    <TabPanel tabId="tab2" activeTab={activeTab}>
+                      <p className="text-text-secondary">Features content goes here.</p>
+                    </TabPanel>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Pills variant:</p>
+                  <Tabs
+                    tabs={[
+                      { id: 'p1', label: 'All' },
+                      { id: 'p2', label: 'Active' },
+                      { id: 'p3', label: 'Archived' },
+                    ]}
+                    activeTab="p1"
+                    onChange={() => {}}
+                    variant="pills"
+                  />
+                </div>
+              </Stack>
+            </div>
+
+            <Divider />
+
+            {/* Dropdown Demo */}
+            <div>
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Dropdown</h3>
+              <Flex gap="md">
+                <Dropdown
+                  trigger={
+                    <Button variant="secondary">
+                      Actions
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Button>
+                  }
+                  items={[
+                    { id: 'edit', label: 'Edit', onClick: () => console.log('Edit') },
+                    { id: 'duplicate', label: 'Duplicate', onClick: () => console.log('Duplicate') },
+                    { id: 'divider1', label: '', divider: true },
+                    { id: 'archive', label: 'Archive', onClick: () => console.log('Archive') },
+                    { id: 'delete', label: 'Delete', onClick: () => console.log('Delete'), disabled: true },
+                  ]}
+                />
+                <Dropdown
+                  trigger={
+                    <Button variant="ghost">
+                      With Submenu
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </Button>
+                  }
+                  items={[
+                    { id: 'profile', label: 'Profile', href: '/profile' },
+                    {
+                      id: 'settings',
+                      label: 'Settings',
+                      items: [
+                        { id: 'account', label: 'Account', href: '/settings/account' },
+                        { id: 'privacy', label: 'Privacy', href: '/settings/privacy' },
+                      ],
+                    },
+                    { id: 'divider', label: '', divider: true },
+                    { id: 'logout', label: 'Logout', onClick: () => console.log('Logout') },
+                  ]}
+                  align="right"
+                />
+              </Flex>
             </div>
           </Card>
         </Stack>
