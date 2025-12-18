@@ -39,7 +39,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             disabled ? 'opacity-60 cursor-not-allowed' : ''
           }`}
         >
-          <div className="relative flex items-center">
+          <div className="relative flex items-center w-5 h-5">
             <input
               ref={ref}
               id={id}
@@ -48,13 +48,13 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               {...inputProps}
               onChange={onChange}
               disabled={disabled}
-              className="peer sr-only"
+              className="peer absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               aria-invalid={!!error}
               aria-describedby={error ? `${id}-error` : undefined}
               {...rest}
             />
             <div
-              className={`w-5 h-5 border-2 rounded transition-all ${
+              className={`absolute inset-0 w-5 h-5 border-2 rounded transition-all ${
                 error
                   ? 'border-danger-500'
                   : 'border-border'

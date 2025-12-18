@@ -155,6 +155,7 @@ export default function VerifyPage() {
                     id="token"
                     name="token"
                     type="text"
+                    label="Verification Code"
                     maxLength={6}
                     required
                     value={token}
