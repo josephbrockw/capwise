@@ -25,6 +25,30 @@ import {
   validators,
   type ValidationRule,
 } from "@/components/bb/forms";
+import {
+  ToastProvider,
+  useToast,
+  Alert,
+  Modal,
+  ConfirmDialog,
+  Spinner,
+  Skeleton,
+  CardSkeleton,
+  TableRowSkeleton,
+  AvatarSkeleton,
+} from "@/components/bb/feedback";
+
+function ToastDemo() {
+  const { success, error, warning, info } = useToast();
+  return (
+    <Flex gap="sm" wrap>
+      <Button variant="primary" onClick={() => success('Success toast!')}>Success</Button>
+      <Button variant="secondary" onClick={() => error('Error toast!')}>Error</Button>
+      <Button variant="light" onClick={() => warning('Warning toast!')}>Warning</Button>
+      <Button variant="ghost" onClick={() => info('Info toast!')}>Info</Button>
+    </Flex>
+  );
+}
 
 export default function ComponentLibrary() {
   const [selectValue, setSelectValue] = useState<string>('');
@@ -32,6 +56,9 @@ export default function ComponentLibrary() {
   const [checkboxValue, setCheckboxValue] = useState<boolean>(false);
   const [toggleValue, setToggleValue] = useState<boolean>(false);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+  const [alertVisible, setAlertVisible] = useState<boolean>(true);
 
   const form = useForm({
     initialValues: {
@@ -59,6 +86,7 @@ export default function ComponentLibrary() {
   });
 
   return (
+    <ToastProvider>
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-900 dark:to-black">
       {/* Navigation */}
       <nav className="border-b border-zinc-200 dark:border-zinc-800">
@@ -379,8 +407,149 @@ export default function ComponentLibrary() {
               </Stack>
             </form>
           </Card>
+
+          {/* Feedback Components Demo */}
+          <Card>
+            <h2 className="text-xl font-semibold mb-4 text-zinc-900 dark:text-white">Feedback Components</h2>
+
+            {/* Toast Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Toast</h3>
+              <p className="text-sm text-text-muted mb-3">Click buttons to trigger toast notifications.</p>
+              <ToastDemo />
+            </div>
+
+            <Divider />
+
+            {/* Alert Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Alert</h3>
+              <Stack gap="sm">
+                <Alert variant="info" title="Information">This is an informational alert.</Alert>
+                <Alert variant="success">Operation completed successfully!</Alert>
+                <Alert variant="warning" title="Warning">Please review before continuing.</Alert>
+                <Alert variant="error">Something went wrong. Please try again.</Alert>
+                {alertVisible && (
+                  <Alert variant="info" onClose={() => setAlertVisible(false)}>
+                    This alert can be dismissed. Click the X to close.
+                  </Alert>
+                )}
+                {!alertVisible && (
+                  <Button variant="ghost" onClick={() => setAlertVisible(true)}>Show dismissable alert</Button>
+                )}
+              </Stack>
+            </div>
+
+            <Divider />
+
+            {/* Modal Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Modal</h3>
+              <Button variant="primary" onClick={() => setShowModal(true)}>Open Modal</Button>
+              <Modal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                title="Example Modal"
+                footer={
+                  <Flex gap="sm" justify="end">
+                    <Button variant="ghost" onClick={() => setShowModal(false)}>Cancel</Button>
+                    <Button variant="primary" onClick={() => setShowModal(false)}>Save Changes</Button>
+                  </Flex>
+                }
+              >
+                <p className="text-text-secondary">This is the modal content. You can put any content here.</p>
+                <p className="text-text-muted text-sm mt-2">Press Escape or click outside to close.</p>
+              </Modal>
+            </div>
+
+            <Divider />
+
+            {/* ConfirmDialog Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Confirm Dialog</h3>
+              <Flex gap="sm">
+                <Button variant="secondary" onClick={() => setShowConfirm(true)}>Delete Item</Button>
+              </Flex>
+              <ConfirmDialog
+                open={showConfirm}
+                onCancel={() => setShowConfirm(false)}
+                onConfirm={() => {
+                  console.log('Confirmed!');
+                  setShowConfirm(false);
+                }}
+                title="Delete Item?"
+                message="Are you sure you want to delete this item? This action cannot be undone."
+                variant="danger"
+                confirmLabel="Delete"
+              />
+            </div>
+
+            <Divider />
+
+            {/* Spinner Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Spinner</h3>
+              <Flex gap="lg" align="end">
+                <Stack gap="xs" align="center">
+                  <Spinner size="sm" />
+                  <span className="text-xs text-text-muted">Small</span>
+                </Stack>
+                <Stack gap="xs" align="center">
+                  <Spinner size="md" />
+                  <span className="text-xs text-text-muted">Medium</span>
+                </Stack>
+                <Stack gap="xs" align="center">
+                  <Spinner size="lg" />
+                  <span className="text-xs text-text-muted">Large</span>
+                </Stack>
+                <Spinner size="md" label="Loading..." />
+              </Flex>
+            </div>
+
+            <Divider />
+
+            {/* Skeleton Demo */}
+            <div>
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Skeleton</h3>
+              <Stack gap="md">
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Basic variants:</p>
+                  <Stack gap="sm">
+                    <Skeleton variant="text" width="60%" />
+                    <Skeleton variant="text" width="80%" />
+                    <Skeleton variant="title" width="40%" />
+                    <Flex gap="sm">
+                      <Skeleton variant="circular" width={40} height={40} />
+                      <Skeleton variant="rectangular" width={100} height={40} />
+                      <Skeleton variant="button" />
+                    </Flex>
+                  </Stack>
+                </div>
+                <Divider />
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Preset skeletons:</p>
+                  <Flex gap="md" wrap>
+                    <div className="w-64">
+                      <p className="text-xs text-text-muted mb-1">CardSkeleton</p>
+                      <CardSkeleton />
+                    </div>
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">AvatarSkeleton</p>
+                      <AvatarSkeleton />
+                    </div>
+                    <div className="flex-1 min-w-[200px]">
+                      <p className="text-xs text-text-muted mb-1">TableRowSkeleton</p>
+                      <TableRowSkeleton />
+                      <TableRowSkeleton />
+                    </div>
+                  </Flex>
+                </div>
+              </Stack>
+            </div>
+          </Card>
         </Stack>
       </main>
     </div>
+    </ToastProvider>
   );
 }
