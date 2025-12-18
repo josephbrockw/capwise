@@ -129,7 +129,7 @@ export function Select<T = string | number>({
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
       {label && (
-        <label htmlFor={id} className="block mb-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+        <label htmlFor={id} className="block mb-2 text-sm font-medium text-text">
           {label}
           {required && (
             <span className="ml-1 text-danger-500 font-semibold" aria-label="required">
@@ -142,13 +142,12 @@ export function Select<T = string | number>({
       <div
         id={id}
         className={`relative w-full px-3 py-2 text-sm border rounded-input transition-all cursor-pointer
-          bg-white dark:bg-zinc-900
-          text-zinc-900 dark:text-zinc-100
+          bg-surface text-text
           ${error
             ? 'border-danger-500 focus:ring-2 focus:ring-danger-500/20'
-            : 'border-zinc-300 dark:border-zinc-600 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
+            : 'border-border focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
           }
-          ${disabled ? 'opacity-60 cursor-not-allowed bg-zinc-50 dark:bg-zinc-800' : 'hover:border-zinc-400 dark:hover:border-zinc-500'}
+          ${disabled ? 'opacity-60 cursor-not-allowed bg-surface-hover' : 'hover:border-border-hover'}
           focus:outline-none
           flex items-center justify-between gap-2`}
         onClick={handleToggleDropdown}
@@ -163,7 +162,7 @@ export function Select<T = string | number>({
         aria-required={required}
         data-testid={`${id}-select`}
       >
-        <span className={!selectedOption ? 'text-zinc-400 dark:text-zinc-500' : ''}>
+        <span className={!selectedOption ? 'text-text-muted' : ''}>
           {displayText}
         </span>
         <svg
@@ -185,7 +184,7 @@ export function Select<T = string | number>({
       {isOpen && (
         <div
           id={`${id}-listbox`}
-          className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-input shadow-lg max-h-60 overflow-auto"
+          className="absolute z-50 w-full mt-1 bg-surface border border-border rounded-input shadow-lg max-h-60 overflow-auto"
           role="listbox"
           aria-labelledby={label ? `${id}-label` : undefined}
         >
@@ -195,8 +194,8 @@ export function Select<T = string | number>({
                 key={`${id}-option-${index}`}
                 className={`px-3 py-2 text-sm cursor-pointer transition-colors
                   ${option.value === value
-                    ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
-                    : 'text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700'
+                    ? 'bg-primary-50 text-primary-700'
+                    : 'text-text hover:bg-surface-hover'
                   }`}
                 onClick={() => handleSelectOption(option)}
                 role="option"
@@ -207,7 +206,7 @@ export function Select<T = string | number>({
               </div>
             ))
           ) : (
-            <div className="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="px-3 py-2 text-sm text-text-muted">
               No options available
             </div>
           )}

@@ -43,7 +43,7 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
         } ${className}`}
       >
         {label && (
-          <span className="text-sm text-zinc-900 dark:text-zinc-100 flex-1">
+          <span className="text-sm text-text flex-1">
             {label}
           </span>
         )}
@@ -65,7 +65,7 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
             className={`absolute inset-0 rounded-full transition-colors ${
               checked
                 ? 'bg-primary-500'
-                : 'bg-zinc-300 dark:bg-zinc-600'
+                : 'bg-border'
             } peer-focus:ring-2 peer-focus:ring-primary-500/20`}
             aria-hidden="true"
           >

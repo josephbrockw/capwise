@@ -57,11 +57,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
               className={`w-5 h-5 border-2 rounded transition-all ${
                 error
                   ? 'border-danger-500'
-                  : 'border-zinc-300 dark:border-zinc-600'
+                  : 'border-border'
               } ${
                 disabled
-                  ? 'bg-zinc-100 dark:bg-zinc-800'
-                  : 'bg-white dark:bg-zinc-900'
+                  ? 'bg-surface-hover'
+                  : 'bg-surface'
               } peer-checked:bg-primary-500 peer-checked:border-primary-500 peer-focus:ring-2 peer-focus:ring-primary-500/20`}
               aria-hidden="true"
             >
@@ -77,7 +77,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             </div>
           </div>
           {label && (
-            <span className="text-sm text-zinc-900 dark:text-zinc-100">
+            <span className="text-sm text-text">
               {label}
             </span>
           )}

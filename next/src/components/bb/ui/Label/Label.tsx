@@ -24,7 +24,7 @@ export const Label = forwardRef<HTMLLabelElement, LabelProps>(
       <label
         ref={ref}
         htmlFor={htmlFor}
-        className={`block mb-2 text-sm font-medium text-zinc-900 dark:text-zinc-100 leading-6 ${
+        className={`block mb-2 text-sm font-medium text-text leading-6 ${
           disabled ? 'opacity-60 cursor-not-allowed' : ''
         } ${className}`}
         {...rest}
