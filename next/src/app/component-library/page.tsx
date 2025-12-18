@@ -37,6 +37,34 @@ import {
   TableRowSkeleton,
   AvatarSkeleton,
 } from "@/components/bb/feedback";
+import {
+  Table,
+  EmptyState,
+  Badge,
+  Avatar,
+  AvatarGroup,
+} from "@/components/bb/data-display";
+
+const sampleTableData = [
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'active' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Editor', status: 'active' },
+  { id: 3, name: 'Bob Wilson', email: 'bob@example.com', role: 'Viewer', status: 'inactive' },
+];
+
+const sampleTableColumns = [
+  { field: 'name', label: 'Name', sortable: true },
+  { field: 'email', label: 'Email', sortable: true },
+  { field: 'role', label: 'Role' },
+  {
+    field: 'status',
+    label: 'Status',
+    render: (value: unknown) => (
+      <Badge variant={value === 'active' ? 'success' : 'default'} size="sm" rounded dot>
+        {String(value)}
+      </Badge>
+    ),
+  },
+];
 
 function ToastDemo() {
   const { success, error, warning, info } = useToast();
@@ -543,6 +571,118 @@ export default function ComponentLibrary() {
                       <TableRowSkeleton />
                     </div>
                   </Flex>
+                </div>
+              </Stack>
+            </div>
+          </Card>
+
+          {/* Data Display Components Demo */}
+          <Card>
+            <h2 className="text-xl font-semibold mb-4 text-zinc-900 dark:text-white">Data Display Components</h2>
+
+            {/* Table Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Table</h3>
+              <p className="text-sm text-text-muted mb-3">Sortable table with custom cell rendering.</p>
+              <Table
+                columns={sampleTableColumns}
+                data={sampleTableData}
+                sortable
+                hover
+              />
+            </div>
+
+            <Divider />
+
+            {/* EmptyState Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Empty State</h3>
+              <div className="border border-border rounded-lg">
+                <EmptyState
+                  title="No results found"
+                  message="Try adjusting your search or filter to find what you're looking for."
+                  actionLabel="Clear filters"
+                  onAction={() => console.log('Clear filters clicked')}
+                />
+              </div>
+            </div>
+
+            <Divider />
+
+            {/* Badge Demo */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Badge</h3>
+              <Stack gap="sm">
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Variants:</p>
+                  <Flex gap="sm" wrap>
+                    <Badge variant="default">Default</Badge>
+                    <Badge variant="primary">Primary</Badge>
+                    <Badge variant="success">Success</Badge>
+                    <Badge variant="warning">Warning</Badge>
+                    <Badge variant="danger">Danger</Badge>
+                  </Flex>
+                </div>
+                <div>
+                  <p className="text-sm text-text-muted mb-2">With dot indicator:</p>
+                  <Flex gap="sm" wrap>
+                    <Badge variant="success" dot>Active</Badge>
+                    <Badge variant="danger" dot>Offline</Badge>
+                    <Badge variant="warning" dot>Pending</Badge>
+                  </Flex>
+                </div>
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Rounded (pill):</p>
+                  <Flex gap="sm" wrap>
+                    <Badge variant="primary" rounded>v1.0.0</Badge>
+                    <Badge variant="success" rounded>New</Badge>
+                    <Badge variant="default" rounded onRemove={() => console.log('Remove')}>Removable</Badge>
+                  </Flex>
+                </div>
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Sizes:</p>
+                  <Flex gap="sm" align="center" wrap>
+                    <Badge size="sm">Small</Badge>
+                    <Badge size="md">Medium</Badge>
+                    <Badge size="lg">Large</Badge>
+                  </Flex>
+                </div>
+              </Stack>
+            </div>
+
+            <Divider />
+
+            {/* Avatar Demo */}
+            <div>
+              <h3 className="text-lg font-medium mb-2 text-zinc-700 dark:text-zinc-300">Avatar</h3>
+              <Stack gap="sm">
+                <div>
+                  <p className="text-sm text-text-muted mb-2">With initials:</p>
+                  <Flex gap="sm" align="center">
+                    <Avatar name="John Doe" size="xs" />
+                    <Avatar name="Jane Smith" size="sm" />
+                    <Avatar name="Bob Wilson" size="md" />
+                    <Avatar name="Alice" size="lg" />
+                    <Avatar name="Charlie Brown" size="xl" />
+                  </Flex>
+                </div>
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Fallback (no name or image):</p>
+                  <Flex gap="sm" align="center">
+                    <Avatar size="md" />
+                    <Avatar size="md" rounded={false} />
+                  </Flex>
+                </div>
+                <div>
+                  <p className="text-sm text-text-muted mb-2">Avatar Group:</p>
+                  <AvatarGroup max={4}>
+                    <Avatar name="John Doe" />
+                    <Avatar name="Jane Smith" />
+                    <Avatar name="Bob Wilson" />
+                    <Avatar name="Alice Johnson" />
+                    <Avatar name="Charlie Brown" />
+                    <Avatar name="Diana Prince" />
+                  </AvatarGroup>
                 </div>
               </Stack>
             </div>
