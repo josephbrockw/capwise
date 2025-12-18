@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const variantClasses = variantStyles[variant];
 
-    const baseClasses = `inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-button font-semibold text-base transition-all duration-200 focus:outline-none focus:ring-[length:var(--focus-ring-width)] focus:ring-[color:var(--focus-ring-color)] focus:ring-offset-[length:var(--focus-ring-offset)] ${variantClasses} ${
+    const baseClasses = `inline-flex items-center justify-center gap-2 px-8 py-2.5 rounded-button font-semibold text-base transition-all duration-200 focus:outline-none focus:ring-[length:var(--focus-ring-width)] focus:ring-[color:var(--focus-ring-color)] focus:ring-offset-[length:var(--focus-ring-offset)] ${variantClasses} ${
       fullWidth ? 'w-full' : ''
     } ${
       disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'

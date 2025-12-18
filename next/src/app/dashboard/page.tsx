@@ -5,10 +5,20 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import config from '@/config';
+import { Card } from '@/components/ui';
+import { Button } from '@/components/bb/ui';
+import { Spinner } from '@/components/bb/feedback';
+import { Progress } from '@/components/bb/data-display';
 
 export default function DashboardPage() {
   const { user, isLoading, logout } = useAuth();
   const router = useRouter();
+
+  const displayName = user?.name ||
+    (user?.first_name && user?.last_name ? `${user.first_name} ${user.last_name}` : null) ||
+    user?.first_name ||
+    user?.email?.split('@')[0] ||
+    'User';
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -24,7 +34,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-900">
-        <div className="text-zinc-600 dark:text-zinc-400">Loading...</div>
+        <Spinner size="lg" label="Loading..." />
       </div>
     );
   }
@@ -66,14 +76,11 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-4">
               <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                {user.name}
+                {displayName}
               </div>
-              <button
-                onClick={handleLogout}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
-              >
+              <Button onClick={handleLogout} variant="primary">
                 Sign out
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -84,7 +91,7 @@ export default function DashboardPage() {
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
-            Welcome back, {user.name}!
+            Welcome back, {displayName}!
           </h1>
           <p className="mt-2 text-zinc-600 dark:text-zinc-400">
             Here&apos;s what&apos;s happening with your projects today.
@@ -93,7 +100,7 @@ export default function DashboardPage() {
 
         {/* Stats Grid */}
         <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <Card>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Total Projects</p>
@@ -106,9 +113,9 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="mt-2 text-sm text-green-600 dark:text-green-400">+2 from last month</p>
-          </div>
+          </Card>
 
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <Card>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Active Tasks</p>
@@ -121,9 +128,9 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="mt-2 text-sm text-yellow-600 dark:text-yellow-400">5 due this week</p>
-          </div>
+          </Card>
 
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <Card>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Completed</p>
@@ -136,9 +143,9 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="mt-2 text-sm text-green-600 dark:text-green-400">+12 this week</p>
-          </div>
+          </Card>
 
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <Card>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">Team Members</p>
@@ -151,12 +158,12 @@ export default function DashboardPage() {
               </div>
             </div>
             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">3 online now</p>
-          </div>
+          </Card>
         </div>
 
         {/* Recent Activity */}
         <div className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <Card>
             <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-white">Recent Projects</h2>
             <div className="space-y-4">
               {[
@@ -170,20 +177,15 @@ export default function DashboardPage() {
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">{project.status}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="h-2 w-24 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-                      <div
-                        className="h-full bg-zinc-900 dark:bg-white"
-                        style={{ width: `${project.progress}%` }}
-                      />
-                    </div>
+                    <Progress value={project.progress} size="sm" className="w-24" />
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">{project.progress}%</span>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
 
-          <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+          <Card>
             <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-white">Recent Activity</h2>
             <div className="space-y-4">
               {[
@@ -201,7 +203,7 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
         </div>
       </main>
     </div>

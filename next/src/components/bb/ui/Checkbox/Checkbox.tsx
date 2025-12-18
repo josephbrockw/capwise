@@ -1,11 +1,11 @@
 'use client';
 
-import { forwardRef, InputHTMLAttributes, ChangeEvent } from 'react';
+import { forwardRef, InputHTMLAttributes, ChangeEvent, ReactNode } from 'react';
 
 export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
   id: string;
   name: string;
-  label?: string;
+  label?: ReactNode;
   checked?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   error?: string;

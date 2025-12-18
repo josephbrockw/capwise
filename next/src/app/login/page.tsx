@@ -7,6 +7,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { login as loginUser } from '@/utils/auth';
 import config from '@/config';
 import { Button, Input, Card } from '@/components/ui';
+import { Stack, Flex } from '@/components/bb/layout';
+import { Alert } from '@/components/bb/feedback';
+import { Checkbox } from '@/components/bb/ui';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -50,11 +53,10 @@ export default function LoginPage() {
 
         {/* Login Form */}
         <Card>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit}>
+            <Stack gap="md">
             {error && (
-              <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
-                {error}
-              </div>
+              <Alert variant="error">{error}</Alert>
             )}
 
             <Input
@@ -77,34 +79,29 @@ export default function LoginPage() {
               placeholder="••••••••"
             />
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-zinc-900 dark:text-white">
-                  Remember me
-                </label>
-              </div>
-
+            <Flex justify="between" align="center">
+              <Checkbox
+                id="remember-me"
+                name="remember-me"
+                label="Remember me"
+              />
               <Link
                 href="#"
                 className="text-sm font-medium text-zinc-900 hover:text-zinc-700 dark:text-white dark:hover:text-zinc-300"
               >
                 Forgot password?
               </Link>
-            </div>
+            </Flex>
 
             <Button
               type="submit"
               disabled={isLoading}
               variant="primary"
-              className="w-full"
+              fullWidth
             >
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
+            </Stack>
           </form>
 
           <div className="mt-6 text-center">
@@ -121,11 +118,9 @@ export default function LoginPage() {
         </Card>
 
         {/* Demo Info */}
-        <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800">
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            <strong>Demo mode:</strong> Use any email and password (min 6 characters) to login
-          </p>
-        </div>
+        <Alert variant="info" className="mt-4">
+          <strong>Demo mode:</strong> Use any email and password (min 6 characters) to login
+        </Alert>
       </div>
     </div>
   );

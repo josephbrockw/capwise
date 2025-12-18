@@ -9,3 +9,6 @@ export type { TabsProps, TabPanelProps, Tab } from './Tabs/Tabs';
 
 export { Dropdown } from './Dropdown/Dropdown';
 export type { DropdownProps, DropdownItem } from './Dropdown/Dropdown';
+
+export { Navbar } from './Navbar/Navbar';
+export type { NavbarProps } from './Navbar/Navbar';

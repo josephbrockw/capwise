@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { register as registerUser } from '@/utils/auth';
 import config from '@/config';
 import { Button, Input, Card } from '@/components/ui';
+import { Stack } from '@/components/bb/layout';
+import { Alert } from '@/components/bb/feedback';
+import { Checkbox } from '@/components/bb/ui';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -93,11 +96,10 @@ export default function RegisterPage() {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit}>
+              <Stack gap="md">
               {error && (
-                <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
-                  {error}
-                </div>
+                <Alert variant="error">{error}</Alert>
               )}
 
             <Input
@@ -145,33 +147,33 @@ export default function RegisterPage() {
               placeholder="••••••••"
             />
 
-            <div className="flex items-start">
-              <input
-                id="terms"
-                type="checkbox"
-                required
-                className="mt-1 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800"
-              />
-              <label htmlFor="terms" className="ml-2 block text-sm text-zinc-900 dark:text-white">
-                I agree to the{' '}
-                <Link href="#" className="font-medium hover:text-zinc-700 dark:hover:text-zinc-300">
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link href="#" className="font-medium hover:text-zinc-700 dark:hover:text-zinc-300">
-                  Privacy Policy
-                </Link>
-              </label>
-            </div>
+            <Checkbox
+              id="terms"
+              name="terms"
+              required
+              label={
+                <>
+                  I agree to the{' '}
+                  <Link href="#" className="font-medium hover:text-zinc-700 dark:hover:text-zinc-300">
+                    Terms of Service
+                  </Link>{' '}
+                  and{' '}
+                  <Link href="#" className="font-medium hover:text-zinc-700 dark:hover:text-zinc-300">
+                    Privacy Policy
+                  </Link>
+                </>
+              }
+            />
 
             <Button
               type="submit"
               disabled={isLoading}
               variant="primary"
-              className="w-full"
+              fullWidth
             >
               {isLoading ? 'Creating account...' : 'Create account'}
             </Button>
+              </Stack>
           </form>
           )}
 
@@ -191,11 +193,9 @@ export default function RegisterPage() {
         </Card>
 
         {/* Demo Info */}
-        <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800">
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            <strong>Demo mode:</strong> Registration creates a mock account for testing
-          </p>
-        </div>
+        <Alert variant="info" className="mt-4">
+          <strong>Demo mode:</strong> Registration creates a mock account for testing
+        </Alert>
       </div>
     </div>
   );

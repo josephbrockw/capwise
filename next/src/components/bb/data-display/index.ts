@@ -9,3 +9,6 @@ export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge/Badge';
 
 export { Avatar, AvatarGroup } from './Avatar/Avatar';
 export type { AvatarProps, AvatarGroupProps, AvatarSize } from './Avatar/Avatar';
+
+export { Progress } from './Progress/Progress';
+export type { ProgressProps } from './Progress/Progress';

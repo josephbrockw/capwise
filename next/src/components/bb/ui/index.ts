@@ -16,3 +16,6 @@ export type { ToggleProps } from '@/components/bb/ui/Toggle/Toggle';
 
 export { Label } from '@/components/bb/ui/Label/Label';
 export type { LabelProps } from '@/components/bb/ui/Label/Label';
+
+export { LinkButton } from '@/components/bb/ui/LinkButton/LinkButton';
+export type { LinkButtonProps } from '@/components/bb/ui/LinkButton/LinkButton';

@@ -6,6 +6,9 @@ import Link from 'next/link';
 import config from '@/config';
 import { verifyEmail, resendVerificationEmail } from '@/api/auth';
 import { Card, Button } from '@/components/ui';
+import { Stack } from '@/components/bb/layout';
+import { Alert } from '@/components/bb/feedback';
+import { Input } from '@/components/bb/ui';
 
 export default function VerifyPage() {
   const searchParams = useSearchParams();
@@ -141,25 +144,22 @@ export default function VerifyPage() {
             </div>
           ) : (
             <>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit}>
+                <Stack gap="md">
                 {error && (
-                  <div className="rounded-lg bg-red-50 p-4 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-400">
-                    {error}
-                  </div>
+                  <Alert variant="error">{error}</Alert>
                 )}
 
                 <div>
-                  <label htmlFor="token" className="block text-sm font-medium text-zinc-900 dark:text-white">
-                    Verification Code
-                  </label>
-                  <input
+                  <Input
                     id="token"
+                    name="token"
                     type="text"
                     maxLength={6}
                     required
                     value={token}
                     onChange={(e) => setToken(e.target.value.toUpperCase())}
-                    className="input-field mt-1 w-full text-center text-2xl tracking-widest"
+                    className="text-center text-2xl tracking-widest"
                     placeholder="X X X X X X"
                     disabled={isLoading}
                   />
@@ -172,10 +172,11 @@ export default function VerifyPage() {
                   type="submit"
                   disabled={isLoading || token.length !== 6}
                   variant="primary"
-                  className="w-full"
+                  fullWidth
                 >
                   {isLoading ? 'Verifying...' : 'Verify Email'}
                 </Button>
+                </Stack>
               </form>
 
               {showResendForm && (
@@ -183,30 +184,27 @@ export default function VerifyPage() {
                   <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
                     Didn&apos;t receive the code?
                   </p>
-                  <form onSubmit={handleResend} className="space-y-4">
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-zinc-900 dark:text-white">
-                        Email address
-                      </label>
-                      <input
-                        id="email"
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="input-field mt-1 w-full"
-                        placeholder="you@example.com"
-                        disabled={isResending}
-                      />
-                    </div>
+                  <form onSubmit={handleResend}>
+                    <Stack gap="sm">
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      disabled={isResending}
+                    />
                     <Button
                       type="submit"
                       disabled={isResending}
                       variant="secondary"
-                      className="w-full"
+                      fullWidth
                     >
                       {isResending ? 'Sending...' : 'Resend Verification Email'}
                     </Button>
+                    </Stack>
                   </form>
                 </div>
               )}

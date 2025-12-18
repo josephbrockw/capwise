@@ -1,45 +1,40 @@
 import Link from "next/link";
 import config from "@/config";
 import { Card } from "@/components/ui";
+import { Container } from "@/components/bb/layout";
+import { Navbar } from "@/components/bb/navigation";
+import { LinkButton } from "@/components/bb/ui";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-900 dark:to-black">
-      {/* Navigation */}
-      <nav className="border-b border-zinc-200 dark:border-zinc-800">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center">
-              <Link href={config.navigation.home} className="text-xl font-bold text-zinc-900 dark:text-white">
-                {config.appName}
-              </Link>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/component-library"
-                className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-              >
-                Components
-              </Link>
-              <Link
-                href={config.navigation.login}
-                className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
-              >
-                Log in
-              </Link>
-              <Link
-                href={config.navigation.register}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
-              >
-                Sign up
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        logo={config.appName}
+        logoHref={config.navigation.home}
+        actions={
+          <>
+            <Link
+              href="/component-library"
+              className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+            >
+              Components
+            </Link>
+            <Link
+              href={config.navigation.login}
+              className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+            >
+              Log in
+            </Link>
+            <LinkButton href={config.navigation.register} size="sm">
+              Sign up
+            </LinkButton>
+          </>
+        }
+      />
 
       {/* Hero Section */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <main>
+        <Container>
         <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center text-center">
           <div className="space-y-8">
             <h1 className="text-5xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-6xl md:text-7xl">
@@ -51,18 +46,12 @@ export default function Home() {
               Start creating, collaborating, and shipping faster than ever before.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Link
-                href={config.navigation.register}
-                className="rounded-lg bg-zinc-900 px-8 py-3 text-base font-semibold text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100"
-              >
+              <LinkButton href={config.navigation.register} size="lg">
                 Get Started
-              </Link>
-              <Link
-                href={config.navigation.login}
-                className="rounded-lg border border-zinc-300 px-8 py-3 text-base font-semibold text-zinc-900 hover:bg-zinc-50 dark:border-zinc-700 dark:text-white dark:hover:bg-zinc-800"
-              >
+              </LinkButton>
+              <LinkButton href={config.navigation.login} variant="secondary" size="lg">
                 Sign In
-              </Link>
+              </LinkButton>
             </div>
           </div>
 
@@ -105,6 +94,7 @@ export default function Home() {
             </Card>
           </div>
         </div>
+        </Container>
       </main>
     </div>
   );
