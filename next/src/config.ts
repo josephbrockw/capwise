@@ -29,7 +29,7 @@ const config = {
         tokenRefresh: '/api/auth/token/refresh',
       },
       user: {
-        info: '/api/user/me',
+        info: '/api/users/me',
       },
     },
   },

@@ -1,18 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import config from '@/config';
 import { Card } from '@/components/ui';
-import { Button } from '@/components/bb/ui';
-import { Spinner } from '@/components/bb/feedback';
 import { Progress } from '@/components/bb/data-display';
+import { Container } from '@/components/bb/layout';
 
 export default function DashboardPage() {
-  const { user, isLoading, logout } = useAuth();
-  const router = useRouter();
+  const { user } = useAuth();
 
   const displayName = user?.name ||
     (user?.first_name && user?.last_name ? `${user.first_name} ${user.last_name}` : null) ||
@@ -20,74 +14,9 @@ export default function DashboardPage() {
     user?.email?.split('@')[0] ||
     'User';
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push(config.navigation.login);
-    }
-  }, [user, isLoading, router]);
-
-  const handleLogout = async () => {
-    await logout();
-    router.push(config.navigation.home);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-900">
-        <Spinner size="lg" label="Loading..." />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return null;
-  }
-
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
-      {/* Navigation */}
-      <nav className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center">
-              <Link href={config.navigation.dashboard} className="text-xl font-bold text-zinc-900 dark:text-white">
-                {config.appName}
-              </Link>
-              <div className="ml-10 flex items-center space-x-4">
-                <Link
-                  href={config.navigation.dashboard}
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-900 hover:bg-zinc-100 dark:text-white dark:hover:bg-zinc-800"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/dashboard/projects"
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
-                >
-                  Projects
-                </Link>
-                <Link
-                  href="/dashboard/settings"
-                  className="rounded-lg px-3 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
-                >
-                  Settings
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                {displayName}
-              </div>
-              <Button onClick={handleLogout} variant="primary">
-                Sign out
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <main className="py-8">
+      <Container>
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">
@@ -205,7 +134,7 @@ export default function DashboardPage() {
             </div>
           </Card>
         </div>
-      </main>
-    </div>
+      </Container>
+    </main>
   );
 }

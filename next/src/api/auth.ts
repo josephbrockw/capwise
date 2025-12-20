@@ -107,6 +107,13 @@ export async function getCurrentUser(): Promise<User> {
 }
 
 /**
+ * Update current user info (requires authentication)
+ */
+export async function updateUser(data: Partial<Pick<User, 'first_name' | 'last_name'>>): Promise<User> {
+  return apiClient.patch<User>(config.api.routes.user.info, data, true);
+}
+
+/**
  * Refresh access token
  */
 export async function refreshToken(refreshToken: string): Promise<{ access: string }> {

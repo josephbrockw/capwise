@@ -9,6 +9,7 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   size?: AvatarSize;
   rounded?: boolean;
   fallback?: ReactNode;
+  color?: string;
 }
 
 const sizeClasses: Record<AvatarSize, string> = {
@@ -30,6 +31,7 @@ function getInitials(name: string): string {
 function getColorFromName(name: string): string {
   const colors = [
     'bg-primary-500',
+    'bg-secondary-500',
     'bg-success-500',
     'bg-warning-500',
     'bg-danger-500',
@@ -54,6 +56,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       size = 'md',
       rounded = true,
       fallback,
+      color,
       className = '',
       ...props
     },
@@ -70,7 +73,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           inline-flex items-center justify-center flex-shrink-0
           ${sizeClasses[size]}
           ${rounded ? 'rounded-full' : 'rounded-lg'}
-          ${showInitials ? getColorFromName(name!) : showFallback ? 'bg-zinc-200 dark:bg-zinc-700' : ''}
+          ${showInitials ? (color || getColorFromName(name!)) : showFallback ? 'bg-zinc-200 dark:bg-zinc-700' : ''}
           ${className}
         `}
         {...props}
