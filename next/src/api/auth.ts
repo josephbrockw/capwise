@@ -114,6 +114,17 @@ export async function updateUser(data: Partial<Pick<User, 'first_name' | 'last_n
 }
 
 /**
+ * Change password for current user (requires authentication)
+ */
+export async function changePassword(data: {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+}): Promise<void> {
+  return apiClient.post<void>(config.api.routes.user.changePassword, data, true);
+}
+
+/**
  * Refresh access token
  */
 export async function refreshToken(refreshToken: string): Promise<{ access: string }> {

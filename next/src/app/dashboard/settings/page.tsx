@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { updateUser } from '@/api/auth';
+import { updateUser, changePassword } from '@/api/auth';
 import { Card } from '@/components/ui';
 import { Input, Button } from '@/components/bb/ui';
 import { Container, Stack, Flex, Divider } from '@/components/bb/layout';
@@ -62,12 +62,15 @@ export default function SettingsPage() {
     }
 
     try {
-      // TODO: Implement API call to change password
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await changePassword({
+        current_password: passwordForm.currentPassword,
+        new_password: passwordForm.newPassword,
+        confirm_password: passwordForm.confirmPassword,
+      });
       setSuccess('Password changed successfully');
       setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch {
-      setError('Failed to change password');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to change password');
     } finally {
       setSaving(false);
     }

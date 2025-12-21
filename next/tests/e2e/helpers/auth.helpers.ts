@@ -75,14 +75,45 @@ export async function loginUser(page: Page, email: string, password: string) {
 }
 
 /**
- * Logout a user via the UI
+ * Logout a user via the UI (uses avatar dropdown)
  */
 export async function logoutUser(page: Page) {
-  // Click logout button (adjust selector based on your UI)
-  await page.getByRole('button', { name: /sign out|log out/i }).click();
+  const avatarDropdown = page.locator('nav [aria-haspopup="menu"]').first();
+  await expect(avatarDropdown).toBeVisible({ timeout: 10000 });
+  await avatarDropdown.click();
 
-  // Wait for redirect to home or login page
-  await page.waitForURL(/\/(login)?$/, { timeout: 5000 });
+  const logoutButton = page.getByRole('button', { name: /logout/i });
+  await expect(logoutButton).toBeVisible({ timeout: 5000 });
+  await logoutButton.click();
+
+  await page.waitForURL(/\/(login)?$/, { timeout: 10000 });
+}
+
+/**
+ * Verify a user's email using test mode (DEBUG=True only)
+ */
+export async function verifyUserEmail(page: Page, email: string) {
+  await page.goto(`/verify?testMode=true&email=${encodeURIComponent(email)}`);
+  await page.waitForLoadState('networkidle');
+
+  await page.getByLabel('Verification Code').fill('000000');
+  await page.getByRole('button', { name: /verify email/i }).click();
+
+  await expect(page.getByText(/email verified/i)).toBeVisible({ timeout: 10000 });
+}
+
+/**
+ * Complete setup: register, verify, and login a new user
+ * Returns the test user credentials for use in tests
+ */
+export async function setupAuthenticatedUser(page: Page): Promise<TestUser> {
+  const testUser = generateTestUser();
+
+  await registerUser(page, testUser);
+  await verifyUserEmail(page, testUser.email);
+  await loginUser(page, testUser.email, testUser.password);
+
+  return testUser;
 }
 
 /**

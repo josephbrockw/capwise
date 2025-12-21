@@ -37,3 +37,44 @@ class UserViewSet(StandardViewSet):
             message="User information updated successfully.",
             status=status.HTTP_200_OK,
         )
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="change-password",
+        url_name="change-password",
+    )
+    def change_password(self, request):
+        """
+        Change password for the currently authenticated user.
+        """
+        current_password = request.data.get("current_password")
+        new_password = request.data.get("new_password")
+        confirm_password = request.data.get("confirm_password")
+
+        if not current_password or not new_password or not confirm_password:
+            return StandardResponse(
+                error="current_password, new_password, and confirm_password are"
+                " required.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if new_password != confirm_password:
+            return StandardResponse(
+                error="New password and confirm password do not match.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not request.user.check_password(current_password):
+            return StandardResponse(
+                error="Current password is incorrect.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        request.user.set_password(new_password)
+        request.user.save()
+
+        return StandardResponse(
+            message="Password changed successfully.",
+            status=status.HTTP_200_OK,
+        )

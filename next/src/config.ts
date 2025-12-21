@@ -30,6 +30,7 @@ const config = {
       },
       user: {
         info: '/api/users/me',
+        changePassword: '/api/users/change-password',
       },
     },
   },

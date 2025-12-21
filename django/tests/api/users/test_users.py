@@ -84,3 +84,118 @@ class UserViewSetTest(APITestCase):
 
         self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(err, "Authentication required. Please sign in.")
+
+    def test_change_password_success(self):
+        password_data = {
+            "current_password": "testpassword",
+            "new_password": "newpassword123",
+            "confirm_password": "newpassword123",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertEqual(msg, "Password changed successfully.")
+
+        # Verify the password was actually changed
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("newpassword123"))
+
+    def test_change_password_incorrect_current(self):
+        password_data = {
+            "current_password": "wrongpassword",
+            "new_password": "newpassword123",
+            "confirm_password": "newpassword123",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "Current password is incorrect.")
+
+        # Verify password was not changed
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("testpassword"))
+
+    def test_change_password_mismatch(self):
+        password_data = {
+            "current_password": "testpassword",
+            "new_password": "newpassword123",
+            "confirm_password": "differentpassword",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(err, "New password and confirm password do not match.")
+
+        # Verify password was not changed
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password("testpassword"))
+
+    def test_change_password_missing_current_password(self):
+        password_data = {
+            "new_password": "newpassword123",
+            "confirm_password": "newpassword123",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            err, "current_password, new_password, and confirm_password are required."
+        )
+
+    def test_change_password_missing_new_password(self):
+        password_data = {
+            "current_password": "testpassword",
+            "confirm_password": "newpassword123",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            err, "current_password, new_password, and confirm_password are required."
+        )
+
+    def test_change_password_missing_confirm_password(self):
+        password_data = {
+            "current_password": "testpassword",
+            "new_password": "newpassword123",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            err, "current_password, new_password, and confirm_password are required."
+        )
+
+    def test_change_password_empty_fields(self):
+        password_data = {
+            "current_password": "",
+            "new_password": "",
+            "confirm_password": "",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            err, "current_password, new_password, and confirm_password are required."
+        )
+
+    def test_change_password_unauthenticated(self):
+        # Remove credentials to simulate unauthenticated request
+        self.client.credentials()
+        password_data = {
+            "current_password": "testpassword",
+            "new_password": "newpassword123",
+            "confirm_password": "newpassword123",
+        }
+        response = self.client.post("/api/users/change-password", data=password_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(err, "Authentication required. Please sign in.")
