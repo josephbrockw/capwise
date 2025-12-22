@@ -1,9 +1,12 @@
+import base64
+import json
 import os
 
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from account.models import OneTimePassword
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from tests import read_api_response
 from tests.utils import mock_stripe
@@ -60,18 +63,32 @@ class AuthenticationTest(APITestCase):
         )
         assert code == status.HTTP_200_OK
 
-        # Step 4: Successful login
+        # Step 4: Successful login with remember_me
         data, msg, err, code = read_api_response(
             self.client.post(
                 "/api/auth/login",
                 data={
                     "username": "granny",
                     "password": PASSWORD,
+                    "remember_me": True,
                 },
             )
         )
         assert code == status.HTTP_200_OK
         refresh_token = data["refresh"]
+
+        # Verify remember_me extends token lifetime
+        refresh_payload = json.loads(
+            base64.b64decode(refresh_token.split(".")[1] + "==").decode("utf-8")
+        )
+        expected_lifetime_seconds = (
+            settings.REMEMBER_ME_TOKEN_LIFETIME_DAYS * 24 * 60 * 60
+        )
+        token_lifetime = refresh_payload["exp"] - refresh_payload["iat"]
+        # Token lifetime should be approximately REMEMBER_ME_TOKEN_LIFETIME_DAYS
+        assert (
+            abs(token_lifetime - expected_lifetime_seconds) < 60
+        ), f"Token lifetime {token_lifetime}s should be ~{expected_lifetime_seconds}s"
 
         # Step 5: Refresh access token
         data, msg, err, code = read_api_response(

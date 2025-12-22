@@ -229,6 +229,9 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "id",
 }
 
+# Extended token lifetime for "Remember Me" functionality (in days)
+REMEMBER_ME_TOKEN_LIFETIME_DAYS = int(os.getenv("REMEMBER_ME_TOKEN_LIFETIME_DAYS", 30))
+
 CORS_ORIGIN_WHITELIST = ["http://localhost:3001", "http://localhost:3002"]
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")

@@ -3,7 +3,7 @@ from rest_framework_simplejwt.serializers import (
     TokenObtainPairSerializer,
     TokenRefreshSerializer,
 )
-from rest_framework_simplejwt.tokens import TokenError
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -146,11 +146,15 @@ class UserSerializer(serializers.ModelSerializer):
 class LogInSerializer(TokenObtainPairSerializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
+    remember_me = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
+        from datetime import timedelta
+
         User = get_user_model()
         username = attrs["username"]
         password = attrs["password"]
+        remember_me = attrs.pop("remember_me", False)
 
         # If input looks like an email, try to find the user by email first
         if "@" in username:
@@ -163,6 +167,15 @@ class LogInSerializer(TokenObtainPairSerializer):
 
         # Now proceed with standard validation
         data = super().validate(attrs)
+
+        # If remember_me is True, generate new tokens with extended lifetime
+        if remember_me:
+            refresh = RefreshToken.for_user(self.user)
+            refresh.set_exp(
+                lifetime=timedelta(days=settings.REMEMBER_ME_TOKEN_LIFETIME_DAYS)
+            )
+            data["refresh"] = str(refresh)
+            data["access"] = str(refresh.access_token)
 
         # Add user data to response
         data["user"] = RegisterUserSerializer(self.user).data

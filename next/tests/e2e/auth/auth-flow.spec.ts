@@ -20,16 +20,29 @@ test.describe('Complete Authentication Flow', () => {
     // Step 2: Verify email
     await verifyUserEmail(page, testUser.email);
 
-    // Step 3: Login with the verified user
+    // Step 3: Login with the verified user (with Remember Me checked)
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
 
     await page.getByLabel('Email address').fill(testUser.email);
     await page.getByLabel('Password').fill(testUser.password);
+    await page.getByLabel('Remember me').check();
     await page.getByRole('button', { name: /sign in/i }).click();
 
     // Should redirect to dashboard
     await expect(page).toHaveURL(/.*\/dashboard/, { timeout: 15000 });
+
+    // Verify remember_me extends token lifetime (30 days = 2592000 seconds)
+    const refreshToken = await page.evaluate(() => localStorage.getItem('refreshToken'));
+    expect(refreshToken).toBeTruthy();
+
+    // Decode JWT payload to check expiration
+    const payload = JSON.parse(atob(refreshToken!.split('.')[1]));
+    const tokenLifetime = payload.exp - payload.iat;
+    const expectedLifetime = 30 * 24 * 60 * 60; // 30 days in seconds
+
+    // Token lifetime should be approximately 30 days (allow 60 seconds tolerance)
+    expect(Math.abs(tokenLifetime - expectedLifetime)).toBeLessThan(60);
 
     // Step 4: Logout
     await logoutUser(page);

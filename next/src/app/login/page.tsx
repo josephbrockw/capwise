@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/bb/ui';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const user = await loginUser(email, password);
+      const user = await loginUser(email, password, rememberMe);
       login(user);
       router.push(config.navigation.dashboard);
     } catch (err) {
@@ -84,6 +85,8 @@ export default function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 label="Remember me"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
               />
               <Link
                 href="#"

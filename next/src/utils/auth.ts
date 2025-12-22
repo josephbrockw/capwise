@@ -52,9 +52,9 @@ export function isAuthenticated(): boolean {
 /**
  * Login user with email and password
  */
-export async function login(email: string, password: string): Promise<User> {
+export async function login(email: string, password: string, rememberMe: boolean = false): Promise<User> {
   try {
-    const response = await authAPI.login({ 'username': email, 'password': password });
+    const response = await authAPI.login({ 'username': email, 'password': password, 'remember_me': rememberMe });
 
     // Store tokens
     setAuthToken(response.access);

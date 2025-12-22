@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from tests import read_api_response
@@ -105,6 +106,81 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(err, "Authentication required. Please sign in.")
         self.assertNotIn("access", data)
         self.assertNotIn("refresh", data)
+
+    def test_login_with_remember_me_true(self):
+        """Login with remember_me=True should return tokens with extended lifetime."""
+        url = "/api/auth/login"
+        payload = {
+            "username": "gytha@lancre.gov",
+            "password": "password123",
+            "remember_me": True,
+        }
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("access", data)
+        self.assertIn("refresh", data)
+
+        # Decode refresh token and verify extended expiration
+        refresh_payload = json.loads(
+            base64.b64decode(data["refresh"].split(".")[1] + "==").decode("utf-8")
+        )
+        # Token exp should be approximately REMEMBER_ME_TOKEN_LIFETIME_DAYS from now
+        expected_lifetime_seconds = (
+            settings.REMEMBER_ME_TOKEN_LIFETIME_DAYS * 24 * 60 * 60
+        )
+        token_lifetime = refresh_payload["exp"] - refresh_payload["iat"]
+        # Allow 60 seconds tolerance for test execution time
+        self.assertAlmostEqual(token_lifetime, expected_lifetime_seconds, delta=60)
+
+    def test_login_with_remember_me_false(self):
+        """Login with remember_me=False should return tokens with normal lifetime."""
+        url = "/api/auth/login"
+        payload = {
+            "username": "gytha@lancre.gov",
+            "password": "password123",
+            "remember_me": False,
+        }
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("access", data)
+        self.assertIn("refresh", data)
+
+        # Decode refresh token and verify normal expiration (1 day default)
+        refresh_payload = json.loads(
+            base64.b64decode(data["refresh"].split(".")[1] + "==").decode("utf-8")
+        )
+        expected_lifetime_seconds = int(
+            settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()
+        )
+        token_lifetime = refresh_payload["exp"] - refresh_payload["iat"]
+        # Allow 60 seconds tolerance for test execution time
+        self.assertAlmostEqual(token_lifetime, expected_lifetime_seconds, delta=60)
+
+    def test_login_without_remember_me_defaults_to_normal_lifetime(self):
+        """Login without remember_me field should default to normal token lifetime."""
+        url = "/api/auth/login"
+        payload = {"username": "gytha@lancre.gov", "password": "password123"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("access", data)
+        self.assertIn("refresh", data)
+
+        # Decode refresh token and verify normal expiration (1 day default)
+        refresh_payload = json.loads(
+            base64.b64decode(data["refresh"].split(".")[1] + "==").decode("utf-8")
+        )
+        expected_lifetime_seconds = int(
+            settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()
+        )
+        token_lifetime = refresh_payload["exp"] - refresh_payload["iat"]
+        # Allow 60 seconds tolerance for test execution time
+        self.assertAlmostEqual(token_lifetime, expected_lifetime_seconds, delta=60)
 
 
 class TokenRefreshViewTests(APITestCase):

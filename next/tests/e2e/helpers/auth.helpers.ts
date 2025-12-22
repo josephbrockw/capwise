@@ -50,7 +50,7 @@ export async function registerUser(page: Page, user: TestUser) {
 /**
  * Login a user via the UI
  */
-export async function loginUser(page: Page, email: string, password: string) {
+export async function loginUser(page: Page, email: string, password: string, rememberMe: boolean = false) {
   await page.goto('/login');
 
   // Wait for form to be ready
@@ -59,6 +59,11 @@ export async function loginUser(page: Page, email: string, password: string) {
   // Fill login form with exact label text
   await page.getByLabel('Email address').fill(email);
   await page.getByLabel('Password').fill(password);
+
+  // Check remember me if requested
+  if (rememberMe) {
+    await page.getByLabel('Remember me').check();
+  }
 
   // Submit form
   await page.getByRole('button', { name: /sign in/i }).click();
