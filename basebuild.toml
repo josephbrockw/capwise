@@ -14,5 +14,5 @@ broker = false               # Redis message broker
 flower = false               # Celery monitoring dashboard
 
 # Optional services
-docs = false                 # Docusaurus documentation
+docs = true                  # Docusaurus documentation
 mobile = false               # React Native app

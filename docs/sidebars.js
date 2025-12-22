@@ -13,37 +13,67 @@
 
 // Sidebar configuration
 const sidebars = {
-  // By default, Docusaurus generates a sidebar from the docs folder structure
   docs: [
     {
       type: 'category',
       label: 'Getting Started',
-      items: ['intro', 'development/installation', 'development/contributing'],
+      items: ['intro', 'development/installation', 'development/cli-tool', 'development/contributing'],
     },
     {
       type: 'category',
-      label: 'Frontend',
+      label: 'Services',
       items: [
-        'frontend/overview',
-        'frontend/components',
         {
           type: 'category',
-          label: 'Registration',
+          label: 'Django API',
           items: [
-            'frontend/registration/overview',
-            'frontend/registration/basic-registration',
-            'frontend/registration/payment-registration',
+            'services/django/overview',
+            'services/django/api',
+            'services/django/serializers',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Next.js',
+          items: [
+            'services/next/overview',
+            'services/next/theming',
+            {
+              type: 'category',
+              label: 'Components',
+              items: [
+                'services/next/components/ui',
+                'services/next/components/feedback',
+                'services/next/components/data-display',
+                'services/next/components/navigation',
+                'services/next/components/forms',
+                'services/next/components/layout',
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'React',
+          items: [
+            'services/react/overview',
+            'services/react/components',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Mobile',
+          items: [
+            'services/mobile/overview',
           ],
         },
       ],
     },
     {
       type: 'category',
-      label: 'Backend',
+      label: 'DevOps',
       items: [
-        'backend/overview',
-        'backend/api',
-        'backend/serializers',
+        'devops/environment-variables',
       ],
     },
   ],

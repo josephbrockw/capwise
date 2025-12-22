@@ -4,32 +4,32 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
-  },
-  {
-    title: 'Focus on What Matters',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
-  },
-  {
-    title: 'Powered by React',
+    title: 'Multiple Frontend Options',
     Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Choose from Next.js (with App Router), React (with Vite), or React Native
+        for mobile. Each includes a comprehensive component library and theming system.
+      </>
+    ),
+  },
+  {
+    title: 'Django API Backend',
+    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    description: (
+      <>
+        Production-ready Django REST API with authentication, email verification,
+        JWT tokens, password reset, and Stripe payment integration.
+      </>
+    ),
+  },
+  {
+    title: 'Developer Tooling',
+    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    description: (
+      <>
+        BB CLI tool for common tasks, Docker Compose for services, automated setup
+        script, and comprehensive environment configuration.
       </>
     ),
   },

@@ -8,28 +8,51 @@ Welcome to the BaseBuild documentation. This guide will help you understand the 
 
 ## What is BaseBuild?
 
-BaseBuild is a web application that provides a streamlined registration and payment process. The application is built with a React frontend and a Django backend.
+BaseBuild is a full-stack application template that provides a streamlined development experience for building modern web and mobile applications. It includes multiple frontend options, a Django API backend, and comprehensive tooling.
 
 ## Key Features
 
-- **Two-Step Registration Process**: A simplified account creation process followed by an optional payment flow
-- **Modern UI**: Clean and responsive user interface
-- **Secure Payment Processing**: Integration with payment processing systems
-- **API-Driven Architecture**: RESTful API backend with a React frontend
+- **Multiple Frontend Options**: Next.js, React, and React Native mobile app
+- **Django API Backend**: RESTful API with authentication, user management, and payments
+- **Modern UI Components**: Comprehensive component libraries for both React and Next.js
+- **Developer Tooling**: BB CLI for common development tasks
+- **Docker-Based Development**: Easy setup with Docker Compose
+- **Theming System**: Centralized theme configuration with hot reload
+
+## Architecture Overview
+
+```
+basebuild/
+├── django/         # Django API backend
+├── next/           # Next.js frontend (primary)
+├── react/          # React frontend (alternative)
+├── app/            # React Native mobile app
+├── docs/           # This documentation (Docusaurus)
+├── bb.d/           # BB CLI tool commands
+└── docker-compose.yml
+```
 
 ## Getting Started
 
-To get started with BaseBuild, check out the following sections:
+1. **[Installation Guide](development/installation)** - Set up your development environment
+2. **[CLI Tool](development/cli-tool)** - Learn the `bb` command shortcuts
 
-- [Installation Guide](development/installation)
-- [Frontend Overview](frontend/overview)
-- [Backend Overview](backend/overview)
+## Services Documentation
 
-## Project Structure
+- **[Django API](services/django/overview)** - Backend API documentation
+- **[Next.js](services/next/overview)** - Next.js frontend with component library
+- **[React](services/react/overview)** - React frontend documentation
+- **[Mobile](services/mobile/overview)** - React Native app (in development)
 
-The project is organized into two main components:
+## Configuration
 
-- **Frontend**: React-based client application
-- **Backend**: Django-based API server
+- **[Environment Variables](devops/environment-variables)** - All configuration options
 
-Each component has its own documentation section with detailed information about its structure, functionality, and usage.
+## Quick Links
+
+| Task | Command/Link |
+|------|--------------|
+| Start development | `./dev_setup.sh` |
+| Run all services | `bb clean` |
+| Run tests | `bb test` |
+| View logs | `bb logs` |

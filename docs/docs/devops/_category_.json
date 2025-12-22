@@ -1,0 +1,8 @@
+{
+  "label": "DevOps",
+  "link": {
+    "description": "Environment configuration, deployment, and infrastructure documentation.",
+    "type": "generated-index"
+  },
+  "position": 4
+}

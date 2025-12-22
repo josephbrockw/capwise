@@ -17,7 +17,13 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            Get Started
+          </Link>
+          <Link
+            className="button button--outline button--lg"
+            style={{marginLeft: '1rem', color: 'white', borderColor: 'white'}}
+            to="/docs/development/installation">
+            Installation Guide
           </Link>
         </div>
       </div>
@@ -29,8 +35,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title="Full-Stack Application Template"
+      description="A modern full-stack application template with Django API, Next.js, React, and React Native">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

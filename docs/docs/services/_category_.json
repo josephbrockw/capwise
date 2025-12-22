@@ -1,0 +1,8 @@
+{
+  "label": "Services",
+  "link": {
+    "description": "Documentation for each service in the BaseBuild stack.",
+    "type": "generated-index"
+  },
+  "position": 2
+}

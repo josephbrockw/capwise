@@ -5,7 +5,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 (module.exports = {
   title: 'BaseBuild Documentation',
-  tagline: 'Documentation for the BaseBuild project',
+  tagline: 'A modern full-stack application template with Django, Next.js, React, and React Native',
   url: 'https://basebuild-docs.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -48,23 +48,59 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         },
         items: [
           {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Documentation',
-          },
-          {
             type: 'dropdown',
-            label: 'Components',
+            label: 'Getting Started',
             position: 'left',
             items: [
               {
-                label: 'Frontend',
-                to: '/docs/frontend/overview',
+                label: 'Introduction',
+                to: '/docs/intro',
               },
               {
-                label: 'Backend',
-                to: '/docs/backend/overview',
+                label: 'Installation',
+                to: '/docs/development/installation',
+              },
+              {
+                label: 'CLI Tool',
+                to: '/docs/development/cli-tool',
+              },
+              {
+                label: 'Contributing',
+                to: '/docs/development/contributing',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            label: 'Services',
+            position: 'left',
+            items: [
+              {
+                label: 'Django API',
+                to: '/docs/services/django/overview',
+              },
+              {
+                label: 'Next.js',
+                to: '/docs/services/next/overview',
+              },
+              {
+                label: 'React',
+                to: '/docs/services/react/overview',
+              },
+              {
+                label: 'Mobile (React Native)',
+                to: '/docs/services/mobile/overview',
+              },
+            ],
+          },
+          {
+            type: 'dropdown',
+            label: 'DevOps',
+            position: 'left',
+            items: [
+              {
+                label: 'Environment Variables',
+                to: '/docs/devops/environment-variables',
               },
             ],
           },
@@ -80,32 +116,36 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Getting Started',
             items: [
               {
-                label: 'Getting Started',
+                label: 'Introduction',
                 to: '/docs/intro',
               },
-              {
-                label: 'Frontend',
-                to: '/docs/frontend/overview',
-              },
-              {
-                label: 'Backend',
-                to: '/docs/backend/overview',
-              },
-            ],
-          },
-          {
-            title: 'Development',
-            items: [
               {
                 label: 'Installation',
                 to: '/docs/development/installation',
               },
               {
-                label: 'Contributing',
-                to: '/docs/development/contributing',
+                label: 'CLI Tool',
+                to: '/docs/development/cli-tool',
+              },
+            ],
+          },
+          {
+            title: 'Services',
+            items: [
+              {
+                label: 'Django API',
+                to: '/docs/services/django/overview',
+              },
+              {
+                label: 'Next.js',
+                to: '/docs/services/next/overview',
+              },
+              {
+                label: 'React',
+                to: '/docs/services/react/overview',
               },
             ],
           },
