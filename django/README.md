@@ -92,3 +92,5 @@ curl -X POST http://localhost:8009/api/auth/sign-up \
 "password1": "testpass123",
 "password2": "testpass123"
 }'
+
+test
