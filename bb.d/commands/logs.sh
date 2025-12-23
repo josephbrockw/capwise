@@ -49,14 +49,16 @@ command_logs_run() {
                 echo -e "${RED}Error: Django service is disabled in basebuild.toml${NC}"
                 exit 1
             fi
-            docker compose logs $follow backend
+            local profiles=$(get_compose_profiles)
+            docker compose $profiles logs $follow backend
             ;;
         celery)
             if ! is_service_enabled "celery_django"; then
                 echo -e "${RED}Error: Celery service is disabled in basebuild.toml${NC}"
                 exit 1
             fi
-            docker compose logs $follow celery
+            local profiles=$(get_compose_profiles)
+            docker compose $profiles logs $follow celery
             ;;
         "")
             echo -e "${RED}Error: Please specify a service${NC}"

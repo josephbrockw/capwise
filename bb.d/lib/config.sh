@@ -111,6 +111,49 @@ get_service_status() {
     fi
 }
 
+# Get compose profile flags based on enabled services in basebuild.toml
+# Returns: string of --profile flags for docker compose commands
+get_compose_profiles() {
+    local profiles=""
+
+    # Core profile (Django backend + database)
+    if is_service_enabled "django"; then
+        profiles="$profiles --profile core"
+    fi
+
+    # React frontend profile
+    if is_service_enabled "react"; then
+        profiles="$profiles --profile react"
+    fi
+
+    # Broker profile (Redis)
+    if is_service_enabled "broker"; then
+        profiles="$profiles --profile broker"
+    fi
+
+    # Workers profile (Celery workers)
+    if is_service_enabled "celery_django" || is_service_enabled "celery_worker"; then
+        profiles="$profiles --profile workers"
+    fi
+
+    # Monitoring profile (Flower)
+    if is_service_enabled "flower"; then
+        profiles="$profiles --profile monitoring"
+    fi
+
+    # Docs profile
+    if is_service_enabled "docs"; then
+        profiles="$profiles --profile docs"
+    fi
+
+    # Mobile profile
+    if is_service_enabled "mobile"; then
+        profiles="$profiles --profile mobile"
+    fi
+
+    echo "$profiles"
+}
+
 # Display current configuration summary
 show_config() {
     echo -e "${BOLD}Enabled Services:${NC}"

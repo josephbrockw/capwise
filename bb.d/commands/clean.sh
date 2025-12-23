@@ -5,7 +5,8 @@ command_clean_help() {
     echo "Clean Help:"
     echo "Usage: bb clean [options]"
     echo "Description: Tears down the docker containers and builds new ones running"
-    echo "in detached mode. Only starts services enabled in basebuild.toml."
+    echo "in detached mode. Uses Docker Compose profiles based on basebuild.toml."
+    echo "Only services with active profiles are validated and started."
     echo "Next.js runs in a tmux session (use 'bb logs next' to view)."
     echo ""
     echo "Options:"
@@ -31,8 +32,8 @@ command_clean_run() {
         exec_backend python manage.py flush --noinput
     else
         echo "Spinning up new instance..."
-        local services=$(get_enabled_services)
-        echo "Enabled services: $services"
+        local profiles=$(get_compose_profiles)
+        echo "Active profiles:$profiles"
 
         # Set WAIT_FOR_BROKER based on broker service status
         if is_service_enabled "broker"; then
@@ -41,8 +42,8 @@ command_clean_run() {
             export WAIT_FOR_BROKER=false
         fi
 
-        docker compose down -v
-        docker compose up -d --build $services
+        docker compose $profiles down -v
+        docker compose $profiles up -d --build
 
         if is_service_enabled "django"; then
             exec_backend python manage.py migrate

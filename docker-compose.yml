@@ -1,9 +1,11 @@
 services:
   broker:
+    profiles: ["broker"]
     image: redis:alpine
     container_name: broker
 
   db:
+    profiles: ["core"]
     image: postgres:15
     container_name: db
     volumes:
@@ -16,6 +18,7 @@ services:
       - 5432:5432
 
   backend:
+    profiles: ["core"]
     build: django
     container_name: backend
     command: python manage.py runserver 0.0.0.0:8000
@@ -32,6 +35,7 @@ services:
       - db
 
   celery:
+    profiles: ["workers"]
     build: django
     container_name: django_worker
     command: celery -A worker worker --hostname=djangoworker --loglevel=info -Q default -E -B
@@ -46,6 +50,7 @@ services:
       - backend
 
   frontend:
+    profiles: ["react"]
     build:
       context: ./react
       dockerfile: Dockerfile.dev
@@ -66,6 +71,7 @@ services:
       - backend
 
   celery2:
+    profiles: ["workers"]
     build: celeryworker
     container_name: independent_worker
     command: celery -A worker_app worker --hostname=independentworker --loglevel=info -Q queue2
@@ -76,6 +82,7 @@ services:
       - broker
 
   flower:
+    profiles: ["monitoring"]
     image: mher/flower
     container_name: flower
     ports:
@@ -86,6 +93,7 @@ services:
       - broker
 
   docs:
+    profiles: ["docs"]
     build:
       context: ./docs
       dockerfile: Dockerfile.dev
@@ -103,6 +111,7 @@ services:
     tty: true
 
   native-app:
+    profiles: ["mobile"]
     build:
       context: ./app
       dockerfile: Dockerfile.dev

@@ -27,7 +27,8 @@ command_stop_run() {
             ;;
         docker)
             echo "Stopping Docker containers..."
-            docker compose down
+            local profiles=$(get_compose_profiles)
+            docker compose $profiles down
             echo -e "${GREEN}Docker containers stopped${NC}"
             ;;
         ""|--all)
@@ -39,7 +40,8 @@ command_stop_run() {
             fi
             # Stop Docker
             echo "Stopping Docker containers..."
-            docker compose down
+            local profiles=$(get_compose_profiles)
+            docker compose $profiles down
             echo -e "${GREEN}All services stopped${NC}"
             ;;
         *)

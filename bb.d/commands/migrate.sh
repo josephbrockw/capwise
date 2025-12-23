@@ -22,7 +22,8 @@ command_migrate_run() {
         exit 1
     fi
 
-    CMD="docker compose exec backend python manage.py migrate"
+    local profiles=$(get_compose_profiles)
+    CMD="docker compose $profiles exec backend python manage.py migrate"
 
     if [[ "$1" == "--rollback" && -n "$2" && -n "$3" ]]; then
         # Roll back to a specific migration

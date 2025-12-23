@@ -16,7 +16,8 @@ command_makemigrations_run() {
         exit 1
     fi
 
-    CMD="docker compose exec backend python manage.py makemigrations"
+    local profiles=$(get_compose_profiles)
+    CMD="docker compose $profiles exec backend python manage.py makemigrations"
     if [[ "$1" == "--name" ]]; then
         CMD="$CMD --name $2"
     fi
