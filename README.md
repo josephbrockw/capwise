@@ -1,6 +1,6 @@
 # BaseBuild
 
-A full-stack application template with Django, React, and Docker.
+A full-stack application template with Django, Next.js, React, and Docker.
 
 ## Quick Start
 
@@ -60,22 +60,59 @@ For extending the CLI tool, see `bb.d/README.md`.
 
 ## Creating a New Project
 
+Use the `start_new_project.sh` script to create a new project from the BaseBuild template:
+
 ```bash
-./start_new_project.sh <new-repo-name>
+./start_new_project.sh my-new-app
 ```
 
-Interactive prompts will configure:
-- **Frontend:** React, Django templates, or none
-- **Backend:** Django or none
-- **Workers:** Django worker, independent worker, or none
-- **Mobile:** React Native app (y/n)
-- **Docs:** Docusaurus (y/n)
+### Interactive Configuration
 
-**After creation:**
+The script will prompt you to configure:
+
+| Prompt | Options | Default |
+|--------|---------|--------|
+| GitHub username | Any valid username | `josephbrockw` |
+| Frontend | `next`, `react`, `none` | `next` |
+| Backend | `django`, `none` | `django` |
+| Background workers | `django-worker`, `independent-worker`, `none` | `none` |
+| Mobile (React Native) | `y`, `n` | `n` |
+| Documentation (Docusaurus) | `y`, `n` | `n` |
+
+### What the Script Does
+
+1. Prompts for GitHub username and service configuration
+2. Creates a new directory `../my-new-app`
+3. Clones the BaseBuild template into it
+4. Generates a customized `basebuild.toml` based on your selections
+5. **Removes unused directories** (e.g., `react/` if you chose `next`)
+6. Sets up git remotes:
+   - `origin` -> your new repo (`git@github.com:<username>/my-new-app.git`)
+   - `upstream` -> BaseBuild (for syncing updates)
+7. Commits the configuration
+
+### After Running the Script
+
 ```bash
-cd ../<new-repo-name>
+# 1. Move into your new project
+cd ../my-new-app
+
+# 2. Create the GitHub repository
+#    Go to: https://github.com/new
+#    Name it the same as your project (e.g., my-new-app)
+
+# 3. Push to GitHub
+git push -u origin main
+
+# 4. Set up development environment
 ./dev_setup.sh
+
+# 5. Start services
 bb clean
+
+# 6. Verify everything is running
+bb config
+docker ps
 ```
 
 ## New Project Setup Checklist
@@ -85,13 +122,13 @@ Complete these steps when starting a new project to customize your application:
 ### Repo Setup
 
 - [ ] Run `./start_new_project.sh <new-repo-name>` to create a new project
-- [ ] Update the `basebuild.toml` file with your project name and other relevant information
-- [ ] Push the new project to your repository
+- [ ] Create the GitHub repository at https://github.com/new
+- [ ] Push to GitHub: `git push -u origin main`
 
 ### Initial Setup
 - [ ] Run `./dev_setup.sh` to install dependencies and set up the BB CLI
 - [ ] Run `bb clean` to build and start all Docker containers
-- [ ] Verify all services are running with `docker ps`
+- [ ] Verify all services are running with `docker ps` and `bb config`
 
 ### Branding & Theming (Next.js/React Frontend)
 
@@ -147,13 +184,15 @@ Edit `basebuild.toml` to enable/disable services:
 
 ```toml
 [services]
-django = true        # Django + PostgreSQL
-react = true         # React
-celery_django = true # Background tasks
-broker = true        # Redis
-flower = true        # Task monitoring
-docs = false         # Docusaurus
-mobile = false       # React Native
+django = true        # Django API + PostgreSQL
+next = true          # Next.js frontend
+react = false        # React frontend
+celery_django = false # Django-integrated Celery worker
+celery_worker = false # Independent Celery worker
+broker = false       # Redis message broker
+flower = false       # Celery monitoring dashboard
+docs = false         # Docusaurus documentation
+mobile = false       # React Native mobile app
 ```
 
 **Commands:**
@@ -181,11 +220,12 @@ bb sync --dry-run    # Preview changes
 
 ```
 basebuild/
-├── django/          # Django backend
-├── react/           # React frontend
-├── celeryworker/    # Independent worker
-├── docs/            # Docusaurus docs
-├── app/             # React Native
+├── django/          # Django API backend
+├── next/            # Next.js frontend (primary)
+├── react/           # React frontend (alternative)
+├── celeryworker/    # Independent Celery worker
+├── docs/            # Docusaurus documentation
+├── app/             # React Native mobile app
 ├── bb.d/            # CLI tool modules
 └── basebuild.toml   # Service configuration
 ```

@@ -14,18 +14,14 @@ fi
 
 # Get the new repository name from the argument
 NEW_REPO_NAME="$1"
-NEW_REPO="git@github.com:josephbrockw/$NEW_REPO_NAME.git"
 
-# Check if the new repo exists on GitHub
-echo "Checking if the repository '$NEW_REPO_NAME' exists..."
+# Prompt for GitHub username
+echo -e "${BLUE}GitHub Configuration${NC}"
+read -p "GitHub username [josephbrockw]: " GITHUB_USERNAME
+GITHUB_USERNAME=${GITHUB_USERNAME:-josephbrockw}
+echo ""
 
-# Use GitHub API to check if the repository exists
-REPO_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" "https://api.github.com/repos/josephbrockw/$NEW_REPO_NAME")
-
-if [ "$REPO_EXISTS" -eq 200 ]; then
-  echo "Error: The repository '$NEW_REPO_NAME' already exists on GitHub. Please choose a different name."
-  exit 1
-fi
+NEW_REPO="git@github.com:$GITHUB_USERNAME/$NEW_REPO_NAME.git"
 
 # Original repository URL
 ORIGINAL_REPO="git@github.com:josephbrockw/basebuild.git"
@@ -38,16 +34,16 @@ echo ""
 
 # 1. Frontend service
 echo -e "${YELLOW}1. Frontend Service${NC}"
-echo "   Options: react, django, none"
-read -p "   Select [react]: " frontend_choice
-frontend_choice=${frontend_choice:-react}
+echo "   Options: next, react, none"
+read -p "   Select [next]: " frontend_choice
+frontend_choice=${frontend_choice:-next}
 frontend_choice=$(echo "$frontend_choice" | tr '[:upper:]' '[:lower:]')
 
 # Validate frontend choice
-while [[ ! "$frontend_choice" =~ ^(react|django|none)$ ]]; do
-  echo -e "${YELLOW}   Invalid choice. Please enter: react, django, or none${NC}"
-  read -p "   Select [react]: " frontend_choice
-  frontend_choice=${frontend_choice:-react}
+while [[ ! "$frontend_choice" =~ ^(next|react|none)$ ]]; do
+  echo -e "${YELLOW}   Invalid choice. Please enter: next, react, or none${NC}"
+  read -p "   Select [next]: " frontend_choice
+  frontend_choice=${frontend_choice:-next}
   frontend_choice=$(echo "$frontend_choice" | tr '[:upper:]' '[:lower:]')
 done
 echo ""
@@ -102,6 +98,7 @@ echo ""
 
 # Convert choices to service flags
 use_django=$([ "$backend_choice" = "django" ] && echo "y" || echo "n")
+use_next=$([ "$frontend_choice" = "next" ] && echo "y" || echo "n")
 use_react=$([ "$frontend_choice" = "react" ] && echo "y" || echo "n")
 use_celery_django=$([ "$worker_choice" = "django-worker" ] && echo "y" || echo "n")
 use_celery_worker=$([ "$worker_choice" = "independent-worker" ] && echo "y" || echo "n")
@@ -127,6 +124,7 @@ echo "Generating basebuild.toml..."
 
 # Convert y/n to true/false
 django_val=$([ "$use_django" = "y" ] && echo "true" || echo "false")
+next_val=$([ "$use_next" = "y" ] && echo "true" || echo "false")
 react_val=$([ "$use_react" = "y" ] && echo "true" || echo "false")
 celery_django_val=$([ "$use_celery_django" = "y" ] && echo "true" || echo "false")
 celery_worker_val=$([ "$use_celery_worker" = "y" ] && echo "true" || echo "false")
@@ -141,8 +139,9 @@ cat > basebuild.toml << EOF
 
 [services]
 # Core services
-django = $django_val               # Django (and db)
-react = $react_val                # React frontend
+django = $django_val               # Django API (and db)
+react = $react_val                 # React frontend
+next = $next_val                   # Next.js frontend
 
 # Background task services
 celery_django = $celery_django_val        # Django-integrated Celery worker
@@ -151,7 +150,7 @@ broker = $broker_val               # Redis message broker
 flower = $flower_val               # Celery monitoring dashboard
 
 # Optional services
-docs = $docs_val                 # Docusaurus documentation
+docs = $docs_val                   # Docusaurus documentation
 mobile = $mobile_val               # React Native app
 EOF
 
@@ -161,14 +160,20 @@ echo ""
 # Remove unused directories
 echo "Cleaning up unused directories..."
 
+# Remove Next.js if not frontend choice
+if [ "$frontend_choice" != "next" ] && [ -d "next" ]; then
+  echo "  Removing Next.js directory..."
+  rm -rf next
+fi
+
 # Remove React if not frontend choice
 if [ "$frontend_choice" != "react" ] && [ -d "react" ]; then
   echo "  Removing React directory..."
   rm -rf react
 fi
 
-# Remove Django if not used as frontend or backend
-if [ "$backend_choice" != "django" ] && [ "$frontend_choice" != "django" ] && [ -d "django" ]; then
+# Remove Django if not used as backend
+if [ "$backend_choice" != "django" ] && [ -d "django" ]; then
   echo "  Removing Django directory..."
   rm -rf django
 fi
@@ -194,28 +199,13 @@ echo ""
 echo "Setting the new repository ($NEW_REPO) as the origin..."
 git remote set-url origin "$NEW_REPO"
 
-# Commit the configuration changes
-git add basebuild.toml
-# Check if any directories were removed
-if [ "$frontend_choice" != "react" ] || [ "$backend_choice" != "django" ] || [ "$use_docs" = "n" ] || [ "$use_mobile" = "n" ] || [ "$worker_choice" = "none" ]; then
-  git add -A
-  git commit -m "Configure project: frontend=$frontend_choice, backend=$backend_choice, workers=$worker_choice"
-fi
-
-# Push the content to the new repository
-echo "Pushing the project to the new repository..."
-git push -u origin main
+# Commit configuration changes
+git add -A
+git commit -m "Configure project: frontend=$frontend_choice, backend=$backend_choice, workers=$worker_choice"
 
 # Add the original repository as an upstream remote to allow pulling updates
 echo "Adding the original repository as upstream..."
 git remote add upstream "$ORIGINAL_REPO"
-
-# Fetch the latest updates from the upstream repo
-echo "Fetching updates from the original repository..."
-git fetch upstream
-
-# Optionally, merge changes from upstream into the current branch
-git merge upstream/main
 
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -239,8 +229,8 @@ echo "  3. Run: bb clean (to spin up configured services)"
 echo "  4. Run: bb config (to view service configuration)"
 echo ""
 echo -e "${BLUE}GitHub:${NC}"
-echo "  - Create repository: https://github.com/new"
-echo "  - Repository name: $NEW_REPO_NAME"
+echo "  - Create repository: https://github.com/new?name=$NEW_REPO_NAME"
+echo "  - Owner: $GITHUB_USERNAME"
 echo "  - Then push: git push -u origin main"
 echo ""
 echo -e "View basebuild.toml to modify service configuration anytime."
