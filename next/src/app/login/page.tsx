@@ -89,8 +89,8 @@ export default function LoginPage() {
                 onChange={(e) => setRememberMe(e.target.checked)}
               />
               <Link
-                href="#"
-                className="text-sm font-medium text-zinc-900 hover:text-zinc-700 dark:text-white dark:hover:text-zinc-300"
+                href="/forgot-password"
+                className="cursor-pointer text-sm font-medium text-zinc-900 hover:text-zinc-700 dark:text-white dark:hover:text-zinc-300"
               >
                 Forgot password?
               </Link>

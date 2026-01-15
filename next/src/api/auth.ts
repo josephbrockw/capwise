@@ -49,6 +49,7 @@ export interface PasswordResetRequest {
 export interface PasswordResetConfirmRequest {
   token: string;
   password: string;
+  password_confirm: string;
 }
 
 /**
