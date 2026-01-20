@@ -247,7 +247,7 @@ REMEMBER_ME_TOKEN_LIFETIME_DAYS = int(os.getenv("REMEMBER_ME_TOKEN_LIFETIME_DAYS
 
 CORS_ORIGIN_WHITELIST = os.environ.get(
     "CORS_ORIGIN_WHITELIST", "http://localhost:3001,http://localhost:3002"
-)
+).split(",")
 CORS_ALLOW_CREDENTIALS = True
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
