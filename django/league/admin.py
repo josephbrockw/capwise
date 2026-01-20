@@ -1,6 +1,17 @@
 from django.contrib import admin
 
-from .models import DraftPick, League, Player, Position, Rookie, RosterPlayer, Team
+from .models import (
+    DraftPick,
+    League,
+    Player,
+    Position,
+    Rookie,
+    RosterPlayer,
+    Team,
+    Trade,
+    TradeAsset,
+    TradeTeam,
+)
 
 
 @admin.register(League)
@@ -86,3 +97,45 @@ class DraftPickAdmin(admin.ModelAdmin):
     search_fields = ("original_team__name", "current_team__name")
     list_filter = ("league", "year", "round", "is_rostered")
     raw_id_fields = ("league", "original_team", "current_team", "player", "rookie")
+
+
+class TradeTeamInline(admin.TabularInline):
+    model = TradeTeam
+    extra = 0
+    raw_id_fields = ("team",)
+
+
+class TradeAssetInline(admin.TabularInline):
+    model = TradeAsset
+    extra = 0
+    raw_id_fields = ("from_team", "to_team", "player", "draft_pick")
+
+
+@admin.register(Trade)
+class TradeAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "league",
+        "status",
+        "proposed_by",
+        "created_at",
+        "executed_at",
+    )
+    search_fields = ("notes",)
+    list_filter = ("league", "status")
+    raw_id_fields = ("league", "proposed_by")
+    inlines = [TradeTeamInline, TradeAssetInline]
+
+
+@admin.register(TradeTeam)
+class TradeTeamAdmin(admin.ModelAdmin):
+    list_display = ("trade", "team")
+    list_filter = ("team",)
+    raw_id_fields = ("trade", "team")
+
+
+@admin.register(TradeAsset)
+class TradeAssetAdmin(admin.ModelAdmin):
+    list_display = ("trade", "from_team", "to_team", "player", "draft_pick")
+    list_filter = ("from_team", "to_team")
+    raw_id_fields = ("trade", "from_team", "to_team", "player", "draft_pick")

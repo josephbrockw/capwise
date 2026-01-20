@@ -404,3 +404,56 @@
     player: null
     rookie: 55555555-5555-5555-5555-555555555551
     is_rostered: false
+
+# Trades
+- model: league.trade
+  pk: 77777777-7777-7777-7777-777777777771
+  fields:
+    league: 11111111-1111-1111-1111-111111111111
+    created_at: "1996-01-15T12:00:00Z"
+    status: proposed
+    proposed_by: null
+    notes: "Pippen for Payton straight up"
+    executed_at: null
+
+- model: league.trade
+  pk: 77777777-7777-7777-7777-777777777772
+  fields:
+    league: 11111111-1111-1111-1111-111111111111
+    created_at: "1996-02-10T12:00:00Z"
+    status: completed
+    proposed_by: null
+    notes: "Historical trade - already executed"
+    executed_at: "1996-02-15T12:00:00Z"
+
+# Trade Teams
+- model: league.tradeteam
+  pk: 88888888-8888-8888-8888-888888888881
+  fields:
+    trade: 77777777-7777-7777-7777-777777777771
+    team: 22222222-2222-2222-2222-222222222221
+
+- model: league.tradeteam
+  pk: 88888888-8888-8888-8888-888888888882
+  fields:
+    trade: 77777777-7777-7777-7777-777777777771
+    team: 22222222-2222-2222-2222-222222222222
+
+# Trade Assets
+- model: league.tradeasset
+  pk: 99999999-9999-9999-9999-999999999991
+  fields:
+    trade: 77777777-7777-7777-7777-777777777771
+    from_team: 22222222-2222-2222-2222-222222222221
+    to_team: 22222222-2222-2222-2222-222222222222
+    player: 33333333-3333-3333-3333-333333333332
+    draft_pick: null
+
+- model: league.tradeasset
+  pk: 99999999-9999-9999-9999-999999999992
+  fields:
+    trade: 77777777-7777-7777-7777-777777777771
+    from_team: 22222222-2222-2222-2222-222222222222
+    to_team: 22222222-2222-2222-2222-222222222221
+    player: 33333333-3333-3333-3333-333333333334
+    draft_pick: null
