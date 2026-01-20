@@ -30,7 +30,9 @@ from api.views.auth import (  # type: ignore
     TokenRefreshView,
 )
 from api.views.experiment import ExperimentViewSet  # type: ignore
+from api.views.league import LeagueViewSet, TeamViewSet  # type: ignore
 from api.views.payment import ProductViewSet, PurchaseViewSet  # type: ignore
+from api.views.player import PlayerViewSet  # type: ignore
 from api.views.user import UserViewSet  # type: ignore
 from django.conf import settings  # type: ignore
 from django.contrib import admin  # type: ignore
@@ -43,6 +45,11 @@ router.register(r"experiments", ExperimentViewSet, basename="experiments")
 router.register(r"products", ProductViewSet, basename="products")
 router.register(r"purchases", PurchaseViewSet, basename="purchases")
 
+league_router = DefaultRouter(trailing_slash=False)
+league_router.register(r"leagues", LeagueViewSet, basename="leagues")
+league_router.register(r"teams", TeamViewSet, basename="teams")
+league_router.register(r"players", PlayerViewSet, basename="players")
+
 urlpatterns = [
     path("admin", admin.site.urls),
     path("version", version, name="version"),
@@ -50,6 +57,7 @@ urlpatterns = [
     path("api/auth/refresh", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/auth/logout", LogoutView.as_view(), name="log_out"),
     path("api/", include(router.urls)),
+    path("api/league/", include(league_router.urls)),
     # OpenAPI 3 documentation with Swagger UI
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
