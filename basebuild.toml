@@ -3,9 +3,9 @@
 
 [services]
 # Core services
-django = true               # Django (and db)
-react = false               # React frontend
-next = true                 # Next.js frontend (runs outside Docker)
+django = true               # Django API (and db)
+react = false                 # React frontend
+next = true                   # Next.js frontend
 
 # Background task services
 celery_django = false        # Django-integrated Celery worker
@@ -14,5 +14,5 @@ broker = false               # Redis message broker
 flower = false               # Celery monitoring dashboard
 
 # Optional services
-docs = true                  # Docusaurus documentation
+docs = false                   # Docusaurus documentation
 mobile = false               # React Native app
