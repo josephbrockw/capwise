@@ -1,0 +1,37 @@
+databases:
+  - name: staging-db
+    databaseName: app_staging
+    user: app_user
+    plan: basic-256mb
+    diskSizeGB: 5
+    region: ohio
+
+services:
+  - type: web
+    name: staging-backend
+    runtime: python
+    plan: starter  # Free tier
+    region: ohio
+    rootDir: django
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate --noinput
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
+      - key: DATABASE_URL
+        fromDatabase:
+          name: staging-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        sync: false  # Set manually in Render dashboard
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false  # Set to your Vercel staging URL
+      - key: DEBUG
+        value: "False"

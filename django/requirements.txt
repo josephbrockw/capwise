@@ -23,3 +23,6 @@ django-celery-beat==2.7.0
 drf-spectacular==0.27.1
 stripe==11.3.0
 pyyaml
+gunicorn==23.0.0
+whitenoise==6.11.0
+dj-database-url==3.1.0
