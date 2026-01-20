@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "worker",
     "experiment",
     "payment",
+    "league",
 ]
 
 MIDDLEWARE = [
