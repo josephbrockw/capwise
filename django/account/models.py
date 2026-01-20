@@ -13,6 +13,14 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     preferred_name = models.CharField(max_length=30, blank=True)
     payment_method_id = models.CharField(max_length=255, blank=True, null=True)
+    default_team = models.ForeignKey(
+        "league.Team",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="default_for_users",
+        help_text="User's last selected team",
+    )
 
     @property
     def name(self):
@@ -25,6 +33,20 @@ class User(AbstractUser):
 
     def salutation(self):
         return f"Hi, {self.name}!"
+
+    def get_teams(self):
+        """Returns all teams user owns across all leagues."""
+        from league.models import Team
+
+        return Team.objects.filter(owner=self)
+
+    def get_leagues(self):
+        """Returns all leagues user participates in (as team owner or commissioner)."""
+        from league.models import League
+
+        owned_team_leagues = League.objects.filter(teams__owner=self)
+        commissioned_leagues = League.objects.filter(commissioner=self)
+        return (owned_team_leagues | commissioned_leagues).distinct()
 
 
 class OneTimePassword(models.Model):
