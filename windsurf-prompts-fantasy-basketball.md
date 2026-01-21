@@ -476,13 +476,13 @@ Important: Do NOT reset salaries for existing roster players - only set min_sala
 
 Use the existing sync_espn_league.py as reference.
 
-### Prompt 4.4: ESPN Sync API Endpoint
+### Prompt 4.4: ESPN Sync API Endpoint (Done)
 
 Create an API endpoint for commissioners to trigger ESPN sync:
 
 **File: api/views/espn_sync.py**
 
-POST /api/league/sync/
+POST /api/league/sync
 - Requires `IsLeagueCommissioner` permission
 - Request body:
   ```json
@@ -501,7 +501,7 @@ For synchronous execution (if Celery not enabled):
 - Call the management command logic directly
 - Return results in response
 
-Add to League serializer: `last_sync_date`, `needs_sync` (computed from last_sync_date > 6 hours ago)
+Add to League serializer: `last_sync_date`, `needs_sync` (computed from last_sync_date > 24 hours ago)
 
 ---
 

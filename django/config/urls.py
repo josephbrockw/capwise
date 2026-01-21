@@ -30,6 +30,7 @@ from api.views.auth import (  # type: ignore
     TokenRefreshView,
 )
 from api.views.draft import DraftPickViewSet, RookieViewSet  # type: ignore
+from api.views.espn_sync import ESPNSyncStatusView, ESPNSyncView  # type: ignore
 from api.views.experiment import ExperimentViewSet  # type: ignore
 from api.views.league import LeagueViewSet, TeamViewSet  # type: ignore
 from api.views.payment import ProductViewSet, PurchaseViewSet  # type: ignore
@@ -65,6 +66,10 @@ urlpatterns = [
     path("api/auth/logout", LogoutView.as_view(), name="log_out"),
     path("api/", include(router.urls)),
     path("api/league/", include(league_router.urls)),
+    path("api/league/sync", ESPNSyncView.as_view(), name="espn-sync"),
+    path(
+        "api/league/sync/status", ESPNSyncStatusView.as_view(), name="espn-sync-status"
+    ),
     # OpenAPI 3 documentation with Swagger UI
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from django.utils import timezone
 from league.models import League, Team
 
 
@@ -36,6 +37,7 @@ class LeagueListSerializer(serializers.ModelSerializer):
 class LeagueDetailSerializer(serializers.ModelSerializer):
     teams = TeamSummarySerializer(many=True, read_only=True)
     team_count = serializers.SerializerMethodField()
+    needs_sync = serializers.SerializerMethodField()
 
     class Meta:
         model = League
@@ -49,6 +51,7 @@ class LeagueDetailSerializer(serializers.ModelSerializer):
             "draft_open",
             "espn_league_id",
             "last_sync_date",
+            "needs_sync",
             "salary_escalation_settings",
             "team_count",
             "teams",
@@ -56,6 +59,12 @@ class LeagueDetailSerializer(serializers.ModelSerializer):
 
     def get_team_count(self, obj):
         return obj.teams.count()
+
+    def get_needs_sync(self, obj):
+        if not obj.last_sync_date:
+            return True
+        hours_since_sync = (timezone.now() - obj.last_sync_date).total_seconds() / 3600
+        return hours_since_sync > 24
 
 
 class LeagueSettingsSerializer(serializers.ModelSerializer):
