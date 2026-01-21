@@ -362,7 +362,7 @@ Filter trades by:
 
 ## Phase 4: ESPN Sync Integration
 
-### Prompt 4.1: ESPN Utility Functions
+### Prompt 4.1: ESPN Utility Functions (Done)
 
 Create ESPN integration utilities in league/utils/espn_utils.py:
 
@@ -443,11 +443,9 @@ Example usage:
 ```bash
 python manage.py sync_espn_players --league_id=abc123 --limit=500
 ```
-```
 
 ### Prompt 4.3: ESPN League Sync Command
 
-```
 Create Django management command: league/management/commands/sync_espn_league.py
 
 This command syncs teams and rosters from ESPN.
@@ -477,11 +475,9 @@ Logic:
 Important: Do NOT reset salaries for existing roster players - only set min_salary for newly added players.
 
 Use the existing sync_espn_league.py as reference.
-```
 
 ### Prompt 4.4: ESPN Sync API Endpoint
 
-```
 Create an API endpoint for commissioners to trigger ESPN sync:
 
 **File: api/views/espn_sync.py**
@@ -506,7 +502,6 @@ For synchronous execution (if Celery not enabled):
 - Return results in response
 
 Add to League serializer: `last_sync_date`, `needs_sync` (computed from last_sync_date > 6 hours ago)
-```
 
 ---
 
@@ -514,7 +509,6 @@ Add to League serializer: `last_sync_date`, `needs_sync` (computed from last_syn
 
 ### Prompt 5.1: Draft Lottery Implementation
 
-```
 Create draft lottery system in league/services/lottery.py:
 
 The lottery determines the top 2 picks for the rookie draft. Non-playoff teams participate, with worse records having better odds.
@@ -582,7 +576,6 @@ GET /api/league/lottery/odds/
 
 GET /api/league/lottery/results/
 - Returns LotteryResult for current/specified year
-```
 
 ---
 
@@ -590,7 +583,6 @@ GET /api/league/lottery/results/
 
 ### Prompt 6.1: API Client Extensions
 
-```
 Extend the Next.js API client (next/src/api/) to support the fantasy basketball endpoints:
 
 **File: next/src/api/league.ts**
@@ -712,11 +704,9 @@ export function useTeam() {
 ```
 
 Wrap the app with TeamProvider in the root layout (after AuthProvider).
-```
 
 ### Prompt 6.3: Navigation and Layout Updates
 
-```
 Update the navigation and layout for the fantasy basketball app:
 
 **File: next/src/components/layout/AppLayout.tsx**
@@ -758,7 +748,6 @@ export const routes = {
 ```
 
 Update the existing dashboard page to use AppLayout.
-```
 
 ---
 
@@ -766,7 +755,6 @@ Update the existing dashboard page to use AppLayout.
 
 ### Prompt 7.1: Dashboard Page
 
-```
 Create the main dashboard page at next/src/app/dashboard/page.tsx:
 
 The dashboard shows an overview of the user's team and league status.
@@ -805,11 +793,9 @@ Use components:
 - Table for roster snapshot
 
 Make it mobile-responsive with a single-column layout on small screens.
-```
 
 ### Prompt 7.2: Team Detail Page
 
-```
 Create the team detail page at next/src/app/team/[id]/page.tsx:
 
 This page shows full details for any team (own or other teams in league).
@@ -851,11 +837,9 @@ Create reusable components:
 - DraftPickList
 - SalaryCapBar
 - TeamHeader
-```
 
 ### Prompt 7.3: League Page
 
-```
 Create the league overview page at next/src/app/league/page.tsx:
 
 Shows league-wide information and standings.
@@ -891,11 +875,9 @@ For commissioners, add:
 - Settings button (opens modal/page to edit league settings)
 - Sync button
 - Run Lottery button (if applicable)
-```
 
 ### Prompt 7.4: Free Agents Page
 
-```
 Create the free agents search page at next/src/app/free-agents/page.tsx:
 
 Searchable, filterable list of available players.
@@ -933,7 +915,6 @@ Create components:
 - AddToRosterModal
 
 Handle loading and empty states appropriately.
-```
 
 ---
 
@@ -941,7 +922,6 @@ Handle loading and empty states appropriately.
 
 ### Prompt 8.1: Trade Machine Page
 
-```
 Create the trade machine at next/src/app/trade-machine/page.tsx:
 
 Interactive tool for building and analyzing trades.
@@ -993,11 +973,9 @@ Create components:
 - TradableDraftPickList
 - TradeAnalysisPanel
 - TradeSummary
-```
 
 ### Prompt 8.2: Trade History and Detail Pages
 
-```
 Create trade-related pages:
 
 **1. Trade History Page** (next/src/app/trades/page.tsx):
@@ -1043,7 +1021,6 @@ Create components:
 - TradeCard (for list view)
 - TradeDetailView
 - TradeActionButtons
-```
 
 ---
 
@@ -1051,7 +1028,6 @@ Create components:
 
 ### Prompt 9.1: Rookie Draft Page
 
-```
 Create the rookie draft page at next/src/app/rookie-draft/page.tsx:
 
 Manages the rookie draft process.
@@ -1103,7 +1079,6 @@ Create components:
 - LotteryOddsDisplay
 - LotteryResultsDisplay
 - MakePickModal
-```
 
 ---
 
@@ -1111,7 +1086,6 @@ Create components:
 
 ### Prompt 10.1: Commissioner Admin Pages
 
-```
 Create admin section for commissioners at next/src/app/admin/:
 
 **Layout:**
@@ -1164,11 +1138,9 @@ Create components:
 - RookieForm
 - LeagueSettingsForm
 - SyncControls
-```
 
 ### Prompt 10.2: Confirmation Modals and Audit Trail
 
-```
 Add safety features for admin actions:
 
 **1. Confirmation Modals**
@@ -1213,7 +1185,6 @@ Add API endpoint:
 GET /api/admin/actions/ - List recent admin actions (commissioner only)
 
 Display recent actions in admin dashboard.
-```
 
 ---
 
@@ -1221,7 +1192,6 @@ Display recent actions in admin dashboard.
 
 ### Prompt 11.1: Mobile-First Refinements
 
-```
 Review and optimize all pages for mobile experience:
 
 **Global Mobile Improvements:**
@@ -1265,11 +1235,9 @@ Create/update components:
 - BottomNav (mobile tab bar)
 
 Use Tailwind breakpoints consistently: sm:, md:, lg:
-```
 
 ### Prompt 11.2: Loading States and Error Handling
 
-```
 Add consistent loading and error states across the app:
 
 **1. Loading States**
@@ -1326,7 +1294,6 @@ Use Toast from bb/feedback for:
 - Sync completion
 
 Create a global toast context/hook for easy triggering.
-```
 
 ---
 
@@ -1334,7 +1301,6 @@ Create a global toast context/hook for easy triggering.
 
 ### Prompt 12.1: Deployment Configuration
 
-```
 Configure the app for deployment:
 
 **Backend (Django on Render):**
@@ -1397,7 +1363,6 @@ Add worker service to render.yaml:
 - [ ] CORS_ALLOWED_ORIGINS
 - [ ] FRONTEND_URL (for emails)
 - [ ] ESPN credentials (if storing centrally)
-```
 
 ---
 
