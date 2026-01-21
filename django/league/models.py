@@ -432,3 +432,39 @@ class TradeAsset(models.Model):
     def __str__(self):
         asset = self.player.name if self.player else str(self.draft_pick)
         return f"{asset}: {self.from_team.name} -> {self.to_team.name}"
+
+
+class LotteryResult(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    league = models.ForeignKey(
+        League, on_delete=models.CASCADE, related_name="lottery_results"
+    )
+    year = models.IntegerField()
+    executed_at = models.DateTimeField(auto_now_add=True)
+    executed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="executed_lotteries",
+    )
+    results = models.JSONField(
+        default=dict,
+        help_text="Full lottery results including all pick assignments",
+    )
+    first_pick_team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        related_name="first_pick_lotteries",
+    )
+    second_pick_team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        related_name="second_pick_lotteries",
+    )
+
+    class Meta:
+        unique_together = [("league", "year")]
+
+    def __str__(self):
+        return f"{self.league.name} {self.year} Lottery"

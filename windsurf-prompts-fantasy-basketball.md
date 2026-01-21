@@ -360,7 +360,7 @@ Filter trades by:
 
 ---
 
-## Phase 4: ESPN Sync Integration
+## Phase 4: ESPN Sync Integration (Done)
 
 ### Prompt 4.1: ESPN Utility Functions (Done)
 
@@ -507,7 +507,7 @@ Add to League serializer: `last_sync_date`, `needs_sync` (computed from last_syn
 
 ## Phase 5: Draft Lottery System
 
-### Prompt 5.1: Draft Lottery Implementation
+### Prompt 5.1: Draft Lottery Implementation (Done)
 
 Create draft lottery system in league/services/lottery.py:
 

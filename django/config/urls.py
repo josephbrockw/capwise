@@ -33,6 +33,11 @@ from api.views.draft import DraftPickViewSet, RookieViewSet  # type: ignore
 from api.views.espn_sync import ESPNSyncStatusView, ESPNSyncView  # type: ignore
 from api.views.experiment import ExperimentViewSet  # type: ignore
 from api.views.league import LeagueViewSet, TeamViewSet  # type: ignore
+from api.views.lottery import (  # type: ignore
+    LotteryOddsView,
+    LotteryResultView,
+    RunLotteryView,
+)
 from api.views.payment import ProductViewSet, PurchaseViewSet  # type: ignore
 from api.views.player import PlayerViewSet  # type: ignore
 from api.views.roster import RosterViewSet  # type: ignore
@@ -69,6 +74,13 @@ urlpatterns = [
     path("api/league/sync", ESPNSyncView.as_view(), name="espn-sync"),
     path(
         "api/league/sync/status", ESPNSyncStatusView.as_view(), name="espn-sync-status"
+    ),
+    path("api/league/lottery/run", RunLotteryView.as_view(), name="lottery-run"),
+    path("api/league/lottery/odds", LotteryOddsView.as_view(), name="lottery-odds"),
+    path(
+        "api/league/lottery/results",
+        LotteryResultView.as_view(),
+        name="lottery-results",
     ),
     # OpenAPI 3 documentation with Swagger UI
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
