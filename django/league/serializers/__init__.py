@@ -34,6 +34,14 @@ from .team import (
     TeamListSerializer,
     TeamRosterSerializer,
 )
+from .trade import (
+    TradeAnalysisSerializer,
+    TradeAssetSerializer,
+    TradeCreateSerializer,
+    TradeDetailSerializer,
+    TradeListSerializer,
+    TradeUpdateSerializer,
+)
 
 __all__ = [
     "LeagueListSerializer",
@@ -62,4 +70,10 @@ __all__ = [
     "RookieSerializer",
     "RookieCreateSerializer",
     "RookieUpdateSerializer",
+    "TradeListSerializer",
+    "TradeDetailSerializer",
+    "TradeAssetSerializer",
+    "TradeCreateSerializer",
+    "TradeUpdateSerializer",
+    "TradeAnalysisSerializer",
 ]

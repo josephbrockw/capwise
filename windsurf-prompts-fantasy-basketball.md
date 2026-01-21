@@ -242,7 +242,7 @@ Add pagination (StandardPagination with page_size=50) for player list.
 Register routes in config/urls.py under /api/league/.
 ```
 
-### Prompt 3.2: Roster Management API
+### Prompt 3.2: Roster Management API (Done)
 
 ```
 Create roster management endpoints in api/views/roster.py:
@@ -277,7 +277,7 @@ POST /roster/batch-update/
 - Updates multiple roster entries at once (useful for bulk salary changes)
 ```
 
-### Prompt 3.3: Draft Picks API
+### Prompt 3.3: Draft Picks API (Done)
 
 ```
 Create draft pick management endpoints in api/views/draft.py:
@@ -307,7 +307,7 @@ Serializers:
 - RookieSerializer (all fields with positions)
 
 Add endpoint for draft pick ownership history (if we want to track trades):
-GET /draft-picks/{id}/history/
+GET /draft-picks/{id}/history
 ```
 
 ### Prompt 3.4: Trade API Endpoints
