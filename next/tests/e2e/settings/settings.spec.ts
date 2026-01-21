@@ -1,26 +1,22 @@
 import { test, expect } from '@playwright/test';
-import { clearAuth, loginUser, logoutUser } from '../helpers/auth.helpers';
-
-const TEST_USER = {
-  email: 'esme@lancre.gov',
-  password: 'testpass123',
-};
+import { clearAuth, loginUser, logoutUser, setupAuthenticatedUser, TestUser } from '../helpers/auth.helpers';
 
 /**
  * Settings Page E2E Test
- * Tests user profile and password change functionality using existing test user
+ * Tests user profile and password change functionality
  */
 test.describe('Settings Page', () => {
+  let testUser: TestUser;
+
   test.beforeEach(async ({ page }) => {
     await clearAuth(page);
   });
 
   test('should handle profile and password changes', async ({ page }) => {
-    const originalPassword = TEST_USER.password;
+    // Create a fresh test user for this test
+    testUser = await setupAuthenticatedUser(page);
+    const originalPassword = testUser.password;
     const newPassword = 'NewPassword456!';
-
-    // Login with existing test user
-    await loginUser(page, TEST_USER.email, originalPassword);
 
     // Navigate to settings page
     await page.goto('/dashboard/settings');
@@ -69,21 +65,9 @@ test.describe('Settings Page', () => {
     await logoutUser(page);
 
     // Step 6: Login with new password
-    await loginUser(page, TEST_USER.email, newPassword);
+    await loginUser(page, testUser.email, newPassword);
 
     // Verify we're on dashboard
     await expect(page).toHaveURL(/.*\/dashboard/);
-
-    // Cleanup: Reset password back to original for future test runs
-    await page.goto('/dashboard/settings');
-    await page.waitForLoadState('networkidle');
-    await page.getByRole('tab', { name: /password/i }).click();
-
-    await page.getByLabel('Current Password').fill(newPassword);
-    await page.getByLabel('New Password', { exact: true }).fill(originalPassword);
-    await page.getByLabel('Confirm New Password').fill(originalPassword);
-    await page.getByRole('button', { name: /change password/i }).click();
-
-    await expect(page.getByText(/password changed successfully/i)).toBeVisible({ timeout: 10000 });
   });
 });

@@ -83,13 +83,29 @@ export async function loginUser(page: Page, email: string, password: string, rem
  * Logout a user via the UI (uses avatar dropdown)
  */
 export async function logoutUser(page: Page) {
-  const avatarDropdown = page.locator('nav [aria-haspopup="menu"]').first();
-  await expect(avatarDropdown).toBeVisible({ timeout: 10000 });
-  await avatarDropdown.click();
+  // Check viewport size to determine if we're on mobile or desktop
+  const viewportSize = page.viewportSize();
+  const isMobile = viewportSize && viewportSize.width < 1024;
 
-  const logoutButton = page.getByRole('button', { name: /logout/i });
-  await expect(logoutButton).toBeVisible({ timeout: 5000 });
-  await logoutButton.click();
+  if (isMobile) {
+    // Mobile: open hamburger menu, then click logout
+    const menuButton = page.locator('button[aria-label="Toggle menu"]');
+    await expect(menuButton).toBeVisible({ timeout: 10000 });
+    await menuButton.click();
+
+    const logoutButton = page.getByRole('button', { name: /logout/i });
+    await expect(logoutButton).toBeVisible({ timeout: 5000 });
+    await logoutButton.click();
+  } else {
+    // Desktop: use avatar dropdown in header or nav
+    const avatarDropdown = page.locator('[aria-haspopup="menu"]').first();
+    await expect(avatarDropdown).toBeVisible({ timeout: 10000 });
+    await avatarDropdown.click();
+
+    const logoutButton = page.getByRole('button', { name: /logout/i });
+    await expect(logoutButton).toBeVisible({ timeout: 5000 });
+    await logoutButton.click();
+  }
 
   await page.waitForURL(/\/(login)?$/, { timeout: 10000 });
 }

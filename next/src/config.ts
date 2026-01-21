@@ -1,5 +1,5 @@
 const config = {
-  appName: 'BaseBuild',
+  appName: 'Capwise',
   version: process.env.NEXT_PUBLIC_APP_VERSION || '0.1.0',
   apiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8009',
   isDevelopment: process.env.NODE_ENV === 'development',
@@ -14,6 +14,17 @@ const config = {
       account: '/settings#account',
       billing: '/settings#billing',
     },
+  },
+
+  routes: {
+    dashboard: '/dashboard',
+    team: (id: string) => `/team/${id}`,
+    league: '/league',
+    tradeMachine: '/trade-machine',
+    rookieDraft: '/rookie-draft',
+    freeAgents: '/free-agents',
+    admin: '/admin',
+    settings: '/dashboard/settings',
   },
 
   api: {

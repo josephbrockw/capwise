@@ -633,7 +633,7 @@ interface Player {
   on_roster: boolean;
   stats: PlayerStats;
 }
-
+```
 // ... more types for RosterPlayer, DraftPick, Trade, etc.
 
 // API Functions
@@ -652,6 +652,7 @@ All API calls should:
 1. Include the X-Team-Context header from context (see next prompt)
 2. Use the existing auth token handling from client.ts
 3. Return typed responses
+
 
 ### Prompt 6.2: Team Context Provider
 
@@ -702,17 +703,17 @@ export function useTeam() {
 
 Wrap the app with TeamProvider in the root layout (after AuthProvider).
 
-### Prompt 6.3: Navigation and Layout Updates
+### Prompt 6.3: Navigation and Layout Updates (Done)
 
 Update the navigation and layout for the fantasy basketball app:
+__Try to utilize what we already have. If major changes are needed to components, we can add a new directory for capwise specific components next to the `bb` components. Extend what you can from bb but we'll be pulling in changes to bb components periodically from the base template, so we don't want conflicts on those components.__
 
 **File: next/src/components/layout/AppLayout.tsx**
 
 Create a new layout component for authenticated pages:
 1. Navbar with:
-   - App logo/name
+   - App logo/name (Capwise is the app name)
    - Team selector dropdown (shows current team, allows switching)
-   - League selector (if user is in multiple leagues)
    - User menu (profile, logout)
 2. Sidebar navigation (collapsible on mobile):
    - Dashboard
@@ -722,7 +723,7 @@ Create a new layout component for authenticated pages:
    - Rookie Draft
    - Free Agents
    - Admin (only if isCommissioner)
-3. Mobile: Bottom navigation bar with key sections
+3. Mobile: the navbar and sidebar should combine into one openable/closeable menu that takes up the full screen
 
 Use existing bb/ components:
 - Navbar, NavLink from bb/navigation
