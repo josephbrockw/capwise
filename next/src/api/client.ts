@@ -39,6 +39,11 @@ class APIClient {
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
+
+      const teamId = localStorage.getItem('capwise_current_team_id');
+      if (teamId) {
+        headers['X-Team-Context'] = teamId;
+      }
     }
 
     if (customHeaders) {
