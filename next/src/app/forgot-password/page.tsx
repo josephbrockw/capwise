@@ -90,6 +90,7 @@ export default function ForgotPasswordPage() {
 
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   label="Email address"
                   required

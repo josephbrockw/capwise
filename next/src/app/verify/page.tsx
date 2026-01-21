@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import config from '@/config';
 import { verifyEmail, resendVerificationEmail } from '@/api/auth';
 import { Card, Button } from '@/components/ui';
 import { Stack } from '@/components/bb/layout';
-import { Alert } from '@/components/bb/feedback';
+import { Alert, Spinner } from '@/components/bb/feedback';
 import { Input } from '@/components/bb/ui';
 
-export default function VerifyPage() {
+function VerifyForm() {
   const searchParams = useSearchParams();
   const tokenFromUrl = searchParams.get('token');
   const emailFromUrl = searchParams.get('email');
@@ -226,5 +226,17 @@ export default function VerifyPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner size="lg" label="Loading..." />
+      </div>
+    }>
+      <VerifyForm />
+    </Suspense>
   );
 }

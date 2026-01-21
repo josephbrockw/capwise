@@ -51,7 +51,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputPro
     }, [controlledValue]);
 
     // Debounced onChange handler
-    const timeoutRef = React.useRef<NodeJS.Timeout>();
+    const timeoutRef = React.useRef<NodeJS.Timeout>(undefined);
 
     const debouncedOnChange = useCallback(
       (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {

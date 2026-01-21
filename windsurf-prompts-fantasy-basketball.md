@@ -654,7 +654,7 @@ All API calls should:
 3. Return typed responses
 
 
-### Prompt 6.2: Team Context Provider
+### Prompt 6.2: Team Context Provider (Done)
 
 Create a React context for managing team selection:
 

@@ -1,16 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import config from '@/config';
 import { confirmPasswordReset } from '@/api/auth';
 import { Card, Button } from '@/components/ui';
 import { Stack } from '@/components/bb/layout';
-import { Alert } from '@/components/bb/feedback';
+import { Alert, Spinner } from '@/components/bb/feedback';
 import { Input } from '@/components/bb/ui';
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const tokenFromUrl = searchParams.get('token');
 
@@ -129,6 +129,7 @@ export default function ResetPasswordPage() {
                 {!tokenFromUrl && (
                   <Input
                     id="token"
+                    name="token"
                     type="text"
                     label="Reset Token"
                     required
@@ -141,6 +142,7 @@ export default function ResetPasswordPage() {
 
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   label="New Password"
                   required
@@ -152,6 +154,7 @@ export default function ResetPasswordPage() {
 
                 <Input
                   id="passwordConfirm"
+                  name="passwordConfirm"
                   type="password"
                   label="Confirm New Password"
                   required
@@ -186,5 +189,17 @@ export default function ResetPasswordPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner size="lg" label="Loading..." />
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

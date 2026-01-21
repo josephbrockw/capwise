@@ -104,6 +104,7 @@ export default function RegisterPage() {
 
             <Input
               id="name"
+              name="name"
               type="text"
               label="Full name"
               required
@@ -114,6 +115,7 @@ export default function RegisterPage() {
 
             <Input
               id="email"
+              name="email"
               type="email"
               label="Email address"
               required
@@ -125,6 +127,7 @@ export default function RegisterPage() {
             <div>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 label="Password"
                 required
@@ -139,6 +142,7 @@ export default function RegisterPage() {
 
             <Input
               id="confirm-password"
+              name="confirm-password"
               type="password"
               label="Confirm password"
               required

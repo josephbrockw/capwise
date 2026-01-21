@@ -62,6 +62,7 @@ export default function LoginPage() {
 
             <Input
               id="email"
+              name="email"
               type="email"
               label="Email address"
               required
@@ -72,6 +73,7 @@ export default function LoginPage() {
 
             <Input
               id="password"
+              name="password"
               type="password"
               label="Password"
               required
