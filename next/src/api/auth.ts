@@ -30,10 +30,19 @@ export interface LoginRequest {
   remember_me?: boolean;
 }
 
+export interface LoginTeam {
+  id: string;
+  name: string;
+  league_id: string;
+  league_name: string;
+}
+
 export interface LoginResponse {
   access: string;
   refresh: string;
   user: User;
+  teams: LoginTeam[];
+  default_team: string | null;
 }
 
 export interface VerifyEmailRequest {

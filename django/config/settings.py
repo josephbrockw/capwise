@@ -251,6 +251,16 @@ CORS_ORIGIN_WHITELIST = os.environ.get(
     "CORS_ORIGIN_WHITELIST", "http://localhost:3001,http://localhost:3002"
 ).split(",")
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "x-team-context",
+]
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 

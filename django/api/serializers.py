@@ -143,6 +143,15 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserTeamSerializer(serializers.Serializer):
+    """Minimal team serializer for login response."""
+
+    id = serializers.UUIDField()
+    name = serializers.CharField()
+    league_id = serializers.UUIDField(source="league.id")
+    league_name = serializers.CharField(source="league.name")
+
+
 class LogInSerializer(TokenObtainPairSerializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
@@ -179,6 +188,15 @@ class LogInSerializer(TokenObtainPairSerializer):
 
         # Add user data to response
         data["user"] = RegisterUserSerializer(self.user).data
+
+        # Add user's teams and default team to response
+        teams = self.user.get_teams().select_related("league")
+        data["teams"] = UserTeamSerializer(teams, many=True).data
+        data["default_team"] = (
+            UserTeamSerializer(self.user.default_team).data
+            if self.user.default_team
+            else None
+        )
 
         return data
 

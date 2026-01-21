@@ -751,7 +751,7 @@ Update the existing dashboard page to use AppLayout.
 
 ## Phase 7: Frontend - Core Pages
 
-### Prompt 7.1: Dashboard Page
+### Prompt 7.1: Dashboard Page (Done)
 
 Create the main dashboard page at next/src/app/dashboard/page.tsx:
 

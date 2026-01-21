@@ -49,6 +49,8 @@ export function isAuthenticated(): boolean {
   return getAuthToken() !== null;
 }
 
+const TEAM_ID_STORAGE_KEY = 'capwise_current_team_id';
+
 /**
  * Login user with email and password
  */
@@ -59,6 +61,12 @@ export async function login(email: string, password: string, rememberMe: boolean
     // Store tokens
     setAuthToken(response.access);
     setRefreshToken(response.refresh);
+
+    // Set selected team: use default_team if available, otherwise first team in list
+    if (response.teams && response.teams.length > 0) {
+      const selectedTeamId = response.default_team ?? response.teams[0].id;
+      localStorage.setItem(TEAM_ID_STORAGE_KEY, selectedTeamId);
+    }
 
     return response.user;
   } catch (error) {
@@ -103,6 +111,7 @@ export async function logout() {
     // Silent fail - token will be removed regardless
   } finally {
     removeAuthToken();
+    localStorage.removeItem(TEAM_ID_STORAGE_KEY);
   }
 }
 

@@ -139,3 +139,34 @@ class TeamViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("current_salary", response.json()["data"])
         self.assertIn("cap_space", response.json()["data"])
+
+    def test_team_detail_includes_league_object(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            f"/api/league/teams/{self.bulls.id}",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["data"]
+        self.assertIn("league", data)
+        league = data["league"]
+        self.assertEqual(league["id"], str(self.league.id))
+        self.assertEqual(league["name"], self.league.name)
+        self.assertIn("year", league)
+        self.assertIn("salary_cap", league)
+        self.assertIn("min_salary", league)
+        self.assertIn("roster_size", league)
+        self.assertIn("commissioner_id", league)
+        self.assertIn("draft_open", league)
+        self.assertIn("needs_sync", league)
+
+    def test_team_detail_includes_owner_id(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            f"/api/league/teams/{self.bulls.id}",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["data"]
+        self.assertIn("owner_id", data)
+        self.assertEqual(data["owner_id"], str(self.user.id))

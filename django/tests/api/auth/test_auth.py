@@ -49,6 +49,12 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(data["user"]["first_name"], user.first_name)
         self.assertEqual(data["user"]["last_name"], user.last_name)
 
+        # Check teams and default_team are in response (magrat has no teams)
+        self.assertIn("teams", data)
+        self.assertIn("default_team", data)
+        self.assertEqual(data["teams"], [])
+        self.assertIsNone(data["default_team"])
+
         # Check that user data is also embedded in JWT token payload
         header, payload, signature = data["access"].split(".")
         header = json.loads(base64.b64decode(header + "==").decode("utf-8"))
@@ -60,6 +66,56 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(payload["email"], user.email)
         self.assertEqual(payload["first_name"], user.first_name)
         self.assertEqual(payload["last_name"], user.last_name)
+
+    def test_login_returns_user_teams(self):
+        """Login should return user's teams and default_team."""
+        url = "/api/auth/login"
+        payload = {"username": "nanny", "password": "password123"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+
+        # Check teams are returned
+        self.assertIn("teams", data)
+        self.assertEqual(len(data["teams"]), 1)
+        team = data["teams"][0]
+        self.assertEqual(team["id"], "bbbbbbbb-cccc-dddd-eeee-ffffffffffff")
+        self.assertEqual(team["name"], "Nanny's Team")
+        self.assertEqual(team["league_id"], "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
+        self.assertEqual(team["league_name"], "Test League")
+
+        # default_team should be None since not set
+        self.assertIn("default_team", data)
+        self.assertIsNone(data["default_team"])
+
+    def test_login_returns_default_team(self):
+        """Login should return default_team when set."""
+        from league.models import Team
+
+        user = get_user_model().objects.get(username="nanny")
+        team = Team.objects.get(pk="bbbbbbbb-cccc-dddd-eeee-ffffffffffff")
+        user.default_team = team
+        user.save()
+
+        url = "/api/auth/login"
+        payload = {"username": "nanny", "password": "password123"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+
+        # Check default_team is returned
+        self.assertIn("default_team", data)
+        self.assertIsNotNone(data["default_team"])
+        self.assertEqual(
+            data["default_team"]["id"], "bbbbbbbb-cccc-dddd-eeee-ffffffffffff"
+        )
+        self.assertEqual(data["default_team"]["name"], "Nanny's Team")
+        self.assertEqual(
+            data["default_team"]["league_id"], "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+        )
+        self.assertEqual(data["default_team"]["league_name"], "Test League")
 
     def test_login_with_email(self):
         url = "/api/auth/login"

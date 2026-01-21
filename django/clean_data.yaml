@@ -1,4 +1,5 @@
 - model: account.user
+  pk: '00000000-0000-0000-0000-000000000001'
   fields:
     password: pbkdf2_sha256$390000$uefOQabAZq3e2g8XZDJ5WC$2oi7KW+Kw2rxy7QC+Czsw/nRuVfOaCMkQ+fVZ31JCQE=
     last_login: null
@@ -15,6 +16,7 @@
     user_permissions: []
 
 - model: account.user
+  pk: '00000000-0000-0000-0000-000000000002'
   fields:
     password: pbkdf2_sha256$390000$uefOQabAZq3e2g8XZDJ5WC$2oi7KW+Kw2rxy7QC+Czsw/nRuVfOaCMkQ+fVZ31JCQE=
     last_login: null
@@ -29,6 +31,1420 @@
     preferred_name: ''
     groups: []
     user_permissions: []
+
+- model: league.league
+  pk: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+  fields:
+    name: Dynasty Ballers
+    year: 2025
+    salary_cap: 300
+    min_salary: 1
+    roster_size: 16
+    commissioner: '00000000-0000-0000-0000-000000000002'
+    draft_open: false
+    espn_league_id: 123456789
+    espn_s2: null
+    espn_swid: null
+    espn_owner_mapping: {}
+    last_sync_date: '2025-01-15T10:00:00.000Z'
+    salary_escalation_settings:
+      rookie_year_salary: 1
+      year_2_4_multiplier: 0.80
+      year_5_plus_multiplier: 0.90
+
+- model: league.team
+  pk: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    name: Joe's Ballers
+    owner: '00000000-0000-0000-0000-000000000002'
+    abbreviation: JOE
+    logo_url: null
+    wins: 12
+    losses: 5
+    standing: 2
+    espn_team_id: 1
+
+- model: league.team
+  pk: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    name: Granny's Hoopers
+    owner: '00000000-0000-0000-0000-000000000001'
+    abbreviation: GRN
+    logo_url: null
+    wins: 10
+    losses: 7
+    standing: 4
+    espn_team_id: 2
+
+- model: league.team
+  pk: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    name: Court Kings
+    owner: null
+    abbreviation: CK
+    logo_url: null
+    wins: 14
+    losses: 3
+    standing: 1
+    espn_team_id: 3
+
+- model: league.team
+  pk: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    name: Slam Dunkers
+    owner: null
+    abbreviation: SD
+    logo_url: null
+    wins: 8
+    losses: 9
+    standing: 6
+    espn_team_id: 4
+
+# Positions
+- model: league.position
+  pk: 'PG'
+  fields:
+    name: Point Guard
+
+- model: league.position
+  pk: 'SG'
+  fields:
+    name: Shooting Guard
+
+- model: league.position
+  pk: 'SF'
+  fields:
+    name: Small Forward
+
+- model: league.position
+  pk: 'PF'
+  fields:
+    name: Power Forward
+
+- model: league.position
+  pk: 'C'
+  fields:
+    name: Center
+
+# Players - Joe's Ballers Roster
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000001'
+  fields:
+    player_id: 3945274
+    name: Luka Doncic
+    positions: ['PG', 'SG']
+    nba_team: DAL
+    projected_value: 58
+    rookie_year: 2019
+    fpts_avg: 58.4
+    pts_avg: 33.9
+    reb_avg: 9.2
+    ast_avg: 9.8
+    stl_avg: 1.4
+    blk_avg: 0.5
+    to_avg: 4.1
+    fg_pct: 0.487
+    ft_pct: 0.786
+    three_pct: 0.382
+    gp: 45
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000002'
+  fields:
+    player_id: 6583
+    name: Anthony Davis
+    positions: ['PF', 'C']
+    nba_team: LAL
+    projected_value: 52
+    rookie_year: 2013
+    fpts_avg: 52.1
+    pts_avg: 24.1
+    reb_avg: 12.6
+    ast_avg: 3.5
+    stl_avg: 1.3
+    blk_avg: 2.3
+    to_avg: 2.1
+    fg_pct: 0.556
+    ft_pct: 0.813
+    three_pct: 0.274
+    gp: 42
+    is_injured: true
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000003'
+  fields:
+    player_id: 4433218
+    name: Tyrese Haliburton
+    positions: ['PG']
+    nba_team: IND
+    projected_value: 48
+    rookie_year: 2021
+    fpts_avg: 48.2
+    pts_avg: 20.1
+    reb_avg: 3.9
+    ast_avg: 10.8
+    stl_avg: 1.2
+    blk_avg: 0.4
+    to_avg: 2.5
+    fg_pct: 0.472
+    ft_pct: 0.853
+    three_pct: 0.381
+    gp: 48
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000004'
+  fields:
+    player_id: 4433255
+    name: Paolo Banchero
+    positions: ['PF', 'SF']
+    nba_team: ORL
+    projected_value: 44
+    rookie_year: 2023
+    fpts_avg: 44.3
+    pts_avg: 22.6
+    reb_avg: 6.9
+    ast_avg: 5.4
+    stl_avg: 0.9
+    blk_avg: 0.6
+    to_avg: 3.1
+    fg_pct: 0.455
+    ft_pct: 0.728
+    three_pct: 0.341
+    gp: 50
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000005'
+  fields:
+    player_id: 3136193
+    name: Devin Booker
+    positions: ['SG', 'PG']
+    nba_team: PHX
+    projected_value: 46
+    rookie_year: 2016
+    fpts_avg: 46.1
+    pts_avg: 27.1
+    reb_avg: 4.5
+    ast_avg: 6.9
+    stl_avg: 1.0
+    blk_avg: 0.4
+    to_avg: 2.8
+    fg_pct: 0.492
+    ft_pct: 0.878
+    three_pct: 0.367
+    gp: 47
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000006'
+  fields:
+    player_id: 4433256
+    name: Chet Holmgren
+    positions: ['C', 'PF']
+    nba_team: OKC
+    projected_value: 42
+    rookie_year: 2024
+    fpts_avg: 42.5
+    pts_avg: 16.5
+    reb_avg: 7.9
+    ast_avg: 2.4
+    stl_avg: 0.8
+    blk_avg: 2.6
+    to_avg: 1.5
+    fg_pct: 0.531
+    ft_pct: 0.791
+    three_pct: 0.372
+    gp: 52
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000007'
+  fields:
+    player_id: 4277811
+    name: Darius Garland
+    positions: ['PG']
+    nba_team: CLE
+    projected_value: 38
+    rookie_year: 2020
+    fpts_avg: 38.2
+    pts_avg: 18.3
+    reb_avg: 2.8
+    ast_avg: 6.5
+    stl_avg: 1.1
+    blk_avg: 0.2
+    to_avg: 2.4
+    fg_pct: 0.447
+    ft_pct: 0.863
+    three_pct: 0.371
+    gp: 44
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000008'
+  fields:
+    player_id: 3078576
+    name: Mikal Bridges
+    positions: ['SF', 'SG']
+    nba_team: NYK
+    projected_value: 32
+    rookie_year: 2019
+    fpts_avg: 32.1
+    pts_avg: 19.6
+    reb_avg: 4.5
+    ast_avg: 3.6
+    stl_avg: 1.0
+    blk_avg: 0.5
+    to_avg: 1.8
+    fg_pct: 0.438
+    ft_pct: 0.819
+    three_pct: 0.371
+    gp: 51
+    is_injured: false
+
+# Players - Granny's Hoopers Roster
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000009'
+  fields:
+    player_id: 4065648
+    name: Jayson Tatum
+    positions: ['SF', 'PF']
+    nba_team: BOS
+    projected_value: 54
+    rookie_year: 2018
+    fpts_avg: 54.3
+    pts_avg: 26.9
+    reb_avg: 8.1
+    ast_avg: 4.9
+    stl_avg: 1.0
+    blk_avg: 0.6
+    to_avg: 2.8
+    fg_pct: 0.471
+    ft_pct: 0.831
+    three_pct: 0.376
+    gp: 49
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000010'
+  fields:
+    player_id: 3908809
+    name: Donovan Mitchell
+    positions: ['SG', 'PG']
+    nba_team: CLE
+    projected_value: 47
+    rookie_year: 2018
+    fpts_avg: 47.2
+    pts_avg: 26.3
+    reb_avg: 5.1
+    ast_avg: 4.8
+    stl_avg: 1.3
+    blk_avg: 0.4
+    to_avg: 2.7
+    fg_pct: 0.462
+    ft_pct: 0.851
+    three_pct: 0.381
+    gp: 46
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000011'
+  fields:
+    player_id: 4066261
+    name: Bam Adebayo
+    positions: ['C', 'PF']
+    nba_team: MIA
+    projected_value: 43
+    rookie_year: 2018
+    fpts_avg: 43.1
+    pts_avg: 19.3
+    reb_avg: 10.4
+    ast_avg: 4.9
+    stl_avg: 1.1
+    blk_avg: 0.9
+    to_avg: 2.4
+    fg_pct: 0.527
+    ft_pct: 0.728
+    three_pct: 0.0
+    gp: 48
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000012'
+  fields:
+    player_id: 3907497
+    name: Dejounte Murray
+    positions: ['PG', 'SG']
+    nba_team: NOP
+    projected_value: 39
+    rookie_year: 2017
+    fpts_avg: 39.4
+    pts_avg: 18.5
+    reb_avg: 5.2
+    ast_avg: 6.1
+    stl_avg: 1.5
+    blk_avg: 0.5
+    to_avg: 2.3
+    fg_pct: 0.442
+    ft_pct: 0.812
+    three_pct: 0.328
+    gp: 45
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000013'
+  fields:
+    player_id: 4433217
+    name: Franz Wagner
+    positions: ['SF', 'PF']
+    nba_team: ORL
+    projected_value: 41
+    rookie_year: 2022
+    fpts_avg: 41.2
+    pts_avg: 21.2
+    reb_avg: 5.6
+    ast_avg: 5.3
+    stl_avg: 1.2
+    blk_avg: 0.4
+    to_avg: 2.1
+    fg_pct: 0.478
+    ft_pct: 0.841
+    three_pct: 0.358
+    gp: 49
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000014'
+  fields:
+    player_id: 4433135
+    name: Desmond Bane
+    positions: ['SG', 'SF']
+    nba_team: MEM
+    projected_value: 37
+    rookie_year: 2021
+    fpts_avg: 37.1
+    pts_avg: 23.7
+    reb_avg: 5.0
+    ast_avg: 4.4
+    stl_avg: 0.9
+    blk_avg: 0.4
+    to_avg: 2.1
+    fg_pct: 0.458
+    ft_pct: 0.862
+    three_pct: 0.392
+    gp: 47
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000015'
+  fields:
+    player_id: 4433219
+    name: Evan Mobley
+    positions: ['PF', 'C']
+    nba_team: CLE
+    projected_value: 36
+    rookie_year: 2022
+    fpts_avg: 36.4
+    pts_avg: 15.7
+    reb_avg: 9.4
+    ast_avg: 3.2
+    stl_avg: 0.8
+    blk_avg: 1.5
+    to_avg: 1.9
+    fg_pct: 0.512
+    ft_pct: 0.689
+    three_pct: 0.312
+    gp: 50
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000016'
+  fields:
+    player_id: 4432158
+    name: Herb Jones
+    positions: ['SF', 'PF']
+    nba_team: NOP
+    projected_value: 28
+    rookie_year: 2022
+    fpts_avg: 28.2
+    pts_avg: 11.2
+    reb_avg: 4.1
+    ast_avg: 2.8
+    stl_avg: 1.7
+    blk_avg: 0.9
+    to_avg: 1.2
+    fg_pct: 0.467
+    ft_pct: 0.741
+    three_pct: 0.328
+    gp: 51
+    is_injured: false
+
+# Players - Court Kings Roster
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000017'
+  fields:
+    player_id: 3112335
+    name: Nikola Jokic
+    positions: ['C']
+    nba_team: DEN
+    projected_value: 65
+    rookie_year: 2016
+    fpts_avg: 65.1
+    pts_avg: 26.4
+    reb_avg: 12.4
+    ast_avg: 9.0
+    stl_avg: 1.4
+    blk_avg: 0.9
+    to_avg: 3.0
+    fg_pct: 0.583
+    ft_pct: 0.817
+    three_pct: 0.359
+    gp: 48
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000018'
+  fields:
+    player_id: 4278073
+    name: Shai Gilgeous-Alexander
+    positions: ['PG', 'SG']
+    nba_team: OKC
+    projected_value: 56
+    rookie_year: 2019
+    fpts_avg: 56.3
+    pts_avg: 31.4
+    reb_avg: 5.5
+    ast_avg: 6.2
+    stl_avg: 2.0
+    blk_avg: 1.0
+    to_avg: 2.4
+    fg_pct: 0.535
+    ft_pct: 0.874
+    three_pct: 0.353
+    gp: 50
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000019'
+  fields:
+    player_id: 3032977
+    name: Giannis Antetokounmpo
+    positions: ['PF', 'C']
+    nba_team: MIL
+    projected_value: 60
+    rookie_year: 2014
+    fpts_avg: 60.2
+    pts_avg: 31.1
+    reb_avg: 11.6
+    ast_avg: 5.8
+    stl_avg: 1.0
+    blk_avg: 1.4
+    to_avg: 3.6
+    fg_pct: 0.611
+    ft_pct: 0.657
+    three_pct: 0.274
+    gp: 47
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000020'
+  fields:
+    player_id: 6442
+    name: Kyrie Irving
+    positions: ['PG', 'SG']
+    nba_team: DAL
+    projected_value: 44
+    rookie_year: 2012
+    fpts_avg: 44.1
+    pts_avg: 25.6
+    reb_avg: 5.0
+    ast_avg: 5.2
+    stl_avg: 0.9
+    blk_avg: 0.5
+    to_avg: 2.3
+    fg_pct: 0.497
+    ft_pct: 0.905
+    three_pct: 0.413
+    gp: 46
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000021'
+  fields:
+    player_id: 4433254
+    name: Scottie Barnes
+    positions: ['SF', 'PF']
+    nba_team: TOR
+    projected_value: 45
+    rookie_year: 2022
+    fpts_avg: 45.2
+    pts_avg: 19.5
+    reb_avg: 8.2
+    ast_avg: 6.1
+    stl_avg: 1.3
+    blk_avg: 1.0
+    to_avg: 2.5
+    fg_pct: 0.478
+    ft_pct: 0.741
+    three_pct: 0.302
+    gp: 48
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000022'
+  fields:
+    player_id: 4277961
+    name: Jaren Jackson Jr.
+    positions: ['PF', 'C']
+    nba_team: MEM
+    projected_value: 40
+    rookie_year: 2019
+    fpts_avg: 40.3
+    pts_avg: 22.3
+    reb_avg: 5.5
+    ast_avg: 2.0
+    stl_avg: 0.9
+    blk_avg: 1.6
+    to_avg: 2.2
+    fg_pct: 0.452
+    ft_pct: 0.812
+    three_pct: 0.321
+    gp: 44
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000023'
+  fields:
+    player_id: 4433257
+    name: Jalen Williams
+    positions: ['SG', 'SF']
+    nba_team: OKC
+    projected_value: 38
+    rookie_year: 2023
+    fpts_avg: 38.1
+    pts_avg: 19.1
+    reb_avg: 4.5
+    ast_avg: 5.1
+    stl_avg: 1.4
+    blk_avg: 0.7
+    to_avg: 1.8
+    fg_pct: 0.524
+    ft_pct: 0.821
+    three_pct: 0.346
+    gp: 52
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000024'
+  fields:
+    player_id: 4433222
+    name: Onyeka Okongwu
+    positions: ['C', 'PF']
+    nba_team: ATL
+    projected_value: 29
+    rookie_year: 2021
+    fpts_avg: 29.4
+    pts_avg: 12.2
+    reb_avg: 7.5
+    ast_avg: 1.9
+    stl_avg: 0.6
+    blk_avg: 1.3
+    to_avg: 1.1
+    fg_pct: 0.612
+    ft_pct: 0.746
+    three_pct: 0.0
+    gp: 48
+    is_injured: false
+
+# Players - Slam Dunkers Roster
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000025'
+  fields:
+    player_id: 4433216
+    name: Anthony Edwards
+    positions: ['SG', 'SF']
+    nba_team: MIN
+    projected_value: 50
+    rookie_year: 2021
+    fpts_avg: 50.2
+    pts_avg: 25.9
+    reb_avg: 5.4
+    ast_avg: 5.1
+    stl_avg: 1.3
+    blk_avg: 0.6
+    to_avg: 2.8
+    fg_pct: 0.461
+    ft_pct: 0.836
+    three_pct: 0.368
+    gp: 49
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000026'
+  fields:
+    player_id: 4432573
+    name: LaMelo Ball
+    positions: ['PG', 'SG']
+    nba_team: CHA
+    projected_value: 46
+    rookie_year: 2021
+    fpts_avg: 46.3
+    pts_avg: 22.3
+    reb_avg: 5.5
+    ast_avg: 8.0
+    stl_avg: 1.5
+    blk_avg: 0.3
+    to_avg: 3.2
+    fg_pct: 0.436
+    ft_pct: 0.851
+    three_pct: 0.361
+    gp: 36
+    is_injured: true
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000027'
+  fields:
+    player_id: 3136195
+    name: Karl-Anthony Towns
+    positions: ['C', 'PF']
+    nba_team: NYK
+    projected_value: 45
+    rookie_year: 2016
+    fpts_avg: 45.1
+    pts_avg: 25.4
+    reb_avg: 10.8
+    ast_avg: 3.1
+    stl_avg: 0.7
+    blk_avg: 0.7
+    to_avg: 2.9
+    fg_pct: 0.548
+    ft_pct: 0.823
+    three_pct: 0.428
+    gp: 46
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000028'
+  fields:
+    player_id: 4066259
+    name: De'Aaron Fox
+    positions: ['PG']
+    nba_team: SAC
+    projected_value: 44
+    rookie_year: 2018
+    fpts_avg: 44.2
+    pts_avg: 26.6
+    reb_avg: 4.6
+    ast_avg: 6.0
+    stl_avg: 1.5
+    blk_avg: 0.4
+    to_avg: 2.8
+    fg_pct: 0.468
+    ft_pct: 0.738
+    three_pct: 0.329
+    gp: 47
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000029'
+  fields:
+    player_id: 4433259
+    name: Jabari Smith Jr.
+    positions: ['PF', 'C']
+    nba_team: HOU
+    projected_value: 33
+    rookie_year: 2023
+    fpts_avg: 33.2
+    pts_avg: 14.5
+    reb_avg: 7.3
+    ast_avg: 2.1
+    stl_avg: 0.8
+    blk_avg: 1.1
+    to_avg: 1.5
+    fg_pct: 0.441
+    ft_pct: 0.712
+    three_pct: 0.361
+    gp: 51
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000030'
+  fields:
+    player_id: 4433221
+    name: Obi Toppin
+    positions: ['PF']
+    nba_team: IND
+    projected_value: 26
+    rookie_year: 2021
+    fpts_avg: 26.1
+    pts_avg: 12.1
+    reb_avg: 4.2
+    ast_avg: 2.1
+    stl_avg: 0.6
+    blk_avg: 0.4
+    to_avg: 1.3
+    fg_pct: 0.543
+    ft_pct: 0.756
+    three_pct: 0.351
+    gp: 48
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000031'
+  fields:
+    player_id: 3064514
+    name: Josh Hart
+    positions: ['SG', 'SF']
+    nba_team: NYK
+    projected_value: 30
+    rookie_year: 2018
+    fpts_avg: 30.2
+    pts_avg: 11.4
+    reb_avg: 8.3
+    ast_avg: 4.1
+    stl_avg: 0.9
+    blk_avg: 0.4
+    to_avg: 1.5
+    fg_pct: 0.432
+    ft_pct: 0.741
+    three_pct: 0.328
+    gp: 52
+    is_injured: false
+
+- model: league.player
+  pk: '00000001-0000-0000-0000-000000000032'
+  fields:
+    player_id: 4433258
+    name: Alperen Sengun
+    positions: ['C']
+    nba_team: HOU
+    projected_value: 42
+    rookie_year: 2022
+    fpts_avg: 42.3
+    pts_avg: 19.2
+    reb_avg: 9.3
+    ast_avg: 5.0
+    stl_avg: 0.9
+    blk_avg: 0.8
+    to_avg: 2.8
+    fg_pct: 0.528
+    ft_pct: 0.712
+    three_pct: 0.291
+    gp: 49
+    is_injured: false
+
+# Roster Entries - Joe's Ballers (8 players)
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000001'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000001'
+    salary: 58
+    is_keeper: true
+    keeper_years: 3
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000002'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000002'
+    salary: 47
+    is_keeper: true
+    keeper_years: 2
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000003'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000003'
+    salary: 38
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000004'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000004'
+    salary: 1
+    is_keeper: true
+    keeper_years: 1
+    acquired_by_draft: true
+    trade_blocked: true
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000005'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000005'
+    salary: 42
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000006'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000006'
+    salary: 1
+    is_keeper: true
+    keeper_years: 1
+    acquired_by_draft: true
+    trade_blocked: true
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000007'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000007'
+    salary: 35
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000008'
+  fields:
+    fantasy_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000008'
+    salary: 28
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+# Roster Entries - Granny's Hoopers (8 players)
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000009'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000009'
+    salary: 52
+    is_keeper: true
+    keeper_years: 4
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000010'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000010'
+    salary: 44
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000011'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000011'
+    salary: 39
+    is_keeper: true
+    keeper_years: 2
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000012'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000012'
+    salary: 36
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000013'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000013'
+    salary: 33
+    is_keeper: true
+    keeper_years: 1
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000014'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000014'
+    salary: 30
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000015'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000015'
+    salary: 1
+    is_keeper: true
+    keeper_years: 2
+    acquired_by_draft: true
+    trade_blocked: true
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000016'
+  fields:
+    fantasy_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000016'
+    salary: 22
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+# Roster Entries - Court Kings (8 players)
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000017'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000017'
+    salary: 65
+    is_keeper: true
+    keeper_years: 5
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000018'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000018'
+    salary: 50
+    is_keeper: true
+    keeper_years: 3
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000019'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000019'
+    salary: 58
+    is_keeper: true
+    keeper_years: 6
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000020'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000020'
+    salary: 40
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000021'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000021'
+    salary: 1
+    is_keeper: true
+    keeper_years: 2
+    acquired_by_draft: true
+    trade_blocked: true
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000022'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000022'
+    salary: 36
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000023'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000023'
+    salary: 1
+    is_keeper: true
+    keeper_years: 1
+    acquired_by_draft: true
+    trade_blocked: true
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000024'
+  fields:
+    fantasy_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000024'
+    salary: 24
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+# Roster Entries - Slam Dunkers (8 players)
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000025'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000025'
+    salary: 45
+    is_keeper: true
+    keeper_years: 2
+    acquired_by_draft: true
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000026'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000026'
+    salary: 42
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000027'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000027'
+    salary: 44
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000028'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000028'
+    salary: 40
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000029'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000029'
+    salary: 1
+    is_keeper: true
+    keeper_years: 1
+    acquired_by_draft: true
+    trade_blocked: true
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000030'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000030'
+    salary: 21
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000031'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000031'
+    salary: 26
+    is_keeper: false
+    keeper_years: 0
+    acquired_by_draft: false
+    trade_blocked: false
+
+- model: league.rosterplayer
+  pk: '00000002-0000-0000-0000-000000000032'
+  fields:
+    fantasy_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000032'
+    salary: 1
+    is_keeper: true
+    keeper_years: 2
+    acquired_by_draft: true
+    trade_blocked: true
+
+# Draft Picks - 2025 Round 1
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000001'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    current_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    year: 2025
+    round: 1
+    pick_number: null
+    projected_number: 2
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000002'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    current_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    year: 2025
+    round: 1
+    pick_number: null
+    projected_number: 4
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000003'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    current_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    year: 2025
+    round: 1
+    pick_number: null
+    projected_number: 1
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000004'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    current_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    year: 2025
+    round: 1
+    pick_number: null
+    projected_number: 3
+    player: null
+    rookie: null
+    is_rostered: false
+
+# Draft Picks - 2025 Round 2
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000005'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    current_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    year: 2025
+    round: 2
+    pick_number: null
+    projected_number: 6
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000006'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    current_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    year: 2025
+    round: 2
+    pick_number: null
+    projected_number: 8
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000007'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    current_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    year: 2025
+    round: 2
+    pick_number: null
+    projected_number: 5
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000008'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    current_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    year: 2025
+    round: 2
+    pick_number: null
+    projected_number: 7
+    player: null
+    rookie: null
+    is_rostered: false
+
+# Draft Picks - 2026 Round 1
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000009'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    current_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    year: 2026
+    round: 1
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000010'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    current_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    year: 2026
+    round: 1
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000011'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    current_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    year: 2026
+    round: 1
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000012'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    current_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    year: 2026
+    round: 1
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+# Rookies for 2025 Draft
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000001'
+  fields:
+    name: Cooper Flagg
+    nba_team: TBD
+    player: null
+    rookie_rank: 1
+    rookie_year: 2025
+    positions: ['SF', 'PF']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000002'
+  fields:
+    name: Dylan Harper
+    nba_team: TBD
+    player: null
+    rookie_rank: 2
+    rookie_year: 2025
+    positions: ['PG', 'SG']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000003'
+  fields:
+    name: Ace Bailey
+    nba_team: TBD
+    player: null
+    rookie_rank: 3
+    rookie_year: 2025
+    positions: ['SF', 'PF']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000004'
+  fields:
+    name: VJ Edgecombe
+    nba_team: TBD
+    player: null
+    rookie_rank: 4
+    rookie_year: 2025
+    positions: ['SG', 'SF']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000005'
+  fields:
+    name: Kon Knueppel
+    nba_team: TBD
+    player: null
+    rookie_rank: 5
+    rookie_year: 2025
+    positions: ['SG', 'SF']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000006'
+  fields:
+    name: Kasparas Jakucionis
+    nba_team: TBD
+    player: null
+    rookie_rank: 6
+    rookie_year: 2025
+    positions: ['PG']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000007'
+  fields:
+    name: Egor Demin
+    nba_team: TBD
+    player: null
+    rookie_rank: 7
+    rookie_year: 2025
+    positions: ['PG', 'SG']
+
+- model: league.rookie
+  pk: '00000004-0000-0000-0000-000000000008'
+  fields:
+    name: Nolan Traore
+    nba_team: TBD
+    player: null
+    rookie_rank: 8
+    rookie_year: 2025
+    positions: ['PG']
 
 - model: payment.product
   pk: 1

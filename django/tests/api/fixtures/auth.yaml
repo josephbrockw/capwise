@@ -124,3 +124,28 @@
     tier: 2
   model: payment.price
   pk: 7
+
+# League and Team for testing login response
+- model: league.league
+  pk: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+  fields:
+    name: Test League
+    year: 2025
+    salary_cap: 300
+    min_salary: 1
+    roster_size: 16
+    commissioner: ee00d202-fbb8-4a94-93ea-fc45b0bff10b
+    draft_open: false
+    espn_league_id: 999999
+
+- model: league.team
+  pk: 'bbbbbbbb-cccc-dddd-eeee-ffffffffffff'
+  fields:
+    league: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'
+    name: Nanny's Team
+    owner: ee00d202-fbb8-4a94-93ea-fc45b0bff10b
+    abbreviation: NAN
+    wins: 5
+    losses: 3
+    standing: 1
+    espn_team_id: 1

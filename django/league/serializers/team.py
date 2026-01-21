@@ -1,6 +1,34 @@
 from rest_framework import serializers
 
-from league.models import Player, RosterPlayer, Team
+from django.utils import timezone
+from league.models import League, Player, RosterPlayer, Team
+
+
+class LeagueForTeamSerializer(serializers.ModelSerializer):
+    commissioner_id = serializers.UUIDField(source="commissioner.id", read_only=True)
+    needs_sync = serializers.SerializerMethodField()
+
+    class Meta:
+        model = League
+        fields = [
+            "id",
+            "name",
+            "year",
+            "salary_cap",
+            "min_salary",
+            "roster_size",
+            "commissioner_id",
+            "draft_open",
+            "last_sync_date",
+            "needs_sync",
+            "salary_escalation_settings",
+        ]
+
+    def get_needs_sync(self, obj):
+        if not obj.last_sync_date:
+            return True
+        hours_since_sync = (timezone.now() - obj.last_sync_date).total_seconds() / 3600
+        return hours_since_sync > 24
 
 
 class RosterPlayerSummarySerializer(serializers.ModelSerializer):
@@ -44,12 +72,13 @@ class TeamListSerializer(serializers.ModelSerializer):
 
 class TeamDetailSerializer(serializers.ModelSerializer):
     owner_name = serializers.SerializerMethodField()
+    owner_id = serializers.UUIDField(source="owner.id", read_only=True)
     current_salary = serializers.IntegerField(read_only=True)
     cap_space = serializers.IntegerField(read_only=True)
     roster_summary = RosterPlayerSummarySerializer(
         source="roster_players", many=True, read_only=True
     )
-    league_name = serializers.CharField(source="league.name", read_only=True)
+    league = LeagueForTeamSerializer(read_only=True)
 
     class Meta:
         model = Team
@@ -58,6 +87,7 @@ class TeamDetailSerializer(serializers.ModelSerializer):
             "name",
             "abbreviation",
             "logo_url",
+            "owner_id",
             "owner_name",
             "wins",
             "losses",
@@ -65,7 +95,7 @@ class TeamDetailSerializer(serializers.ModelSerializer):
             "espn_team_id",
             "current_salary",
             "cap_space",
-            "league_name",
+            "league",
             "roster_summary",
         ]
 
