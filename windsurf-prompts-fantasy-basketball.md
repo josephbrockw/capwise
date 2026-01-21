@@ -196,11 +196,10 @@ class TeamContextMixin:
 
 ---
 
-## Phase 3: Core API Endpoints
+## Phase 3: Core API Endpoints (Done)
 
 ### Prompt 3.1: League and Team API Endpoints (Done)
 
-```
 Create API endpoints for leagues and teams following BaseBuild patterns (StandardViewSet, StandardResponse):
 
 **File: api/views/league.py**
@@ -240,11 +239,9 @@ Create API endpoints for leagues and teams following BaseBuild patterns (Standar
 Add pagination (StandardPagination with page_size=50) for player list.
 
 Register routes in config/urls.py under /api/league/.
-```
 
 ### Prompt 3.2: Roster Management API (Done)
 
-```
 Create roster management endpoints in api/views/roster.py:
 
 1. **RosterViewSet** (StandardViewSet):
@@ -275,11 +272,9 @@ Serializers:
 Add a batch endpoint for commissioner:
 POST /roster/batch-update/
 - Updates multiple roster entries at once (useful for bulk salary changes)
-```
 
 ### Prompt 3.3: Draft Picks API (Done)
 
-```
 Create draft pick management endpoints in api/views/draft.py:
 
 1. **DraftPickViewSet** (StandardViewSet):
@@ -308,11 +303,11 @@ Serializers:
 
 Add endpoint for draft pick ownership history (if we want to track trades):
 GET /draft-picks/{id}/history
-```
 
-### Prompt 3.4: Trade API Endpoints
 
-```
+### Prompt 3.4: Trade API Endpoints (Done)
+
+
 Create trade management endpoints in api/views/trade.py:
 
 1. **TradeViewSet** (StandardViewSet):
@@ -361,7 +356,7 @@ Filter trades by:
 - status
 - team_id (any involvement)
 - date range
-```
+
 
 ---
 
@@ -369,7 +364,6 @@ Filter trades by:
 
 ### Prompt 4.1: ESPN Utility Functions
 
-```
 Create ESPN integration utilities in league/utils/espn_utils.py:
 
 1. **Position mapping**:
@@ -416,11 +410,9 @@ def extract_player_stats(espn_player):
 def should_sync(league, hours=6):
     """Returns True if league should be synced (hasn't synced in X hours)"""
 ```
-```
 
 ### Prompt 4.2: ESPN Player Sync Command
 
-```
 Create Django management command: league/management/commands/sync_espn_players.py
 
 This command syncs NBA players from ESPN to our database.
