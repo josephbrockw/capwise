@@ -29,6 +29,7 @@ from api.views.auth import (  # type: ignore
     LogoutView,
     TokenRefreshView,
 )
+from api.views.draft import DraftPickViewSet, RookieViewSet  # type: ignore
 from api.views.experiment import ExperimentViewSet  # type: ignore
 from api.views.league import LeagueViewSet, TeamViewSet  # type: ignore
 from api.views.payment import ProductViewSet, PurchaseViewSet  # type: ignore
@@ -51,6 +52,8 @@ league_router.register(r"leagues", LeagueViewSet, basename="leagues")
 league_router.register(r"teams", TeamViewSet, basename="teams")
 league_router.register(r"players", PlayerViewSet, basename="players")
 league_router.register(r"roster", RosterViewSet, basename="roster")
+league_router.register(r"draft-picks", DraftPickViewSet, basename="draft-picks")
+league_router.register(r"rookies", RookieViewSet, basename="rookies")
 
 urlpatterns = [
     path("admin", admin.site.urls),
