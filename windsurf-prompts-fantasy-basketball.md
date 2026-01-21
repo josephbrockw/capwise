@@ -11,9 +11,9 @@ This document contains a series of prompts for Windsurf to build a fantasy baske
 
 ---
 
-## Phase 1: Core Data Models
+## Phase 1: Core Data Models (Done)
 
-### Prompt 1.1: Create Fantasy Basketball Models
+### Prompt 1.1: Create Fantasy Basketball Models (Done)
 
 ```
 I'm building a fantasy basketball dynasty league app on top of the BaseBuild template. Create the core Django models in a new app called `league`.
@@ -116,7 +116,7 @@ Create the migration and a data migration to seed the Position table with: PG, S
 Register all models in admin.py for Django admin access.
 ```
 
-### Prompt 1.2: Create Trade History Models
+### Prompt 1.2: Create Trade History Models (Done)
 
 ```
 Add trade tracking models to the league app:
@@ -154,9 +154,9 @@ Create the migration.
 
 ---
 
-## Phase 2: Team Context & Permissions
+## Phase 2: Team Context & Permissions (Done)
 
-### Prompt 2.1: Team Context Middleware and Permissions
+### Prompt 2.1: Team Context Middleware and Permissions (Done)
 
 ```
 Create middleware and permissions for team context in the api app:
@@ -192,13 +192,13 @@ class TeamContextMixin:
         team = self.get_team()
         return team.league if team else None
 ```
-```
+
 
 ---
 
 ## Phase 3: Core API Endpoints
 
-### Prompt 3.1: League and Team API Endpoints
+### Prompt 3.1: League and Team API Endpoints (Done)
 
 ```
 Create API endpoints for leagues and teams following BaseBuild patterns (StandardViewSet, StandardResponse):

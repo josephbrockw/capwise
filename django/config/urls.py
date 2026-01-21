@@ -33,6 +33,7 @@ from api.views.experiment import ExperimentViewSet  # type: ignore
 from api.views.league import LeagueViewSet, TeamViewSet  # type: ignore
 from api.views.payment import ProductViewSet, PurchaseViewSet  # type: ignore
 from api.views.player import PlayerViewSet  # type: ignore
+from api.views.roster import RosterViewSet  # type: ignore
 from api.views.user import UserViewSet  # type: ignore
 from django.conf import settings  # type: ignore
 from django.contrib import admin  # type: ignore
@@ -49,6 +50,7 @@ league_router = DefaultRouter(trailing_slash=False)
 league_router.register(r"leagues", LeagueViewSet, basename="leagues")
 league_router.register(r"teams", TeamViewSet, basename="teams")
 league_router.register(r"players", PlayerViewSet, basename="players")
+league_router.register(r"roster", RosterViewSet, basename="roster")
 
 urlpatterns = [
     path("admin", admin.site.urls),

@@ -11,6 +11,12 @@ from .player import (
     PositionSerializer,
     RosterEntrySerializer,
 )
+from .roster import (
+    RosterPlayerBatchUpdateSerializer,
+    RosterPlayerCreateSerializer,
+    RosterPlayerSerializer,
+    RosterPlayerUpdateSerializer,
+)
 from .team import (
     PlayerDetailForRosterSerializer,
     RosterPlayerDetailSerializer,
@@ -36,4 +42,8 @@ __all__ = [
     "PlayerUpdateSerializer",
     "PositionSerializer",
     "RosterEntrySerializer",
+    "RosterPlayerSerializer",
+    "RosterPlayerCreateSerializer",
+    "RosterPlayerUpdateSerializer",
+    "RosterPlayerBatchUpdateSerializer",
 ]
