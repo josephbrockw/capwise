@@ -411,7 +411,7 @@ def should_sync(league, hours=6):
     """Returns True if league should be synced (hasn't synced in X hours)"""
 ```
 
-### Prompt 4.2: ESPN Player Sync Command
+### Prompt 4.2: ESPN Player Sync Command (Done)
 
 Create Django management command: league/management/commands/sync_espn_players.py
 
@@ -444,7 +444,7 @@ Example usage:
 python manage.py sync_espn_players --league_id=abc123 --limit=500
 ```
 
-### Prompt 4.3: ESPN League Sync Command
+### Prompt 4.3: ESPN League Sync Command (Done)
 
 Create Django management command: league/management/commands/sync_espn_league.py
 
