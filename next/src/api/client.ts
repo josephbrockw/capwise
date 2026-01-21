@@ -26,8 +26,11 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  private getHeaders(includeAuth: boolean = false): HeadersInit {
-    const headers: HeadersInit = {
+  private getHeaders(
+    includeAuth: boolean = false,
+    customHeaders?: Record<string, string>
+  ): HeadersInit {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
 
@@ -36,6 +39,10 @@ class APIClient {
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
+    }
+
+    if (customHeaders) {
+      Object.assign(headers, customHeaders);
     }
 
     return headers;
@@ -65,10 +72,14 @@ class APIClient {
     return data.data as T;
   }
 
-  async get<T>(endpoint: string, authenticated: boolean = false): Promise<T> {
+  async get<T>(
+    endpoint: string,
+    authenticated: boolean = false,
+    customHeaders?: Record<string, string>
+  ): Promise<T> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'GET',
-      headers: this.getHeaders(authenticated),
+      headers: this.getHeaders(authenticated, customHeaders),
     });
 
     return this.handleResponse<T>(response);
@@ -77,11 +88,12 @@ class APIClient {
   async post<T>(
     endpoint: string,
     body?: unknown,
-    authenticated: boolean = false
+    authenticated: boolean = false,
+    customHeaders?: Record<string, string>
   ): Promise<T> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'POST',
-      headers: this.getHeaders(authenticated),
+      headers: this.getHeaders(authenticated, customHeaders),
       body: body ? JSON.stringify(body) : undefined,
     });
 
@@ -91,11 +103,12 @@ class APIClient {
   async put<T>(
     endpoint: string,
     body?: unknown,
-    authenticated: boolean = false
+    authenticated: boolean = false,
+    customHeaders?: Record<string, string>
   ): Promise<T> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'PUT',
-      headers: this.getHeaders(authenticated),
+      headers: this.getHeaders(authenticated, customHeaders),
       body: body ? JSON.stringify(body) : undefined,
     });
 
@@ -105,21 +118,26 @@ class APIClient {
   async patch<T>(
     endpoint: string,
     body?: unknown,
-    authenticated: boolean = false
+    authenticated: boolean = false,
+    customHeaders?: Record<string, string>
   ): Promise<T> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'PATCH',
-      headers: this.getHeaders(authenticated),
+      headers: this.getHeaders(authenticated, customHeaders),
       body: body ? JSON.stringify(body) : undefined,
     });
 
     return this.handleResponse<T>(response);
   }
 
-  async delete<T>(endpoint: string, authenticated: boolean = false): Promise<T> {
+  async delete<T>(
+    endpoint: string,
+    authenticated: boolean = false,
+    customHeaders?: Record<string, string>
+  ): Promise<T> {
     const response = await fetch(`${this.baseURL}${endpoint}`, {
       method: 'DELETE',
-      headers: this.getHeaders(authenticated),
+      headers: this.getHeaders(authenticated, customHeaders),
     });
 
     return this.handleResponse<T>(response);

@@ -581,7 +581,7 @@ GET /api/league/lottery/results/
 
 ## Phase 6: Frontend - Foundation
 
-### Prompt 6.1: API Client Extensions
+### Prompt 6.1: API Client Extensions (Done)
 
 Extend the Next.js API client (next/src/api/) to support the fantasy basketball endpoints:
 
@@ -647,17 +647,14 @@ export async function getDraftPicks(params: DraftPickParams): Promise<DraftPick[
 export async function getTrades(params: TradeParams): Promise<Trade[]>
 export async function analyzeTrade(payload: TradeAnalysisPayload): Promise<TradeAnalysis>
 // ... etc
-```
 
 All API calls should:
 1. Include the X-Team-Context header from context (see next prompt)
 2. Use the existing auth token handling from client.ts
 3. Return typed responses
-```
 
 ### Prompt 6.2: Team Context Provider
 
-```
 Create a React context for managing team selection:
 
 **File: next/src/contexts/TeamContext.tsx**
