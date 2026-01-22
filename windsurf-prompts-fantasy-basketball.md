@@ -749,7 +749,7 @@ Update the existing dashboard page to use AppLayout.
 
 ---
 
-## Phase 7: Frontend - Core Pages
+## Phase 7: Frontend - Core Pages (Done)
 
 ### Prompt 7.1: Dashboard Page (Done)
 
@@ -912,7 +912,7 @@ Handle loading and empty states appropriately.
 
 ## Phase 8: Frontend - Trade Machine
 
-### Prompt 8.1: Trade Machine Page
+### Prompt 8.1: Trade Machine Page (Done)
 
 Create the trade machine at next/src/app/trade-machine/page.tsx:
 
@@ -951,8 +951,6 @@ Two-column layout (stacked on mobile) for the two teams involved.
    - Draft pick value (use simple round-based value)
 4. Warnings/Errors:
    - Over salary cap (if in-season)
-   - Under minimum roster
-   - Trade blocked players
 
 **Actions:**
 - "Analyze Trade" button - refreshes analysis

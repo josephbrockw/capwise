@@ -71,10 +71,22 @@ class TradeAssetSerializer(serializers.ModelSerializer):
 
 class TradeListSerializer(serializers.ModelSerializer):
     teams = serializers.SerializerMethodField()
+    proposed_by_name = serializers.CharField(
+        source="proposed_by.username", read_only=True
+    )
 
     class Meta:
         model = Trade
-        fields = ["id", "status", "created_at", "executed_at", "notes", "teams"]
+        fields = [
+            "id",
+            "status",
+            "created_at",
+            "executed_at",
+            "proposed_by",
+            "proposed_by_name",
+            "notes",
+            "teams",
+        ]
 
     def get_teams(self, obj):
         assets = obj.assets.select_related(

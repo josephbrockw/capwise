@@ -166,9 +166,11 @@ export interface TradeTeam {
 
 export interface Trade {
   id: string;
-  status: 'pending' | 'accepted' | 'rejected' | 'cancelled';
+  status: 'proposed' | 'accepted' | 'rejected' | 'cancelled' | 'completed';
   created_at: string;
   executed_at: string | null;
+  proposed_by: string;
+  proposed_by_name: string;
   teams: TradeTeam[];
   notes: string | null;
 }
@@ -444,31 +446,29 @@ export async function createTrade(
   );
 }
 
-export async function acceptTrade(id: string, teamId: string): Promise<Trade> {
+export async function respondToTrade(
+  id: string,
+  teamId: string,
+  action: 'accept' | 'reject' | 'cancel'
+): Promise<Trade> {
   return apiClient.post<Trade>(
-    `${config.api.routes.league.tradeDetail(id)}/accept`,
-    undefined,
+    `${config.api.routes.league.tradeDetail(id)}/respond`,
+    { action },
     true,
     teamContextHeader(teamId)
   );
+}
+
+export async function acceptTrade(id: string, teamId: string): Promise<Trade> {
+  return respondToTrade(id, teamId, 'accept');
 }
 
 export async function rejectTrade(id: string, teamId: string): Promise<Trade> {
-  return apiClient.post<Trade>(
-    `${config.api.routes.league.tradeDetail(id)}/reject`,
-    undefined,
-    true,
-    teamContextHeader(teamId)
-  );
+  return respondToTrade(id, teamId, 'reject');
 }
 
 export async function cancelTrade(id: string, teamId: string): Promise<Trade> {
-  return apiClient.post<Trade>(
-    `${config.api.routes.league.tradeDetail(id)}/cancel`,
-    undefined,
-    true,
-    teamContextHeader(teamId)
-  );
+  return respondToTrade(id, teamId, 'cancel');
 }
 
 export async function analyzeTrade(

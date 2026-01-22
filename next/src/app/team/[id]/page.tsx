@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTeam } from '@/contexts/TeamContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { getTeam, getTrades, TeamDetail, Trade } from '@/api/league';
+import { getTeam, getTrades, acceptTrade, rejectTrade, cancelTrade, TeamDetail, Trade } from '@/api/league';
 import { Card, CardHeader } from '@/components/capwise/ui';
 import {
   TeamHeader,
@@ -19,45 +19,153 @@ import { Container, Stack, Flex } from '@/components/bb/layout';
 import { Button } from '@/components/bb/ui';
 import { Spinner, Alert } from '@/components/bb/feedback';
 import { Badge } from '@/components/bb/data-display';
+import { Dropdown } from '@/components/bb/navigation';
 import { formatCurrency } from '@/utils/format';
 import config from '@/config';
 
 interface TradeHistoryRowProps {
   trade: Trade;
   statusVariant: 'success' | 'danger' | 'warning' | 'default';
+  currentTeamId: string;
+  currentUserId: string;
+  onTradeAction: () => void;
 }
 
-function TradeHistoryRow({ trade, statusVariant }: TradeHistoryRowProps) {
+function TradeHistoryRow({ trade, statusVariant, currentTeamId, currentUserId, onTradeAction }: TradeHistoryRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isPending = trade.status === 'proposed';
+  const isProposer = trade.proposed_by === currentUserId;
+  const isInvolvedTeam = trade.teams.some(t => t.team_id === currentTeamId);
+  const canAcceptReject = isPending && isInvolvedTeam && !isProposer;
+  const canCancel = isPending && isProposer;
+  const showActions = canAcceptReject || canCancel;
+
+  const handleAccept = async () => {
+    setIsLoading(true);
+    try {
+      await acceptTrade(trade.id, currentTeamId);
+      onTradeAction();
+    } catch (error) {
+      console.error('Failed to accept trade:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    setIsLoading(true);
+    try {
+      await rejectTrade(trade.id, currentTeamId);
+      onTradeAction();
+    } catch (error) {
+      console.error('Failed to reject trade:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    setIsLoading(true);
+    try {
+      await cancelTrade(trade.id, currentTeamId);
+      onTradeAction();
+    } catch (error) {
+      console.error('Failed to cancel trade:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="border-b border-border last:border-b-0">
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 hover:bg-surface-hover/50 transition-colors text-left"
-      >
-        <div className="flex justify-between items-center gap-3">
-          <div className="flex items-center gap-2 flex-1 min-w-0">
-            <svg
-              className={`w-4 h-4 text-text-muted transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90' : ''}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            <p className="font-medium text-text truncate">
-              {trade.teams.map((t) => t.team_name).join(' & ')}
-            </p>
+      <div className="flex items-center">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex-1 p-4 hover:bg-surface-hover/50 transition-colors text-left"
+        >
+          <div className="flex justify-between items-center gap-3">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <svg
+                className={`w-4 h-4 text-text-muted transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+              <p className="font-medium text-text truncate">
+                {trade.teams.map((t) => t.team_name).join(' & ')}
+              </p>
+            </div>
+            <Badge variant={statusVariant} size="sm">
+              {trade.status.charAt(0).toUpperCase() + trade.status.slice(1)}
+            </Badge>
+            <span className="text-xs text-text-muted whitespace-nowrap">
+              {new Date(trade.created_at).toLocaleDateString()}
+            </span>
           </div>
-          <Badge variant={statusVariant} size="sm">
-            {trade.status.charAt(0).toUpperCase() + trade.status.slice(1)}
-          </Badge>
-          <span className="text-xs text-text-muted whitespace-nowrap">
-            {new Date(trade.created_at).toLocaleDateString()}
-          </span>
-        </div>
-      </button>
+        </button>
+
+        {showActions && (
+          <div className="pr-4">
+            <Dropdown
+              trigger={
+                <div className="p-2 hover:bg-surface-hover rounded-md transition-colors cursor-pointer">
+                  {isLoading ? (
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-text-muted" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                    </svg>
+                  )}
+                </div>
+              }
+              align="right"
+              items={[
+                ...(canAcceptReject ? [
+                  {
+                    id: 'accept',
+                    label: 'Accept Trade',
+                    icon: (
+                      <svg className="w-4 h-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ),
+                    onClick: handleAccept,
+                  },
+                  {
+                    id: 'reject',
+                    label: 'Reject Trade',
+                    icon: (
+                      <svg className="w-4 h-4 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    ),
+                    onClick: handleReject,
+                  },
+                ] : []),
+                ...(canCancel ? [
+                  {
+                    id: 'cancel',
+                    label: 'Cancel Trade',
+                    icon: (
+                      <svg className="w-4 h-4 text-text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    ),
+                    onClick: handleCancel,
+                  },
+                ] : []),
+              ]}
+            />
+          </div>
+        )}
+      </div>
 
       {isExpanded && (
         <div className="px-4 pb-4 pt-0">
@@ -113,6 +221,16 @@ export default function TeamDetailPage() {
   const isOwnTeam = currentTeam?.id === teamId;
   const isCommissioner = currentTeam?.league?.commissioner_id === user?.id;
   const canEdit = isOwnTeam || isCommissioner;
+
+  const refreshTrades = async () => {
+    if (!currentTeam?.id) return;
+    try {
+      const tradesData = await getTrades(currentTeam.id, { team_id: teamId });
+      setTrades(tradesData);
+    } catch (err) {
+      console.error('Failed to refresh trades:', err);
+    }
+  };
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -275,7 +393,7 @@ export default function TeamDetailPage() {
                   <div>
                     {trades.slice(0, 5).map((trade) => {
                       const statusVariant =
-                        trade.status === 'accepted' ? 'success' :
+                        trade.status === 'accepted' || trade.status === 'completed' ? 'success' :
                         trade.status === 'rejected' ? 'danger' :
                         trade.status === 'cancelled' ? 'default' : 'warning';
 
@@ -284,6 +402,9 @@ export default function TeamDetailPage() {
                           key={trade.id}
                           trade={trade}
                           statusVariant={statusVariant}
+                          currentTeamId={currentTeam?.id || ''}
+                          currentUserId={user?.id || ''}
+                          onTradeAction={refreshTrades}
                         />
                       );
                     })}

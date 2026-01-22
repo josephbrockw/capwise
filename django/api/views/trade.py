@@ -267,6 +267,79 @@ class TradeViewSet(TeamContextMixin, StandardViewSet):
             status=status.HTTP_200_OK,
         )
 
+    @action(detail=True, methods=["post"], url_path="respond", url_name="respond")
+    def respond(self, request, pk=None):
+        """Accept, reject, or cancel a trade proposal."""
+        league = self.get_league()
+        team = self.get_team()
+        user = request.user
+
+        action_type = request.data.get("action")
+        if action_type not in ["accept", "reject", "cancel"]:
+            return StandardResponse(
+                error="Invalid action. Must be 'accept', 'reject', or 'cancel'.",
+                error_code="INVALID_ACTION",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            trade = Trade.objects.get(pk=pk, league=league)
+        except Trade.DoesNotExist:
+            return StandardResponse(
+                error="Trade not found.",
+                error_code="NOT_FOUND",
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if trade.status != Trade.Status.PROPOSED:
+            return StandardResponse(
+                error=f"Trade is not in 'proposed' status. Current: {trade.status}",
+                error_code="INVALID_STATUS",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        is_involved = trade.trade_teams.filter(team=team).exists()
+        is_proposer = trade.proposed_by == user
+
+        if action_type == "cancel":
+            if not is_proposer:
+                return StandardResponse(
+                    error="Only the proposer can cancel a trade.",
+                    error_code="PERMISSION_DENIED",
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            trade.status = Trade.Status.CANCELLED
+            message = "Trade cancelled successfully."
+
+        elif action_type in ["accept", "reject"]:
+            if not is_involved:
+                return StandardResponse(
+                    error="You are not involved in this trade.",
+                    error_code="PERMISSION_DENIED",
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            if is_proposer:
+                return StandardResponse(
+                    error="You cannot accept or reject your own trade.",
+                    error_code="PERMISSION_DENIED",
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            if action_type == "accept":
+                trade.status = Trade.Status.ACCEPTED
+                message = "Trade accepted successfully."
+            else:
+                trade.status = Trade.Status.REJECTED
+                message = "Trade rejected successfully."
+
+        trade.save()
+
+        serializer = TradeDetailSerializer(trade, context=self.get_serializer_context())
+        return StandardResponse(
+            data=serializer.data,
+            message=message,
+            status=status.HTTP_200_OK,
+        )
+
     @action(detail=True, methods=["post"], url_path="execute", url_name="execute")
     def execute(self, request, pk=None):
         """Commissioner only - execute an accepted trade."""

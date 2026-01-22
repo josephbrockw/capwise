@@ -324,3 +324,172 @@ class TradeViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         data = response.json()
         self.assertIn("accepted", data["error"])
+
+    # =========================================================================
+    # Respond Endpoint Tests
+    # =========================================================================
+
+    def test_respond_accept_trade_success(self):
+        """Other team owner can accept a proposed trade."""
+        self.proposed_trade.proposed_by = self.other_user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "accept"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.proposed_trade.refresh_from_db()
+        self.assertEqual(self.proposed_trade.status, "accepted")
+
+    def test_respond_reject_trade_success(self):
+        """Other team owner can reject a proposed trade."""
+        self.proposed_trade.proposed_by = self.other_user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "reject"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.proposed_trade.refresh_from_db()
+        self.assertEqual(self.proposed_trade.status, "rejected")
+
+    def test_respond_cancel_trade_success(self):
+        """Proposer can cancel their own trade."""
+        self.proposed_trade.proposed_by = self.user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "cancel"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.proposed_trade.refresh_from_db()
+        self.assertEqual(self.proposed_trade.status, "cancelled")
+
+    def test_respond_invalid_action(self):
+        """Invalid action returns 400."""
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "invalid"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("Invalid action", response.json()["error"])
+
+    def test_respond_missing_action(self):
+        """Missing action returns 400."""
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_respond_cancel_by_non_proposer_denied(self):
+        """Non-proposer cannot cancel a trade."""
+        self.proposed_trade.proposed_by = self.other_user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "cancel"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn("Only the proposer", response.json()["error"])
+
+    def test_respond_accept_own_trade_denied(self):
+        """Proposer cannot accept their own trade."""
+        self.proposed_trade.proposed_by = self.user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "accept"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn("cannot accept or reject your own", response.json()["error"])
+
+    def test_respond_reject_own_trade_denied(self):
+        """Proposer cannot reject their own trade."""
+        self.proposed_trade.proposed_by = self.user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "reject"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_respond_trade_not_proposed_status(self):
+        """Cannot respond to trade that is not in proposed status."""
+        self.proposed_trade.status = Trade.Status.ACCEPTED
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "cancel"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("not in 'proposed' status", response.json()["error"])
+
+    def test_respond_trade_not_found(self):
+        """Responding to non-existent trade returns 404."""
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            "/api/league/trades/00000000-0000-0000-0000-000000000000/respond",
+            {"action": "accept"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_respond_uninvolved_user_denied(self):
+        """User not involved in trade cannot accept/reject."""
+        third_user = User.objects.create_user(
+            username="third",
+            email="third@test.com",
+            password="third123",
+        )
+        jazz = Team.objects.get(name="Utah Jazz")
+        jazz.owner = third_user
+        jazz.save()
+
+        self.proposed_trade.proposed_by = self.other_user
+        self.proposed_trade.save()
+
+        self.client.force_authenticate(user=third_user)
+        response = self.client.post(
+            f"/api/league/trades/{self.proposed_trade.id}/respond",
+            {"action": "accept"},
+            format="json",
+            HTTP_X_TEAM_CONTEXT=str(jazz.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertIn("not involved", response.json()["error"])
