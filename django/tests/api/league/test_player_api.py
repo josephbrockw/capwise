@@ -120,6 +120,26 @@ class PlayerViewSetTest(TestCase):
         for player in response.json()["data"]["results"]:
             self.assertLessEqual(player["projected_value"], 50)
 
+    def test_list_players_filter_by_is_injured_true(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            "/api/league/players?is_injured=true",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        for player in response.json()["data"]["results"]:
+            self.assertTrue(player["is_injured"])
+
+    def test_list_players_filter_by_is_injured_false(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            "/api/league/players?is_injured=false",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        for player in response.json()["data"]["results"]:
+            self.assertFalse(player["is_injured"])
+
     def test_retrieve_player_success(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(

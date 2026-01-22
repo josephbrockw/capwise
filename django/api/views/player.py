@@ -60,6 +60,13 @@ class PlayerViewSet(TeamContextMixin, StandardViewSet):
         if max_value:
             queryset = queryset.filter(projected_value__lte=float(max_value))
 
+        is_injured = self.request.query_params.get("is_injured")
+        if is_injured is not None:
+            if is_injured.lower() == "true":
+                queryset = queryset.filter(is_injured=True)
+            elif is_injured.lower() == "false":
+                queryset = queryset.filter(is_injured=False)
+
         return queryset.distinct()
 
     def list(self, request):

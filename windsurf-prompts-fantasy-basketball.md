@@ -836,7 +836,7 @@ Create reusable components:
 - SalaryCapBar
 - TeamHeader
 
-### Prompt 7.3: League Page
+### Prompt 7.3: League Page (Done)
 
 Create the league overview page at next/src/app/league/page.tsx:
 
@@ -874,7 +874,7 @@ For commissioners, add:
 - Sync button
 - Run Lottery button (if applicable)
 
-### Prompt 7.4: Free Agents Page
+### Prompt 7.4: Free Agents Page (Done)
 
 Create the free agents search page at next/src/app/free-agents/page.tsx:
 
@@ -887,14 +887,13 @@ Features:
 
 2. **Filters** (collapsible on mobile)
    - Position: Multi-select (PG, SG, SF, PF, C)
-   - NBA Team: Dropdown
    - Projected Value: Min/Max range inputs
    - Hide Injured: Toggle
 
 3. **Results Table**
    - Columns: Name, Pos, NBA Team, Proj Value, FPTS, PTS, REB, AST
    - Sortable by any column
-   - Pagination (50 per page)
+   - Pagination (50 per page) utilize backend pagination
    - "Add to Team" button (if user has cap space and roster space)
 
 4. **Player Quick View**
@@ -902,15 +901,10 @@ Features:
    - Full stats, injury status
    - "Add to Roster" button with salary input
 
-5. **Comparison Mode** (nice to have)
-   - Checkbox to select players
-   - Compare button shows side-by-side stats
-
 Create components:
 - PlayerSearchFilters
 - PlayerTable (reusable)
-- PlayerQuickView modal/panel
-- AddToRosterModal
+
 
 Handle loading and empty states appropriately.
 
@@ -1382,3 +1376,14 @@ Execute prompts in this order for best results:
 12. **Phase 12:** Deployment (12.1)
 
 After each phase, test the functionality before moving to the next. The API should be testable via curl/Postman before building frontend pages.
+
+
+## Future Work
+### Free Agents
+Bid system? Add to roster?
+- PlayerQuickView modal/panel
+- AddToRosterModal
+
+5. **Comparison Mode** (nice to have)
+   - Checkbox to select players
+   - Compare button shows side-by-side stats

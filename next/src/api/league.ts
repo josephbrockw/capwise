@@ -246,10 +246,12 @@ export interface PaginatedResponse<T> {
 }
 
 export interface PlayerSearchParams {
-  search?: string;
+  name?: string;
   position?: string;
-  on_roster?: boolean;
+  rostered?: boolean;
   is_injured?: boolean;
+  min_projected_value?: number;
+  max_projected_value?: number;
   ordering?: string;
   page?: number;
   page_size?: number;

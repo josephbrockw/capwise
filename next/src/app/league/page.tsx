@@ -53,7 +53,7 @@ export default function LeaguePage() {
           getTeams(currentTeam.id),
           getTrades(currentTeam.id, { status: 'accepted' }).catch(() => []),
           getDraftPicks(currentTeam.id).catch(() => []),
-          getPlayers(currentTeam.id, { on_roster: true, page_size: 100 }).catch(() => ({ results: [] })),
+          getPlayers(currentTeam.id, { rostered: true, page_size: 100 }).catch(() => ({ results: [] })),
         ]);
 
         setTeams(teamsData.sort((a, b) => a.standing - b.standing));
