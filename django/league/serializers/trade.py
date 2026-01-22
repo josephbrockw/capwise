@@ -71,32 +71,57 @@ class TradeAssetSerializer(serializers.ModelSerializer):
 
 class TradeListSerializer(serializers.ModelSerializer):
     teams = serializers.SerializerMethodField()
-    summary = serializers.SerializerMethodField()
 
     class Meta:
         model = Trade
-        fields = ["id", "status", "created_at", "teams", "summary"]
+        fields = ["id", "status", "created_at", "executed_at", "notes", "teams"]
 
     def get_teams(self, obj):
-        return list(obj.trade_teams.values_list("team__name", flat=True))
-
-    def get_summary(self, obj):
         assets = obj.assets.select_related(
-            "player", "draft_pick", "from_team", "to_team"
+            "player", "draft_pick", "draft_pick__original_team", "from_team", "to_team"
         )
-        summary_parts = []
+
+        team_data = {}
+        for trade_team in obj.trade_teams.select_related("team"):
+            team_data[str(trade_team.team.id)] = {
+                "team_id": str(trade_team.team.id),
+                "team_name": trade_team.team.name,
+                "assets_sent": [],
+                "assets_received": [],
+            }
+
         for asset in assets:
+            asset_info = {
+                "id": str(asset.id),
+                "type": "player" if asset.player else "draft_pick",
+                "from_team_id": str(asset.from_team.id),
+                "from_team_name": asset.from_team.name,
+                "to_team_id": str(asset.to_team.id),
+                "to_team_name": asset.to_team.name,
+            }
+
             if asset.player:
-                summary_parts.append(
-                    f"{asset.player.name}: "
-                    f"{asset.from_team.name} -> {asset.to_team.name}"
-                )
+                asset_info["player"] = {
+                    "id": str(asset.player.id),
+                    "name": asset.player.name,
+                }
             elif asset.draft_pick:
-                summary_parts.append(
-                    f"{asset.draft_pick.year} R{asset.draft_pick.round}: "
-                    f"{asset.from_team.name} -> {asset.to_team.name}"
-                )
-        return summary_parts
+                asset_info["draft_pick"] = {
+                    "id": str(asset.draft_pick.id),
+                    "year": asset.draft_pick.year,
+                    "round": asset.draft_pick.round,
+                    "original_team_name": asset.draft_pick.original_team.name,
+                }
+
+            from_team_id = str(asset.from_team.id)
+            to_team_id = str(asset.to_team.id)
+
+            if from_team_id in team_data:
+                team_data[from_team_id]["assets_sent"].append(asset_info)
+            if to_team_id in team_data:
+                team_data[to_team_id]["assets_received"].append(asset_info)
+
+        return list(team_data.values())
 
 
 class TradeDetailSerializer(serializers.ModelSerializer):

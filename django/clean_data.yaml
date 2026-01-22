@@ -36,7 +36,7 @@
   pk: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
   fields:
     name: Dynasty Ballers
-    year: 2025
+    year: 2026
     salary_cap: 300
     min_salary: 1
     roster_size: 16
@@ -1342,7 +1342,7 @@
   fields:
     league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
     original_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
-    current_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    current_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
     year: 2026
     round: 1
     pick_number: null
@@ -1359,6 +1359,49 @@
     current_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
     year: 2026
     round: 1
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+# Draft Picks - 2026 Round 2
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000013'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    current_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    year: 2026
+    round: 2
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000014'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    current_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    year: 2026
+    round: 2
+    pick_number: null
+    projected_number: null
+    player: null
+    rookie: null
+    is_rostered: false
+
+- model: league.draftpick
+  pk: '00000003-0000-0000-0000-000000000016'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    original_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    current_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    year: 2026
+    round: 2
     pick_number: null
     projected_number: null
     player: null
@@ -1445,6 +1488,264 @@
     rookie_rank: 8
     rookie_year: 2025
     positions: ['PG']
+
+# Trades
+- model: league.trade
+  pk: '00000005-0000-0000-0000-000000000001'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    status: accepted
+    proposed_by: '00000000-0000-0000-0000-000000000002'
+    notes: 'Blockbuster trade for draft capital'
+    created_at: '2025-01-10T14:30:00.000Z'
+    executed_at: '2025-01-11T10:00:00.000Z'
+
+- model: league.trade
+  pk: '00000005-0000-0000-0000-000000000002'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    status: accepted
+    proposed_by: '00000000-0000-0000-0000-000000000001'
+    notes: 'Win-now move'
+    created_at: '2025-01-05T09:15:00.000Z'
+    executed_at: '2025-01-06T16:00:00.000Z'
+
+- model: league.trade
+  pk: '00000005-0000-0000-0000-000000000003'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    status: accepted
+    proposed_by: '00000000-0000-0000-0000-000000000002'
+    notes: 'Salary dump trade'
+    created_at: '2024-12-20T11:00:00.000Z'
+    executed_at: '2024-12-21T08:30:00.000Z'
+
+# Trade 4 - Player trade (Court Kings <-> Joe's Ballers)
+- model: league.trade
+  pk: '00000005-0000-0000-0000-000000000004'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    status: accepted
+    proposed_by: '00000000-0000-0000-0000-000000000002'
+    notes: 'Star player swap'
+    created_at: '2025-01-12T16:00:00.000Z'
+    executed_at: '2025-01-13T09:00:00.000Z'
+
+# Trade 5 - Player for pick trade (Granny's Hoopers <-> Slam Dunkers)
+- model: league.trade
+  pk: '00000005-0000-0000-0000-000000000005'
+  fields:
+    league: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+    status: accepted
+    proposed_by: '00000000-0000-0000-0000-000000000001'
+    notes: 'Rebuilding move'
+    created_at: '2025-01-08T12:00:00.000Z'
+    executed_at: '2025-01-09T14:00:00.000Z'
+
+# Trade Teams - Trade 1 (Slam Dunkers <-> Joe's Ballers) - Slam Dunkers pick goes to Joe
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000001'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000001'
+    team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000002'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000001'
+    team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+
+# Trade Teams - Trade 2 (Court Kings <-> Slam Dunkers) - Court Kings pick goes to Slam Dunkers
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000003'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000002'
+    team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000004'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000002'
+    team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+
+# Trade Teams - Trade 3 (Joe's Ballers <-> Granny's Hoopers) - Joe's 2026 pick goes to Granny
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000005'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000003'
+    team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000006'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000003'
+    team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+
+# Trade Teams - Trade 4 (Court Kings <-> Joe's Ballers) - Player trade
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000007'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000004'
+    team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000008'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000004'
+    team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+
+# Trade Teams - Trade 5 (Granny's Hoopers <-> Slam Dunkers) - Player for pick
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000009'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000005'
+    team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+
+- model: league.tradeteam
+  pk: '00000006-0000-0000-0000-000000000010'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000005'
+    team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+
+# Trade Assets - Trade 1: Slam Dunkers 2025 R1 pick -> Joe's Ballers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000001'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000001'
+    from_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    to_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000004'
+
+# Trade Assets - Trade 2: Court Kings 2025 R1 pick -> Slam Dunkers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000002'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000002'
+    from_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    to_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000003'
+
+# Trade Assets - Trade 3: Joe's Ballers 2026 R1 pick -> Granny's Hoopers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000003'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000003'
+    from_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    to_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000009'
+
+# Trade Assets - Trade 1: Joe's Ballers 2025 R2 pick -> Slam Dunkers (return)
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000004'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000001'
+    from_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    to_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000005'
+
+# Trade Assets - Trade 2: Slam Dunkers 2025 R2 pick -> Court Kings (return)
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000005'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000002'
+    from_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    to_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000008'
+
+# Trade Assets - Trade 3: Granny's Hoopers 2025 R2 pick -> Joe's Ballers (return)
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000006'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000003'
+    from_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    to_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000006'
+
+# Trade Assets - Trade 4: Kyrie Irving (Court Kings) -> Joe's Ballers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000007'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000004'
+    from_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    to_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: '00000001-0000-0000-0000-000000000020'
+    draft_pick: null
+
+# Trade Assets - Trade 4: Darius Garland (Joe's Ballers) -> Court Kings
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000008'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000004'
+    from_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    to_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000007'
+    draft_pick: null
+
+# Trade Assets - Trade 4: Mikal Bridges (Joe's Ballers) -> Court Kings
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000011'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000004'
+    from_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    to_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    player: '00000001-0000-0000-0000-000000000008'
+    draft_pick: null
+
+# Trade Assets - Trade 4: Court Kings 2026 R1 pick -> Joe's Ballers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000012'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000004'
+    from_team: 'd4e5f6a7-b8c9-0123-def0-456789012345'
+    to_team: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000011'
+
+# Trade Assets - Trade 5: Desmond Bane (Granny's Hoopers) -> Slam Dunkers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000009'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000005'
+    from_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    to_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000014'
+    draft_pick: null
+
+# Trade Assets - Trade 5: Slam Dunkers 2026 R2 pick -> Granny's Hoopers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000010'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000005'
+    from_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    to_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: null
+    draft_pick: '00000003-0000-0000-0000-000000000016'
+
+# Trade Assets - Trade 5: Obi Toppin (Slam Dunkers) -> Granny's Hoopers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000013'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000005'
+    from_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    to_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    player: '00000001-0000-0000-0000-000000000030'
+    draft_pick: null
+
+# Trade Assets - Trade 5: Herb Jones (Granny's Hoopers) -> Slam Dunkers
+- model: league.tradeasset
+  pk: '00000007-0000-0000-0000-000000000014'
+  fields:
+    trade: '00000005-0000-0000-0000-000000000005'
+    from_team: 'c3d4e5f6-a7b8-9012-cdef-345678901234'
+    to_team: 'e5f6a7b8-c9d0-1234-ef01-567890123456'
+    player: '00000001-0000-0000-0000-000000000016'
+    draft_pick: null
 
 - model: payment.product
   pk: 1

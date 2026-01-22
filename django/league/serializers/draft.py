@@ -101,8 +101,14 @@ class RookieUpdateSerializer(serializers.ModelSerializer):
 
 
 class DraftPickListSerializer(serializers.ModelSerializer):
-    original_team = TeamMinimalSerializer(read_only=True)
-    current_team = TeamMinimalSerializer(read_only=True)
+    original_team_id = serializers.UUIDField(source="original_team.id", read_only=True)
+    original_team_name = serializers.CharField(
+        source="original_team.name", read_only=True
+    )
+    current_team_id = serializers.UUIDField(source="current_team.id", read_only=True)
+    current_team_name = serializers.CharField(
+        source="current_team.name", read_only=True
+    )
     assigned_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -113,8 +119,10 @@ class DraftPickListSerializer(serializers.ModelSerializer):
             "round",
             "pick_number",
             "projected_number",
-            "original_team",
-            "current_team",
+            "original_team_id",
+            "original_team_name",
+            "current_team_id",
+            "current_team_name",
             "assigned_name",
             "is_rostered",
         ]

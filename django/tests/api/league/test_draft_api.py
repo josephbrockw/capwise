@@ -63,6 +63,23 @@ class DraftPickViewSetTest(TestCase):
         data = response.json()["data"]
         self.assertGreater(len(data), 0)
 
+    def test_list_draft_picks_returns_flat_team_fields(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            "/api/league/draft-picks?year=1997",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["data"]
+        self.assertGreater(len(data), 0)
+        pick = data[0]
+        self.assertIn("original_team_id", pick)
+        self.assertIn("original_team_name", pick)
+        self.assertIn("current_team_id", pick)
+        self.assertIn("current_team_name", pick)
+        self.assertIn("year", pick)
+        self.assertIn("round", pick)
+
     def test_list_draft_picks_filter_by_year(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(
@@ -83,7 +100,7 @@ class DraftPickViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()["data"]
         for pick in data:
-            self.assertEqual(pick["current_team"]["id"], str(self.bulls.id))
+            self.assertEqual(pick["current_team_id"], str(self.bulls.id))
 
     def test_list_draft_picks_filter_by_round(self):
         self.client.force_authenticate(user=self.user)

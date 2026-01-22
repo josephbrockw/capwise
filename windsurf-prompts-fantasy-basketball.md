@@ -792,7 +792,7 @@ Use components:
 
 Make it mobile-responsive with a single-column layout on small screens.
 
-### Prompt 7.2: Team Detail Page
+### Prompt 7.2: Team Detail Page (Done)
 
 Create the team detail page at next/src/app/team/[id]/page.tsx:
 

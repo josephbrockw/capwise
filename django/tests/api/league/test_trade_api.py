@@ -78,6 +78,26 @@ class TradeViewSetTest(TestCase):
         data = response.json()["data"]
         self.assertGreaterEqual(len(data), 2)
 
+    def test_list_trades_returns_teams_with_assets(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            "/api/league/trades",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["data"]
+        self.assertGreater(len(data), 0)
+        trade = data[0]
+        self.assertIn("teams", trade)
+        self.assertIn("status", trade)
+        self.assertIn("created_at", trade)
+        if len(trade["teams"]) > 0:
+            team = trade["teams"][0]
+            self.assertIn("team_id", team)
+            self.assertIn("team_name", team)
+            self.assertIn("assets_sent", team)
+            self.assertIn("assets_received", team)
+
     def test_list_trades_filter_by_status(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(
@@ -98,7 +118,7 @@ class TradeViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()["data"]
         for trade in data:
-            team_names = trade["teams"]
+            team_names = [t["team_name"] for t in trade["teams"]]
             self.assertTrue(
                 any("Bulls" in name or "Chicago" in name for name in team_names)
             )
