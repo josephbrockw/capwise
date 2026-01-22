@@ -24,6 +24,15 @@ vi.mock('@/contexts/AuthContext', () => ({
   })),
 }));
 
+vi.mock('@/contexts/TeamContext', () => ({
+  useTeam: vi.fn(() => ({
+    currentTeam: { id: 'team-1', name: 'Test Team' },
+    userTeams: [{ id: 'team-1', name: 'Test Team' }],
+    isCommissioner: false,
+    isLoading: false,
+  })),
+}));
+
 vi.mock('@/config', () => ({
   default: {
     appName: 'Capwise',

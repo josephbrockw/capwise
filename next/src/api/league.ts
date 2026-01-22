@@ -166,11 +166,9 @@ export interface TradeTeam {
 
 export interface Trade {
   id: string;
-  league_id: string;
   status: 'pending' | 'accepted' | 'rejected' | 'cancelled';
-  proposed_at: string;
-  resolved_at: string | null;
-  proposed_by_team_id: string;
+  created_at: string;
+  executed_at: string | null;
   teams: TradeTeam[];
   notes: string | null;
 }
@@ -268,12 +266,17 @@ export interface TradeParams {
   team_id?: string;
 }
 
+export interface TradeAssetPayload {
+  from_team: string;
+  to_team: string;
+  player_id?: string | null;
+  draft_pick_id?: string | null;
+}
+
 export interface TradeCreatePayload {
-  teams: {
-    team_id: string;
-    players_to_send: string[];
-    draft_picks_to_send: string[];
-  }[];
+  league_id: string;
+  teams: string[];
+  assets: TradeAssetPayload[];
   notes?: string;
 }
 

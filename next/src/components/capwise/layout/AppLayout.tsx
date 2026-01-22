@@ -4,6 +4,7 @@ import { ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTeam } from '@/contexts/TeamContext';
 import config from '@/config';
 import { Spinner } from '@/components/bb/feedback';
 import { Dropdown } from '@/components/bb/navigation';
@@ -102,14 +103,20 @@ interface AppLayoutProps {
 export function AppLayout({
   children,
   teams = [],
-  currentTeamId,
+  currentTeamId: propTeamId,
   onTeamChange,
   isCommissioner = false,
 }: AppLayoutProps) {
   const { user, isLoading, logout } = useAuth();
+  const { currentTeam: contextTeam, userTeams, isCommissioner: contextIsCommissioner } = useTeam();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Use context team ID if prop not provided
+  const currentTeamId = propTeamId || contextTeam?.id;
+  const effectiveTeams = teams.length > 0 ? teams : userTeams.map(t => ({ id: t.id, name: t.name }));
+  const effectiveIsCommissioner = isCommissioner || contextIsCommissioner;
 
   const displayName =
     user?.name ||
@@ -120,7 +127,7 @@ export function AppLayout({
     user?.email?.split('@')[0] ||
     'User';
 
-  const currentTeam = teams.find((t) => t.id === currentTeamId);
+  const currentTeam = effectiveTeams.find((t) => t.id === currentTeamId);
 
   const handleLogout = async () => {
     await logout();
@@ -129,7 +136,7 @@ export function AppLayout({
 
   const navItems = getNavItems(currentTeamId);
   const filteredNavItems = navItems.filter(
-    (item) => !item.adminOnly || isCommissioner
+    (item) => !item.adminOnly || effectiveIsCommissioner
   );
 
   if (isLoading) {

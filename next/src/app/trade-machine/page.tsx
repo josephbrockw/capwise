@@ -225,25 +225,55 @@ export default function TradeMachinePage() {
   ]);
 
   const handleProposeTrade = useCallback(async () => {
-    if (!teamId || !tradeState.team1 || !tradeState.team2) return;
+    if (!teamId || !leagueId || !tradeState.team1 || !tradeState.team2) return;
 
     try {
       setIsProposing(true);
       setError(null);
 
+      // Build assets array: each player/pick going from one team to the other
+      const assets: { from_team: string; to_team: string; player_id?: string; draft_pick_id?: string }[] = [];
+
+      // Team 1 players going to Team 2
+      team1SelectedPlayers.forEach((player) => {
+        assets.push({
+          from_team: tradeState.team1!.id,
+          to_team: tradeState.team2!.id,
+          player_id: player.player.id,
+        });
+      });
+
+      // Team 1 picks going to Team 2
+      team1SelectedPicks.forEach((pick) => {
+        assets.push({
+          from_team: tradeState.team1!.id,
+          to_team: tradeState.team2!.id,
+          draft_pick_id: pick.id,
+        });
+      });
+
+      // Team 2 players going to Team 1
+      team2SelectedPlayers.forEach((player) => {
+        assets.push({
+          from_team: tradeState.team2!.id,
+          to_team: tradeState.team1!.id,
+          player_id: player.player.id,
+        });
+      });
+
+      // Team 2 picks going to Team 1
+      team2SelectedPicks.forEach((pick) => {
+        assets.push({
+          from_team: tradeState.team2!.id,
+          to_team: tradeState.team1!.id,
+          draft_pick_id: pick.id,
+        });
+      });
+
       await createTrade(teamId, {
-        teams: [
-          {
-            team_id: tradeState.team1.id,
-            players_to_send: Array.from(tradeState.team1SelectedPlayerIds),
-            draft_picks_to_send: Array.from(tradeState.team1SelectedPickIds),
-          },
-          {
-            team_id: tradeState.team2.id,
-            players_to_send: Array.from(tradeState.team2SelectedPlayerIds),
-            draft_picks_to_send: Array.from(tradeState.team2SelectedPickIds),
-          },
-        ],
+        league_id: leagueId,
+        teams: [tradeState.team1.id, tradeState.team2.id],
+        assets,
       });
 
       setSuccessMessage('Trade proposal sent successfully!');
@@ -254,7 +284,7 @@ export default function TradeMachinePage() {
     } finally {
       setIsProposing(false);
     }
-  }, [teamId, tradeState, handleReset]);
+  }, [teamId, leagueId, tradeState, team1SelectedPlayers, team1SelectedPicks, team2SelectedPlayers, team2SelectedPicks, handleReset]);
 
   const otherTeams = teams.filter((t) => t.id !== teamId);
   const teamOptions = otherTeams.map((t) => ({ value: t.id, label: t.name }));

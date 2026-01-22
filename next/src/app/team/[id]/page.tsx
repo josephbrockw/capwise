@@ -18,8 +18,86 @@ import {
 import { Container, Stack, Flex } from '@/components/bb/layout';
 import { Button } from '@/components/bb/ui';
 import { Spinner, Alert } from '@/components/bb/feedback';
+import { Badge } from '@/components/bb/data-display';
 import { formatCurrency } from '@/utils/format';
 import config from '@/config';
+
+interface TradeHistoryRowProps {
+  trade: Trade;
+  statusVariant: 'success' | 'danger' | 'warning' | 'default';
+}
+
+function TradeHistoryRow({ trade, statusVariant }: TradeHistoryRowProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="border-b border-border last:border-b-0">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full p-4 hover:bg-surface-hover/50 transition-colors text-left"
+      >
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <svg
+              className={`w-4 h-4 text-text-muted transition-transform flex-shrink-0 ${isExpanded ? 'rotate-90' : ''}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            <p className="font-medium text-text truncate">
+              {trade.teams.map((t) => t.team_name).join(' & ')}
+            </p>
+          </div>
+          <Badge variant={statusVariant} size="sm">
+            {trade.status.charAt(0).toUpperCase() + trade.status.slice(1)}
+          </Badge>
+          <span className="text-xs text-text-muted whitespace-nowrap">
+            {new Date(trade.created_at).toLocaleDateString()}
+          </span>
+        </div>
+      </button>
+
+      {isExpanded && (
+        <div className="px-4 pb-4 pt-0">
+          <div className="bg-surface-hover/30 rounded-lg p-3 space-y-3">
+            {trade.teams.map((team) => (
+              <div key={team.team_id} className="space-y-1">
+                <p className="text-xs font-medium text-text-muted uppercase tracking-wide">
+                  {team.team_name} sends:
+                </p>
+                {team.assets_sent.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {team.assets_sent.map((asset) => (
+                      <span
+                        key={asset.id}
+                        className="inline-flex items-center px-2 py-1 rounded-md bg-surface text-xs text-text border border-border"
+                      >
+                        {asset.type === 'player'
+                          ? asset.player?.name || 'Player'
+                          : `${asset.draft_pick?.year} R${asset.draft_pick?.round}`}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-xs text-text-muted italic">Nothing</span>
+                )}
+              </div>
+            ))}
+            {trade.notes && (
+              <div className="pt-2 border-t border-border">
+                <p className="text-xs text-text-muted">
+                  <span className="font-medium">Notes:</span> {trade.notes}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function TeamDetailPage() {
   const params = useParams();
@@ -194,25 +272,21 @@ export default function TeamDetailPage() {
                   padding="none"
                   header={<CardHeader title="Trade History" />}
                 >
-                  <div className="divide-y divide-border">
-                    {trades.slice(0, 5).map((trade) => (
-                      <div key={trade.id} className="p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <p className="font-medium text-text">
-                              {trade.teams.map((t) => t.team_name).join(' & ')}
-                            </p>
-                            <p className="text-sm text-text-muted mt-1">
-                              {trade.status.charAt(0).toUpperCase() +
-                                trade.status.slice(1)}
-                            </p>
-                          </div>
-                          <span className="text-xs text-text-muted">
-                            {new Date(trade.proposed_at).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                  <div>
+                    {trades.slice(0, 5).map((trade) => {
+                      const statusVariant =
+                        trade.status === 'accepted' ? 'success' :
+                        trade.status === 'rejected' ? 'danger' :
+                        trade.status === 'cancelled' ? 'default' : 'warning';
+
+                      return (
+                        <TradeHistoryRow
+                          key={trade.id}
+                          trade={trade}
+                          statusVariant={statusVariant}
+                        />
+                      );
+                    })}
                   </div>
                 </Card>
               )}
