@@ -39,10 +39,39 @@ export interface Team {
   logo_url: string | null;
 }
 
+export interface RosterPlayerDetail {
+  id: string;
+  player: {
+    id: string;
+    player_id: number;
+    name: string;
+    positions: string[];
+    nba_team: string;
+    projected_value: number;
+    fpts_avg: number;
+    pts_avg: number;
+    reb_avg: number;
+    ast_avg: number;
+    stl_avg: number;
+    blk_avg: number;
+    to_avg: number;
+    fg_pct: number;
+    ft_pct: number;
+    three_pct: number;
+    gp: number;
+    is_injured: boolean;
+  };
+  salary: number;
+  is_keeper: boolean;
+  keeper_years: number;
+  acquired_by_draft: boolean;
+  trade_blocked: boolean;
+}
+
 export interface TeamDetail extends Team {
   league: League;
-  roster: RosterPlayer[];
-  draft_picks: DraftPick[];
+  roster: RosterPlayerDetail[];
+  draft_picks: TeamDraftPick[];
 }
 
 export interface PlayerStats {
@@ -93,6 +122,18 @@ export interface DraftPick {
   round: number;
   pick_number: number | null;
   is_owned: boolean;
+}
+
+export interface TeamDraftPick {
+  id: string;
+  year: number;
+  round: number;
+  pick_number: number | null;
+  projected_number: number | null;
+  original_team_id: string;
+  original_team_name: string;
+  current_team_id: string;
+  is_rostered: boolean;
 }
 
 export interface Rookie {

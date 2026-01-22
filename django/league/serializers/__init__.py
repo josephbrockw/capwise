@@ -29,7 +29,6 @@ from .roster import (
 from .team import (
     PlayerDetailForRosterSerializer,
     RosterPlayerDetailSerializer,
-    RosterPlayerSummarySerializer,
     TeamDetailSerializer,
     TeamListSerializer,
     TeamRosterSerializer,
@@ -51,7 +50,6 @@ __all__ = [
     "TeamListSerializer",
     "TeamDetailSerializer",
     "TeamRosterSerializer",
-    "RosterPlayerSummarySerializer",
     "RosterPlayerDetailSerializer",
     "PlayerDetailForRosterSerializer",
     "PlayerListSerializer",

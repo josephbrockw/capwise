@@ -81,7 +81,7 @@ class TeamViewSetTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["data"]["name"], "Chicago Bulls Dynasty")
-        self.assertIn("roster_summary", response.json()["data"])
+        self.assertIn("roster", response.json()["data"])
 
     def test_retrieve_team_in_same_league(self):
         self.client.force_authenticate(user=self.user)
@@ -170,3 +170,34 @@ class TeamViewSetTest(TestCase):
         data = response.json()["data"]
         self.assertIn("owner_id", data)
         self.assertEqual(data["owner_id"], str(self.user.id))
+
+    def test_team_detail_includes_roster(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            f"/api/league/teams/{self.bulls.id}",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["data"]
+        self.assertIn("roster", data)
+        self.assertEqual(len(data["roster"]), 3)
+        roster_player = data["roster"][0]
+        self.assertIn("player", roster_player)
+        self.assertIn("salary", roster_player)
+        self.assertIn("is_keeper", roster_player)
+        player = roster_player["player"]
+        self.assertIn("name", player)
+        self.assertIn("positions", player)
+        self.assertIn("nba_team", player)
+        self.assertIn("fpts_avg", player)
+
+    def test_team_detail_includes_draft_picks(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            f"/api/league/teams/{self.bulls.id}",
+            HTTP_X_TEAM_CONTEXT=str(self.bulls.id),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["data"]
+        self.assertIn("draft_picks", data)
+        self.assertIsInstance(data["draft_picks"], list)

@@ -71,11 +71,9 @@ export function TeamProvider({ children }: { children: ReactNode }) {
 
   const switchLeague = useCallback(
     (leagueId: string) => {
-      const teamInLeague = userTeams.find(
-        (t) => userLeagues.find((l) => l.id === leagueId)?.id === leagueId
-      );
-      if (teamInLeague) {
-        setCurrentTeam(teamInLeague.id);
+      const leagueExists = userLeagues.some((l) => l.id === leagueId);
+      if (leagueExists && userTeams.length > 0) {
+        setCurrentTeam(userTeams[0].id);
       }
     },
     [userTeams, userLeagues, setCurrentTeam]

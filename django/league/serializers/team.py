@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from django.utils import timezone
-from league.models import League, Player, RosterPlayer, Team
+from league.models import DraftPick, League, Player, RosterPlayer, Team
 
 
 class LeagueForTeamSerializer(serializers.ModelSerializer):
@@ -31,22 +31,6 @@ class LeagueForTeamSerializer(serializers.ModelSerializer):
         return hours_since_sync > 24
 
 
-class RosterPlayerSummarySerializer(serializers.ModelSerializer):
-    player_name = serializers.CharField(source="player.name", read_only=True)
-    player_id = serializers.UUIDField(source="player.id", read_only=True)
-
-    class Meta:
-        model = RosterPlayer
-        fields = [
-            "id",
-            "player_id",
-            "player_name",
-            "salary",
-            "is_keeper",
-            "keeper_years",
-        ]
-
-
 class TeamListSerializer(serializers.ModelSerializer):
     owner_name = serializers.SerializerMethodField()
     current_salary = serializers.IntegerField(read_only=True)
@@ -64,39 +48,6 @@ class TeamListSerializer(serializers.ModelSerializer):
             "standing",
             "current_salary",
             "cap_space",
-        ]
-
-    def get_owner_name(self, obj):
-        return obj.owner.name if obj.owner else None
-
-
-class TeamDetailSerializer(serializers.ModelSerializer):
-    owner_name = serializers.SerializerMethodField()
-    owner_id = serializers.UUIDField(source="owner.id", read_only=True)
-    current_salary = serializers.IntegerField(read_only=True)
-    cap_space = serializers.IntegerField(read_only=True)
-    roster_summary = RosterPlayerSummarySerializer(
-        source="roster_players", many=True, read_only=True
-    )
-    league = LeagueForTeamSerializer(read_only=True)
-
-    class Meta:
-        model = Team
-        fields = [
-            "id",
-            "name",
-            "abbreviation",
-            "logo_url",
-            "owner_id",
-            "owner_name",
-            "wins",
-            "losses",
-            "standing",
-            "espn_team_id",
-            "current_salary",
-            "cap_space",
-            "league",
-            "roster_summary",
         ]
 
     def get_owner_name(self, obj):
@@ -147,6 +98,65 @@ class RosterPlayerDetailSerializer(serializers.ModelSerializer):
             "acquired_by_draft",
             "trade_blocked",
         ]
+
+
+class DraftPickForTeamSerializer(serializers.ModelSerializer):
+    original_team_id = serializers.UUIDField(source="original_team.id", read_only=True)
+    original_team_name = serializers.CharField(
+        source="original_team.name", read_only=True
+    )
+    current_team_id = serializers.UUIDField(source="current_team.id", read_only=True)
+
+    class Meta:
+        model = DraftPick
+        fields = [
+            "id",
+            "year",
+            "round",
+            "pick_number",
+            "projected_number",
+            "original_team_id",
+            "original_team_name",
+            "current_team_id",
+            "is_rostered",
+        ]
+
+
+class TeamDetailSerializer(serializers.ModelSerializer):
+    owner_name = serializers.SerializerMethodField()
+    owner_id = serializers.UUIDField(source="owner.id", read_only=True)
+    current_salary = serializers.IntegerField(read_only=True)
+    cap_space = serializers.IntegerField(read_only=True)
+    roster = RosterPlayerDetailSerializer(
+        source="roster_players", many=True, read_only=True
+    )
+    draft_picks = DraftPickForTeamSerializer(
+        source="current_picks", many=True, read_only=True
+    )
+    league = LeagueForTeamSerializer(read_only=True)
+
+    class Meta:
+        model = Team
+        fields = [
+            "id",
+            "name",
+            "abbreviation",
+            "logo_url",
+            "owner_id",
+            "owner_name",
+            "wins",
+            "losses",
+            "standing",
+            "espn_team_id",
+            "current_salary",
+            "cap_space",
+            "league",
+            "roster",
+            "draft_picks",
+        ]
+
+    def get_owner_name(self, obj):
+        return obj.owner.name if obj.owner else None
 
 
 class TeamRosterSerializer(serializers.ModelSerializer):
