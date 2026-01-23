@@ -964,7 +964,7 @@ Create components:
 - TradeAnalysisPanel
 - TradeSummary
 
-### Prompt 8.2: Trade History and Detail Pages
+### Prompt 8.2: Trade History and Detail Pages (Skip)
 
 Create trade-related pages:
 

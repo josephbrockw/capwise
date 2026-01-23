@@ -5,7 +5,8 @@ import { useTeam } from '@/contexts/TeamContext';
 import { Card, CardHeader, StatCard } from '@/components/capwise/ui';
 import { SalaryCapChart, RosterValueChart, RosterPlayer } from '@/components/capwise/charts';
 import { Badge } from '@/components/bb/data-display';
-import { Container, Stack, Flex } from '@/components/bb/layout';
+import { Stack, Flex } from '@/components/bb/layout';
+import { PageContainer } from '@/components/capwise/layout';
 import { Button } from '@/components/bb/ui';
 import { Spinner } from '@/components/bb/feedback';
 import { formatCurrency, getOrdinalSuffix } from '@/utils/format';
@@ -28,21 +29,15 @@ export default function DashboardPage() {
 
   if (isLoading) {
     return (
-      <main className="py-8">
-        <Container>
-          <div className="flex items-center justify-center min-h-[400px]">
-            <Spinner size="lg" label="Loading dashboard..." />
-          </div>
-        </Container>
-      </main>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Spinner size="lg" label="Loading dashboard..." />
+      </div>
     );
   }
 
   if (!currentTeam || !currentLeague) {
     return (
-      <main className="py-8">
-        <Container>
-          <Card variant="elevated" padding="lg">
+      <Card variant="elevated" padding="lg">
             <div className="text-center py-8">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-900/20">
                 <svg className="h-8 w-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,9 +48,7 @@ export default function DashboardPage() {
               <p className="text-text-muted mb-6">You don&apos;t have any teams yet or haven&apos;t selected one.</p>
               <Button>Join a League</Button>
             </div>
-          </Card>
-        </Container>
-      </main>
+      </Card>
     );
   }
 
@@ -81,9 +74,8 @@ export default function DashboardPage() {
   const injuredPlayers = mockTopPlayers.filter(p => p.status === 'injured' || p.status === 'questionable');
 
   return (
-    <main className="py-6 lg:py-8">
-      <Container>
-        <Stack gap="lg">
+    <PageContainer>
+      <Stack gap="lg">
           {/* Header */}
           <div>
             <Flex justify="between" align="start" className="flex-col sm:flex-row gap-4">
@@ -317,8 +309,7 @@ export default function DashboardPage() {
               </Card>
             </div>
           </div>
-        </Stack>
-      </Container>
-    </main>
+      </Stack>
+    </PageContainer>
   );
 }

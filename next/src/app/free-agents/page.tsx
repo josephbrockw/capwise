@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTeam } from '@/contexts/TeamContext';
 import { getPlayers, Player, PlayerSearchParams } from '@/api/league';
-import { Container, Stack } from '@/components/bb/layout';
+import { Stack } from '@/components/bb/layout';
 import { Spinner, Alert } from '@/components/bb/feedback';
 import { Card } from '@/components/capwise/ui';
-import { AppLayout } from '@/components/capwise/layout';
+import { AppLayout, PageContainer } from '@/components/capwise/layout';
 import {
   PlayerSearchFilters,
   PlayerFilters,
@@ -100,22 +100,17 @@ export default function FreeAgentsPage() {
   if (!currentTeam) {
     return (
       <AppLayout>
-        <main className="py-8">
-          <Container>
-            <Alert variant="warning" title="No Team Selected">
-              Please select a team to view free agents.
-            </Alert>
-          </Container>
-        </main>
+        <Alert variant="warning" title="No Team Selected">
+          Please select a team to view free agents.
+        </Alert>
       </AppLayout>
     );
   }
 
   return (
     <AppLayout>
-      <main className="py-6 lg:py-8">
-        <Container>
-          <Stack gap="lg">
+      <PageContainer>
+        <Stack gap="lg">
             <FreeAgentsHeader totalCount={totalCount} />
 
             <PlayerSearchFilters
@@ -144,9 +139,8 @@ export default function FreeAgentsPage() {
                 />
               </Card>
             )}
-          </Stack>
-        </Container>
-      </main>
+        </Stack>
+      </PageContainer>
     </AppLayout>
   );
 }

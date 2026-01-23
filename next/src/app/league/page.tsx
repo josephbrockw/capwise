@@ -23,7 +23,8 @@ import {
   StatCategory,
   LeagueLeader,
 } from '@/components/capwise/league';
-import { Container, Stack } from '@/components/bb/layout';
+import { Stack } from '@/components/bb/layout';
+import { PageContainer } from '@/components/capwise/layout';
 import { Spinner, Alert } from '@/components/bb/feedback';
 
 export default function LeaguePage() {
@@ -127,44 +128,31 @@ export default function LeaguePage() {
 
   if (isLoading) {
     return (
-      <main className="py-8">
-        <Container>
-          <div className="flex items-center justify-center min-h-[400px]">
-            <Spinner size="lg" label="Loading league..." />
-          </div>
-        </Container>
-      </main>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Spinner size="lg" label="Loading league..." />
+      </div>
     );
   }
 
   if (!currentTeam || !currentLeague) {
     return (
-      <main className="py-8">
-        <Container>
-          <Alert variant="warning" title="No League Selected">
-            Please select a team to view league information.
-          </Alert>
-        </Container>
-      </main>
+      <Alert variant="warning" title="No League Selected">
+        Please select a team to view league information.
+      </Alert>
     );
   }
 
   if (error) {
     return (
-      <main className="py-8">
-        <Container>
-          <Alert variant="error" title="Error">
-            {error}
-          </Alert>
-        </Container>
-      </main>
+      <Alert variant="error" title="Error">
+        {error}
+      </Alert>
     );
   }
 
   return (
-    <main className="py-6 lg:py-8">
-      <Container>
-        <Stack gap="lg">
+    <PageContainer>
+      <Stack gap="lg">
           <LeagueHeader
             league={currentLeague}
             isCommissioner={isCommissioner}
@@ -192,8 +180,7 @@ export default function LeaguePage() {
             onYearChange={setSelectedDraftYear}
             currentTeamId={currentTeam.id}
           />
-        </Stack>
-      </Container>
-    </main>
+      </Stack>
+    </PageContainer>
   );
 }

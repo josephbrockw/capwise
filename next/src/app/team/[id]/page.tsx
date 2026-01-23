@@ -15,7 +15,8 @@ import {
   RosterPlayerData,
   DraftPickData,
 } from '@/components/capwise/team';
-import { Container, Stack, Flex } from '@/components/bb/layout';
+import { Stack, Flex } from '@/components/bb/layout';
+import { PageContainer } from '@/components/capwise/layout';
 import { Button } from '@/components/bb/ui';
 import { Spinner, Alert } from '@/components/bb/feedback';
 import { Badge } from '@/components/bb/data-display';
@@ -258,28 +259,22 @@ export default function TeamDetailPage() {
 
   if (isLoading) {
     return (
-      <main className="py-8">
-        <Container>
-          <div className="flex items-center justify-center min-h-[400px]">
-            <Spinner size="lg" label="Loading team..." />
-          </div>
-        </Container>
-      </main>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Spinner size="lg" label="Loading team..." />
+      </div>
     );
   }
 
   if (error || !team) {
     return (
-      <main className="py-8">
-        <Container>
-          <Alert variant="error">{error || 'Team not found'}</Alert>
-          <div className="mt-4">
-            <Link href={config.routes.dashboard}>
-              <Button variant="secondary">Back to Dashboard</Button>
-            </Link>
-          </div>
-        </Container>
-      </main>
+      <div>
+        <Alert variant="error">{error || 'Team not found'}</Alert>
+        <div className="mt-4">
+          <Link href={config.routes.dashboard}>
+            <Button variant="secondary">Back to Dashboard</Button>
+          </Link>
+        </div>
+      </div>
     );
   }
 
@@ -321,9 +316,8 @@ export default function TeamDetailPage() {
   };
 
   return (
-    <main className="py-6 lg:py-8">
-      <Container>
-        <Stack gap="lg">
+    <PageContainer>
+      <Stack gap="lg">
           <div className="flex items-center gap-2 text-sm text-text-muted">
             <Link href={config.routes.dashboard} className="hover:text-text">
               Dashboard
@@ -479,8 +473,7 @@ export default function TeamDetailPage() {
               </Card>
             </div>
           </div>
-        </Stack>
-      </Container>
-    </main>
+      </Stack>
+    </PageContainer>
   );
 }

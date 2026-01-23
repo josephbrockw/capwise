@@ -113,15 +113,16 @@ export interface RosterPlayer {
 
 export interface DraftPick {
   id: string;
-  league_id: string;
+  year: number;
+  round: number;
+  pick_number: number | null;
+  projected_number: number | null;
   original_team_id: string;
   original_team_name: string;
   current_team_id: string;
   current_team_name: string;
-  year: number;
-  round: number;
-  pick_number: number | null;
-  is_owned: boolean;
+  assigned_name: string | null;
+  is_rostered: boolean;
 }
 
 export interface TeamDraftPick {
@@ -136,14 +137,28 @@ export interface TeamDraftPick {
   is_rostered: boolean;
 }
 
+export interface RookieListItem {
+  id: string;
+  name: string;
+  nba_team: string;
+  rookie_rank: number | null;
+  rookie_year: number | null;
+  positions: string[];
+  player_id: string | null;
+}
+
 export interface Rookie {
   id: string;
-  player: Player;
-  draft_year: number;
-  draft_round: number;
-  draft_pick: number;
-  drafted_by_team_id: string | null;
-  drafted_by_team_name: string | null;
+  name: string;
+  nba_team: string;
+  rookie_rank: number | null;
+  rookie_year: number | null;
+  positions: string[];
+  player: {
+    id: string;
+    name: string;
+    nba_team: string;
+  } | null;
 }
 
 export interface TradeAsset {
@@ -261,6 +276,26 @@ export interface DraftPickParams {
   year?: number;
   round?: number;
   team_id?: string;
+  original_team_id?: string;
+}
+
+export interface RookieParams {
+  rookie_year?: number;
+  position?: string;
+  available?: boolean;
+}
+
+export interface DraftPickDetail {
+  id: string;
+  year: number;
+  round: number;
+  pick_number: number | null;
+  projected_number: number | null;
+  original_team: { id: string; name: string; abbreviation: string };
+  current_team: { id: string; name: string; abbreviation: string };
+  player: { id: string; name: string; nba_team: string } | null;
+  rookie: RookieListItem | null;
+  is_rostered: boolean;
 }
 
 export interface TradeParams {
@@ -402,9 +437,37 @@ export async function getDraftPicks(
 // Rookie API Functions
 // ============================================================================
 
-export async function getRookies(teamId: string): Promise<Rookie[]> {
-  return apiClient.get<Rookie[]>(
-    config.api.routes.league.rookies,
+export async function getRookies(
+  teamId: string,
+  params: RookieParams = {}
+): Promise<RookieListItem[]> {
+  const qs = buildQueryString(params);
+  return apiClient.get<RookieListItem[]>(
+    `${config.api.routes.league.rookies}${qs}`,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export async function getDraftPickDetail(
+  teamId: string,
+  pickId: string
+): Promise<DraftPickDetail> {
+  return apiClient.get<DraftPickDetail>(
+    `${config.api.routes.league.draftPicks}/${pickId}`,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export async function makePick(
+  teamId: string,
+  pickId: string,
+  rookieId: string
+): Promise<DraftPickDetail> {
+  return apiClient.patch<DraftPickDetail>(
+    `${config.api.routes.league.draftPicks}/${pickId}`,
+    { rookie_id: rookieId },
     true,
     teamContextHeader(teamId)
   );

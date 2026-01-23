@@ -254,7 +254,7 @@ export function AppLayout({
           </header>
 
           {/* Page Content */}
-          <main>{children}</main>
+          <main className="px-6 py-6">{children}</main>
         </div>
       </div>
 
@@ -448,7 +448,7 @@ export function AppLayout({
         )}
 
         {/* Page Content */}
-        {!mobileMenuOpen && <main>{children}</main>}
+        {!mobileMenuOpen && <main className="px-4 py-4">{children}</main>}
       </div>
     </div>
   );

@@ -5,3 +5,4 @@ export * from './league';
 export * from './team';
 export * from './free-agents';
 export * from './trade-machine';
+export * from './rookie-draft';
