@@ -1074,9 +1074,11 @@ Please update clean_data.yaml so we have data to fill out these displays. As alw
 
 ## Phase 10: Admin Section
 
-### Prompt 10.1: Commissioner Admin Pages
+### Prompt 10.1: Commissioner Admin Pages (Done)
 
 Create admin section for commissioners at next/src/app/admin/:
+
+Some of these features will be for super admins only. We might have to serialize issuperadmin in the login's user data section and the /me endpoint. We should only show them if the user is a superadmin (I'll denote which ones.)
 
 **Layout:**
 - Only accessible if isCommissioner is true
@@ -1088,7 +1090,6 @@ Create admin section for commissioners at next/src/app/admin/:
 - Full roster table with edit capabilities
 - For each player: Edit salary, keeper status, trade blocked
 - Inline editing or modal
-- Batch actions: Apply salary increases, mark keepers
 
 **2. Draft Pick Management** (/admin/draft-picks):
 - Filter by year
@@ -1097,13 +1098,13 @@ Create admin section for commissioners at next/src/app/admin/:
 - Set pick numbers manually
 - Assign players to picks
 
-**3. Player Management** (/admin/players):
+**3. Player Management** (/admin/players): [Super Admin]
 - Search all players
 - Edit: Projected value, positions, injury status
 - Bulk update projected values (CSV import nice to have)
 - Link/unlink players to rookies
 
-**4. Rookie Management** (/admin/rookies):
+**4. Rookie Management** (/admin/rookies): [Super Admin]
 - Add new rookies
 - Edit rank, positions, link to player
 - Delete rookies
@@ -1117,10 +1118,12 @@ Create admin section for commissioners at next/src/app/admin/:
 
 **6. Sync Controls** (/admin/sync):
 - Last sync date display
-- Buttons: Sync Players, Sync Rosters, Full Sync
+- Buttons: Sync Players [Super Admin], Sync Rosters, Full Sync [Super Admin]
 - Sync log/status display
 
 Create components:
+As always, utilize bb components, or extend them in capwise. Break up tabs / sections / reusable pieces into their own components with their own tests. Make sure all functionality discussed has a test case to prove it. Below are some components we might need.
+
 - AdminLayout (with sub-nav)
 - EditableRosterTable
 - DraftPickEditor

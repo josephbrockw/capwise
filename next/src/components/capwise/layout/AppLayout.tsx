@@ -108,7 +108,7 @@ export function AppLayout({
   isCommissioner = false,
 }: AppLayoutProps) {
   const { user, isLoading, logout } = useAuth();
-  const { currentTeam: contextTeam, userTeams, isCommissioner: contextIsCommissioner } = useTeam();
+  const { currentTeam: contextTeam, userTeams, setCurrentTeam, isCommissioner: contextIsCommissioner } = useTeam();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -167,7 +167,7 @@ export function AppLayout({
           </div>
 
           {/* Team Selector */}
-          {teams.length > 0 && (
+          {effectiveTeams.length > 0 && (
             <div className="px-4 py-4 border-b border-border">
               <Dropdown
                 trigger={
@@ -190,10 +190,10 @@ export function AppLayout({
                     </svg>
                   </div>
                 }
-                items={teams.map((team) => ({
+                items={effectiveTeams.map((team) => ({
                   id: team.id,
                   label: team.name,
-                  onClick: () => onTeamChange?.(team.id),
+                  onClick: () => onTeamChange ? onTeamChange(team.id) : setCurrentTeam(team.id),
                 }))}
                 width="trigger"
               />
@@ -313,7 +313,7 @@ export function AppLayout({
           <div className="fixed inset-0 z-40 bg-surface pt-16">
             <div className="flex flex-col h-full">
               {/* Team Selector */}
-              {teams.length > 0 && (
+              {effectiveTeams.length > 0 && (
                 <div className="px-4 py-4 border-b border-border">
                   <p className="text-xs font-medium text-text-muted uppercase tracking-wider mb-2">
                     Current Team
@@ -339,11 +339,11 @@ export function AppLayout({
                         </svg>
                       </div>
                     }
-                    items={teams.map((team) => ({
+                    items={effectiveTeams.map((team) => ({
                       id: team.id,
                       label: team.name,
                       onClick: () => {
-                        onTeamChange?.(team.id);
+                        onTeamChange ? onTeamChange(team.id) : setCurrentTeam(team.id);
                         setMobileMenuOpen(false);
                       },
                     }))}
