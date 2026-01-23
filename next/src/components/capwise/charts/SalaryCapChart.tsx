@@ -45,14 +45,6 @@ export function SalaryCapChart({ used, total }: SalaryCapChartProps) {
           aria-valuemin={0}
           aria-valuemax={100}
         />
-        {percentage > 75 && percentage <= 100 && (
-          <div
-            className="absolute top-0 h-full w-0.5 bg-warning-600"
-            style={{ left: '90%' }}
-            title="Luxury tax threshold"
-            data-testid="luxury-tax-marker"
-          />
-        )}
       </div>
       <div className="flex justify-between text-xs text-text-muted">
         <span>0%</span>

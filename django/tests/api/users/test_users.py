@@ -35,6 +35,39 @@ class UserViewSetTest(APITestCase):
         self.assertEqual(data["preferred_name"], "")
         self.assertEqual(data["first_name"], self.user.first_name)
         self.assertEqual(data["last_name"], self.user.last_name)
+        self.assertIn("is_superuser", data)
+        self.assertFalse(data["is_superuser"])
+
+    def test_retrieve_user_includes_is_superuser_for_regular_user(self):
+        """Regular users should have is_superuser=False in /me response."""
+        response = self.client.get("/api/users/me")
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("is_superuser", data)
+        self.assertFalse(data["is_superuser"])
+
+    def test_retrieve_user_includes_is_superuser_for_superuser(self):
+        """Superusers should have is_superuser=True in /me response."""
+        self.user.is_superuser = True
+        self.user.save()
+
+        response = self.client.get("/api/users/me")
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("is_superuser", data)
+        self.assertTrue(data["is_superuser"])
+
+    def test_is_superuser_is_read_only(self):
+        """Users should not be able to update their is_superuser status."""
+        update_data = {"is_superuser": True}
+        response = self.client.patch("/api/users/me", data=update_data)
+        data, msg, err, code = read_api_response(response)
+
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertFalse(self.user.is_superuser)
 
     def test_update_user(self):
         update_data = {

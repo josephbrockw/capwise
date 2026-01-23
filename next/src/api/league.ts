@@ -239,6 +239,7 @@ export interface LotteryResult {
 export interface SyncStatus {
   last_sync_date: string | null;
   needs_sync: boolean;
+  espn_league_id?: string;
 }
 
 export interface SyncResult {
@@ -246,6 +247,10 @@ export interface SyncResult {
   message: string;
   players_created?: number;
   players_updated?: number;
+  teams_created?: number;
+  teams_updated?: number;
+  roster_players_added?: number;
+  roster_players_removed?: number;
   rosters_synced?: number;
 }
 
@@ -600,5 +605,138 @@ export async function getLotteryResults(
     `${config.api.routes.league.lotteryResults}${qs}`,
     true,
     teamContextHeader(teamId)
+  );
+}
+
+// ============================================================================
+// Admin API Functions
+// ============================================================================
+
+export interface RosterPlayerUpdate {
+  salary?: number;
+  is_keeper?: boolean;
+  trade_blocked?: boolean;
+}
+
+export async function updateRosterPlayer(
+  teamId: string,
+  rosterPlayerId: string,
+  updates: RosterPlayerUpdate
+): Promise<RosterPlayerDetail> {
+  return apiClient.patch<RosterPlayerDetail>(
+    `${config.api.routes.league.roster}/${rosterPlayerId}`,
+    updates,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export interface DraftPickUpdate {
+  pick_number?: number;
+  projected_number?: number;
+  current_team_id?: string;
+  rookie_id?: string;
+}
+
+export async function updateDraftPick(
+  teamId: string,
+  draftPickId: string,
+  updates: DraftPickUpdate
+): Promise<DraftPick> {
+  return apiClient.patch<DraftPick>(
+    `${config.api.routes.league.draftPicks}/${draftPickId}`,
+    updates,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export interface PlayerUpdate {
+  projected_value?: number;
+  positions?: string[];
+  is_injured?: boolean;
+}
+
+export async function updatePlayer(
+  teamId: string,
+  playerId: string,
+  updates: PlayerUpdate
+): Promise<Player> {
+  return apiClient.patch<Player>(
+    `${config.api.routes.league.playerDetail(playerId)}`,
+    updates,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export interface RookieCreate {
+  name: string;
+  nba_team: string;
+  positions: string[];
+  rookie_rank?: number;
+  rookie_year: number;
+}
+
+export async function createRookie(
+  teamId: string,
+  data: RookieCreate
+): Promise<Rookie> {
+  return apiClient.post<Rookie>(
+    config.api.routes.league.rookies,
+    data,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export interface RookieUpdate {
+  name?: string;
+  nba_team?: string;
+  positions?: string[];
+  rookie_rank?: number;
+  player_id?: string;
+}
+
+export async function updateRookie(
+  teamId: string,
+  rookieId: string,
+  updates: RookieUpdate
+): Promise<Rookie> {
+  return apiClient.patch<Rookie>(
+    `${config.api.routes.league.rookies}/${rookieId}`,
+    updates,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export async function deleteRookie(
+  teamId: string,
+  rookieId: string
+): Promise<void> {
+  return apiClient.delete<void>(
+    `${config.api.routes.league.rookies}/${rookieId}`,
+    true,
+    teamContextHeader(teamId)
+  );
+}
+
+export interface LeagueSettingsUpdate {
+  salary_cap?: number;
+  min_salary?: number;
+  roster_size?: number;
+  draft_open?: boolean;
+  salary_escalation_settings?: SalaryEscalationSettings;
+}
+
+export async function updateLeagueSettings(
+  leagueId: string,
+  updates: LeagueSettingsUpdate
+): Promise<League> {
+  return apiClient.patch<League>(
+    config.api.routes.league.detail(leagueId),
+    updates,
+    true
   );
 }

@@ -6,6 +6,7 @@ import { User, isAuthenticated, logout as logoutUtil, getCurrentUser, removeAuth
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isSuperAdmin: boolean;
   login: (user: User) => void;
   logout: () => Promise<void>;
 }
@@ -50,8 +51,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const isSuperAdmin = user?.is_superuser ?? false;
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, isSuperAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

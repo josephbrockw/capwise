@@ -64,23 +64,6 @@ describe('SalaryCapChart', () => {
     });
   });
 
-  describe('Luxury Tax Marker', () => {
-    it('shows luxury tax marker when between 75-100%', () => {
-      render(<SalaryCapChart used={80000000} total={100000000} />);
-      expect(screen.getByTestId('luxury-tax-marker')).toBeInTheDocument();
-    });
-
-    it('hides luxury tax marker when under 75%', () => {
-      render(<SalaryCapChart used={50000000} total={100000000} />);
-      expect(screen.queryByTestId('luxury-tax-marker')).not.toBeInTheDocument();
-    });
-
-    it('hides luxury tax marker when over 100%', () => {
-      render(<SalaryCapChart used={110000000} total={100000000} />);
-      expect(screen.queryByTestId('luxury-tax-marker')).not.toBeInTheDocument();
-    });
-  });
-
   describe('Accessibility', () => {
     it('has progressbar role', () => {
       render(<SalaryCapChart used={50000000} total={100000000} />);

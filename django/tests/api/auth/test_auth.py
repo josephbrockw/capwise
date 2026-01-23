@@ -48,6 +48,8 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(data["user"]["email"], user.email)
         self.assertEqual(data["user"]["first_name"], user.first_name)
         self.assertEqual(data["user"]["last_name"], user.last_name)
+        self.assertIn("is_superuser", data["user"])
+        self.assertFalse(data["user"]["is_superuser"])
 
         # Check teams and default_team are in response (magrat has no teams)
         self.assertIn("teams", data)
@@ -66,6 +68,22 @@ class LogInViewTestCase(APITestCase):
         self.assertEqual(payload["email"], user.email)
         self.assertEqual(payload["first_name"], user.first_name)
         self.assertEqual(payload["last_name"], user.last_name)
+
+    def test_login_returns_is_superuser_true_for_superuser(self):
+        """Login should return is_superuser=True for superusers."""
+        user = get_user_model().objects.get(username="magrat")
+        user.is_superuser = True
+        user.save()
+
+        url = "/api/auth/login"
+        payload = {"username": "magrat", "password": "password123"}
+        data, msg, err, code = read_api_response(
+            self.client.post(url, payload, format="json")
+        )
+        self.assertEqual(code, status.HTTP_200_OK)
+        self.assertIn("user", data)
+        self.assertIn("is_superuser", data["user"])
+        self.assertTrue(data["user"]["is_superuser"])
 
     def test_login_returns_user_teams(self):
         """Login should return user's teams and default_team."""

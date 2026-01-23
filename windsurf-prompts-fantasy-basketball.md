@@ -910,7 +910,7 @@ Handle loading and empty states appropriately.
 
 ---
 
-## Phase 8: Frontend - Trade Machine
+## Phase 8: Frontend - Trade Machine (Done)
 
 ### Prompt 8.1: Trade Machine Page (Done)
 
@@ -1014,18 +1014,18 @@ Create components:
 
 ---
 
-## Phase 9: Frontend - Rookie Draft
+## Phase 9: Frontend - Rookie Draft (Done)
 
-### Prompt 9.1: Rookie Draft Page
+### Prompt 9.1: Rookie Draft Page (Done)
 
 Create the rookie draft page at next/src/app/rookie-draft/page.tsx:
 
 Manages the rookie draft process.
 
 **Tabs:**
-1. Draft Board
+1. Draft Board / Lottery (depending on phase)
 2. Available Rookies
-3. Draft Order / Lottery
+3. Lottery
 
 **Tab 1: Draft Board**
 - Visual draft board showing all picks
@@ -1041,7 +1041,6 @@ Manages the rookie draft process.
 - List of rookies not yet drafted
 - Columns: Rank, Name, Position, NBA Team
 - Sortable and searchable
-- Commissioner can drag-and-drop to reorder ranks
 - Filter by position
 
 **Tab 3: Draft Order / Lottery**
@@ -1070,6 +1069,7 @@ Create components:
 - LotteryResultsDisplay
 - MakePickModal
 
+Please update clean_data.yaml so we have data to fill out these displays. As always, utilize bb components, or extend them in capwise. Break up tabs / sections / reusable pieces into their own components with their own tests. Make sure all functionality discussed has a test case to prove it.
 ---
 
 ## Phase 10: Admin Section

@@ -112,6 +112,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             "password2",
             "first_name",
             "last_name",
+            "is_superuser",
             "payment_method_id",
             "productId",
             "tierId",
@@ -119,7 +120,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             "discountCode",
             "trialDays",
         )
-        read_only_fields = ("id",)
+        read_only_fields = ("id", "is_superuser")
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -132,8 +133,9 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "is_superuser",
         )
-        read_only_fields = ("id", "username", "email")
+        read_only_fields = ("id", "username", "email", "is_superuser")
 
     def update(self, instance, validated_data):
         # Update the instance without modifying the password fields
