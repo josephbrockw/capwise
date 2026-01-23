@@ -72,6 +72,7 @@ class LogInViewTestCase(APITestCase):
     def test_login_returns_is_superuser_true_for_superuser(self):
         """Login should return is_superuser=True for superusers."""
         user = get_user_model().objects.get(username="magrat")
+        user.is_active = True
         user.is_superuser = True
         user.save()
 
