@@ -52,6 +52,40 @@
       year_2_4_multiplier: 0.80
       year_5_plus_multiplier: 0.90
 
+- model: league.league
+  pk: 'bbbbbbbb-e5f6-7890-abcd-ef1234567890'
+  fields:
+    name: LCA Fantasy Basketball
+    year: 2026
+    salary_cap: 1000
+    min_salary: 1
+    roster_size: 16
+    commissioner: '00000000-0000-0000-0000-000000000002'
+    draft_open: false
+    espn_league_id: 223774
+    espn_s2: AEAnZrDTVBfXHsuHlMqSL3kQBXcx%2FyeWrh5tT1%2Bs4YJ1vuqCB8CKaaQyNBlcrvkOBwpILYHPQyAMVdfF8wMZL%2F2eEdVWy%2F7cmyXFEBIvysCYs6Nfsb%2F%2Bl7uRgxb7XrGZSlekZ0Nb2f8o9ZiULaCiBkFiQiwo%2Fiv1rxJXtvAatA%2FolWwN%2BAYSzlCEchXpoEibAaN3hWJrlVVYmMXDDeiH9wvzwhRUTigmugEAPUWhTgw1OGb45mS9jRWBMtqKbmcQ%2Bbv6A8H6vt28AqKv7fH1U6tKQIMnOSLAMLhBuyritPMEvA%3D%3D
+    espn_swid: '{8738E1A8-B2A1-4E0C-AD6D-864485D31503}'
+    espn_owner_mapping: {}
+    last_sync_date: '2025-01-15T10:00:00.000Z'
+    salary_escalation_settings:
+      rookie_year_salary: 1
+      year_2_4_multiplier: 0.80
+      year_5_plus_multiplier: 0.90
+
+-   model: league.team
+    pk: 1caf2e61-cafa-4df9-9515-c836802ec719
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        name: KC Kings
+        owner:
+        - joe
+        abbreviation: WILK
+        logo_url: https://imgur.com/iI4fPCP.jpg
+        wins: 18
+        losses: 1
+        standing: 1
+        espn_team_id: 1
+
 - model: league.team
   pk: 'b2c3d4e5-f6a7-8901-bcde-f23456789012'
   fields:

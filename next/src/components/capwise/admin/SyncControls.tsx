@@ -76,7 +76,7 @@ export function SyncControls({
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {isSuperAdmin && (
           <div className="p-4 border border-border rounded-lg">
             <h4 className="font-medium text-text mb-2">Sync Players</h4>
@@ -84,7 +84,7 @@ export function SyncControls({
               Update player stats and information from ESPN
             </p>
             <Button
-              variant="secondary"
+              variant="primary"
               onClick={() => handleSync('players')}
               disabled={isLoading || syncingType !== null}
               className="w-full"
@@ -100,7 +100,7 @@ export function SyncControls({
             Update team rosters from ESPN
           </p>
           <Button
-            variant="secondary"
+            variant="primary"
             onClick={() => handleSync('rosters')}
             disabled={isLoading || syncingType !== null}
             className="w-full"
@@ -108,23 +108,6 @@ export function SyncControls({
             {syncingType === 'rosters' ? 'Syncing...' : 'Sync Rosters'}
           </Button>
         </div>
-
-        {isSuperAdmin && (
-          <div className="p-4 border border-border rounded-lg">
-            <h4 className="font-medium text-text mb-2">Full Sync</h4>
-            <p className="text-sm text-text-muted mb-4">
-              Complete sync of all data from ESPN
-            </p>
-            <Button
-              variant="primary"
-              onClick={() => handleSync('full')}
-              disabled={isLoading || syncingType !== null}
-              className="w-full"
-            >
-              {syncingType === 'full' ? 'Syncing...' : 'Full Sync'}
-            </Button>
-          </div>
-        )}
       </div>
 
       {lastResult && (

@@ -94,7 +94,8 @@ class DraftPickModelTest(TestCase):
             year=1999,
             round=1,
         )
-        self.assertEqual(DraftPick.objects.filter(league=league).count(), 1)
+        # 14 picks created by signal + 1 manual = 15
+        self.assertEqual(DraftPick.objects.filter(league=league).count(), 15)
         league.delete()
         self.assertEqual(DraftPick.objects.filter(year=1999, round=1).count(), 0)
 
