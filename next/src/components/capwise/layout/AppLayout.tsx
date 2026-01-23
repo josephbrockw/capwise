@@ -115,7 +115,9 @@ export function AppLayout({
 
   // Use context team ID if prop not provided
   const currentTeamId = propTeamId || contextTeam?.id;
-  const effectiveTeams = teams.length > 0 ? teams : userTeams.map(t => ({ id: t.id, name: t.name }));
+  const effectiveTeams = teams.length > 0
+    ? teams.map(t => ({ id: t.id, name: t.name, league_name: '' }))
+    : userTeams.map(t => ({ id: t.id, name: t.name, league_name: t.league_name }));
   const effectiveIsCommissioner = isCommissioner || contextIsCommissioner;
 
   const displayName =
@@ -192,7 +194,7 @@ export function AppLayout({
                 }
                 items={effectiveTeams.map((team) => ({
                   id: team.id,
-                  label: team.name,
+                  label: team.league_name ? `${team.name} (${team.league_name})` : team.name,
                   onClick: () => onTeamChange ? onTeamChange(team.id) : setCurrentTeam(team.id),
                 }))}
                 width="trigger"
@@ -341,7 +343,7 @@ export function AppLayout({
                     }
                     items={effectiveTeams.map((team) => ({
                       id: team.id,
-                      label: team.name,
+                      label: team.league_name ? `${team.name} (${team.league_name})` : team.name,
                       onClick: () => {
                         onTeamChange ? onTeamChange(team.id) : setCurrentTeam(team.id);
                         setMobileMenuOpen(false);

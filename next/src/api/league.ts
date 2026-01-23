@@ -39,6 +39,13 @@ export interface Team {
   logo_url: string | null;
 }
 
+export interface UserTeam {
+  id: string;
+  name: string;
+  league_id: string;
+  league_name: string;
+}
+
 export interface RosterPlayerDetail {
   id: string;
   player: {
@@ -364,6 +371,14 @@ export async function getLeagues(): Promise<League[]> {
 
 export async function getLeague(id: string): Promise<League> {
   return apiClient.get<League>(config.api.routes.league.detail(id), true);
+}
+
+// ============================================================================
+// User Team API Functions
+// ============================================================================
+
+export async function getMyTeams(): Promise<UserTeam[]> {
+  return apiClient.get<UserTeam[]>(config.api.routes.user.myTeams, true);
 }
 
 // ============================================================================

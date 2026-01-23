@@ -31,9 +31,9 @@ describe('RosterValueChart', () => {
 
     it('displays player values', () => {
       render(<RosterValueChart players={mockPlayers} />);
-      expect(screen.getByTestId('player-value-1')).toHaveTextContent('50.0 FP');
-      expect(screen.getByTestId('player-value-2')).toHaveTextContent('40.0 FP');
-      expect(screen.getByTestId('player-value-3')).toHaveTextContent('30.0 FP');
+      expect(screen.getByTestId('player-value-1')).toHaveTextContent('50');
+      expect(screen.getByTestId('player-value-2')).toHaveTextContent('40');
+      expect(screen.getByTestId('player-value-3')).toHaveTextContent('30');
     });
   });
 

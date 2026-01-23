@@ -64,7 +64,6 @@ describe('SyncControls', () => {
 
     expect(screen.getByRole('button', { name: 'Sync Rosters' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Sync Players' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Full Sync' })).not.toBeInTheDocument();
   });
 
   it('shows all sync options for super admins', () => {
@@ -78,7 +77,6 @@ describe('SyncControls', () => {
 
     expect(screen.getByRole('button', { name: 'Sync Players' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sync Rosters' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Full Sync' })).toBeInTheDocument();
   });
 
   it('calls onSync with correct type when clicking Sync Rosters', async () => {
@@ -107,7 +105,7 @@ describe('SyncControls', () => {
     });
   });
 
-  it('calls onSync with correct type when clicking Full Sync', async () => {
+  it('calls onSync with correct type when clicking Sync Players', async () => {
     mockOnSync.mockResolvedValueOnce({
       players_created: 10,
       players_updated: 50,
@@ -125,11 +123,11 @@ describe('SyncControls', () => {
       />
     );
 
-    const syncButton = screen.getByRole('button', { name: 'Full Sync' });
+    const syncButton = screen.getByRole('button', { name: 'Sync Players' });
     fireEvent.click(syncButton);
 
     await waitFor(() => {
-      expect(mockOnSync).toHaveBeenCalledWith('full');
+      expect(mockOnSync).toHaveBeenCalledWith('players');
     });
   });
 
@@ -151,7 +149,7 @@ describe('SyncControls', () => {
       />
     );
 
-    const syncButton = screen.getByRole('button', { name: 'Full Sync' });
+    const syncButton = screen.getByRole('button', { name: 'Sync Players' });
     fireEvent.click(syncButton);
 
     await waitFor(() => {
@@ -175,7 +173,7 @@ describe('SyncControls', () => {
       />
     );
 
-    const fullSyncButton = screen.getByRole('button', { name: 'Full Sync' });
+    const fullSyncButton = screen.getByRole('button', { name: 'Sync Players' });
     fireEvent.click(fullSyncButton);
 
     await waitFor(() => {
@@ -183,7 +181,7 @@ describe('SyncControls', () => {
     });
 
     const syncRostersButton = screen.getByRole('button', { name: /Sync Rosters/i });
-    expect(syncRostersButton).toBeDisabled();
+    expect(syncRostersButton).toHaveAttribute('aria-disabled', 'true');
 
     resolveSync!({});
   });

@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useTeam } from '@/contexts/TeamContext';
+import { getTrades, Trade, RosterPlayerDetail } from '@/api/league';
 import { Card, CardHeader, StatCard } from '@/components/capwise/ui';
 import { SalaryCapChart, RosterValueChart, RosterPlayer } from '@/components/capwise/charts';
 import { Badge } from '@/components/bb/data-display';
@@ -24,8 +26,82 @@ function getPhaseInfo(phase: LeaguePhase): { label: string; variant: 'primary' |
   return phases[phase];
 }
 
+function calculatePlayerValue(rosterPlayer: RosterPlayerDetail): number {
+  const fpts = rosterPlayer.player.fpts_avg || 0;
+  const salary = rosterPlayer.salary || 1;
+
+  let tierMultiplier: number;
+  if (fpts >= 40) {
+    tierMultiplier = 2.0 + (fpts - 35) * 0.5;
+  } else if (fpts >= 30) {
+    tierMultiplier = 1.5;
+  } else if (fpts >= 25) {
+    tierMultiplier = 1.2;
+  } else if (fpts >= 20) {
+    tierMultiplier = 1.0;
+  } else {
+    tierMultiplier = 0.5;
+  }
+
+  const sal_val = salary > 10 ? salary : 10;
+
+  const baseValue = (fpts / sal_val) * 10;
+  return baseValue * tierMultiplier;
+}
+
 export default function DashboardPage() {
   const { currentTeam, currentLeague, isCommissioner, isLoading } = useTeam();
+  const [recentTrades, setRecentTrades] = useState<Trade[]>([]);
+  const [tradesLoading, setTradesLoading] = useState(false);
+  const [isRosterExpanded, setIsRosterExpanded] = useState(false);
+
+  const allPlayersByValue: RosterPlayer[] = useMemo(() => {
+    if (!currentTeam?.roster) return [];
+
+    return currentTeam.roster
+      .map(rp => ({
+        id: rp.id,
+        name: rp.player.name,
+        positions: rp.player.positions.join('/'),
+        projectedValue: rp.player.fpts_avg || 0,
+        salary: rp.salary,
+        status: rp.player.is_injured ? 'injured' as const : 'healthy' as const,
+        value: calculatePlayerValue(rp),
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [currentTeam?.roster]);
+
+  const displayedPlayers = isRosterExpanded ? allPlayersByValue : allPlayersByValue.slice(0, 5);
+
+  const injuredPlayers = useMemo(() => {
+    if (!currentTeam?.roster) return [];
+    return currentTeam.roster
+      .filter(rp => rp.player.is_injured)
+      .map(rp => ({
+        id: rp.id,
+        name: rp.player.name,
+        positions: rp.player.positions.join('/'),
+        projectedValue: rp.player.fpts_avg || 0,
+        salary: rp.salary,
+        status: 'injured' as const,
+      }));
+  }, [currentTeam?.roster]);
+
+  useEffect(() => {
+    const fetchTrades = async () => {
+      if (!currentTeam?.id) return;
+      setTradesLoading(true);
+      try {
+        const trades = await getTrades(currentTeam.id, { status: 'accepted' });
+        setRecentTrades(trades.slice(0, 5));
+      } catch (err) {
+        console.error('Failed to fetch trades:', err);
+      } finally {
+        setTradesLoading(false);
+      }
+    };
+    fetchTrades();
+  }, [currentTeam?.id]);
 
   if (isLoading) {
     return (
@@ -56,22 +132,6 @@ export default function DashboardPage() {
   const phaseInfo = getPhaseInfo(mockPhase);
   const daysUntilNextPhase = 23;
   const needsSync = currentLeague.needs_sync;
-
-  const mockTopPlayers: RosterPlayer[] = [
-    { id: '1', name: 'Luka Doncic', positions: 'PG/SG', projectedValue: 58.4, salary: 45000000, status: 'healthy' },
-    { id: '2', name: 'Anthony Davis', positions: 'PF/C', projectedValue: 52.1, salary: 40000000, status: 'questionable' },
-    { id: '3', name: 'Jayson Tatum', positions: 'SF/PF', projectedValue: 48.7, salary: 37000000, status: 'healthy' },
-    { id: '4', name: 'Tyrese Haliburton', positions: 'PG', projectedValue: 45.2, salary: 28000000, status: 'healthy' },
-    { id: '5', name: 'Paolo Banchero', positions: 'PF', projectedValue: 42.8, salary: 12000000, status: 'injured' },
-  ];
-
-  const mockRecentTrades = [
-    { id: '1', teams: 'Ballers traded with Dynasty', summary: 'J. Brown for 2 picks', time: '2 hours ago' },
-    { id: '2', teams: 'Hoops traded with Slam', summary: 'D. Fox + pick for T. Young', time: '1 day ago' },
-    { id: '3', teams: 'Dynasty traded with Nets', summary: 'B. Ingram for J. Poole + pick', time: '3 days ago' },
-  ];
-
-  const injuredPlayers = mockTopPlayers.filter(p => p.status === 'injured' || p.status === 'questionable');
 
   return (
     <PageContainer>
@@ -190,7 +250,29 @@ export default function DashboardPage() {
                 }
               >
                 <div className="p-6">
-                  <RosterValueChart players={mockTopPlayers} />
+                  <RosterValueChart players={displayedPlayers} />
+                  {allPlayersByValue.length > 5 && (
+                    <button
+                      onClick={() => setIsRosterExpanded(!isRosterExpanded)}
+                      className="mt-4 w-full text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium flex items-center justify-center gap-1"
+                    >
+                      {isRosterExpanded ? (
+                        <>
+                          Show Less
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          Show All ({allPlayersByValue.length} players)
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               </Card>
 
@@ -264,13 +346,38 @@ export default function DashboardPage() {
                 }
               >
                 <div className="divide-y divide-border">
-                  {mockRecentTrades.map((trade) => (
-                    <div key={trade.id} className="p-4">
-                      <p className="text-sm font-medium text-text">{trade.teams}</p>
-                      <p className="text-sm text-text-muted mt-0.5">{trade.summary}</p>
-                      <p className="text-xs text-text-muted mt-1">{trade.time}</p>
+                  {tradesLoading ? (
+                    <div className="p-4 text-center">
+                      <Spinner size="sm" />
                     </div>
-                  ))}
+                  ) : recentTrades.length > 0 ? (
+                    recentTrades.map((trade) => (
+                      <div key={trade.id} className="p-4">
+                        <p className="text-sm font-medium text-text">
+                          {trade.teams.map((t) => t.team_name).join(' traded with ')}
+                        </p>
+                        <p className="text-sm text-text-muted mt-0.5">
+                          {trade.teams
+                            .map((t) => {
+                              const assets = t.assets_sent.map((a) =>
+                                a.type === 'player'
+                                  ? a.player?.name || 'Player'
+                                  : `${a.draft_pick?.year} R${a.draft_pick?.round}`
+                              );
+                              return assets.length > 0 ? assets.join(', ') : 'Nothing';
+                            })
+                            .join(' for ')}
+                        </p>
+                        <p className="text-xs text-text-muted mt-1">
+                          {new Date(trade.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-text-muted text-sm">
+                      No recent trades
+                    </div>
+                  )}
                 </div>
               </Card>
 

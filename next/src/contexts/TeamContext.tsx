@@ -9,14 +9,14 @@ import {
   ReactNode,
 } from 'react';
 import { useAuth } from './AuthContext';
-import { Team, TeamDetail, League, getLeagues, getTeam } from '@/api/league';
+import { Team, TeamDetail, League, UserTeam, getLeagues, getTeam, getMyTeams } from '@/api/league';
 
 const TEAM_ID_STORAGE_KEY = 'capwise_current_team_id';
 
 interface TeamContextValue {
   currentTeam: TeamDetail | null;
   currentLeague: League | null;
-  userTeams: Team[];
+  userTeams: UserTeam[];
   userLeagues: League[];
   setCurrentTeam: (teamId: string) => void;
   switchLeague: (leagueId: string) => void;
@@ -34,7 +34,7 @@ export function getTeamContextId(): string | null {
 export function TeamProvider({ children }: { children: ReactNode }) {
   const { user, isLoading: authLoading } = useAuth();
   const [currentTeam, setCurrentTeamState] = useState<TeamDetail | null>(null);
-  const [userTeams, setUserTeams] = useState<Team[]>([]);
+  const [userTeams, setUserTeams] = useState<UserTeam[]>([]);
   const [userLeagues, setUserLeagues] = useState<League[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -93,44 +93,31 @@ export function TeamProvider({ children }: { children: ReactNode }) {
     const loadTeamsAndLeagues = async () => {
       setIsLoading(true);
       try {
-        const storedTeamId = localStorage.getItem(TEAM_ID_STORAGE_KEY);
+        // Always fetch all user teams
+        const [teams, leagues] = await Promise.all([
+          getMyTeams(),
+          getLeagues(),
+        ]);
+        setUserTeams(teams);
+        setUserLeagues(leagues);
 
-        // If we have a stored team ID, fetch that team directly
-        if (storedTeamId) {
+        // Try to restore stored team or use first available
+        const storedTeamId = localStorage.getItem(TEAM_ID_STORAGE_KEY);
+        const targetTeamId = storedTeamId && teams.some(t => t.id === storedTeamId)
+          ? storedTeamId
+          : teams[0]?.id;
+
+        if (targetTeamId) {
           try {
-            const teamDetail = await getTeam(storedTeamId, storedTeamId);
+            const teamDetail = await getTeam(targetTeamId, targetTeamId);
             if (teamDetail) {
               setCurrentTeamState(teamDetail);
-              setUserTeams([
-                {
-                  id: teamDetail.id,
-                  name: teamDetail.name,
-                  abbreviation: teamDetail.abbreviation,
-                  owner_id: teamDetail.owner_id,
-                  owner_name: teamDetail.owner_name,
-                  wins: teamDetail.wins,
-                  losses: teamDetail.losses,
-                  standing: teamDetail.standing,
-                  current_salary: teamDetail.current_salary,
-                  cap_space: teamDetail.cap_space,
-                  logo_url: teamDetail.logo_url,
-                },
-              ]);
-              if (teamDetail.league) {
-                setUserLeagues([teamDetail.league]);
-              }
-              return;
+              localStorage.setItem(TEAM_ID_STORAGE_KEY, targetTeamId);
             }
           } catch {
-            // Team might not exist anymore, clear the stored ID
             localStorage.removeItem(TEAM_ID_STORAGE_KEY);
           }
         }
-
-        // Fallback: fetch leagues if no stored team or fetch failed
-        const leagues = await getLeagues();
-        setUserLeagues(leagues);
-        setUserTeams([]);
       } catch (error) {
         console.error('Failed to load teams and leagues:', error);
       } finally {

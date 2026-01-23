@@ -9,6 +9,7 @@ export interface RosterPlayer {
   projectedValue: number;
   salary: number;
   status: 'healthy' | 'injured' | 'questionable';
+  value?: number;
 }
 
 export interface RosterValueChartProps {
@@ -16,7 +17,7 @@ export interface RosterValueChartProps {
 }
 
 export function RosterValueChart({ players }: RosterValueChartProps) {
-  const maxValue = Math.max(...players.map(p => p.projectedValue), 1);
+  const maxValue = Math.max(...players.map(p => p.value ?? p.projectedValue), 1);
 
   return (
     <div className="space-y-3" data-testid="roster-value-chart">
@@ -33,13 +34,13 @@ export function RosterValueChart({ players }: RosterValueChartProps) {
               )}
             </div>
             <span className="text-text-muted" data-testid={`player-value-${player.id}`}>
-              {player.projectedValue.toFixed(1)} FP
+              {(player.value ?? player.projectedValue).toFixed(0)}
             </span>
           </div>
           <div className="relative h-2 w-full overflow-hidden rounded-full bg-surface-hover">
             <div
               className="h-full rounded-full bg-gradient-to-r from-primary-400 to-primary-600 transition-all duration-300"
-              style={{ width: `${(player.projectedValue / maxValue) * 100}%` }}
+              style={{ width: `${((player.value ?? player.projectedValue) / maxValue) * 100}%` }}
               data-testid={`player-bar-${player.id}`}
             />
           </div>

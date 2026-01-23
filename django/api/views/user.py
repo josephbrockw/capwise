@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from api.serializers import UserSerializer
+from api.serializers import UserSerializer, UserTeamSerializer
 from config.api import StandardResponse, StandardViewSet
 from django.contrib.auth import get_user_model
 
@@ -11,6 +11,17 @@ class UserViewSet(StandardViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
+
+    @action(detail=False, methods=["get"], url_path="my-teams", url_name="my-teams")
+    def my_teams(self, request):
+        """Get all teams owned by the current user across all leagues."""
+        teams = request.user.get_teams().select_related("league")
+        serializer = UserTeamSerializer(teams, many=True)
+        return StandardResponse(
+            data=serializer.data,
+            message="User teams retrieved successfully.",
+            status=status.HTTP_200_OK,
+        )
 
     @action(detail=False, methods=["get"], url_path="me", url_name="me")
     def me(self, request):
