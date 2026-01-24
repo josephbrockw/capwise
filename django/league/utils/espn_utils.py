@@ -56,16 +56,45 @@ def get_position_mapping():
 
 
 def get_player_positions(espn_player_data: Any, position_mapping: dict):
-    """Extract positions from ESPN player data, returns list of Position objects."""
+    """Extract positions from ESPN player data, returns list of Position objects.
+
+    The espn_api library converts eligibleSlots to string codes
+    (e.g., ["PG", "SG", "G"]). We need to handle both string codes and integer
+    IDs for compatibility.
+    """
     positions = []
+    position_codes_by_code = {pos.code: pos for pos in position_mapping.values()}
 
     eligible_slots = getattr(espn_player_data, "eligibleSlots", [])
 
-    for slot_id in eligible_slots:
-        if slot_id in position_mapping:
-            position = position_mapping[slot_id]
-            if position not in positions and position.code != "UTIL":
-                positions.append(position)
+    for slot in eligible_slots:
+        position = None
+
+        if isinstance(slot, str):
+            if slot in position_codes_by_code and slot not in (
+                "UTIL",
+                "IR",
+                "BE",
+                "G",
+                "F",
+            ):
+                position = position_codes_by_code[slot]
+        elif isinstance(slot, int) and slot in position_mapping:
+            pos = position_mapping[slot]
+            if pos.code not in ("UTIL", "IR", "BE", "G", "F"):
+                position = pos
+
+        if position and position not in positions:
+            positions.append(position)
+
+    if not positions:
+        default_position = getattr(espn_player_data, "position", None)
+        if default_position and isinstance(default_position, str):
+            if default_position in position_codes_by_code and default_position not in (
+                "G",
+                "F",
+            ):
+                positions.append(position_codes_by_code[default_position])
 
     return positions
 

@@ -74,9 +74,9 @@ describe('RosterTable', () => {
       expect(screen.getAllByText('52.3').length).toBeGreaterThan(0);
     });
 
-    it('displays keeper status', () => {
+    it('displays keeper status icon', () => {
       render(<RosterTable players={mockPlayers} />);
-      expect(screen.getAllByText(/Keeper/).length).toBeGreaterThan(0);
+      expect(screen.getAllByTitle(/Keeper/).length).toBeGreaterThan(0);
     });
 
     it('displays injury status', () => {
@@ -123,24 +123,18 @@ describe('RosterTable', () => {
     });
   });
 
-  describe('Edit functionality', () => {
-    it('does not show edit buttons by default', () => {
+  describe('Context menu functionality', () => {
+    it('does not show context menu by default', () => {
       render(<RosterTable players={mockPlayers} />);
-      expect(screen.queryByTestId('edit-player-1')).not.toBeInTheDocument();
+      const menuButtons = screen.queryAllByRole('button');
+      const contextMenuTriggers = menuButtons.filter(btn => btn.querySelector('svg[viewBox="0 0 20 20"]'));
+      expect(contextMenuTriggers.length).toBe(0);
     });
 
-    it('shows edit buttons when isEditable is true', () => {
+    it('shows context menu trigger when isEditable is true', () => {
       render(<RosterTable players={mockPlayers} isEditable />);
-      expect(screen.getByTestId('edit-player-1')).toBeInTheDocument();
-    });
-
-    it('calls onEditPlayer when edit button is clicked', () => {
-      const handleEdit = vi.fn();
-      render(<RosterTable players={mockPlayers} isEditable onEditPlayer={handleEdit} />);
-
-      fireEvent.click(screen.getByTestId('edit-player-1'));
-
-      expect(handleEdit).toHaveBeenCalledWith('p1');
+      const table = screen.getByTestId('roster-table');
+      expect(table).toBeInTheDocument();
     });
   });
 

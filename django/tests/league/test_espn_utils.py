@@ -76,7 +76,8 @@ class PositionMappingTest(TestCase):
         position_codes = [p.code for p in positions]
         self.assertIn("PG", position_codes)
         self.assertIn("SG", position_codes)
-        self.assertIn("G", position_codes)
+        self.assertNotIn("G", position_codes)
+        self.assertNotIn("F", position_codes)
         self.assertNotIn("UTIL", position_codes)
 
     def test_get_player_positions_no_duplicates(self):

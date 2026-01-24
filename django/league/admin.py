@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import (
     DraftPick,
     League,
+    LotteryResult,
     Player,
     Position,
     Rookie,
@@ -23,10 +24,13 @@ class LeagueAdmin(admin.ModelAdmin):
         "roster_size",
         "commissioner",
         "draft_open",
+        "espn_league_id",
+        "last_sync_date",
     )
-    search_fields = ("name",)
+    search_fields = ("name", "espn_league_id")
     list_filter = ("year", "draft_open")
     raw_id_fields = ("commissioner",)
+    readonly_fields = ("last_sync_date",)
 
 
 @admin.register(Team)
@@ -53,10 +57,24 @@ class PositionAdmin(admin.ModelAdmin):
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ("name", "player_id", "nba_team", "projected_value", "is_injured")
-    search_fields = ("name", "player_id")
-    list_filter = ("nba_team", "is_injured")
+    list_display = (
+        "name",
+        "player_id",
+        "nba_team",
+        "get_positions",
+        "fpts_avg",
+        "pts_avg",
+        "reb_avg",
+        "ast_avg",
+        "is_injured",
+    )
+    search_fields = ("name", "player_id", "nba_team")
+    list_filter = ("nba_team", "is_injured", "positions")
     filter_horizontal = ("positions",)
+
+    @admin.display(description="Positions")
+    def get_positions(self, obj):
+        return ", ".join(p.code for p in obj.positions.all())
 
 
 @admin.register(RosterPlayer)
@@ -139,3 +157,18 @@ class TradeAssetAdmin(admin.ModelAdmin):
     list_display = ("trade", "from_team", "to_team", "player", "draft_pick")
     list_filter = ("from_team", "to_team")
     raw_id_fields = ("trade", "from_team", "to_team", "player", "draft_pick")
+
+
+@admin.register(LotteryResult)
+class LotteryResultAdmin(admin.ModelAdmin):
+    list_display = (
+        "league",
+        "year",
+        "first_pick_team",
+        "second_pick_team",
+        "executed_at",
+        "executed_by",
+    )
+    list_filter = ("league", "year")
+    raw_id_fields = ("league", "executed_by", "first_pick_team", "second_pick_team")
+    readonly_fields = ("executed_at",)

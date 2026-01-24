@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTeam } from '@/contexts/TeamContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { getTeam, getTrades, acceptTrade, rejectTrade, cancelTrade, TeamDetail, Trade } from '@/api/league';
+import { getTeam, getTrades, acceptTrade, rejectTrade, cancelTrade, updateRosterPlayer, TeamDetail, Trade } from '@/api/league';
 import { Card, CardHeader } from '@/components/capwise/ui';
 import {
   TeamHeader,
@@ -290,6 +290,8 @@ export default function TeamDetailPage() {
     keeperYears: rp.keeper_years,
     isInjured: rp.player.is_injured,
     injuryStatus: null,
+    acquiredByDraft: rp.acquired_by_draft,
+    tradeBlocked: rp.trade_blocked,
   }));
 
   const draftPicks: DraftPickData[] = (team.draft_picks || []).map((dp) => ({
@@ -311,8 +313,26 @@ export default function TeamDetailPage() {
   const avgFpts =
     rosterPlayers.length > 0 ? totalProjectedValue / rosterPlayers.length : 0;
 
-  const handleEditPlayer = (playerId: string) => {
-    console.log('Edit player:', playerId);
+  const handleToggleTradeBlock = async (rosterPlayerId: string, currentlyBlocked: boolean) => {
+    if (!currentTeam?.id) return;
+    try {
+      await updateRosterPlayer(currentTeam.id, rosterPlayerId, { trade_blocked: !currentlyBlocked });
+      const teamData = await getTeam(teamId, currentTeam.id);
+      setTeam(teamData);
+    } catch (error) {
+      console.error('Failed to toggle trade block:', error);
+    }
+  };
+
+  const handleToggleKeeper = async (rosterPlayerId: string, currentlyKeeper: boolean) => {
+    if (!currentTeam?.id) return;
+    try {
+      await updateRosterPlayer(currentTeam.id, rosterPlayerId, { is_keeper: !currentlyKeeper });
+      const teamData = await getTeam(teamId, currentTeam.id);
+      setTeam(teamData);
+    } catch (error) {
+      console.error('Failed to toggle keeper:', error);
+    }
   };
 
   return (
@@ -373,7 +393,8 @@ export default function TeamDetailPage() {
                   <RosterTable
                     players={rosterPlayers}
                     isEditable={canEdit}
-                    onEditPlayer={handleEditPlayer}
+                    onToggleTradeBlock={handleToggleTradeBlock}
+                    onToggleKeeper={handleToggleKeeper}
                   />
                 </div>
               </Card>

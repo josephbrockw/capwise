@@ -133,7 +133,7 @@ describe('TradablePlayerList', () => {
     expect(injBadges).toHaveLength(1);
   });
 
-  it('shows blocked badge for trade-blocked players', () => {
+  it('shows trade block icon for trade-blocked players', () => {
     render(
       <TradablePlayerList
         players={mockPlayers}
@@ -141,7 +141,7 @@ describe('TradablePlayerList', () => {
       />
     );
 
-    expect(screen.getByText('Blocked')).toBeInTheDocument();
+    expect(screen.getByTitle('On Trade Block')).toBeInTheDocument();
   });
 
   it('calls onSelectionChange when player is selected', () => {
@@ -243,15 +243,18 @@ describe('TradablePlayerList', () => {
     });
   });
 
-  it('disables checkbox for trade-blocked players', () => {
+  it('allows selection of trade-blocked players', () => {
+    const onSelectionChange = vi.fn();
     render(
       <TradablePlayerList
         players={mockPlayers}
-        onSelectionChange={vi.fn()}
+        onSelectionChange={onSelectionChange}
       />
     );
 
     const blockedCheckbox = screen.getByRole('checkbox', { name: /blocked player/i });
-    expect(blockedCheckbox).toBeDisabled();
+    expect(blockedCheckbox).not.toBeDisabled();
+    fireEvent.click(blockedCheckbox);
+    expect(onSelectionChange).toHaveBeenCalledWith('rp-3', true);
   });
 });
