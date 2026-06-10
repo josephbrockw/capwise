@@ -7,7 +7,7 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args: ["--maxkb=500"]
-        exclude: "package-lock.json"
+        exclude: "package-lock.json|(current_roster|salaries|synced_data|half_sal|save)\\.yaml$"
       - id: pretty-format-json
         args: ["--autofix"]
         files: \.(json)$

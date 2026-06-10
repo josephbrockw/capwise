@@ -17,12 +17,12 @@
         user_permissions: []
 -   model: account.user
     fields:
-        password: pbkdf2_sha256$870000$k4FsQNRe1ZEUGcB4SHo52o$hTfzrIPftWw3JMvghogu3JxYWshg0r2eAVGxdE50ZoE=
+        password: ''
         last_login: null
         is_superuser: false
-        username: 'jake'
-        first_name: 'Jake'
-        last_name: 'Turner'
+        username: espn_user_3
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.168792+00:00
@@ -34,12 +34,12 @@
         user_permissions: []
 -   model: account.user
     fields:
-        password: pbkdf2_sha256$870000$k4FsQNRe1ZEUGcB4SHo52o$hTfzrIPftWw3JMvghogu3JxYWshg0r2eAVGxdE50ZoE=
+        password: ''
         last_login: null
         is_superuser: false
-        username: 'jordan'
-        first_name: 'Jordan'
-        last_name: 'White'
+        username: espn_user_17
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.317935+00:00
@@ -51,12 +51,12 @@
         user_permissions: []
 -   model: account.user
     fields:
-        password: pbkdf2_sha256$870000$k4FsQNRe1ZEUGcB4SHo52o$hTfzrIPftWw3JMvghogu3JxYWshg0r2eAVGxdE50ZoE=
+        password: ''
         last_login: null
         is_superuser: false
-        username: 'ricky'
-        first_name: 'Ricky'
-        last_name: 'Greer'
+        username: espn_user_19
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.350330+00:00
@@ -71,9 +71,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'kit'
-        first_name: 'Kit'
-        last_name: 'Keeling'
+        username: espn_user_15
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.281236+00:00
@@ -88,9 +88,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'tpayne'
-        first_name: 'Tyler'
-        last_name: 'Payne'
+        username: espn_user_7
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.208285+00:00
@@ -105,9 +105,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'sam'
-        first_name: 'Sam'
-        last_name: 'Meeks'
+        username: espn_user_14
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.265037+00:00
@@ -122,9 +122,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'casey'
-        first_name: 'Casey'
-        last_name: 'McCreery'
+        username: espn_user_10
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.244378+00:00
@@ -139,9 +139,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'curran'
-        first_name: 'Curran'
-        last_name: 'Merrigan'
+        username: espn_user_18
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.334179+00:00
@@ -156,9 +156,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'cho'
-        first_name: 'Charlie'
-        last_name: 'Cho'
+        username: espn_user_8
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.225223+00:00
@@ -173,9 +173,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'denton'
-        first_name: 'Dento'
-        last_name: 'Brader'
+        username: espn_user_16
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.298120+00:00
@@ -190,9 +190,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'morgan'
-        first_name: 'Morgan'
-        last_name: 'Lewis'
+        username: espn_user_2
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.146854+00:00
@@ -207,9 +207,9 @@
         password: ''
         last_login: null
         is_superuser: false
-        username: 'joed'
-        first_name: 'Joe'
-        last_name: 'Daniel'
+        username: espn_user_4
+        first_name: ''
+        last_name: ''
         is_staff: false
         is_active: true
         date_joined: 2026-01-24 20:59:43.188910+00:00
@@ -258,7 +258,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Champ From  Taiwan
         owner:
-        - cho
+        - espn_user_8
         abbreviation: CHO
         logo_url: https://g.espncdn.com/lm-static/fba/images/default_logos/3.svg
         wins: 8
@@ -271,7 +271,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Team McCreery
         owner:
-        - casey
+        - espn_user_10
         abbreviation: KC
         logo_url: https://g.espncdn.com/lm-static/logo-packs/core/Sneakerhead-ESPN/sneakerhead-08.svg
         wins: 5
@@ -284,7 +284,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Here's to You Mitchl Robinson
         owner:
-        - morgan
+        - espn_user_2
         abbreviation: MLEW
         logo_url: https://g.espncdn.com/lm-static/logo-packs/core/StadiumFoods-ESPN/stadium-foods_hot-dog.svg
         wins: 7
@@ -297,7 +297,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Presti's  3D Chess
         owner:
-        - joed
+        - espn_user_4
         abbreviation: P3C
         logo_url: https://g.espncdn.com/lm-static/logo-packs/core/SimpleShields/shields-6.svg
         wins: 6
@@ -310,7 +310,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: What it do, Baby!
         owner:
-        - curran
+        - espn_user_18
         abbreviation: MERR
         logo_url: https://ih1.redbubble.net/image.873134475.7646/flat,750x,075,f-pad,750x1000,f8f8f8.jpg
         wins: 7
@@ -323,7 +323,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: KC Fighting French
         owner:
-        - jake
+        - espn_user_3
         abbreviation: JT
         logo_url: https://g.espncdn.com/lm-static/logo-packs/core/StadiumFoods-ESPN/stadium-foods_tacos.svg
         wins: 10
@@ -336,7 +336,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Thiccola Jokic
         owner:
-        - jordan
+        - espn_user_17
         abbreviation: Thic
         logo_url: https://g.espncdn.com/lm-static/fba/images/default_logos/20.svg
         wins: 4
@@ -349,7 +349,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Kiwi Dreams
         owner:
-        - sam
+        - espn_user_14
         abbreviation: sam
         logo_url: https://library.sportingnews.com/styles/crop_style_16_9_mobile_2x/s3/2022-03/nba-plain--b913c5ed-25b3-4954-92c8-30747b8649aa.png
         wins: 3
@@ -362,7 +362,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: The Clintonites
         owner:
-        - tpayne
+        - espn_user_7
         abbreviation: bill
         logo_url: https://www.pewresearch.org/wp-content/uploads/2019/10/FT_19.10.02_ClintonImpeachment_feature.jpg
         wins: 5
@@ -375,7 +375,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Barkev Ballers
         owner:
-        - ricky
+        - espn_user_19
         abbreviation: BB
         logo_url: https://i.imgur.com/tlSjq5a.jpg
         wins: 2
@@ -388,7 +388,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Bad  Management
         owner:
-        - kit
+        - espn_user_15
         abbreviation: KIT
         logo_url: https://g.espncdn.com/lm-static/fba/images/default_logos/16.svg
         wins: 1
@@ -401,7 +401,7 @@
         league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
         name: Poverty Franchise
         owner:
-        - denton
+        - espn_user_16
         abbreviation: BRAD
         logo_url: https://g.espncdn.com/lm-static/fba/images/default_logos/1.svg
         wins: 8
@@ -24648,7 +24648,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: abb4e3e8-9d18-4a01-b05b-fdc76c70dbc4
-        salary: 3
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -24718,7 +24718,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: 86f2c4b1-0098-4c4c-b138-d56f39ad4831
-        salary: 3
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -24778,7 +24778,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: b1a522f7-47c0-4b31-865c-2815344bdf8b
-        salary: 246
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -24828,7 +24828,7 @@
     fields:
         fantasy_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
         player: 629f8bfc-b7c3-4ab1-8214-85b4c619918d
-        salary: 15
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -24888,7 +24888,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: b37b2ef6-70e7-413e-a056-834708a0edb8
-        salary: 67
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25018,7 +25018,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: 74df423b-2e06-4814-b4f6-982b905ef58d
-        salary: 266
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25088,7 +25088,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: f7c4c2d6-e7e0-4490-8147-50c23c79f3a9
-        salary: 9
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25118,7 +25118,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 48a70b02-5dc5-4157-bf76-7c836f1c93eb
-        salary: 325
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25188,7 +25188,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: e292dbd3-dd83-4af7-bf65-3041f25d4a46
-        salary: 4
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25258,7 +25258,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: f14d054d-5572-44bb-8fa1-7404731d828e
-        salary: 12
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25268,7 +25268,7 @@
     fields:
         fantasy_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
         player: e5522760-9da0-467d-82c2-ae07005f0366
-        salary: 4
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25318,7 +25318,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: 9b410b77-da11-4c0f-9c9c-a2a62572ee46
-        salary: 15
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25348,7 +25348,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: c027f6bf-feec-4c49-8d29-560dee9bf562
-        salary: 58
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25408,7 +25408,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 58d835ab-f808-42d5-943e-c2591af36c04
-        salary: 4
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25428,7 +25428,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: dbd310f1-ee8f-43c2-9568-bdde3b47ac48
-        salary: 48
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25488,7 +25488,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: 85c8e607-88d1-497b-aa42-a00ee4cf39d1
-        salary: 3
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25508,7 +25508,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: d64f1bd5-409a-4bbc-b4c7-4b88c64431fd
-        salary: 12
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25518,7 +25518,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: a0c73ec4-3fec-40fd-ad0e-691b3153712d
-        salary: 4
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25538,7 +25538,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: 83e4ad32-6dbd-45ed-8354-e98e7f82dd3b
-        salary: 23
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25588,7 +25588,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 7625a298-574e-487d-a42c-58f9acefac74
-        salary: 173
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25638,7 +25638,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: 0dfeadef-8a1e-470b-9a45-c85fb62e43c8
-        salary: 3
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25658,7 +25658,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: a9dc08db-9b80-410e-b447-b38b6ee4aad0
-        salary: 25
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25688,7 +25688,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: 59b8f43c-3eb1-4840-8e24-3a9767a5b711
-        salary: 171
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25738,7 +25738,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: aa77b4fc-1212-4b60-8fd0-ee6a1dbea3ff
-        salary: 56
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25768,7 +25768,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: 91dc3bff-44db-4305-b378-56ef2558821a
-        salary: 136
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25848,7 +25848,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: b067a27a-f15d-4373-95ec-0583d71c7ccd
-        salary: 91
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25878,7 +25878,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: fb39f8ef-6f03-46a1-ba3d-719f53d31a3a
-        salary: 3
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -25998,7 +25998,7 @@
     fields:
         fantasy_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
         player: 57971312-ff17-4a0e-b5f3-b126edceeaeb
-        salary: 18
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26028,7 +26028,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: 0863d5c1-0ecf-437a-aa2e-4cd75d1fa262
-        salary: 113
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26038,7 +26038,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: 6d271c40-7f95-4bda-8dc8-297d68a7d016
-        salary: 5
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26068,7 +26068,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: be1fa867-1ff4-411b-8027-1e32bac15965
-        salary: 143
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26088,7 +26088,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: 01bf7c35-5b72-429e-a218-0205d7a53b76
-        salary: 32
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26128,7 +26128,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 4f486acd-e334-49f6-b67a-1ce9df4f661d
-        salary: 7
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26138,7 +26138,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: 64e3ee83-78c5-4bcf-a77f-05a6bc84c609
-        salary: 42
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26188,7 +26188,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 76720412-18d5-4e15-a241-ab478de1a80d
-        salary: 32
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26198,7 +26198,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 64c8242a-75e6-4725-a58d-f95d80bd92b9
-        salary: 5
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26218,7 +26218,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: 7fb82c37-6433-4182-9266-879d5d0f2c47
-        salary: 273
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26238,7 +26238,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: fec09161-92b3-460d-af6b-c42b92c34ce6
-        salary: 6
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26248,7 +26248,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: ce1fb22b-9b0d-41a4-a6ad-b2d3c5227422
-        salary: 171
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26268,7 +26268,7 @@
     fields:
         fantasy_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
         player: 249b5493-8df4-422f-8cf7-672515904c76
-        salary: 203
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26298,7 +26298,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: f1afe846-6488-46f5-b435-7094674dc3b5
-        salary: 207
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26338,7 +26338,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: 00820312-0e10-4d50-b83d-1086b72e545a
-        salary: 10
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26408,7 +26408,7 @@
     fields:
         fantasy_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
         player: e82669c7-0f2d-4e85-ae50-3fcf9dba656c
-        salary: 275
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26438,7 +26438,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: 9b805b82-213a-4129-8937-fa46a2f396e9
-        salary: 213
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26448,7 +26448,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: ae11bc35-146e-4c87-aec6-7ddd08d497e0
-        salary: 5
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26518,7 +26518,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: 242bbc4e-e486-4f74-a365-708f79d2e217
-        salary: 104
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26588,7 +26588,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: e75c32a4-c959-485d-8a07-d7742356f01c
-        salary: 31
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26598,7 +26598,7 @@
     fields:
         fantasy_team: f1dd692e-6c77-4e18-b684-303b40f46524
         player: ab229d9a-2127-46ee-9f55-700ea58f006e
-        salary: 172
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26628,7 +26628,7 @@
     fields:
         fantasy_team: ed121c77-079e-4650-ab56-3421fa37b178
         player: b4ab4499-debc-45ea-bdeb-5ed777214806
-        salary: 4
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26668,7 +26668,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: ca919699-ecaf-4305-975b-72a03fcfb410
-        salary: 21
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26688,7 +26688,7 @@
     fields:
         fantasy_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
         player: e32f662d-a902-4519-8326-d9ce81f60d8b
-        salary: 160
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26768,7 +26768,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: 9a1eaed6-d30c-413a-adaa-620066467a84
-        salary: 254
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26778,7 +26778,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: 3686039b-e9c0-4641-a67a-443b3e556e3d
-        salary: 9
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26788,7 +26788,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: 5e329741-bb87-4e5e-9dd5-4e6715857217
-        salary: 4
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26878,7 +26878,7 @@
     fields:
         fantasy_team: a9115c16-6535-41f5-b105-7e064cc4b240
         player: 69d61de9-a429-4ff4-8612-986b1f107c3a
-        salary: 8
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26898,7 +26898,7 @@
     fields:
         fantasy_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
         player: 4f4ce205-acdd-4731-8413-4956dd6331cf
-        salary: 108
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26928,7 +26928,7 @@
     fields:
         fantasy_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
         player: d53c1f9b-7db9-4d39-98c0-165adbde3a45
-        salary: 25
+        salary: 1
         is_keeper: false
         keeper_years: 0
         acquired_by_draft: false
@@ -26963,6 +26963,2372 @@
         keeper_years: 0
         acquired_by_draft: false
         trade_blocked: false
+-   model: league.draftpick
+    pk: 00287a6e-830e-4350-af98-6cf261e63327
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 00f5dcb1-e462-481a-9941-d34d90dc669a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 0102e16e-5efb-46cb-ba59-46c5c2b0e573
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 015cbf69-fa14-482e-b905-90b752530ae1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 020f048c-2f7d-4b50-b401-51c23f5454eb
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 023313df-59ae-4196-b68b-cf2bd9d3f2d5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 04a09102-d368-47ab-9b6e-9b22d8290d75
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 064afcaf-90ff-4b76-80e5-7034546e9915
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 080d2442-7889-43c7-9595-2f0e876e9d43
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 0a7f9366-e2a6-4a33-ba09-91c5cd8c0db8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 0bab66c7-11f2-41d1-b2b0-99fc3f3e860b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 0c315093-600b-4e9a-834b-3c27895c4b34
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 0d526f74-2645-4bfd-8e2e-c6aebbcbf36a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 0fed0688-52f8-4a74-ab74-dbd892b602b2
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 104f7311-7e22-4d81-b795-2c37a46d4903
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 10ddeb9e-0480-4fb8-b41f-bc699840c4f6
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 10e7d3c2-3b3e-4d76-bd80-09c3ce84d8b5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 128b6727-cb94-4b3b-848b-da35b8b4fd2a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 12ba0069-db46-4753-b378-9602fdc747d1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 13278f1d-84b1-4016-bc36-3449c100c32d
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 14192544-f173-4225-a7aa-a3b52915565d
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 14aceecc-7a5f-4419-b958-7bef498add9f
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 174d1e2b-edeb-4b97-97a1-ed295a5b392e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 18b3c1c8-1929-4877-a3bb-de4440577eae
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 18f9e10e-f8ef-4340-9b2f-19eeb979f6ed
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 1b710cfd-149b-4f61-8efc-f5b198851a3b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 1c3ce38d-feb7-41dd-b882-75ac5d7d77f9
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 1c918e62-79b1-4f67-a6f0-6b0b15266652
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 1de16807-1c27-4afa-993c-0be0b12f9a8a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 1e86178b-2f7d-4043-951e-2f18224539e2
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 20ce852b-18ed-4655-937f-60b7a498c390
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 22863e57-a199-4ef0-8b5b-34bf859129f8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 245618db-d0ad-41ca-b159-3faf66f16315
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2a5bac05-8c4e-440a-af9a-ef0cf17d92f0
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2a6cb62b-7d3a-402f-8242-9f2d4ca4d843
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2c410b51-7228-4aef-a3d9-6688d054c208
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2c53d5d9-9a12-46e9-af52-63e2c2dc499e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2ce5c838-73c9-422b-92c6-1433656aa341
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2d058a6e-96a0-420e-8122-bdc89e8ebcf5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2e8949b2-74d1-489f-94f8-0dcd4a0f8d78
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 2ef3d4d9-279c-4b1a-9257-73627a54f95b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 30a27862-cd69-46b5-abdc-3d6051678f94
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 32111de6-9168-47c8-9d9a-7145ecf8d1cb
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 322c4553-c0d6-4d72-abe8-b5c7fe1cacab
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 328ef1a5-0ed4-4ade-b16d-5d2ad8e89e90
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 348deed0-287f-410c-bb3c-b975bca2c122
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 34b85f01-71ff-4d41-86c2-e0febfe144c0
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 366df086-2c2a-4230-ad4b-60e8a55b95c7
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 375efb11-2a6f-4fc8-8dbd-963d28dc3851
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 3a4600cc-9fc5-4068-a0c0-07e6c6458493
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 3bee9efe-b0c9-47c4-a081-d713a06153d6
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 3e4633ac-c0b6-4fb1-8869-9ec360616f60
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 3e62e96d-49cb-4a7d-80e2-576283b54fcf
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 3ed4650a-2e2a-4f77-b9c8-3b5458be00e3
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 3f71f1fa-a070-4605-90dd-5aade078cc37
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 41933713-0f72-4e97-9ecc-398933f2745f
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 446d53ff-ca17-4616-afd1-4bcc10acd86c
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 44fc151b-572a-44da-9f7c-01e63011adc2
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 466ee1d0-8280-4a8f-ac1e-84b219ab53b1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 48aa4c9f-eaa4-49b8-9ec6-cf1c821955ad
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4a4de2b4-5c38-474e-aa08-57abcbc70747
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4a5ad31c-9ccf-40df-8fc5-1c8735d00ec2
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4b845e85-ed85-4a90-8cec-f66f83643dc0
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4c8e3ff3-fa9d-4922-a965-a93ff0722c71
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4d7eda74-5fc4-41f2-9b38-d6ce0c04add1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4d8d41ed-3142-4965-8813-dc22f5044ca7
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 4edadd3c-1854-4acb-8092-ecf1d1eb13a5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 51a9c7f8-9cef-4030-b095-eb3ed6a0061a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 52931c10-cb34-495d-9cc3-7886ad1b3145
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 53036b40-175e-4955-bb92-cdf8c1745779
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 534a940b-4ac3-4cde-8773-fe63da6551ae
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 53ba0324-5701-4a02-b15c-894eb5bf0d0b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 54de861b-d38d-40e8-8478-99bf24de3d6e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 55475904-83f5-424a-b2ff-c91bbafc80a9
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 574d7c86-59da-496b-a371-842065dbfc15
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 595ea8c0-f9f1-45cb-be08-5c3c08fc6fef
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 5cff8052-1e95-4df0-9b7f-9dd93948524e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 5e0f65e1-f7e6-4135-9068-22ad68f9817b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 5f4d495f-d17c-4ccd-83e5-ef4182d11a90
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 60542f51-1b09-472c-99b8-be116848a743
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 60a7d788-d82c-476c-a3dc-508f5da1e956
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 61f2366a-d951-42d8-9707-cd8f604a9e96
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 62430025-fe6b-4998-9475-c10287295a22
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 632c8c28-0fb6-4c31-98d9-0bd3ae6a08d8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 642ee2bb-a58d-49f0-9b4e-adebd0f1a68b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 646af67f-b18f-4acb-be07-5ed10a2f9e61
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 6892c236-1eda-44f8-83e8-0557b32a40bb
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 6a8be70b-dd79-4935-af7c-db089b316497
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 6d4bf09f-2884-4bb2-ab4a-e222cf644b4f
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 6dd9f262-7ae5-4fe7-bec1-92eea82e34e0
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 6f0c64ed-a9aa-460c-9842-2ac75390b2d1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 6fd5b70b-184c-4c0a-8006-cf4b3ca44f7e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 70db0e0f-8782-4833-a3d0-7acaba9b4256
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 70fd11d4-a2e3-42c6-b2c5-bb3cdebd1f4e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 72520f3a-2509-4770-a37b-986518ad19b1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 739028b2-0779-4532-8902-1f29e3eae118
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 73b1cb0f-1bba-46ad-aed3-09917695a54b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 75a809f7-110b-4c14-81a7-051f528804d1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 76086cb0-5162-42f1-94f0-1eb0a980ada9
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 76d68f28-d875-4189-be78-1da66abddbca
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 76eef4d9-8154-4dee-8751-f05ff2bb5321
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 772455e6-2f50-48d2-9d44-117a62a080ec
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 78b46dd8-ef84-48ec-a9a5-bc7e09aeb3de
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 79e56c69-8f4b-4cbd-8d7e-7c345be9c9e5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 7a5ba36b-b882-4e07-84e5-ab5ebf43bef7
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 7d54fe64-c525-4589-8c5c-f3cbe8475be2
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 816dcb3f-0d57-4d00-aa09-fc12b8ecd4ae
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 81b3dff2-99f7-4177-baaf-ceda8a6883fa
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 855a11bf-71fd-41ee-b6b3-d44caeb75318
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 85cf0a49-9ed8-413c-8f3b-b17b77da0d69
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 871bf615-7ed8-4cbe-a488-633addd12554
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 87fa4dea-3f44-4257-aec9-e14b04d70c9f
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 88315995-ec86-4fc2-a13e-0c6c935fbdf8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 88a17488-b063-4668-8827-161c09e1ef0b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 88d7e609-2a21-42ed-9c02-f493f0af3438
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 8a5a740b-11ea-4b70-943c-8de063c1f3ad
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 8d56f81c-750e-4b5c-80a7-6243231ae4d8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 8e42e8bd-36af-44a3-995b-49af6a9b3b8d
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 8fc54984-0592-4c3c-b4f5-4b1fde5975d5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 9054f906-7e5b-45ad-b0de-4750e252ce29
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 91acf194-24d3-4bdf-a5fa-6be00e195f42
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 95cb223f-20b6-4d05-b833-e33ad93a2849
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 988aee4c-2144-4420-b199-204840904170
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2032
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 98990958-94c9-4a20-8140-765e812841e7
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 98db6c33-f0cc-4d4b-8f0c-26ffaa0fe02d
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: 9d9b0d11-1f82-4534-800e-72129b0996b1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        current_team: 1caf2e61-cafa-4df9-9515-c836802ec719
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: a3856e52-3632-4d73-923b-0e78fd70557a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: a3f8a605-98a6-46b1-8035-a267f31e2ca9
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: a7751d2d-e0fc-471d-a865-b15c67855a76
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: a809bf12-f2a1-49e6-9da4-de8e1986052c
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: aa7a2cb5-e2b7-4d77-a64b-a411c230e574
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: adb5a925-7078-48c9-aa91-2d7d1b08046a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: ade41ef9-5b24-4cbc-9052-7765ea779972
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        current_team: aea5fc6d-0977-4bc9-8ffe-57fa6c47ab84
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b0a25b05-5e65-431e-bb84-9765010ea832
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b28618bf-2912-4bff-a147-0daceb67cbd8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b4510660-458d-4ac8-ae83-b91135c9f5a0
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b50b285e-45d4-4bfb-97a4-6c848b6cc98f
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b6d33fd4-f70f-4633-9d3f-4dc8c11d1860
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b8711a86-e8bf-4248-b6a5-c04449cb93b5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: b9bc758f-fd98-423b-920f-f65104e97881
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: babdf087-451f-44bc-a988-6028cf7738ff
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: bb6fdd2c-80c9-4220-882f-9d3040ca62eb
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: bbf24434-bc17-4782-989d-0708b5cd0d79
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: bc739507-c246-456f-b8dd-e300e5e96a93
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: bd3227f6-1df5-4308-9478-0268e57fc173
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: be1bf242-f343-403e-b47b-40abaea4c595
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: bfabb721-0e24-4a24-a8c2-c79c4a8dd705
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c0c62cd5-145e-41e6-8e5d-5247b6107579
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c23bd5fe-9626-4b76-a692-0297acef1c03
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c23f2ba1-a9a0-439e-af93-a1661a18131b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c33f7f41-3b26-4de4-a975-6b6327e58d83
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c591f0f9-fb24-4da9-9008-3bc6094143e5
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c5a2e961-5502-45d4-a3ae-1fc002af8133
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c61aafa0-6bd2-4df1-9223-e4b290738e0a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c6794b01-68de-4a95-bd58-c015eb0ee58a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: c8951b57-2409-4cdb-9e01-2b1d6c929af9
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: ca214387-01a8-4342-9f97-20140a76d9cd
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: cbc5ffda-c2fc-4b0d-9712-f2c022d31580
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: cfac4c26-8e01-484c-8e7e-6396dbd829a6
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: d0548a6b-e750-40eb-8b86-20d7712c579d
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: d32905bc-275e-4d4e-a74d-1565192176f1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: d36c873c-ab24-4115-b688-596ee723b23c
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2031
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: d4e41b68-5269-4b65-ae59-2958c0e8ab1c
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: d685622d-de22-4660-b263-e5339034455a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: da181e5c-0ce4-48d6-a12f-9ffb1f73a49b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2030
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: dfb46b6a-5650-479c-8713-93e0abbde938
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2029
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: e216b5b5-91b8-4ea6-a9e8-c448493f292f
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2029
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: e51aec18-50d7-4ebe-b751-77ab12c49195
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        current_team: 8c10bafb-9b6d-4daa-93bc-9a2ad1514f01
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: e5c80c4d-80c8-496e-9e2e-3e84a23627a8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        current_team: a9115c16-6535-41f5-b105-7e064cc4b240
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: e6632db4-5a51-4a46-8a66-dfb88268de89
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: e6fbda06-7057-45d6-9a05-6639a86c7c53
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2027
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: e8b72686-975c-4932-9972-be67a0295178
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2026
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: ea4fdb1e-2197-4647-bfa6-18eac50a6bde
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        current_team: d6f71ebc-00de-4bf3-bf9a-46c3b8176cb7
+        year: 2032
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: eaff58e4-e641-443f-82f6-e81bb6918108
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        current_team: 1d150f9e-a164-46a5-8c5e-4a20dd0cb591
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: eb2aaece-84c8-4a8c-a0d3-e0d32723164a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: ed121c77-079e-4650-ab56-3421fa37b178
+        current_team: ed121c77-079e-4650-ab56-3421fa37b178
+        year: 2028
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: ef9f00a5-b788-483c-958a-6a6625045ce1
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        current_team: 4595dc8a-1584-4cff-be1d-c2a6320c254a
+        year: 2030
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: f27e4a79-dd48-4bdb-96ce-14c58f3ca7c0
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        current_team: d1f7bee6-32ac-4aeb-a5a8-228a3412cce3
+        year: 2028
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: f32de174-310b-4343-b91a-58a88e6ac1e8
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: f68e467e-cae4-4128-a8ca-9068eb67586a
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        current_team: 1ea17284-deee-46e8-8bc3-880ea1b60717
+        year: 2026
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: f978a49b-3ff9-4ed6-bad7-d81a4248bf1b
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        current_team: 2ef43ee8-3fd2-4243-9000-fff66fef4cf9
+        year: 2027
+        round: 1
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: faa03ea4-e63c-43e6-b090-4c82915c7104
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        current_team: f1dd692e-6c77-4e18-b684-303b40f46524
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
+-   model: league.draftpick
+    pk: fe271419-2a29-4f3e-933f-c5e904bb860e
+    fields:
+        league: bbbbbbbb-e5f6-7890-abcd-ef1234567890
+        original_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        current_team: 95478be4-c328-48f7-b076-f2f69b1afd9b
+        year: 2031
+        round: 2
+        pick_number: null
+        projected_number: null
+        player: null
+        rookie: null
+        is_rostered: false
 -   model: token_blacklist.outstandingtoken
     pk: 1
     fields:
@@ -26972,12 +29338,3 @@
         token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2OTM3NDc2OSwiaWF0IjoxNzY5Mjg4MzY5LCJqdGkiOiI1ZTAyYWU4MjA3Nzk0ZGM4YjY3MjhmNzI5YzhkYmI3OSIsImlkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAyIn0.NXq2HvOoV1h_1WEsbQuAbOvTOFcxfqbYwFK8j1OOXVE
         created_at: 2026-01-24 20:59:29.883780+00:00
         expires_at: 2026-01-25 20:59:29+00:00
--   model: token_blacklist.outstandingtoken
-    pk: 2
-    fields:
-        user:
-        - joe
-        jti: bc0a34e4751a4c7b8838b65ef0b8d0bc
-        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2OTQ2MDE3NCwiaWF0IjoxNzY5MzczNzc0LCJqdGkiOiJiYzBhMzRlNDc1MWE0YzdiODgzOGI2NWVmMGI4ZDBiYyIsImlkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAyIn0.A6iT0lY9qG_v9Ld6ztrhc6jGkDFe-d8tmCfeoU29FiA
-        created_at: 2026-01-25 20:42:54.427874+00:00
-        expires_at: 2026-01-26 20:42:54+00:00

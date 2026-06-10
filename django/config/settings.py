@@ -111,6 +111,8 @@ if os.environ.get("DATABASE_URL"):
             ssl_require=True,
         )
     }
+    # Only enable if dumping data becomes an issue in production
+    # DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 else:
     DATABASES = {
         "default": {
@@ -122,6 +124,7 @@ else:
             "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
             "HOST": os.environ.get("SQL_HOST", "localhost"),
             "PORT": os.environ.get("SQL_PORT", "5432"),
+            "DISABLE_SERVER_SIDE_CURSORS": True,
         }
     }
 

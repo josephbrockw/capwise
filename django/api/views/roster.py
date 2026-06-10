@@ -92,12 +92,8 @@ class RosterViewSet(TeamContextMixin, StandardViewSet):
 
     def partial_update(self, request, pk=None):
         """Update roster player details."""
-        team = self.get_team()
-
         try:
-            roster_player = RosterPlayer.objects.select_related("player").get(
-                pk=pk, fantasy_team=team
-            )
+            roster_player = RosterPlayer.objects.select_related("player").get(pk=pk)
         except RosterPlayer.DoesNotExist:
             return StandardResponse(
                 error="Roster player not found.",

@@ -46,7 +46,7 @@ class IsLeagueCommissioner(permissions.BasePermission):
 
 class IsTeamOwnerOrCommissioner(permissions.BasePermission):
     """
-    User must be either team owner or league commissioner.
+    User must be either team owner, league commissioner, or superuser.
     """
 
     message = "You must be the team owner or league commissioner."
@@ -57,4 +57,6 @@ class IsTeamOwnerOrCommissioner(permissions.BasePermission):
             return False
         if not request.user.is_authenticated:
             return False
+        if request.user.is_superuser:
+            return True
         return team.owner == request.user or team.league.commissioner == request.user
